@@ -50,7 +50,7 @@ Jui_Button : UserView {
 		this.onClose_{
 			iconSymbol.free;
 			routine.stop;
-			"Jui_Button.closed".postln;
+			// "Jui_Button.closed".postln;
 			// this.remove;
 			// "jsem".warn;
 		};

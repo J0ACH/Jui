@@ -16,31 +16,16 @@ Jui_Canvan : Window {
 		objects = Dictionary.new();
 
 		this.initControls;
-		// this.name = "Canvan";
-
-		// this.addToOnClose({
-		this.onClose_{
-			"CloseCanvan".postln;
-			// this.asView.removeAll;
-			/*
-			objects.do({|button|
-			button.close;
-			});
-			*/
-		};
-		// });
 
 		this.asView.minWidth_(150);
 		this.asView.minHeight_(50);
-		// this.asView.decorator_(nil);
-
 
 		this.asView.action_{
 
 		};
 
 		this.asView.onResize_{
-			"ResizeCanvan".postln;
+			// "ResizeCanvan".postln;
 
 			// normalRect = this.bounds;
 
@@ -72,15 +57,7 @@ Jui_Canvan : Window {
 			.name_("ButtonExit")
 			.iconName("ButtonExitGUI")
 			.colorFrame_(Color.clear)
-			.action_{|button|
-				// this.visible_(false);
-				// this.asView.removeAll;
-				// this.remove;
-				this.view.remove;
-				this.remove;
-				this.close;
-
-			}
+			.action_{|button| this.close }
 		);
 
 		objects.put(\Button_Maximize, Jui_Button(this)
@@ -103,6 +80,8 @@ Jui_Canvan : Window {
 			.action_{|button| this.minimize	}
 		);
 	}
+
+	decorator{ ^this.view.decorator }
 
 }
 

@@ -39,7 +39,7 @@ Jui_ViewControl : UserView {
 			this.bounds = Rect(0,0, parent.bounds.width, parent.bounds.height);
 			this.fitManipulators;
 			moveView.bounds_(Rect.offsetRect(parent.bounds, manipulatorsZone , manipulatorsZone, manipulatorsZone, manipulatorsZone));
-					};
+		};
 
 		moveView = UserView(parent).name_(\move);
 		selectorEdges.do({|edgeName|
