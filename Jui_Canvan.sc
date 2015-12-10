@@ -1,9 +1,6 @@
 Jui_Canvan : Window {
 
-	var fullscreen, minimize, normalRect,
-	isRunning,
-	objects;
-
+	var objects;
 
 	*new { | bounds |
 		bounds.isNil.if(
@@ -17,22 +14,26 @@ Jui_Canvan : Window {
 	init {
 
 		objects = Dictionary.new();
-		fullscreen = false;
-		minimize = false;
-		isRunning = true;
-
 
 		this.initControls;
-
 		// this.name = "Canvan";
 
-
-
-
-		this.addToOnClose({
+		// this.addToOnClose({
+		this.onClose_{
 			"CloseCanvan".postln;
-			isRunning = false;
-		});
+			// this.asView.removeAll;
+			/*
+			objects.do({|button|
+			button.close;
+			});
+			*/
+		};
+		// });
+
+		this.asView.minWidth_(150);
+		this.asView.minHeight_(50);
+		// this.asView.decorator_(nil);
+
 
 		this.asView.action_{
 
@@ -41,7 +42,7 @@ Jui_Canvan : Window {
 		this.asView.onResize_{
 			"ResizeCanvan".postln;
 
-			normalRect = this.bounds;
+			// normalRect = this.bounds;
 
 			objects[\Button_Exit].bounds_(Rect.offsetCornerRT(this.bounds, 10,10,25,25));
 			objects[\Button_Maximize].bounds_(Rect.offsetCornerRT(this.bounds, 40,10,25,25));
@@ -67,14 +68,22 @@ Jui_Canvan : Window {
 	initControls {
 		Jui_ViewControl(this.view, [\left, \top, \right, \bottom]);
 
-		objects.put(\Button_Exit, QGui_Button(this)
+		objects.put(\Button_Exit, Jui_Button(this)
 			.name_("ButtonExit")
 			.iconName("ButtonExitGUI")
 			.colorFrame_(Color.clear)
-			.action_{|button| this.close }
+			.action_{|button|
+				// this.visible_(false);
+				// this.asView.removeAll;
+				// this.remove;
+				this.view.remove;
+				this.remove;
+				this.close;
+
+			}
 		);
 
-		objects.put(\Button_Maximize, QGui_Button(this)
+		objects.put(\Button_Maximize, Jui_Button(this)
 			.name_("ButtonMaximize")
 			.iconName("ButtonMaximizeGUI")
 			.colorFrame_(Color.clear)
@@ -86,7 +95,7 @@ Jui_Canvan : Window {
 				);
 			}
 		);
-		objects.put(\Button_Minimize, QGui_Button(this)
+		objects.put(\Button_Minimize, Jui_Button(this)
 			.name_("ButtonMinimize")
 			.iconName("ButtonMinimizeGUI")
 			.colorFrame_(Color.clear)
