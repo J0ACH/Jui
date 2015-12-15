@@ -2,9 +2,11 @@ Jui_GraphVertex : UserView {
 
 	var parent;
 	var <positionView;
+	var <numBoxLevel, <numBoxTime;
 	var screenMouseClick, originalParentRect;
 
 	var <graphX, <graphY, <curve;
+	var <offset;
 	var string;
 
 	var displayState;
@@ -30,6 +32,7 @@ Jui_GraphVertex : UserView {
 		graphX = nil;
 		graphY = nil;
 		curve = \sin;
+		offset = 0;
 		string = "[%,%]".format(graphX, graphY);
 
 		// frameAlpha = 0;
@@ -56,7 +59,9 @@ Jui_GraphVertex : UserView {
 		this.addAction({|view, x, y|
 			(displayState == \over).if({
 				this.displayState_(\off);
-				positionView.visible_(false);
+				// positionView.visible_(false);
+				numBoxLevel.visible_(false);
+				numBoxTime.visible_(false);
 			});
 			this.refresh;
 		}, \mouseLeaveAction);
@@ -70,7 +75,9 @@ Jui_GraphVertex : UserView {
 			(displayState == \over).if(
 				{
 					this.displayState_(\on);
-					positionView.visible_(true);
+					// positionView.visible_(true);
+					numBoxLevel.visible_(true);
+					numBoxTime.visible_(true);
 				},
 				{ this.displayState_(\over) }
 			);
@@ -89,7 +96,9 @@ Jui_GraphVertex : UserView {
 					originalParentRect.height
 				)
 			);
-			positionView.visible_(true);
+			// positionView.visible_(true);
+			numBoxLevel.visible_(true);
+			numBoxTime.visible_(true);
 		}, \mouseMoveAction);
 
 		this.addAction({|view, char, modifiers, unicode, keycode, key|
@@ -103,10 +112,16 @@ Jui_GraphVertex : UserView {
 		this.drawFunc = { this.draw };
 	}
 
-	setCoor {|x, y|
-		graphX = x;
+	setCoor {|x, y, c|
+		graphX = x + offset;
 		graphY = y;
+		curve = c;
 		string = "[%,%]".format(graphX.round(0.001), graphY.round(0.001));
+	}
+
+	offset_ {|val|
+		offset = val;
+		// graphX = x + offset;
 	}
 
 	addEnv {|env|
@@ -122,36 +137,51 @@ Jui_GraphVertex : UserView {
 	}
 
 	addPositionView {
+		numBoxLevel = NumberBox(parent,Rect(this.bounds.right, this.bounds.top - 15,30,15))
+		.background_(Color.new255(30,30,30,120))
+		.visible_(false)
+		.typingColor_(Color(0.3,1,0.3))
+		.normalColor_(Color.white)
+		.stringColor_(Color.red)
+		.buttonsVisible_(true)
+		.align = \center;
+
+
+		numBoxTime = NumberBox(parent,Rect(this.bounds.right + 32, this.bounds.top - 15, 30,15))
+		.background_(Color.new255(30,30,30,120))
+		.visible_(false)
+		.typingColor_(Color(0.3,1,0.3))
+		.normalColor_(Color.white)
+		.stringColor_(Color.red)
+		.align = \center;
+
+		/*
 		positionView = UserView(parent,Rect(this.bounds.right, this.bounds.top - 15, 60,15))
 		.background_(Color.new255(60,60,60,120))
 		.drawFunc_{
-			string.notNil.if({
-				Pen.font = stringFont;
-				Pen.stringLeftJustIn( string, Rect(0,0, positionView.bounds.width, positionView.bounds.height),
-					color:Color.white;
-				);
-			});
+		string.notNil.if({
+		Pen.font = stringFont;
+		Pen.stringLeftJustIn( string, Rect(0,0, positionView.bounds.width, positionView.bounds.height),
+		color:Color.white;
+		);
+		});
 		}
 		.visible_(false)
 		.addAction({|view, x, y, modifiers, buttonNumber, clickCount|
-			"textClick".warn;
+		"textClick".warn;
 		}, \mouseDownAction)
 		;
+		*/
 	}
 
 
 	// name_ {|buttonName| name = "Jui_Button [%]".format(buttonName) }
 
 	draw {
-		// this.background = Color.new255(150,50,50,50);
-
-
-
 		Pen.fillColor = case
 		{displayState == \on} { colorFrameOver }
 		{displayState == \over} { colorBackgroundActive }
 		{displayState == \off} { colorBackground };
-
 
 		// Pen.fillColor = Color.new255(150,50,50,50);
 		Pen.fillOval(Rect(3,3, this.bounds.width-6, this.bounds.height-6));

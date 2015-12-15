@@ -10,6 +10,8 @@ Jui_Graph : UserView {
 	var graphSegments;
 	var testPlay;
 
+	var delayBox;
+
 
 	*new { | parent, bounds |
 		var me = super.new(parent, bounds ?? {this.sizeHint} );
@@ -23,7 +25,6 @@ Jui_Graph : UserView {
 		parent = argParent;
 		this.bounds = argBounds;
 
-		// vertex = Order.new;
 		vertex = LinkedList.new;
 		envelope = nil;
 
@@ -34,20 +35,20 @@ Jui_Graph : UserView {
 
 		graphRectOffset = 30;
 		vertexSize = 12;
-		graphSegments = 400;
+		graphSegments = 800;
 
 		this.name = "Jui_Graph";
 
 		this.drawFunc = { this.draw };
 
-		this.onClose_{
-			Ndef(\testPlay).release(1);
-		};
+		this.onClose_{ Ndef(\testPlay).release(1) };
 
 		this.addAction({|view, x, y, modifiers, buttonNumber, clickCount|
 			vertex.do({|oneVertex|
 				oneVertex.displayState_(\off);
-				oneVertex.positionView.visible_(false);
+				// oneVertex.positionView.visible_(false);
+				oneVertex.numBoxLevel.visible_(false);
+				oneVertex.numBoxTime.visible_(false);
 				oneVertex.refresh;
 			});
 
@@ -64,6 +65,35 @@ Jui_Graph : UserView {
 		this.addAction({|view, x, y, modifiers|
 			this.testEnvelope;
 		}, \mouseUpAction);
+
+		delayBox = NumberBox(this,Rect(300, 5 ,30,15))
+		.background_(Color.new255(30,30,30,120))
+		.typingColor_(Color(0.3,1,0.3))
+		.normalColor_(Color.white)
+		.stringColor_(Color.red)
+		.buttonsVisible_(true)
+		.align_(\center)
+		.action_({|box|
+			// envelope.delay(box.value);
+			vertex.do({|oneVertex|
+				var displayPoint;
+				oneVertex.offset_(box.value);
+				displayPoint = this.displayCoor(oneVertex.graphX, oneVertex.graphY);
+				oneVertex.bounds_(Rect(
+					displayPoint.x - vertexSize.half,
+					displayPoint.y - vertexSize.half,
+					vertexSize,
+					vertexSize
+				));
+
+				oneVertex.setCoor(oneVertex.graphX, oneVertex.graphY, oneVertex.curve);
+				oneVertex.graphX.postln;
+				// (oneVertex.graphX + box.value).postln;
+				// this.
+				oneVertex.refresh;
+			});
+			this.makeEnvelope;
+		});
 	}
 
 	domain_ {|minVal, maxVal|
@@ -85,88 +115,92 @@ Jui_Graph : UserView {
 
 	graphCoor{|displayX, displayY|
 		var point = Point.new;
+		var round = 0.005;
 		point.x = displayX.linlin(graphRectOffset, this.bounds.width - graphRectOffset, minDomain, maxDomain);
 		point.y = displayY.linlin(graphRectOffset, this.bounds.height - graphRectOffset, maxLimit, minLimit);
+		point.x = point.x.round(round);
+		point.y = point.y.round(round);
 		^point;
 	}
 
-
-	addVertex {|graphX, graphY| //+channel
+	addVertex {|graphX, graphY, curve = \sin| //+channel
 		var displayPoint = this.displayCoor(graphX, graphY);
-		/*
-		vertex.put(graphX, Jui_GraphVertex(this, Rect(
-			displayPoint.x - vertexSize.half,
-			displayPoint.y - vertexSize.half,
-			vertexSize,
-			vertexSize
-		))
-		*/
+
 		vertex.add(Jui_GraphVertex(this, Rect(
 			displayPoint.x - vertexSize.half,
 			displayPoint.y - vertexSize.half,
 			vertexSize,
 			vertexSize
 		))
-		.setCoor(graphX, graphY)
+		.setCoor(graphX, graphY, curve)
 		.onMove_{|view|
 			var graphPoint = this.graphCoor(view.bounds.center.x, view.bounds.center.y);
-/*
-			view.graphX.notNil.if({
-				var moveVertex = vertex.at(view.graphX);
 
-				vertex.at(moveVertex.graphX).notNil.if(
-					{
-						var shiftedVertex = vertex.at(view.graphX);
-						vertex.removeAt(view.graphX);
-						shiftedVertex.setCoor(shiftedVertex.graphX+0.001, shiftedVertex.graphY);
-						vertex.put(graphPoint.x+0.001,shiftedVertex);
-						vertex.put(graphPoint.x,moveVertex);
-						"KOLIZE".warn;
-					},
-					{
-
-
-					}
-				);
-				vertex.removeAt(view.graphX);
-				vertex.put(graphPoint.x, moveVertex);
-			});
-*/
-
-			view.setCoor(graphPoint.x, graphPoint.y);
+			view.setCoor(graphPoint.x, graphPoint.y, curve);
 			view.refresh;
-
+			/*
 			view.positionView.notNil.if({
-				view.positionView.bounds_(Rect(view.bounds.right, view.bounds.top - 15, 60,15));
-				view.positionView.refresh;
+			view.positionView.bounds_(Rect(view.bounds.right, view.bounds.top - 15, 60,15));
+			view.positionView.refresh;
+			});
+			*/
+			view.numBoxLevel.notNil.if({
+				view.numBoxLevel.bounds_(Rect(view.bounds.right, view.bounds.top - 15, 30,15));
+				view.numBoxLevel.value_(graphPoint.x);
+				view.numBoxLevel.refresh;
+
+				view.numBoxTime.bounds_(Rect(view.bounds.right + 32, view.bounds.top - 15, 30,15));
+				view.numBoxTime.value_(graphPoint.y);
+				view.numBoxTime.refresh;
 			});
 
-			// vertex.indices.postln;
+
 			this.makeEnvelope;
 		}
 		.onClose_{|view|
-			"remove".warn;
-			// vertex.indices.postln;
-			view.graphX.postln;
-			// vertex.removeAt(view.graphX);
-			view.positionView.close;
+			("RemoveVertex [%]".format(view.graphX)).warn;
+			// view.positionView.close;
+			view.numBoxLevel.close;
 			vertex.remove(view);
-			// vertex.indices.postln;
-			this.makeEnvelope;
+			(vertex.size > 0).if({
+				this.makeEnvelope;
+			});
 		}
 		);
-
-
 		this.makeEnvelope;
-		// vertex.indices.postln;
 	}
 
-	removeVertex {|x, y|
-
+	vertexFirst {
+		var selectedVertex;
+		var min = nil;
+		vertex.do({|oneVertex|
+			min.isNil.if({ min = oneVertex.graphX });
+			(min >= oneVertex.graphX).if({
+				min = oneVertex.graphX;
+				selectedVertex = oneVertex;
+			});
+		})
+		^selectedVertex;
 	}
 
 	addEnv {|env|
+		var sumTime = 0;
+		"envelope.levels %".format(env.levels).postln;
+		"envelope.times %".format(env.times).postln;
+		"envelope.curves %".format(env.curves).postln;
 
+		env.curves.isArray.postln;
+		env.postcs;
+		// env.curves.wrap(
+		this.addVertex(0, env.at(0), env.curves.asArray.wrapAt(0));
+		env.times.do({|time, i|
+			i.postln;
+			sumTime = sumTime + time;
+			this.addVertex(sumTime, env.at(sumTime), env.curves.asArray.wrapAt(i+1));
+		});
+
+		envelope = env;
+		this.makeEnvelope;
 	}
 
 	addPbind {|env|
@@ -176,8 +210,7 @@ Jui_Graph : UserView {
 	makeEnvelope {
 		var arrXYC = List.new;
 		var env;
-		// vertex.indicesDo({|oneVertex|
-			vertex.do({|oneVertex|
+		vertex.do({|oneVertex|
 			// ("graphX : %").format(oneVertex.graphX).postln;
 			// ("graphY : %").format(oneVertex.graphY).postln;
 			arrXYC.add([oneVertex.graphX, oneVertex.graphY, oneVertex.curve]);
@@ -192,13 +225,15 @@ Jui_Graph : UserView {
 			envelope = Env(envelope.levels, envelope.times, envelope.curves);
 			// env.plot;
 		});
+		// envelope.delay(this.vertexFirst.graphX);
+		envelope.delay(1);
 		// envelope.plot;
 		this.refresh;
 	}
 
 	testEnvelope {
 		Ndef(\testPlay,{
-			SinOsc.ar( 120!2, mul:EnvGen.kr(Env.circle(envelope.levels, envelope.times, envelope.curves) ))
+			SinOsc.ar( 120!2, mul: EnvGen.kr(Env(envelope.levels, envelope.times, envelope.curves).circle(2, \lin)) )
 		}).play;
 	}
 
@@ -208,7 +243,8 @@ Jui_Graph : UserView {
 
 		Pen.width = 1;
 		Pen.strokeColor = Color.white;
-		// Pen.addRect(Rect(0,0, this.bounds.width, this.bounds.height));
+		Pen.addRect(Rect(0,0, this.bounds.width, this.bounds.height));
+
 		Pen.addRect(
 			Rect(
 				graphRectOffset,
