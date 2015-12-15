@@ -23,7 +23,8 @@ Jui_Graph : UserView {
 		parent = argParent;
 		this.bounds = argBounds;
 
-		vertex = Order.new;
+		// vertex = Order.new;
+		vertex = LinkedList.new;
 		envelope = nil;
 
 		minDomain = 0;
@@ -44,7 +45,7 @@ Jui_Graph : UserView {
 		};
 
 		this.addAction({|view, x, y, modifiers, buttonNumber, clickCount|
-			vertex.indicesDo({|oneVertex|
+			vertex.do({|oneVertex|
 				oneVertex.displayState_(\off);
 				oneVertex.positionView.visible_(false);
 				oneVertex.refresh;
@@ -90,23 +91,47 @@ Jui_Graph : UserView {
 	}
 
 
-	addVertex {|x, y| //+channel
-		var displayPoint = this.displayCoor(x, y);
-		vertex.put(x, Jui_GraphVertex(this, Rect(
+	addVertex {|graphX, graphY| //+channel
+		var displayPoint = this.displayCoor(graphX, graphY);
+		/*
+		vertex.put(graphX, Jui_GraphVertex(this, Rect(
 			displayPoint.x - vertexSize.half,
 			displayPoint.y - vertexSize.half,
 			vertexSize,
 			vertexSize
 		))
-		.setCoor(x, y)
+		*/
+		vertex.add(Jui_GraphVertex(this, Rect(
+			displayPoint.x - vertexSize.half,
+			displayPoint.y - vertexSize.half,
+			vertexSize,
+			vertexSize
+		))
+		.setCoor(graphX, graphY)
 		.onMove_{|view|
 			var graphPoint = this.graphCoor(view.bounds.center.x, view.bounds.center.y);
-			var oldVertex;
+/*
 			view.graphX.notNil.if({
-				oldVertex = vertex.at(view.graphX);
+				var moveVertex = vertex.at(view.graphX);
+
+				vertex.at(moveVertex.graphX).notNil.if(
+					{
+						var shiftedVertex = vertex.at(view.graphX);
+						vertex.removeAt(view.graphX);
+						shiftedVertex.setCoor(shiftedVertex.graphX+0.001, shiftedVertex.graphY);
+						vertex.put(graphPoint.x+0.001,shiftedVertex);
+						vertex.put(graphPoint.x,moveVertex);
+						"KOLIZE".warn;
+					},
+					{
+
+
+					}
+				);
 				vertex.removeAt(view.graphX);
-				vertex.put(graphPoint.x,oldVertex);
+				vertex.put(graphPoint.x, moveVertex);
 			});
+*/
 
 			view.setCoor(graphPoint.x, graphPoint.y);
 			view.refresh;
@@ -116,21 +141,28 @@ Jui_Graph : UserView {
 				view.positionView.refresh;
 			});
 
-			vertex.indices.postln;
+			// vertex.indices.postln;
 			this.makeEnvelope;
 		}
 		.onClose_{|view|
+			"remove".warn;
+			// vertex.indices.postln;
 			view.graphX.postln;
-			vertex.removeAt(view.graphX);
+			// vertex.removeAt(view.graphX);
 			view.positionView.close;
-			vertex.indices.postln;
+			vertex.remove(view);
+			// vertex.indices.postln;
 			this.makeEnvelope;
 		}
 		);
 
 
 		this.makeEnvelope;
-		vertex.indices.postln;
+		// vertex.indices.postln;
+	}
+
+	removeVertex {|x, y|
+
 	}
 
 	addEnv {|env|
@@ -143,7 +175,9 @@ Jui_Graph : UserView {
 
 	makeEnvelope {
 		var arrXYC = List.new;
-		vertex.indicesDo({|oneVertex|
+		var env;
+		// vertex.indicesDo({|oneVertex|
+			vertex.do({|oneVertex|
 			// ("graphX : %").format(oneVertex.graphX).postln;
 			// ("graphY : %").format(oneVertex.graphY).postln;
 			arrXYC.add([oneVertex.graphX, oneVertex.graphY, oneVertex.curve]);
@@ -151,17 +185,21 @@ Jui_Graph : UserView {
 		envelope = Env.xyc(arrXYC);
 		// envelope.test(envelope.duration);
 
-
+		(envelope.times.size > 1).if({
+			// "envelope.levels %".format(envelope.levels).postln;
+			// "envelope.times %".format(envelope.times).postln;
+			// "envelope.curves %".format(envelope.curves).postln;
+			envelope = Env(envelope.levels, envelope.times, envelope.curves);
+			// env.plot;
+		});
 		// envelope.plot;
 		this.refresh;
 	}
 
 	testEnvelope {
-		Ndef(\testPlay,{ SinOsc.ar( 120!2, mul:EnvGen.kr(Env.circle(envelope.levels, envelope.times, envelope.curves) )) }).play;
-		// testPlay.free;
-		// testPlay = { SinOsc.ar( EnvGen.kr(Env.circle(envelope.levels, envelope.times, envelope.curves) )) };
-		// testPlay.play;
-		// ).play;
+		Ndef(\testPlay,{
+			SinOsc.ar( 120!2, mul:EnvGen.kr(Env.circle(envelope.levels, envelope.times, envelope.curves) ))
+		}).play;
 	}
 
 	// name_ {|buttonName| name = "Jui_Button [%]".format(buttonName) }
@@ -210,6 +248,15 @@ Jui_Graph : UserView {
 			// Pen.lineTo(displayPoint);
 
 			Pen.fillStroke;
+
+			Pen.font = Font( 'Helvetica', 10 );
+			Pen.stringLeftJustIn(
+				string: envelope.asCompileString,
+				rect: Rect.offsetEdgeTop(this.bounds, 5,5,5,30),
+				font: Font( 'Helvetica', 10 ),
+				color: Color.white
+			);
+			Pen.stroke;
 		})
 
 	}
