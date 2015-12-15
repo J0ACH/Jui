@@ -2,8 +2,13 @@ Jui_Graph : UserView {
 	var parent;
 
 	var <vertex;
+	var envelope;
 	var minDomain, maxDomain;
 	var minLimit, maxLimit;
+	var graphRectOffset;
+	var vertexSize;
+	var graphSegments;
+	var testPlay;
 
 
 	*new { | parent, bounds |
@@ -19,41 +24,45 @@ Jui_Graph : UserView {
 		this.bounds = argBounds;
 
 		vertex = Order.new;
+		envelope = nil;
+
 		minDomain = 0;
 		maxDomain = 1;
 		minLimit = 0;
 		maxLimit = 1;
 
-		/*
-		this.displayState_(\off);
-		keepingState = true;
+		graphRectOffset = 30;
+		vertexSize = 12;
+		graphSegments = 400;
 
-		frameAlpha = 0;
-		name = "Jui_Button";
-		string = nil;
-		stringFont = Font( 'Helvetica', 10 );
+		this.name = "Jui_Graph";
 
-		colorBackground = Color.clear;
-		colorBackgroundActive = Color.new255(50,60,70);
-
-		colorFrame = Color.clear;
-		colorFrameOver = Color.new255(20,180,240);
-		colorFrameActive = colorFrame;
-
-		colorString = Color.white;
-		colorStringActive = colorString;
-
-		value = 0;
-		*/
 		this.drawFunc = { this.draw };
 
 		this.onClose_{
-			// iconSymbol.free;
-			// routine.stop;
-			// "Jui_Button.closed".postln;
-			// this.remove;
-			// "jsem".warn;
+			Ndef(\testPlay).release(1);
 		};
+
+		this.addAction({|view, x, y, modifiers, buttonNumber, clickCount|
+			vertex.indicesDo({|oneVertex|
+				oneVertex.displayState_(\off);
+				oneVertex.positionView.visible_(false);
+				oneVertex.refresh;
+			});
+
+			(clickCount == 2).if({
+				var graphPoint = this.graphCoor(x, y);
+				"[%,%]".format(x, y).postln;
+				graphPoint.postln;
+				this.addVertex(graphPoint.x, graphPoint.y);
+				this.makeEnvelope;
+				"doubleClick".warn;
+			});
+		}, \mouseDownAction);
+
+		this.addAction({|view, x, y, modifiers|
+			this.testEnvelope;
+		}, \mouseUpAction);
 	}
 
 	domain_ {|minVal, maxVal|
@@ -66,22 +75,62 @@ Jui_Graph : UserView {
 		maxLimit = maxVal;
 	}
 
-	mapCoor{|x, y|
+	displayCoor{|graphX, graphY|
 		var point = Point.new;
-		point.x = x.linlin(minDomain, maxDomain, 0, this.bounds.width);
-		point.y = y.linlin(minLimit, maxLimit, 0, this.bounds.height);
+		point.x = graphX.linlin(minDomain, maxDomain, graphRectOffset, this.bounds.width - graphRectOffset);
+		point.y = graphY.linlin(minLimit, maxLimit, this.bounds.height - graphRectOffset, graphRectOffset);
+		^point;
+	}
+
+	graphCoor{|displayX, displayY|
+		var point = Point.new;
+		point.x = displayX.linlin(graphRectOffset, this.bounds.width - graphRectOffset, minDomain, maxDomain);
+		point.y = displayY.linlin(graphRectOffset, this.bounds.height - graphRectOffset, maxLimit, minLimit);
 		^point;
 	}
 
 
 	addVertex {|x, y| //+channel
-		var point = Point.new;
-		point.x = x.linlin(minDomain, maxDomain, 0, this.bounds.width-10);
-		point.y = y.linlin(minLimit, maxLimit, this.bounds.height-10, 0);
+		var displayPoint = this.displayCoor(x, y);
+		vertex.put(x, Jui_GraphVertex(this, Rect(
+			displayPoint.x - vertexSize.half,
+			displayPoint.y - vertexSize.half,
+			vertexSize,
+			vertexSize
+		))
+		.setCoor(x, y)
+		.onMove_{|view|
+			var graphPoint = this.graphCoor(view.bounds.center.x, view.bounds.center.y);
+			var oldVertex;
+			view.graphX.notNil.if({
+				oldVertex = vertex.at(view.graphX);
+				vertex.removeAt(view.graphX);
+				vertex.put(graphPoint.x,oldVertex);
+			});
 
-		vertex.put(x, Jui_GraphVertex(this, Rect(point.x,point.y,10,10)));
-		// this.mapCoor(x,y).postln;
+			view.setCoor(graphPoint.x, graphPoint.y);
+			view.refresh;
 
+			view.positionView.notNil.if({
+				view.positionView.bounds_(Rect(view.bounds.right, view.bounds.top - 15, 60,15));
+				view.positionView.refresh;
+			});
+
+			vertex.indices.postln;
+			this.makeEnvelope;
+		}
+		.onClose_{|view|
+			view.graphX.postln;
+			vertex.removeAt(view.graphX);
+			view.positionView.close;
+			vertex.indices.postln;
+			this.makeEnvelope;
+		}
+		);
+
+
+		this.makeEnvelope;
+		vertex.indices.postln;
 	}
 
 	addEnv {|env|
@@ -92,81 +141,77 @@ Jui_Graph : UserView {
 
 	}
 
+	makeEnvelope {
+		var arrXYC = List.new;
+		vertex.indicesDo({|oneVertex|
+			// ("graphX : %").format(oneVertex.graphX).postln;
+			// ("graphY : %").format(oneVertex.graphY).postln;
+			arrXYC.add([oneVertex.graphX, oneVertex.graphY, oneVertex.curve]);
+		});
+		envelope = Env.xyc(arrXYC);
+		// envelope.test(envelope.duration);
+
+
+		// envelope.plot;
+		this.refresh;
+	}
+
+	testEnvelope {
+		Ndef(\testPlay,{ SinOsc.ar( 120!2, mul:EnvGen.kr(Env.circle(envelope.levels, envelope.times, envelope.curves) )) }).play;
+		// testPlay.free;
+		// testPlay = { SinOsc.ar( EnvGen.kr(Env.circle(envelope.levels, envelope.times, envelope.curves) )) };
+		// testPlay.play;
+		// ).play;
+	}
+
 	// name_ {|buttonName| name = "Jui_Button [%]".format(buttonName) }
 
 	draw {
 
-
-		vertex.do({|oneVertex, i|
-			oneVertex.draw;
-			i.postln;
-		});
-
 		Pen.width = 1;
 		Pen.strokeColor = Color.white;
-		Pen.addRect(Rect(0,0, this.bounds.width, this.bounds.height));
+		// Pen.addRect(Rect(0,0, this.bounds.width, this.bounds.height));
+		Pen.addRect(
+			Rect(
+				graphRectOffset,
+				graphRectOffset,
+				this.bounds.width-(graphRectOffset*2),
+				this.bounds.height-(graphRectOffset*2)
+			)
+		);
 
 		Pen.strokeColor = Color.gray;
-		Pen.line(this.mapCoor(maxDomain/2,minLimit), this.mapCoor(maxDomain/2,maxLimit));
-		Pen.line(this.mapCoor(minDomain,maxLimit/2), this.mapCoor(maxDomain,maxLimit/2));
+		Pen.line(this.displayCoor(maxDomain/2,minLimit), this.displayCoor(maxDomain/2,maxLimit));
+		Pen.line(this.displayCoor(minDomain,maxLimit/2), this.displayCoor(maxDomain,maxLimit/2));
 		Pen.stroke;
 
-		/*
-		string.notNil.if({
-		Pen.font = stringFont;
-		Pen.stringCenteredIn( string, Rect(0,0, this.bounds.width, this.bounds.height),
-		color:case
-		{displayState == \on} { colorStringActive }
-		{displayState == \onOver} { colorStringActive }
-		{displayState == \off} { colorString }
-		{displayState == \offOver} { colorString };
-		);
-		});
-		*/
+		Pen.strokeColor = Color.white;
+		Pen.fillColor = Color.new255(50,60,70, 150);
+		envelope.notNil.if({
+			var time = 0;
+			var dTime = envelope.duration / (graphSegments);
+			var y = envelope.at(time);
+			var displayPoint = this.displayCoor(time, y);
+			Pen.moveTo(displayPoint);
+			time = time + dTime;
 
+			(graphSegments).do({|i|
+				y = envelope.at(time);
+				displayPoint = this.displayCoor(time, y);
+				Pen.lineTo(displayPoint);
+				// time.postln;
+				// "[%,%]".format(time, y).postln;
+				// displayPoint.postln;
+				time = time + dTime;
 
-		// this.background = case
-		/*
-		displayState.notNil.if({
+			});
+			// y = envelope.at(0);
+			// displayPoint = this.displayCoor(0, y);
+			// Pen.lineTo(displayPoint);
 
-		this.background = case
-		{displayState == \on} { colorBackgroundActive }
-		{displayState == \onOver} { colorBackgroundActive }
-		{displayState == \off} { colorBackground }
-		{displayState == \offOver} { colorBackground };
-
-		iconPath.notNil.if({
-		iconSymbol.drawInRect(
-		Rect(0,0,this.bounds.width,this.bounds.height),
-		Rect(0,0,iconSymbol.width, iconSymbol.height),
-		'sourceOver',
-		1
-		);
-		});
-
-		Pen.width = 1;
-
-		Pen.strokeColor = case
-		{displayState == \on} { colorFrameActive.blend(colorFrameOver,frameAlpha) }
-		{displayState == \onOver} { colorFrameActive.blend(colorFrameOver,frameAlpha) }
-		{displayState == \off} { colorFrame.blend(colorFrameOver,frameAlpha) }
-		{displayState == \offOver} { colorFrame.blend(colorFrameOver,frameAlpha) };
-
-		Pen.addRect(Rect(0,0, this.bounds.width, this.bounds.height));
-		Pen.stroke;
-
-		string.notNil.if({
-		Pen.font = stringFont;
-		Pen.stringCenteredIn( string, Rect(0,0, this.bounds.width, this.bounds.height),
-		color:case
-		{displayState == \on} { colorStringActive }
-		{displayState == \onOver} { colorStringActive }
-		{displayState == \off} { colorString }
-		{displayState == \offOver} { colorString };
-		);
-		});
+			Pen.fillStroke;
 		})
-		*/
+
 	}
 
 }

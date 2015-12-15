@@ -1,8 +1,17 @@
 Jui_GraphVertex : UserView {
-	var parent;
 
-	var mouseDownCoor;
-	var manipulatorMouseClick, screenMouseClick, manipulatorDrag, originalParentRect;
+	var parent;
+	var <positionView;
+	var screenMouseClick, originalParentRect;
+
+	var <graphX, <graphY, <curve;
+	var string;
+
+	var displayState;
+	var colorBackground, colorBackgroundActive;
+	var colorFrame, colorFrameOver, colorFrameActive;
+	var colorString, colorStringActive;
+	var stringFont;
 
 	*new { | parent, bounds |
 		var me = super.new(parent, bounds ?? {this.sizeHint} );
@@ -15,13 +24,18 @@ Jui_GraphVertex : UserView {
 
 		parent = argParent;
 		this.bounds = argBounds;
-		/*
-		this.displayState_(\off);
-		keepingState = true;
 
-		frameAlpha = 0;
-		name = "Jui_Button";
-		string = nil;
+		this.displayState_(\off);
+
+		graphX = nil;
+		graphY = nil;
+		curve = \sin;
+		string = "[%,%]".format(graphX, graphY);
+
+		// frameAlpha = 0;
+		this.name = "Jui_GraphVertex";
+		this.addPositionView;
+		// string = nil;
 		stringFont = Font( 'Helvetica', 10 );
 
 		colorBackground = Color.clear;
@@ -34,30 +48,36 @@ Jui_GraphVertex : UserView {
 		colorString = Color.white;
 		colorStringActive = colorString;
 
-		value = 0;
-		*/
 		this.addAction({|view, x, y|
-			"jsem tu".postln;
+			(displayState == \off).if({ this.displayState_(\over) });
+			this.refresh;
 		}, \mouseEnterAction);
 
 		this.addAction({|view, x, y|
-			"odchazim".postln;
+			(displayState == \over).if({
+				this.displayState_(\off);
+				positionView.visible_(false);
+			});
+			this.refresh;
 		}, \mouseLeaveAction);
 
 		this.addAction({|view, x, y, modifiers, buttonNumber, clickCount|
-			// mouseDownCoor = parent.mapToGlobal( .map Point(x,y);
-			mouseDownCoor = Point(x,y);
-
-			manipulatorMouseClick = x@y;
 			screenMouseClick = QtGUI.cursorPosition;
 			originalParentRect = this.bounds;
-
-			"click [%,%]".format(x,y).postln;
 		}, \mouseDownAction);
 
+		this.addAction({|view, x, y, modifiers, buttonNumber, clickCount|
+			(displayState == \over).if(
+				{
+					this.displayState_(\on);
+					positionView.visible_(true);
+				},
+				{ this.displayState_(\over) }
+			);
+			this.refresh;
+		}, \mouseUpAction);
+
 		this.addAction({|view, x, y, modifiers|
-			// view.moveTo(x, y);
-			// this.moveTo(mouseDownCoor.x-x, mouseDownCoor.y-y);
 			var mouse = QtGUI.cursorPosition;
 			var newX = mouse.x - screenMouseClick.x;
 			var newY = mouse.y - screenMouseClick.y;
@@ -68,96 +88,79 @@ Jui_GraphVertex : UserView {
 					originalParentRect.width,
 					originalParentRect.height
 				)
-			)
-
-			// "posun [%,%]".format(x,y).postln;
+			);
+			positionView.visible_(true);
 		}, \mouseMoveAction);
 
 		this.addAction({|view, char, modifiers, unicode, keycode, key|
-			"klavasa".postln;
+			// "klavesa[%,%] [%,%,%,%,%,%]".format(graphX, graphY, view, char, modifiers, unicode, keycode, key).postln;
+			(unicode == 127).if({
+				"deleteVertex".warn;
+				this.close;
+			})
 		}, \keyDownAction);
 
 		this.drawFunc = { this.draw };
+	}
 
-		this.onClose_{
-			// iconSymbol.free;
-			// routine.stop;
-			// "Jui_Button.closed".postln;
-			// this.remove;
-			// "jsem".warn;
-		};
+	setCoor {|x, y|
+		graphX = x;
+		graphY = y;
+		string = "[%,%]".format(graphX.round(0.001), graphY.round(0.001));
 	}
 
 	addEnv {|env|
 
 	}
 
+	displayState_ {|type|
+		case
+		{type.asSymbol == \on} {displayState = \on}
+		{type.asSymbol == \over} {displayState = \over}
+		{type.asSymbol == \off} {displayState = \off}
+		{true}{("Jui_GraphVertex displayState_(%) not define, use [\\on, \\over, \\off, ]".format(type)).warn};
+	}
+
+	addPositionView {
+		positionView = UserView(parent,Rect(this.bounds.right, this.bounds.top - 15, 60,15))
+		.background_(Color.new255(60,60,60,120))
+		.drawFunc_{
+			string.notNil.if({
+				Pen.font = stringFont;
+				Pen.stringLeftJustIn( string, Rect(0,0, positionView.bounds.width, positionView.bounds.height),
+					color:Color.white;
+				);
+			});
+		}
+		.visible_(false)
+		.addAction({|view, x, y, modifiers, buttonNumber, clickCount|
+			"textClick".warn;
+		}, \mouseDownAction)
+		;
+	}
+
+
 	// name_ {|buttonName| name = "Jui_Button [%]".format(buttonName) }
 
 	draw {
-		this.background = Color.new255(150,50,50,50);
+		// this.background = Color.new255(150,50,50,50);
+
+
+
+		Pen.fillColor = case
+		{displayState == \on} { colorFrameOver }
+		{displayState == \over} { colorBackgroundActive }
+		{displayState == \off} { colorBackground };
+
+
+		// Pen.fillColor = Color.new255(150,50,50,50);
+		Pen.fillOval(Rect(3,3, this.bounds.width-6, this.bounds.height-6));
 
 		Pen.width = 1;
-		Pen.strokeColor = Color.red;
-		Pen.addRect(Rect(0,0, this.bounds.width, this.bounds.height));
+		Pen.strokeColor = Color.white;
+		Pen.strokeOval(Rect(1,1, this.bounds.width-2, this.bounds.height-2));
 		Pen.stroke;
 
-		/*
-		string.notNil.if({
-		Pen.font = stringFont;
-		Pen.stringCenteredIn( string, Rect(0,0, this.bounds.width, this.bounds.height),
-		color:case
-		{displayState == \on} { colorStringActive }
-		{displayState == \onOver} { colorStringActive }
-		{displayState == \off} { colorString }
-		{displayState == \offOver} { colorString };
-		);
-		});
-		*/
-
-
-		// this.background = case
-		/*
-		displayState.notNil.if({
-
-		this.background = case
-		{displayState == \on} { colorBackgroundActive }
-		{displayState == \onOver} { colorBackgroundActive }
-		{displayState == \off} { colorBackground }
-		{displayState == \offOver} { colorBackground };
-
-		iconPath.notNil.if({
-		iconSymbol.drawInRect(
-		Rect(0,0,this.bounds.width,this.bounds.height),
-		Rect(0,0,iconSymbol.width, iconSymbol.height),
-		'sourceOver',
-		1
-		);
-		});
-
-		Pen.width = 1;
-
-		Pen.strokeColor = case
-		{displayState == \on} { colorFrameActive.blend(colorFrameOver,frameAlpha) }
-		{displayState == \onOver} { colorFrameActive.blend(colorFrameOver,frameAlpha) }
-		{displayState == \off} { colorFrame.blend(colorFrameOver,frameAlpha) }
-		{displayState == \offOver} { colorFrame.blend(colorFrameOver,frameAlpha) };
-
-		Pen.addRect(Rect(0,0, this.bounds.width, this.bounds.height));
-		Pen.stroke;
-
-		string.notNil.if({
-		Pen.font = stringFont;
-		Pen.stringCenteredIn( string, Rect(0,0, this.bounds.width, this.bounds.height),
-		color:case
-		{displayState == \on} { colorStringActive }
-		{displayState == \onOver} { colorStringActive }
-		{displayState == \off} { colorString }
-		{displayState == \offOver} { colorString };
-		);
-		});
-		})
-		*/
 	}
 
 }
