@@ -11,6 +11,7 @@ Jui_Graph : UserView {
 	var testPlay;
 
 	var delayBox;
+	var delayOffset;
 
 
 	*new { | parent, bounds |
@@ -36,6 +37,8 @@ Jui_Graph : UserView {
 		graphRectOffset = 30;
 		vertexSize = 12;
 		graphSegments = 800;
+
+		delayOffset = 0;
 
 		this.name = "Jui_Graph";
 
@@ -71,13 +74,19 @@ Jui_Graph : UserView {
 		.typingColor_(Color(0.3,1,0.3))
 		.normalColor_(Color.white)
 		.stringColor_(Color.red)
-		.buttonsVisible_(true)
+		.scroll_step_(0.1)
 		.align_(\center)
 		.action_({|box|
+
 			// envelope.delay(box.value);
+			delayOffset = box.value;
+
 			vertex.do({|oneVertex|
+				// oneVertex.graphX.notNil.if({
 				var displayPoint;
-				oneVertex.offset_(box.value);
+
+				"vert [%, %, %]".format(oneVertex.graphX, oneVertex.graphY, oneVertex.curve).postln;
+				// oneVertex.setCoor(oneVertex.graphX, oneVertex.graphY, oneVertex.curve, box.value);
 				displayPoint = this.displayCoor(oneVertex.graphX, oneVertex.graphY);
 				oneVertex.bounds_(Rect(
 					displayPoint.x - vertexSize.half,
@@ -86,12 +95,32 @@ Jui_Graph : UserView {
 					vertexSize
 				));
 
-				oneVertex.setCoor(oneVertex.graphX, oneVertex.graphY, oneVertex.curve);
+				// oneVertex.setCoor(oneVertex.graphX, oneVertex.graphY, oneVertex.curve, box.value);
 				oneVertex.graphX.postln;
 				// (oneVertex.graphX + box.value).postln;
 				// this.
 				oneVertex.refresh;
+
 			});
+
+			/*
+			var displayPoint;
+			var firstVertex = this.vertexFirst;
+			firstVertex.setCoor(firstVertex.graphX, firstVertex.graphY, firstVertex.curve, box.value);
+			displayPoint = this.displayCoor(firstVertex.graphX + firstVertex.offset, firstVertex.graphY);
+			firstVertex.bounds_(Rect(
+			displayPoint.x - vertexSize.half,
+			displayPoint.y - vertexSize.half,
+			vertexSize,
+			vertexSize
+			));
+			*/
+			// oneVertex.setCoor(oneVertex.graphX, oneVertex.graphY, oneVertex.curve, box.value);
+			// oneVertex.graphX.postln;
+			// (oneVertex.graphX + box.value).postln;
+			// this.
+			// firstVertex.refresh;
+
 			this.makeEnvelope;
 		});
 	}
@@ -132,11 +161,11 @@ Jui_Graph : UserView {
 			vertexSize,
 			vertexSize
 		))
-		.setCoor(graphX, graphY, curve)
+		.setCoor(graphX, graphY, curve, delayBox.value)
 		.onMove_{|view|
 			var graphPoint = this.graphCoor(view.bounds.center.x, view.bounds.center.y);
 
-			view.setCoor(graphPoint.x, graphPoint.y, curve);
+			view.setCoor(graphPoint.x, graphPoint.y, curve, 0);
 			view.refresh;
 			/*
 			view.positionView.notNil.if({
@@ -210,10 +239,14 @@ Jui_Graph : UserView {
 	makeEnvelope {
 		var arrXYC = List.new;
 		var env;
-		vertex.do({|oneVertex|
-			// ("graphX : %").format(oneVertex.graphX).postln;
-			// ("graphY : %").format(oneVertex.graphY).postln;
-			arrXYC.add([oneVertex.graphX, oneVertex.graphY, oneVertex.curve]);
+		var copies = 2;
+		copies.do({|i|
+			// i.postln;
+			vertex.do({|oneVertex|
+				// ("graphX : %").format(oneVertex.graphX).postln;
+				// ("graphY : %").format(oneVertex.graphY).postln;
+				arrXYC.add([oneVertex.graphX + (1.5*i), oneVertex.graphY, oneVertex.curve]);
+			});
 		});
 		envelope = Env.xyc(arrXYC);
 		// envelope.test(envelope.duration);
@@ -225,9 +258,13 @@ Jui_Graph : UserView {
 			envelope = Env(envelope.levels, envelope.times, envelope.curves);
 			// env.plot;
 		});
-		// envelope.delay(this.vertexFirst.graphX);
-		envelope.delay(1);
+
+		envelope = envelope.delay(delayOffset);
 		// envelope.plot;
+		env = envelope.delay(envelope.duration);
+
+		// envelope = envelope + env;
+
 		this.refresh;
 	}
 

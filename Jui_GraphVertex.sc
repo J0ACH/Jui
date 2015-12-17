@@ -5,8 +5,8 @@ Jui_GraphVertex : UserView {
 	var <numBoxLevel, <numBoxTime;
 	var screenMouseClick, originalParentRect;
 
-	var <graphX, <graphY, <curve;
-	var <offset;
+	var <graphX, <graphY, <curve, <offset;
+	// var <offset;
 	var string;
 
 	var displayState;
@@ -32,7 +32,7 @@ Jui_GraphVertex : UserView {
 		graphX = nil;
 		graphY = nil;
 		curve = \sin;
-		offset = 0;
+		// offset = 0;
 		string = "[%,%]".format(graphX, graphY);
 
 		// frameAlpha = 0;
@@ -112,17 +112,16 @@ Jui_GraphVertex : UserView {
 		this.drawFunc = { this.draw };
 	}
 
-	setCoor {|x, y, c|
-		graphX = x + offset;
+	setCoor {|x, y, c, off|
+		graphX = x;
 		graphY = y;
 		curve = c;
-		string = "[%,%]".format(graphX.round(0.001), graphY.round(0.001));
+		offset = off;
+		string = "[%,%]".format(graphX.round(0.001) + offset, graphY.round(0.001));
+		this.refresh;
 	}
 
-	offset_ {|val|
-		offset = val;
-		// graphX = x + offset;
-	}
+	// offset_ {|val| offset = val	}
 
 	addEnv {|env|
 
