@@ -5,7 +5,12 @@ Jui_GraphVertex : UserView {
 	var <numBoxLevel, <numBoxTime;
 	var screenMouseClick, originalParentRect;
 
-	var <graphX, <graphY, <curve, <offset;
+	var level, time, <curve;
+	var screenX, screenY;
+	var typeVertex;
+
+
+	var <graphX, <graphY, /*<curve*/, <offset;
 	// var <offset;
 	var string;
 

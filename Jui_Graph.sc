@@ -10,6 +10,7 @@ Jui_Graph : UserView {
 	var graphSegments;
 	var testPlay;
 
+	var edge;
 	var delayBox;
 	var delayOffset;
 
@@ -123,6 +124,14 @@ Jui_Graph : UserView {
 
 			this.makeEnvelope;
 		});
+
+
+		this.addVertex(minDomain,0);
+		this.addVertex(maxDomain,0);
+
+		edge = Jui_ViewControl(this, [\right]);
+		edge.removeMoveConroler;
+		Jui_ViewControl.displayMoveZone = true;
 	}
 
 	domain_ {|minVal, maxVal|
