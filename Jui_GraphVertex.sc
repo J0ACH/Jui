@@ -10,7 +10,7 @@ Jui_GraphVertex : UserView {
 	var typeVertex;
 
 
-	var <graphX, <graphY, /*<curve*/, <offset;
+	var <graphX, <graphY, /*<curve,*/ <offset;
 	// var <offset;
 	var string;
 
@@ -111,6 +111,8 @@ Jui_GraphVertex : UserView {
 			(unicode == 127).if({
 				"deleteVertex".warn;
 				this.close;
+				numBoxLevel.close;
+				numBoxTime.close;
 			})
 		}, \keyDownAction);
 
@@ -147,7 +149,6 @@ Jui_GraphVertex : UserView {
 		.typingColor_(Color(0.3,1,0.3))
 		.normalColor_(Color.white)
 		.stringColor_(Color.red)
-		.buttonsVisible_(true)
 		.align = \center;
 
 

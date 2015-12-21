@@ -5,13 +5,16 @@ Jui_Graph : UserView {
 	var envelope;
 	var minDomain, maxDomain;
 	var minLimit, maxLimit;
-	var graphRectOffset;
+	var graphRectOffset, menuSize;
 	var vertexSize;
 	var graphSegments;
 	var testPlay;
 
 	var edge;
+	var objects;
+
 	var delayBox;
+	var addButt, removeButt;
 	var delayOffset;
 
 
@@ -29,13 +32,15 @@ Jui_Graph : UserView {
 
 		vertex = LinkedList.new;
 		envelope = nil;
+		objects = Dictionary.new;
 
 		minDomain = 0;
 		maxDomain = 1;
 		minLimit = 0;
 		maxLimit = 1;
 
-		graphRectOffset = 30;
+		graphRectOffset = 10;
+		menuSize = 30;
 		vertexSize = 12;
 		graphSegments = 800;
 
@@ -46,6 +51,13 @@ Jui_Graph : UserView {
 		this.drawFunc = { this.draw };
 
 		this.onClose_{ Ndef(\testPlay).release(1) };
+
+		this.action_({
+			"graphAction".postln;
+			objects[\removeButt].bounds_(Rect.offsetCornerRT(this.bounds, 5, 5, 15, 15));
+			objects[\addButt].bounds_(Rect.offsetCornerRT(this.bounds, 5, 25, 15, 15));
+			// \onResize
+		});
 
 		this.addAction({|view, x, y, modifiers, buttonNumber, clickCount|
 			vertex.do({|oneVertex|
@@ -67,7 +79,7 @@ Jui_Graph : UserView {
 		}, \mouseDownAction);
 
 		this.addAction({|view, x, y, modifiers|
-			this.testEnvelope;
+			// this.testEnvelope;
 		}, \mouseUpAction);
 
 		delayBox = NumberBox(this,Rect(300, 5 ,30,15))
@@ -131,7 +143,26 @@ Jui_Graph : UserView {
 
 		edge = Jui_ViewControl(this, [\right]);
 		edge.removeMoveConroler;
-		Jui_ViewControl.displayMoveZone = true;
+		// Jui_ViewControl.displayMoveZone = true;
+
+		objects.put(\removeButt, Jui_Button(this)
+			.string_("x")
+			.keepingState_(false)
+			.action_{
+				"del".warn;
+			}
+		);
+
+
+		objects.put(\addButt, Jui_Button(this)
+			.string_("+")
+			.keepingState_(false)
+			.action_{
+				"add".warn;
+			}
+		);
+
+		this.doAction;
 	}
 
 	domain_ {|minVal, maxVal|
@@ -147,7 +178,7 @@ Jui_Graph : UserView {
 	displayCoor{|graphX, graphY|
 		var point = Point.new;
 		point.x = graphX.linlin(minDomain, maxDomain, graphRectOffset, this.bounds.width - graphRectOffset);
-		point.y = graphY.linlin(minLimit, maxLimit, this.bounds.height - graphRectOffset, graphRectOffset);
+		point.y = graphY.linlin(minLimit, maxLimit, this.bounds.height - graphRectOffset , graphRectOffset);
 		^point;
 	}
 
@@ -248,15 +279,16 @@ Jui_Graph : UserView {
 	makeEnvelope {
 		var arrXYC = List.new;
 		var env;
-		var copies = 2;
-		copies.do({|i|
-			// i.postln;
-			vertex.do({|oneVertex|
-				// ("graphX : %").format(oneVertex.graphX).postln;
-				// ("graphY : %").format(oneVertex.graphY).postln;
-				arrXYC.add([oneVertex.graphX + (1.5*i), oneVertex.graphY, oneVertex.curve]);
-			});
+		// var copies = 1;
+		// copies.do({|i|
+		// i.postln;
+		vertex.do({|oneVertex|
+			// ("graphX : %").format(oneVertex.graphX).postln;
+			// ("graphY : %").format(oneVertex.graphY).postln;
+			// arrXYC.add([oneVertex.graphX + (1.5*i), oneVertex.graphY, oneVertex.curve]);
+			arrXYC.add([oneVertex.graphX, oneVertex.graphY, oneVertex.curve]);
 		});
+		// });
 		envelope = Env.xyc(arrXYC);
 		// envelope.test(envelope.duration);
 
@@ -268,9 +300,9 @@ Jui_Graph : UserView {
 			// env.plot;
 		});
 
-		envelope = envelope.delay(delayOffset);
+		// envelope = envelope.delay(delayOffset);
 		// envelope.plot;
-		env = envelope.delay(envelope.duration);
+		// env = envelope.delay(envelope.duration);
 
 		// envelope = envelope + env;
 
@@ -294,9 +326,9 @@ Jui_Graph : UserView {
 		Pen.addRect(
 			Rect(
 				graphRectOffset,
-				graphRectOffset,
+				graphRectOffset + menuSize,
 				this.bounds.width-(graphRectOffset*2),
-				this.bounds.height-(graphRectOffset*2)
+				this.bounds.height-(graphRectOffset*2) - menuSize
 			)
 		);
 

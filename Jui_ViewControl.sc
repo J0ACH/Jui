@@ -112,6 +112,7 @@ Jui_ViewControl : UserView {
 						{
 							parent.moveTo(man.bounds.left - manipulatorMouseClick.x + x, parent.bounds.top);
 							parent.resizeTo(originalParentRect.width - x + manipulatorMouseClick.x, originalParentRect.height);
+							parent.doAction;
 						}
 					);
 				}
@@ -133,17 +134,21 @@ Jui_ViewControl : UserView {
 						{
 							parent.moveTo(originalParentRect.left,man.bounds.top - manipulatorMouseClick.y + y);
 							parent.resizeTo(originalParentRect.width, originalParentRect.height - y + manipulatorMouseClick.y );
+							parent.doAction;
 						}
 					);
 
 				}
 				{man.name.asSymbol == \right}{
 					// "mouseMoveAction % [%,%]".format(man.name, x, y).postln;
-					parent.resizeTo(originalParentRect.width + x - manipulatorMouseClick.x, originalParentRect.height)
+					"resize right".postln;
+					parent.resizeTo(originalParentRect.width + x - manipulatorMouseClick.x, originalParentRect.height);
+					parent.doAction;
 				}
 				{man.name.asSymbol == \bottom}{
 					// "mouseMoveAction % [%,%]".format(man.name, x, y).postln;
-					parent.resizeTo(originalParentRect.width, man.bounds.bottom - originalParentRect.top - manipulatorMouseClick.y + y)
+					parent.resizeTo(originalParentRect.width, man.bounds.bottom - originalParentRect.top - manipulatorMouseClick.y + y);
+					parent.doAction;
 				}
 			}, \mouseMoveAction);
 		});
@@ -176,7 +181,8 @@ Jui_ViewControl : UserView {
 	}
 
 	addMoveControler{
-		"addMove".warn;
+		moveView.acceptsMouse = true;
+
 		moveView.addAction({|man, x, y, buttNum|
 			"mouseDownAction % [%,%]".format(man.name, x, y).postln;
 			manipulatorMouseClick = x@y;
@@ -192,11 +198,14 @@ Jui_ViewControl : UserView {
 	}
 
 	removeMoveConroler {
-		// moveView.removeAction({"removeMove".warn;}, \mouseDownAction);
-		moveView.removeAction(this.moveManipulators(nil), \mouseMoveAction);
+		moveView.acceptsMouse = false;
+
+		moveView.mouseDownAction = nil;
+		moveView.mouseMoveAction = nil;
 	}
 
 	moveManipulators {|man|
+		// man.notNil
 		var mouse = QtGUI.cursorPosition;
 
 		// (direction.asSymbol == \horizontal).if({ newY = anchorPoint.y });
@@ -207,7 +216,7 @@ Jui_ViewControl : UserView {
 				var canvan = parent.findWindow;
 				canvan.setTopLeftBounds(
 					Rect(
-						originalParentRect.origin.x + mouse.x - manipulatorMouseClick.x - man.bounds.left ,
+						originalParentRect.origin.x + mouse.x - manipulatorMouseClick.x - man.bounds.left,
 						originalParentRect.origin.y + mouse.y - manipulatorMouseClick.y - man.bounds.top,
 						originalParentRect.width,
 						originalParentRect.height
