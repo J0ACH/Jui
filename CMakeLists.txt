@@ -4,35 +4,44 @@ if (CMAKE_SYSTEM_NAME MATCHES "Linux")
 	set(LINUX 1)
 endif()
 
-cmake_minimum_required (VERSION 2.8.11)
+cmake_minimum_required( VERSION 2.8.11 )
 
-set(PROJECT_VERSION_MAJOR 0)
-set(PROJECT_VERSION_MINOR 1)
-set(PROJECT_VERSION_PATCH test1)
+INCLUDE("JuiVersion.txt" ${QT_USE_FILE})
+SET(PROJECT_VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}${PROJECT_VERSION_PATCH}")
 
-# CMAKE_SOURCE_DIR || CMAKE_CURRENT_SOURCE_DIR-> zdrojovy adresar
-# CMAKE_BINARY_DIR || CMAKE_CURRENT_BINARY_DIR-> cilovy adresar sestaveni
+SET(CMAKE_AUTOMOC ON)
+SET(CMAKE_AUTORCC ON)
 
-#cesta pro instal
-SET(CMAKE_INSTALL_PATH "${CMAKE_CURRENT_BINARY_DIR}/Jui_Install" CACHE STRING "Build dir")
+if(CMAKE_GENERATOR MATCHES "Visual Studio 12 2013")
+    set(CMAKE_CONFIGURATION_TYPES Release)
+    set(CMAKE_CONFIGURATION_TYPES "${CMAKE_CONFIGURATION_TYPES}" CACHE STRING
+        "Reset the configurations to what we need/support"
+        FORCE
+    )
+    message(STATUS "Generating files with generator \"${CMAKE_GENERATOR}\"")
+    message(STATUS "Please choose build configuration (\"Release\" or \"Debug\") in next step.")
+ENDIF()
 
-add_executable(Jui testQt.cpp)
-
-if (WIN32)
-	message(STATUS "CMAKE_SOURCE_DIR: ${CMAKE_SOURCE_DIR}")
-	message(STATUS "CMAKE_CURRENT_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
-	message(STATUS "CMAKE_BINARY_DIR: ${CMAKE_BINARY_DIR}")
-	message(STATUS  "CMAKE_CURRENT_BINARY_DIR: ${CMAKE_CURRENT_BINARY_DIR}")
-	message(STATUS "CMAKE_INSTALL_PATH: ${CMAKE_INSTALL_PATH}")
-	#message(SEND_ERROR "CMAKE_INSTALL_PATH: ${CMAKE_INSTALL_PATH}")
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+	SET(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/JuiLibrary" CACHE STRING "Cmake install path" FORCE)
 endif()
 
-#target_include_directories (libsclang ${FFTW3F_INCLUDE_DIR})
-	#target_link_libraries(libsclang ${FFTW3F_LIBRARY})
+OPTION(JUI_CANVAN_SYSTEMFRAME "Canvan system frame" OFF)
+CONFIGURE_FILE (
+  "${PROJECT_SOURCE_DIR}/JuiConfig.h.in"
+  "${PROJECT_BINARY_DIR}/JuiConfig.h"
+)
 
-#set(SC_SOURCE_DIR "SC_SOURCE_PATH" CACHE STRING "A path to SuperCollider source directory")
-#set(SC_BUILD_DIR "SC_BUILD_PATH" CACHE STRING "A path to SuperCollider build directory")
-SET(QT_DIR "QT_DIR" CACHE STRING "Qt source dir")
-#SET(QT_LIB "QT_Lib" CACHE STRING "Qt source dir")
+MESSAGE(STATUS "JUI_VERSION : " ${PROJECT_VERSION} )
 
-include_directories ("${QT_DIR}")
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR})
+
+ADD_SUBDIRECTORY(Classes)
+#ADD_SUBDIRECTORY(Resources)
+
+
+
+
+
+
+
