@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
 	//app.setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }");
 
 	Canvan win(100, 100, 800, 400);
-	win.setTitle("QuantGui");
+	win.setTitle("JuiPreview");
 	//win.setVersion(Qnt_VERSION_MAJOR, Qnt_VERSION_MINOR, Qnt_VERSION_PATCH);
 	win.show();
 

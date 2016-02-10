@@ -1,5 +1,5 @@
 #include "Canvan.h"
-//#include "/JuiConfig.h"
+#include "JuiConfig.h"
 
 Canvan::Canvan(int originX, int originY, int sizeX, int sizeY)
 	: QMainWindow()
@@ -16,14 +16,11 @@ Canvan::Canvan(int originX, int originY, int sizeX, int sizeY)
 	mySetPalette();
 
 #ifdef JUI_CANVAN_SYSTEMFRAME
-
 	setWindowFlags(Qt::CustomizeWindowHint);
-	//setWindowFlags(Qt::BypassWindowManagerHint);
-	//setWindowFlags(Qt::FramelessWindowHint);
 #else
-	//setWindowFlags(Qt::CustomizeWindowHint);
 	setWindowFlags(Qt::FramelessWindowHint);
 #endif
+
 	//setIconSize(QSize(100, 100));
 
 	mCursor = new QPoint(0, 0);
@@ -48,7 +45,7 @@ Canvan::Canvan(int originX, int originY, int sizeX, int sizeY)
 	//menu->setBackgroundRole(QPalette::Background);
 	//menu->setPalette(*palette);
 
-	//menu->setFixedHeight(70);
+	menu->setFixedHeight(70);
 	menu->addMenu(tr("&File"));
 	menu->addMenu(tr("&Edit"));
 
@@ -126,7 +123,7 @@ void Canvan::paintEvent(QPaintEvent *)
 	QPen *pen;
 	pen = new QPen(Qt::red, 1);
 
-	
+
 	painter.setPen(Qt::NoPen);
 	painter.setBrush(QBrush(QColor(30, 30, 30), Qt::SolidPattern));
 	painter.drawRect(rect);
@@ -137,15 +134,15 @@ void Canvan::paintEvent(QPaintEvent *)
 	QRectF target(0, 0, width(), height());
 	QRectF source(0, 0, 168, 128);
 	QImage image("C:/GitHub/QntGui/Resources/Qnt_Logo_128px.png");
-	
+
 	painter.setPen(*pen);
 	//painter.drawRect(imgRect);
 	painter.drawImage(imgRect, image, source);
 	*/
-	
-	
 
-	
+
+
+
 
 	//QRectF rect = dock->geometry();
 	//painter.drawRect(rect);
@@ -172,7 +169,7 @@ void Canvan::mouseMoveEvent(QMouseEvent *mouseEvent)
 
 void Canvan::mySetPalette()
 {
-//	menu->setStyle(QStyleFactory::create("Fusion"));
+	//	menu->setStyle(QStyleFactory::create("Fusion"));
 
 	backColor = new QColor(40, 40, 40);
 	panelColor = new QColor(20, 20, 20);
@@ -195,31 +192,31 @@ void Canvan::mySetPalette()
 	//palette->setBrush(QPalette::Button, QBrush((130, 30, 30), Qt::SolidPattern));
 
 	qApp->setPalette(*palette);
-	
+
 
 	//qApp->setStyle(QStyleFactory::create("Fusion"));
 	/*
-    QPalette darkPalette;
-    darkPalette.setColor(QPalette::Window, QColor(53,53,53));
-    darkPalette.setColor(QPalette::WindowText, Qt::white);
-    darkPalette.setColor(QPalette::Base, QColor(25,25,25));
-    darkPalette.setColor(QPalette::AlternateBase, QColor(53,53,53));
-    darkPalette.setColor(QPalette::ToolTipBase, Qt::white);
-    darkPalette.setColor(QPalette::ToolTipText, Qt::white);
-    darkPalette.setColor(QPalette::Text, Qt::white);
-    darkPalette.setColor(QPalette::Button, QColor(53,53,53));
-    darkPalette.setColor(QPalette::ButtonText, Qt::white);
-    darkPalette.setColor(QPalette::BrightText, Qt::red);
-    darkPalette.setColor(QPalette::Link, QColor(42, 130, 218));
+	QPalette darkPalette;
+	darkPalette.setColor(QPalette::Window, QColor(53,53,53));
+	darkPalette.setColor(QPalette::WindowText, Qt::white);
+	darkPalette.setColor(QPalette::Base, QColor(25,25,25));
+	darkPalette.setColor(QPalette::AlternateBase, QColor(53,53,53));
+	darkPalette.setColor(QPalette::ToolTipBase, Qt::white);
+	darkPalette.setColor(QPalette::ToolTipText, Qt::white);
+	darkPalette.setColor(QPalette::Text, Qt::white);
+	darkPalette.setColor(QPalette::Button, QColor(53,53,53));
+	darkPalette.setColor(QPalette::ButtonText, Qt::white);
+	darkPalette.setColor(QPalette::BrightText, Qt::red);
+	darkPalette.setColor(QPalette::Link, QColor(42, 130, 218));
 
-    darkPalette.setColor(QPalette::Highlight, QColor(42, 130, 218));
-    darkPalette.setColor(QPalette::HighlightedText, Qt::black);
-	
-//	setPalette(darkPalette);
-    qApp->setPalette(darkPalette);
-	
-// qApp->setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }");
-*/
+	darkPalette.setColor(QPalette::Highlight, QColor(42, 130, 218));
+	darkPalette.setColor(QPalette::HighlightedText, Qt::black);
+
+	//	setPalette(darkPalette);
+	qApp->setPalette(darkPalette);
+
+	// qApp->setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }");
+	*/
 }
 
 void Canvan::closeCanvan() { close(); }
