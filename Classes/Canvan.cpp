@@ -49,17 +49,17 @@ Canvan::Canvan(int originX, int originY, int sizeX, int sizeY)
 	menu->addMenu(tr("&File"));
 	menu->addMenu(tr("&Edit"));
 
+	//infoLabel->setText(tr("Invoked <b>File|New</b>"));
 
 
+	testButton = new QPushButton(screen);
+	testButton->setGeometry(50, 50, 100, 30);
+	testButton->setText(tr("close"));
 
-	closeButton = new QPushButton(screen);
-	closeButton->setGeometry(50, 50, 100, 30);
-	closeButton->setText(tr("close"));
-
-	testButton = new Button(screen);
-	testButton->setGeometry(50, 150, 100, 30);
-
-
+	closeButton = new Button(menu);
+	minimizeButton = new Button(menu);
+	maximizeButton = new Button(menu);
+	
 
 
 	//console = new QDockWidget(QString("Console"), this);
@@ -80,8 +80,8 @@ Canvan::Canvan(int originX, int originY, int sizeX, int sizeY)
 
 	connect(this, SIGNAL(sendToConsole(QString)), console, SLOT(addLine(QString)));
 
-	connect(closeButton, SIGNAL(pressed()), this, SLOT(closeCanvan()));
-	connect(testButton, SIGNAL(pressAct()), this, SLOT(testUpdate()));
+	connect(closeButton, SIGNAL(pressAct()), this, SLOT(closeCanvan()));
+	connect(testButton, SIGNAL(pressed()), this, SLOT(closeCanvan()));
 
 
 	msgConsole(tr("start"));
@@ -107,13 +107,7 @@ void Canvan::setVersion(int major = 0, int minor = 0, int patch = 0)
 	tail->showMessage(text);
 }
 
-void Canvan::testUpdate()
-{
-	qDebug() << "updateCanvan";
-	QString text = tr("tick2");
-	emit sendToConsole(text);
 
-}
 
 void Canvan::paintEvent(QPaintEvent *)
 {
@@ -123,10 +117,16 @@ void Canvan::paintEvent(QPaintEvent *)
 	QPen *pen;
 	pen = new QPen(Qt::red, 1);
 
+	
 
 	painter.setPen(Qt::NoPen);
 	painter.setBrush(QBrush(QColor(30, 30, 30), Qt::SolidPattern));
-	painter.drawRect(rect);
+	painter.drawRect(screen->geometry());
+
+	painter.setPen(QPen(Qt::red, 1));
+	painter.setBrush(Qt::NoBrush);
+	painter.drawRect(QRect(0, 0, width()-1, height()-1));
+
 
 	/*
 	QRect imgRect(200, 100, 168, 128);
@@ -152,6 +152,7 @@ void Canvan::paintEvent(QPaintEvent *)
 void Canvan::mousePressEvent(QMouseEvent *mouseEvent)
 {
 	*mCursor = mouseEvent->pos();
+	//*mCursor = mouseEvent->globalPos();
 	QString text = tr("pressed [%1,%2]").arg(QString::number(mCursor->x()), QString::number(mCursor->y()));
 	emit sendToConsole(text);
 }
@@ -160,9 +161,6 @@ void Canvan::mouseMoveEvent(QMouseEvent *mouseEvent)
 {
 	QPoint mouseCoor = mouseEvent->globalPos();
 	setGeometry(QRect(mouseCoor.x() - mCursor->x(), mouseCoor.y() - mCursor->y(), width(), height()));
-	//int mouseX = mCursor->x();
-	//int mouseY = mCursor->y() ;
-	//QString text = tr("pressed [%1,%2]").arg(QString::number(mouseX), QString::number(mouseY));
 	QString text = tr("move [%1,%2]").arg(QString::number(mCursor->x()), QString::number(mCursor->y()));
 	emit sendToConsole(text);
 }
@@ -232,7 +230,7 @@ void Canvan::maximizeCanvan()
 	//emit maximizeAct();
 }
 
-void Canvan::resizeCanvan(QResizeEvent *)
+void Canvan::resizeEvent(QResizeEvent *resizeEvent)
 {
 	closeButton->setGeometry(width() - 40, 10, 30, 30);
 	maximizeButton->setGeometry(width() - 70, 10, 30, 30);
@@ -240,9 +238,9 @@ void Canvan::resizeCanvan(QResizeEvent *)
 
 	header->setGeometry(0, 0, width(), 150);
 
-	msgConsole(tr("resize"));
+	msgConsole(tr("resize [%1, %2]").arg(QString::number(width()), QString::number(height())));
 
-	update();
+	//update();
 }
 
 Canvan::~Canvan()

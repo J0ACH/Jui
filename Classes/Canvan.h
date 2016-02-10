@@ -39,7 +39,6 @@ signals:
 
 	public slots:
 	void msgConsole(QString);
-	void testUpdate();
 	void closeCanvan();
 	void minimizeCanvan();
 	void maximizeCanvan();
@@ -47,9 +46,9 @@ signals:
 protected:
 	void mousePressEvent(QMouseEvent *event);
 	void mouseMoveEvent(QMouseEvent *event);
-	void resizeCanvan(QResizeEvent *event);
+	void resizeEvent(QResizeEvent *event);
 	void paintEvent(QPaintEvent *event);
-
+		
 private:
 	//Ui::CanvanClass ui;
 	
@@ -58,10 +57,12 @@ private:
 	QWidget *screen;
 	QStatusBar *tail;
 
-	QPushButton *closeButton;
-	QPushButton *maximizeButton;
-	QPushButton *minimizeButton;
-	Button *testButton;
+	QPushButton *testButton;;
+	
+	Button *closeButton;
+	Button *maximizeButton;
+	Button *minimizeButton;
+
 
 	QDockWidget *dock;
 	Console *console;
