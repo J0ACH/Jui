@@ -18,12 +18,15 @@ public:
 	QRectF boundingRect() const;
 
 	void setIconPath(QString path);
+	void setName(QString name);
 
 protected:
 	void paintEvent(QPaintEvent *);
 
 private:
 	bool isPressed, isOver;
+
+	QString *name;
 
 	QString iconPath;
 
@@ -44,8 +47,10 @@ private:
 
 signals:
 	void pressAct();
+	void enterAct(QString name);
+	void leaveAct(QString name);
 
-	public slots:
+public slots:
 	void alphaUpdate();
 
 	

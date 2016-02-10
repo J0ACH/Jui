@@ -52,14 +52,14 @@ Canvan::Canvan(int originX, int originY, int sizeX, int sizeY)
 	//infoLabel->setText(tr("Invoked <b>File|New</b>"));
 
 
-	testButton = new QPushButton(screen);
+	testButton = new Button(screen);
 	testButton->setGeometry(50, 50, 100, 30);
-	testButton->setText(tr("close"));
+	testButton->setName(tr("testButton"));
 
 	closeButton = new Button(menu);
 	minimizeButton = new Button(menu);
 	maximizeButton = new Button(menu);
-	
+
 
 
 	//console = new QDockWidget(QString("Console"), this);
@@ -81,7 +81,10 @@ Canvan::Canvan(int originX, int originY, int sizeX, int sizeY)
 	connect(this, SIGNAL(sendToConsole(QString)), console, SLOT(addLine(QString)));
 
 	connect(closeButton, SIGNAL(pressAct()), this, SLOT(closeCanvan()));
-	connect(testButton, SIGNAL(pressed()), this, SLOT(closeCanvan()));
+	connect(testButton, SIGNAL(pressAct()), this, SLOT(closeCanvan()));
+
+	connect(testButton, SIGNAL(enterAct(QString)), console, SLOT(addLine(QString)));
+	connect(testButton, SIGNAL(leaveAct(QString)), console, SLOT(addLine(QString)));
 
 
 	msgConsole(tr("start"));
@@ -107,8 +110,6 @@ void Canvan::setVersion(int major = 0, int minor = 0, int patch = 0)
 	tail->showMessage(text);
 }
 
-
-
 void Canvan::paintEvent(QPaintEvent *)
 {
 	QPainter painter(this);
@@ -117,7 +118,7 @@ void Canvan::paintEvent(QPaintEvent *)
 	QPen *pen;
 	pen = new QPen(Qt::red, 1);
 
-	
+
 
 	painter.setPen(Qt::NoPen);
 	painter.setBrush(QBrush(QColor(30, 30, 30), Qt::SolidPattern));
@@ -125,7 +126,7 @@ void Canvan::paintEvent(QPaintEvent *)
 
 	painter.setPen(QPen(Qt::red, 1));
 	painter.setBrush(Qt::NoBrush);
-	painter.drawRect(QRect(0, 0, width()-1, height()-1));
+	painter.drawRect(QRect(0, 0, width() - 1, height() - 1));
 
 
 	/*
@@ -149,20 +150,29 @@ void Canvan::paintEvent(QPaintEvent *)
 	//painter.drawText(10, 15, QString::number(backgroundAlpha));
 }
 
+
+void Canvan::resizeEvent(QResizeEvent *resizeEvent)
+{
+	closeButton->setGeometry(width() - 40, 10, 30, 30);
+	maximizeButton->setGeometry(width() - 70, 10, 30, 30);
+	minimizeButton->setGeometry(width() - 100, 10, 30, 30);
+
+	header->setGeometry(0, 0, width(), 150);
+
+	msgConsole(tr("resize [%1, %2]").arg(QString::number(width()), QString::number(height())));
+}
+
 void Canvan::mousePressEvent(QMouseEvent *mouseEvent)
 {
 	*mCursor = mouseEvent->pos();
-	//*mCursor = mouseEvent->globalPos();
-	QString text = tr("pressed [%1,%2]").arg(QString::number(mCursor->x()), QString::number(mCursor->y()));
-	emit sendToConsole(text);
+	msgConsole(tr("pressed [%1,%2]").arg(QString::number(mCursor->x()), QString::number(mCursor->y())));
 }
 
 void Canvan::mouseMoveEvent(QMouseEvent *mouseEvent)
 {
 	QPoint mouseCoor = mouseEvent->globalPos();
 	setGeometry(QRect(mouseCoor.x() - mCursor->x(), mouseCoor.y() - mCursor->y(), width(), height()));
-	QString text = tr("move [%1,%2]").arg(QString::number(mCursor->x()), QString::number(mCursor->y()));
-	emit sendToConsole(text);
+	msgConsole(tr("move [%1,%2]").arg(QString::number(mCursor->x()), QString::number(mCursor->y())));
 }
 
 void Canvan::mySetPalette()
@@ -230,18 +240,6 @@ void Canvan::maximizeCanvan()
 	//emit maximizeAct();
 }
 
-void Canvan::resizeEvent(QResizeEvent *resizeEvent)
-{
-	closeButton->setGeometry(width() - 40, 10, 30, 30);
-	maximizeButton->setGeometry(width() - 70, 10, 30, 30);
-	minimizeButton->setGeometry(width() - 100, 10, 30, 30);
-
-	header->setGeometry(0, 0, width(), 150);
-
-	msgConsole(tr("resize [%1, %2]").arg(QString::number(width()), QString::number(height())));
-
-	//update();
-}
 
 Canvan::~Canvan()
 {

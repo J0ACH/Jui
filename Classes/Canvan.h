@@ -37,7 +37,7 @@ public:
 signals:
 	void sendToConsole(QString);
 
-	public slots:
+public slots:
 	void msgConsole(QString);
 	void closeCanvan();
 	void minimizeCanvan();
@@ -57,8 +57,7 @@ private:
 	QWidget *screen;
 	QStatusBar *tail;
 
-	QPushButton *testButton;;
-	
+	Button *testButton;	
 	Button *closeButton;
 	Button *maximizeButton;
 	Button *minimizeButton;

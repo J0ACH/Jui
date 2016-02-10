@@ -6,6 +6,7 @@ Button::Button(QWidget *parent)
 	isPressed = false;
 	isOver = false;
 
+	name = new QString();
 	iconPath = QString();
 
 	backgroundAlpha = 0;
@@ -15,6 +16,11 @@ Button::Button(QWidget *parent)
 
 	timer = new QTimer(this);
 	connect(timer, SIGNAL(timeout()), this, SLOT(alphaUpdate()));
+}
+
+void Button::setName(QString buttonName)
+{
+	*name = buttonName;
 }
 
 QRectF Button::boundingRect() const
@@ -121,10 +127,7 @@ void Button::enterEvent(QEvent *event)
 	timer->start();
 
 	isOver = true;
-	//qDebug() << "Enter";
-	//update();
-	//QWidget::enterEvent(event);
-	//emit enterAct();
+	emit enterAct(tr("Button_EnterAct [%1]").arg(*name));
 }
 
 void Button::leaveEvent(QEvent *event)
@@ -134,10 +137,7 @@ void Button::leaveEvent(QEvent *event)
 	timer->start();
 
 	isOver = false;
-	//qDebug() << "Leave";
-	//update();
-	//QWidget::leaveEvent(event);
-	//emit leaveAct();
+	emit leaveAct(tr("Button_LeaveAct [%1]").arg(*name));	
 }
 
 Button::~Button()
