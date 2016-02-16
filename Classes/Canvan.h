@@ -34,6 +34,9 @@ public:
 	void setTitle(QString titleName);
 	void setVersion(int major, int minor, int patch);
 
+	Console *console;
+	QWidget *screen;
+
 signals:
 	void sendToConsole(QString);
 
@@ -54,7 +57,7 @@ private:
 	
 	QMenuBar *menu;
 	QWidget *header;
-	QWidget *screen;
+	
 	QStatusBar *tail;
 
 	Button *testButton;	
@@ -64,7 +67,7 @@ private:
 
 
 	QDockWidget *dock;
-	Console *console;
+	
 
 	QLabel *title;
 	QLabel *version;

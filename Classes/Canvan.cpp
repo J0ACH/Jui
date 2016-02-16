@@ -13,7 +13,7 @@ Canvan::Canvan(int originX, int originY, int sizeX, int sizeY)
 	this->window()->setWindowOpacity(0.95);
 
 	setGeometry(QRect(originX, originY, sizeX, sizeY));
-	mySetPalette();
+	//mySetPalette();
 
 #ifdef JUI_CANVAN_SYSTEMFRAME
 	setWindowFlags(Qt::CustomizeWindowHint);
@@ -26,7 +26,6 @@ Canvan::Canvan(int originX, int originY, int sizeX, int sizeY)
 	mCursor = new QPoint(0, 0);
 
 	this->setMouseTracking(true);
-
 
 	menu = new QMenuBar(this);
 	header = new QWidget(this);
@@ -49,6 +48,10 @@ Canvan::Canvan(int originX, int originY, int sizeX, int sizeY)
 	menu->addMenu(tr("&File"));
 	menu->addMenu(tr("&Edit"));
 
+//	menu->setStyleSheet("QMenuBar{ background - color: qlineargradient(x1 : 0, y1 : 0, x2 : 0, y2 : 1, stop : 0 lightgray, stop : 1 darkgray); }");
+
+	menu->setStyleSheet("QMenuBar{ background - color: yellow; }");
+
 	//infoLabel->setText(tr("Invoked <b>File|New</b>"));
 
 
@@ -60,6 +63,7 @@ Canvan::Canvan(int originX, int originY, int sizeX, int sizeY)
 	minimizeButton = new Button(menu);
 	maximizeButton = new Button(menu);
 
+	closeButton->show();
 
 
 	//console = new QDockWidget(QString("Console"), this);
