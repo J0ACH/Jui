@@ -1,19 +1,18 @@
 message(STATUS "Jui Tester")
 message(STATUS ${PROJECT_SOURCE_DIR})
 message(STATUS ${PROJECT_BINARY_DIR})
+message(STATUS ": "${CMAKE_BINARY_DIR})
 
 FIND_PACKAGE(Qt5Core)
 FIND_PACKAGE(Qt5Widgets)
 FIND_PACKAGE(Qt5Gui)
 
-
-
 # tohle funguje az kdyz probiha druhy install, jinak v cily nic neni
 
 #INCLUDE_DIRECTORIES(your/header/dir)
 #LINK_DIRECTORIES(your/library/dir)
-INCLUDE_DIRECTORIES(${PROJECT_BINARY_DIR}/JuiLibrary/include)
-LINK_DIRECTORIES(${PROJECT_BINARY_DIR}/JuiLibrary/lib)
+INCLUDE_DIRECTORIES(${CMAKE_BINARY_DIR}/include)
+LINK_DIRECTORIES(${CMAKE_BINARY_DIR}/lib)
 # 
 
 
@@ -30,7 +29,9 @@ TARGET_LINK_LIBRARIES(JuiTester ${QT_TESTER_LIBRARIES})
 #LINKER(EXE TARGET)
 TARGET_LINK_LIBRARIES(JuiTester Jui)
 
-INSTALL(TARGETS JuiTester DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
+INSTALL(TARGETS JuiTester DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/Release)
+
+# Release tester
 
 if(WIN32)	
 	SET(QT_DLL_DIR ${Qt5Core_DIR}/../../../bin)
@@ -39,12 +40,12 @@ if(WIN32)
 		${QT_DLL_DIR}/Qt5Core.dll
 		${QT_DLL_DIR}/Qt5Gui.dll
 		${QT_DLL_DIR}/Qt5Widgets.dll
-		${QT_DLL_DIR}/icuin53.dll
-		${QT_DLL_DIR}/icuuc53.dll
-		${QT_DLL_DIR}/icudt53.dll
+		${QT_DLL_DIR}/icuin54.dll
+		${QT_DLL_DIR}/icuuc54.dll
+		${QT_DLL_DIR}/icudt54.dll
 	)
 
 	IF(CMAKE_C_FLAGS_RELEASE)
-		FILE(COPY ${QT_LIBRARIES_RELEASE} DESTINATION ${PROJECT_BINARY_DIR}/JuiLibrary/bin)
+		FILE(COPY ${QT_LIBRARIES_RELEASE} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/Release)
 	ENDIF()
 ENDIF()
