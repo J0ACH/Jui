@@ -1,0 +1,26 @@
+
+
+SET(Core_cmake ${CMAKE_CURRENT_LIST_FILE})
+SET(Core_hdr
+ ${CMAKE_CURRENT_LIST_DIR}/Student.h
+)
+SET(Core_src
+  ${CMAKE_CURRENT_LIST_DIR}/Student.cpp
+)
+SET(Core_res
+)
+
+SOURCE_GROUP("" FILES ${Core_cmake})
+SOURCE_GROUP("headers" FILES ${Core_hdr})
+SOURCE_GROUP("sources" FILES ${Core_src})
+SOURCE_GROUP("resources" FILES ${Core_res})
+
+TARGET_SOURCES(Jui PRIVATE 
+  ${Core_cmake}
+  ${Core_hdr}
+  ${Core_src}
+  ${Core_res}
+)
+
+SET_PROPERTY(TARGET Jui PROPERTY FOLDER "libraries")
+

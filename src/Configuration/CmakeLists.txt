@@ -1,0 +1,22 @@
+
+SET(Config_cmake ${CMAKE_CURRENT_LIST_FILE})
+SET(Config_hdr
+ 
+)
+SET(Config_src
+  ${CMAKE_CURRENT_LIST_DIR}/Config.cpp
+)
+
+SOURCE_GROUP("" FILES ${Config_cmake})
+SOURCE_GROUP("headers" FILES ${Config_hdr})
+SOURCE_GROUP("sources" FILES ${Config_src})
+SOURCE_GROUP("resources" FILES ${Config_res})
+
+TARGET_SOURCES(Config PRIVATE 
+  ${Config_cmake}
+  ${Config_hdr}
+  ${Config_src}
+  ${Config_res}
+)
+
+SET_PROPERTY(TARGET Config PROPERTY FOLDER "application")
