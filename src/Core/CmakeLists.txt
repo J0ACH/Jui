@@ -16,5 +16,5 @@ TARGET_SOURCES(Jui PRIVATE
   ${Core_res}
 )
 
-
+INSTALL(FILES ${Core_hdr} DESTINATION include COMPONENT Devel)
 
