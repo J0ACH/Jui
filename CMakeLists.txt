@@ -39,6 +39,7 @@ ENDFUNCTION(QT_ADDMODULE)
 ADD_LIBRARY(Jui SHARED "")
 QT_ADDMODULE(Jui Core)
 QT_ADDMODULE(Jui Widgets)
+QT_ADDMODULE(Jui Gui)
 
 # CONFIG SETUP ###################################################
 
