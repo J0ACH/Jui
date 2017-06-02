@@ -1,11 +1,9 @@
 
 SET(Core_hdr
- ${CMAKE_CURRENT_LIST_DIR}/Student.h
- ${CMAKE_CURRENT_LIST_DIR}/Canvan.h
+  ${CMAKE_CURRENT_LIST_DIR}/Canvan.h
 )
 
 SET(Core_src
-  ${CMAKE_CURRENT_LIST_DIR}/Student.cpp
   ${CMAKE_CURRENT_LIST_DIR}/Canvan.cpp
 )
 
