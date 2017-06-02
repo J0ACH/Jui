@@ -1,11 +1,5 @@
 
-#SOURCE_GROUP("CmakeStructure\\Src" FILES ${CMAKE_CURRENT_LIST_FILE})
-
-#INCLUDE(${CMAKE_CURRENT_LIST_DIR}/Core/CMakeLists.txt)
 ADD_SUBDIRECTORY(Core)
-
-
-#INCLUDE(${CMAKE_CURRENT_LIST_DIR}/Configuration/CMakeLists.txt)
 ADD_SUBDIRECTORY(Configuration)
 
 

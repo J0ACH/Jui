@@ -53,4 +53,5 @@ Temporary Items
 Build folder
 # =========================
 build/
+.vs/
 
