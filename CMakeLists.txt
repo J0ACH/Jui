@@ -8,6 +8,9 @@ SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/build/lib)
 SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/build/lib)
 SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/build/bin)
 SET(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
+#SET(CMAKE_AUTOMOC ON)
+#set(CMAKE_AUTOMOC TRUE)
+#set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 # FUNCTIONS SETUP ###################################################
 
@@ -37,6 +40,12 @@ ENDFUNCTION(QT_ADDMODULE)
 # LIBRARY SETUP ###################################################
 
 ADD_LIBRARY(Jui SHARED "")
+#ADD_LIBRARY(Jui SHARED
+#  ${Core_hdr}
+#  ${Core_src}
+#  ${Core_res}
+#  ${Core_QT_Sources}
+#)
 QT_ADDMODULE(Jui Core)
 QT_ADDMODULE(Jui Widgets)
 QT_ADDMODULE(Jui Gui)

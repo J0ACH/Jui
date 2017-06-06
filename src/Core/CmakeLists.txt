@@ -1,4 +1,5 @@
 
+
 SET(Core_hdr
   ${CMAKE_CURRENT_LIST_DIR}/Canvan.h
 )
@@ -10,11 +11,28 @@ SET(Core_src
 SET(Core_res
 )
 
+QT5_WRAP_CPP( Core_moc ${Core_hdr} )
+QT5_ADD_RESOURCES( Core_rcc ${Core_res} )
+SET(Core_QT_Sources ${Core_moc} ${Core_rcc})
+
+
+
+
+#ADD_LIBRARY(Jui SHARED "")
+#ADD_LIBRARY(Jui SHARED
+#  ${Core_hdr}
+#  ${Core_src}
+#  ${Core_res}
+#  ${Core_QT_Sources}
+#)
+
 TARGET_SOURCES(Jui PRIVATE 
   ${Core_hdr}
   ${Core_src}
   ${Core_res}
+  ${Core_QT_Sources}
 )
 
 INSTALL(FILES ${Core_hdr} DESTINATION include COMPONENT Devel)
+
 

@@ -13,7 +13,7 @@ namespace Jui
 	Canvan::Canvan(int x, int y, int width, int height) : QWidget(0)
 	{
 		qDebug("Canvan new x, y, w, h, ");
-		this->setWindowTitle("Canvan");
+		//this->setWindowTitle("Canvan");
 
 		Canvan::init(x, y, width, height);
 	}
@@ -71,6 +71,9 @@ namespace Jui
 			<< "Name:" << this->name
 			<< "gPosX:" << gPos.x()
 			<< "gPosY:" << gPos.y();
+		
+		//emit actMousePressed(this, gPos.x(), gPos.y());
+		//emit actMousePressed();
 	}
 
 	void Canvan::paintEvent(QPaintEvent *event)
@@ -86,5 +89,7 @@ namespace Jui
 	Canvan::~Canvan()
 	{
 		qDebug("Canvan closed");
+		//emit actClosed(this);
+		//emit actClosed();
 	}
 }
