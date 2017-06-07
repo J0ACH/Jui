@@ -1,24 +1,24 @@
-#include "Canvan.h"
+#include "Canvas.h"
 
 
 namespace Jui
 {
 
-	Canvan::Canvan(QWidget *parent, int x, int y, int width, int height) : QWidget(parent)
+	Canvas::Canvas(QWidget *parent, int x, int y, int width, int height) : QWidget(parent)
 	{
 		qDebug("Canvan new parent ");
-		Canvan::init(x, y, width, height);
+		Canvas::init(x, y, width, height);
 	}
 
-	Canvan::Canvan(int x, int y, int width, int height) : QWidget(0)
+	Canvas::Canvas(int x, int y, int width, int height) : QWidget(0)
 	{
 		qDebug("Canvan new x, y, w, h, ");
 		//this->setWindowTitle("Canvan");
 
-		Canvan::init(x, y, width, height);
+		Canvas::init(x, y, width, height);
 	}
 
-	void Canvan::init(int x, int y, int width, int height)
+	void Canvas::init(int x, int y, int width, int height)
 	{
 		this->setWindowFlags(Qt::FramelessWindowHint);
 		this->setAttribute(Qt::WA_TranslucentBackground);
@@ -33,26 +33,26 @@ namespace Jui
 		this->show();
 	}
 
-	void Canvan::setName(QString name) { this->name = name; }
+	void Canvas::setName(QString name) { this->name = name; }
 
-	void Canvan::setBackgroundAlpha(int alpha) {
+	void Canvas::setBackgroundAlpha(int alpha) {
 		if (alpha < 1) alpha = 1;
 		if (alpha > 255) alpha = 255;		
 		this->colorBackround.setAlpha(alpha);
 	}
-	void Canvan::setBackgroundColor(int red, int green, int blue)
+	void Canvas::setBackgroundColor(int red, int green, int blue)
 	{
 		this->colorBackround.setRed(red);
 		this->colorBackround.setGreen(green);
 		this->colorBackround.setBlue(blue);
 	}
 	
-	void Canvan::setFrameAlpha(int alpha) {
+	void Canvas::setFrameAlpha(int alpha) {
 		if (alpha < 1) alpha = 1;
 		if (alpha > 255) alpha = 255;
 		this->colorFrame.setAlpha(alpha);
 	}
-	void Canvan::setFrameColor(int red, int green, int blue)
+	void Canvas::setFrameColor(int red, int green, int blue)
 	{
 		this->colorFrame.setRed(red);
 		this->colorFrame.setGreen(green);
@@ -60,23 +60,23 @@ namespace Jui
 	}
 
 
-	void Canvan::mousePressEvent(QMouseEvent *mouseEvent)
+	void Canvas::mousePressEvent(QMouseEvent *mouseEvent)
 	{
 		QPoint gPos = mouseEvent->globalPos();
 		//QPoint *mCursorGlobal = new QPoint(&mouseEvent->globalPos()));
 		//QPoint *mCursorLocal = event->pos();
-		qDebug("Canvan mouse pressed event");
+		qDebug("Canvas mouse pressed event");
 
 		qDebug()
 			<< "Name:" << this->name
 			<< "gPosX:" << gPos.x()
 			<< "gPosY:" << gPos.y();
 		
-		//emit actMousePressed(this, gPos.x(), gPos.y());
+		emit actMousePressed(this, gPos.x(), gPos.y());
 		//emit actMousePressed();
 	}
 
-	void Canvan::paintEvent(QPaintEvent *event)
+	void Canvas::paintEvent(QPaintEvent *event)
 	{
 		QPainter painter(this);
 		painter.fillRect(QRect(0, 0, width(), height()), this->colorBackround);
@@ -86,9 +86,9 @@ namespace Jui
 		// QToolBar::paintEvent(event);
 	}
 
-	Canvan::~Canvan()
+	Canvas::~Canvas()
 	{
-		qDebug("Canvan closed");
+		qDebug("Canvas closed");
 		//emit actClosed(this);
 		//emit actClosed();
 	}

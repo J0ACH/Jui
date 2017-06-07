@@ -1,24 +1,21 @@
-#ifndef CANVAN_H
-#define CANVAN_H
+#ifndef CANVAS_H
+#define CANVAS_H
 
 #include <QWidget>
 #include <QDebug>
 #include <QPainter>
 #include <QMouseEvent>
-//#include <QMetaObject>
-
-//#include "moc_Canvan.cpp"
 
 namespace Jui
 {
-	class Canvan : public QWidget
+	class Canvas : public QWidget
 	{
 		Q_OBJECT
 
 	public:
-		Canvan(QWidget *parent, int x, int y, int width, int height);
-		Canvan(int x, int y, int width, int height);
-		~Canvan();
+		Canvas(QWidget *parent, int x, int y, int width, int height);
+		Canvas(int x, int y, int width, int height);
+		~Canvas();
 
 		void setName(QString name);
 		void setBackgroundAlpha(int alpha);
@@ -31,7 +28,7 @@ namespace Jui
 
 	signals:
 		//void actClosed(Canvan *obj);
-		//void actMousePressed(Canvan *obj, int x, int y);
+		void actMousePressed(Canvas *obj, int x, int y);
 		//void actMousePressed();
 		//void actClosed();
 
@@ -49,4 +46,4 @@ namespace Jui
 
 
 
-#endif // CANVAN_H
+#endif // CANVAS_H
