@@ -5,7 +5,7 @@
 #include <QDebug>
 #include <QPainter>
 #include <QMouseEvent>
-#include <QMetaObject>
+//#include <QMetaObject>
 
 //#include "moc_Canvan.cpp"
 
@@ -13,7 +13,7 @@ namespace Jui
 {
 	class Canvan : public QWidget
 	{
-		//Q_OBJECT
+		Q_OBJECT
 
 	public:
 		Canvan(QWidget *parent, int x, int y, int width, int height);
@@ -49,4 +49,4 @@ namespace Jui
 
 
 
-#endif
+#endif // CANVAN_H

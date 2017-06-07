@@ -1,5 +1,38 @@
 
+FIND_PACKAGE(Qt5 COMPONENTS Core Widgets Gui REQUIRED)
+
+SET(QT_LIBRARIES 
+  Qt5::Core
+  Qt5::Gui 
+  Qt5::Widgets
+ )
+  
 ADD_SUBDIRECTORY(Core)
 ADD_SUBDIRECTORY(Configuration)
 
+ADD_LIBRARY(Jui SHARED
+	${Core_hdr}
+	${Core_src}
+	${Core_res}
+)
+TARGET_LINK_LIBRARIES(Jui PUBLIC ${QT_LIBRARIES})
 
+
+ADD_EXECUTABLE(Config 
+	${Config_hdr}
+	${Config_src}
+)
+TARGET_INCLUDE_DIRECTORIES(Config PUBLIC ${CMAKE_SOURCE_DIR}/build/include)
+TARGET_INCLUDE_DIRECTORIES(Config PUBLIC ${CMAKE_SOURCE_DIR}/src/Core)
+TARGET_LINK_LIBRARIES(Config PUBLIC 
+	Jui
+	${QT_LIBRARIES}
+)
+
+
+INSTALL(
+	TARGETS Jui Config
+	EXPORT JuiTargets
+    RUNTIME DESTINATION install
+	CONFIGURATIONS Release
+)

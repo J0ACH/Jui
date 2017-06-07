@@ -1,15 +1,17 @@
 
-SET(Config_hdr 
+SET(Config_hdr
+	PARENT_SCOPE
 )
 
 SET(Config_src
-  ${CMAKE_CURRENT_LIST_DIR}/Config.cpp
+	${CMAKE_CURRENT_LIST_DIR}/Config.cpp
+	PARENT_SCOPE
 )
 
-TARGET_SOURCES(Config PRIVATE 
-  ${Config_hdr}
-  ${Config_src}
-  ${Config_res}
-)
+#TARGET_SOURCES(Config PRIVATE 
+#  ${Config_hdr}
+#  ${Config_src}
+#  ${Config_res}
+#)
 
 
