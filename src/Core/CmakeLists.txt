@@ -14,17 +14,6 @@ SET(Core_res
 	PARENT_SCOPE
 )
 
-#QT5_WRAP_CPP( Core_moc ${Core_hdr} )
-#QT5_ADD_RESOURCES( Core_rcc ${Core_res} )
-#SET(Core_QT_Sources ${Core_moc} ${Core_rcc})
-
-#TARGET_SOURCES(Jui PRIVATE 
-#  ${Core_hdr}
-#  ${Core_src}
-#  ${Core_res}
-  #${Core_QT_Sources}
-#)
-
 INSTALL(FILES ${Core_hdr} DESTINATION include COMPONENT Devel)
 
 

@@ -10,7 +10,7 @@ namespace Jui
 		Canvas::init(x, y, width, height);
 	}
 
-	Canvas::Canvas(int x, int y, int width, int height) : QWidget(0)
+	Canvas::Canvas(int x, int y, int width, int height) : QWidget()
 	{
 		qDebug("Canvan new x, y, w, h, ");
 		//this->setWindowTitle("Canvan");
@@ -31,6 +31,13 @@ namespace Jui
 		this->setFrameAlpha(255);
 
 		this->show();
+		
+		/*
+		QObject::connect(
+			this, &Canvas::actMousePressed,
+			this, &Canvas::onClose
+		);
+		*/
 	}
 
 	void Canvas::setName(QString name) { this->name = name; }
@@ -59,6 +66,10 @@ namespace Jui
 		this->colorFrame.setBlue(blue);
 	}
 
+	void Canvas::onClose()
+	{
+		qDebug("Canvas onClose");
+	}
 
 	void Canvas::mousePressEvent(QMouseEvent *mouseEvent)
 	{
@@ -72,8 +83,8 @@ namespace Jui
 			<< "gPosX:" << gPos.x()
 			<< "gPosY:" << gPos.y();
 		
-		emit actMousePressed(this, gPos.x(), gPos.y());
-		//emit actMousePressed();
+		//emit actMousePressed(this, gPos.x(), gPos.y());
+		emit actMousePressed();
 	}
 
 	void Canvas::paintEvent(QPaintEvent *event)

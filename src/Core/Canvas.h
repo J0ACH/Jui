@@ -24,12 +24,12 @@ namespace Jui
 		void setFrameColor(int red, int green, int blue);
 
 	public slots:
-		//void onClose();
+		void onClose();
 
 	signals:
 		//void actClosed(Canvan *obj);
-		void actMousePressed(Canvas *obj, int x, int y);
-		//void actMousePressed();
+		//void actMousePressed(Canvas *obj, int x, int y);
+		void actMousePressed();
 		//void actClosed();
 
 	protected:
@@ -43,7 +43,5 @@ namespace Jui
 		QColor colorBackround, colorFrame;
 	};
 }
-
-
 
 #endif // CANVAS_H
