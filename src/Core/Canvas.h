@@ -2,6 +2,7 @@
 #define CANVAS_H
 
 #include <QWidget>
+//#include <QMetaObject>
 #include <QDebug>
 #include <QPainter>
 #include <QMouseEvent>
@@ -13,6 +14,7 @@ namespace Jui
 		Q_OBJECT
 
 	public:
+		Canvas(QWidget *parent = 0);
 		Canvas(QWidget *parent, int x, int y, int width, int height);
 		Canvas(int x, int y, int width, int height);
 		~Canvas();

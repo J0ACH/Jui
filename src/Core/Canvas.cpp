@@ -3,6 +3,11 @@
 
 namespace Jui
 {
+	Canvas::Canvas(QWidget *parent) : QWidget(parent)
+	{
+		qDebug("Canvan new parent ");
+		Canvas::init(0, 0, 100, 100);
+	}
 
 	Canvas::Canvas(QWidget *parent, int x, int y, int width, int height) : QWidget(parent)
 	{
@@ -31,20 +36,13 @@ namespace Jui
 		this->setFrameAlpha(255);
 
 		this->show();
-		
-		/*
-		QObject::connect(
-			this, &Canvas::actMousePressed,
-			this, &Canvas::onClose
-		);
-		*/
 	}
 
 	void Canvas::setName(QString name) { this->name = name; }
 
 	void Canvas::setBackgroundAlpha(int alpha) {
 		if (alpha < 1) alpha = 1;
-		if (alpha > 255) alpha = 255;		
+		if (alpha > 255) alpha = 255;
 		this->colorBackround.setAlpha(alpha);
 	}
 	void Canvas::setBackgroundColor(int red, int green, int blue)
@@ -53,7 +51,7 @@ namespace Jui
 		this->colorBackround.setGreen(green);
 		this->colorBackround.setBlue(blue);
 	}
-	
+
 	void Canvas::setFrameAlpha(int alpha) {
 		if (alpha < 1) alpha = 1;
 		if (alpha > 255) alpha = 255;
@@ -82,7 +80,7 @@ namespace Jui
 			<< "Name:" << this->name
 			<< "gPosX:" << gPos.x()
 			<< "gPosY:" << gPos.y();
-		
+
 		//emit actMousePressed(this, gPos.x(), gPos.y());
 		emit actMousePressed();
 	}
