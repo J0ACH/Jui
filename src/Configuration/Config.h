@@ -2,18 +2,20 @@
 #define CONFIG_H
 
 #include <QWidget>
+//#include <QMetaObject>
 #include <QDebug>
-
 #include "Canvas.h"
 
 namespace Jui
 {
-	class Config : public QWidget
+	//class Config : public QWidget
+	class Config : public Canvas
 	{
 		Q_OBJECT
 
 	public:
-		Config(int x, int y, int width, int height);
+		Config(QWidget *parent);
+		//Config(int x, int y, int width, int height);
 		~Config();
 	};
 }
