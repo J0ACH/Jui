@@ -1,19 +1,45 @@
 
+INCLUDE(QtLinkMacro)
+INCLUDE(RegPackageMacro)
+
+SET(BUILD_BIN_TYPE_DIR ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_CONFIGURATION_TYPES})
+SET(BUILD_INCLUDE_DIR ${BUILD_DIR}/include)
+SET(BUILD_INSTALL_DIR ${BUILD_DIR}/install)
+
+MESSAGE(STATUS "BUILD_DIR: " ${BUILD_DIR})
+MESSAGE(STATUS "BUILD_INCLUDE_DIR: " ${BUILD_INCLUDE_DIR})
+MESSAGE(STATUS "BUILD_INSTALL_DIR: " ${BUILD_INSTALL_DIR})
+
+FIND_PACKAGE(Qt5 COMPONENTS Core Widgets Gui REQUIRED)
 ADD_SUBDIRECTORY(Core)
 ADD_SUBDIRECTORY(Configuration)
 
-FIND_PACKAGE(Qt5 COMPONENTS Core Widgets Gui REQUIRED)
+# JUI SETUP ###################################################
 
 ADD_LIBRARY(Jui SHARED
 	${Core_hdr}
 	${Core_src}
 	${Core_res}
 )
-QT_ADDMODULE(Jui Core)
-QT_ADDMODULE(Jui Widgets)
-QT_ADDMODULE(Jui Gui)
-#TARGET_LINK_LIBRARIES(Jui PUBLIC ${QT_LIBRARIES})
 
+ADD_CUSTOM_COMMAND(TARGET Jui
+	POST_BUILD
+	COMMAND ${CMAKE_COMMAND} -E make_directory ${BUILD_INCLUDE_DIR}
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${Core_hdr} ${BUILD_INCLUDE_DIR}
+)
+
+TARGET_INCLUDE_DIRECTORIES(Jui PUBLIC ${BUILD_INCLUDE_DIR}/)
+
+QtLink(Jui Core Widgets Gui)
+
+INSTALL(TARGETS Jui 
+	RUNTIME DESTINATION install
+	#COMPONENT applications
+)
+
+RegPackage(Jui)
+
+# CONFIG SETUP ###################################################
 
 ADD_EXECUTABLE(Config 
 	${Config_hdr}
@@ -22,27 +48,12 @@ ADD_EXECUTABLE(Config
 TARGET_INCLUDE_DIRECTORIES(Config PUBLIC ${CMAKE_SOURCE_DIR}/build/include)
 TARGET_INCLUDE_DIRECTORIES(Config PUBLIC ${CMAKE_SOURCE_DIR}/src/Core)
 TARGET_LINK_LIBRARIES(Config PUBLIC Jui)
-QT_ADDMODULE(Config Widgets)
-QT_ADDMODULE(Config Core)
 
+QtLink(Config Core Widgets)
 
-INSTALL(
-	TARGETS Jui Config
-	EXPORT JuiTargets
-    RUNTIME DESTINATION install
-	CONFIGURATIONS Release
+INSTALL(TARGETS Config 
+	RUNTIME DESTINATION install
+	#COMPONENT applications
 )
 
-# PACKAGE SETUP ###################################################
-
-INCLUDE(CMakePackageConfigHelpers)
-
-CONFIGURE_PACKAGE_CONFIG_FILE(
-	${CMAKE_SOURCE_DIR}/JuiConfig.cmake.in
-	${CMAKE_BINARY_DIR}/JuiConfig.cmake
-	INSTALL_DESTINATION lib/cmake
-	#PATH_VARS ${CMAKE_BINARY_DIR@/bin}
-)
-
-EXPORT(EXPORT JuiTargets FILE ${CMAKE_BINARY_DIR}/JuiTargets.cmake)
-EXPORT ( PACKAGE Jui ) 
+#####################################################
