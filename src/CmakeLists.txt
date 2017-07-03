@@ -23,7 +23,7 @@ ADD_LIBRARY(Jui SHARED
 )
 
 ADD_CUSTOM_COMMAND(TARGET Jui
-	POST_BUILD
+	PRE_BUILD
 	COMMAND ${CMAKE_COMMAND} -E make_directory ${BUILD_INCLUDE_DIR}
     COMMAND ${CMAKE_COMMAND} -E copy_if_different ${Core_hdr} ${BUILD_INCLUDE_DIR}
 )
@@ -41,19 +41,31 @@ RegPackage(Jui)
 
 # CONFIG SETUP ###################################################
 
-ADD_EXECUTABLE(Config 
+ADD_EXECUTABLE(Config
 	${Config_hdr}
 	${Config_src}
 )
-TARGET_INCLUDE_DIRECTORIES(Config PUBLIC ${CMAKE_SOURCE_DIR}/build/include)
-TARGET_INCLUDE_DIRECTORIES(Config PUBLIC ${CMAKE_SOURCE_DIR}/src/Core)
-TARGET_LINK_LIBRARIES(Config PUBLIC Jui)
 
-QtLink(Config Core Widgets)
+ADD_CUSTOM_COMMAND(TARGET Config
+	PRE_BUILD
+	COMMAND ${CMAKE_COMMAND} -E make_directory ${BUILD_INCLUDE_DIR}
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${Config_hdr} ${BUILD_INCLUDE_DIR}
+)
+
+TARGET_INCLUDE_DIRECTORIES(Config PUBLIC ${BUILD_INCLUDE_DIR}/)
+TARGET_INCLUDE_DIRECTORIES(Config PUBLIC ${CMAKE_SOURCE_DIR}/src/Core)
+TARGET_LINK_LIBRARIES(Config PUBLIC 
+	Jui
+	Qt5::WinMain # dulezity pro main() funkci
+)
+
+IF( ${CMAKE_CONFIGURATION_TYPES} STREQUAL "Release" )
+   SET_TARGET_PROPERTIES( Config PROPERTIES WIN32_EXECUTABLE TRUE )
+ENDIF()
+
+QtLink(Config Core Widgets Gui)
 
 INSTALL(TARGETS Config 
 	RUNTIME DESTINATION install
 	#COMPONENT applications
 )
-
-#####################################################

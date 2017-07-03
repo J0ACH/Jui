@@ -67,6 +67,7 @@ namespace Jui
 	void Canvas::onClose()
 	{
 		qDebug("Canvas onClose");
+		this->close();
 	}
 
 	void Canvas::mousePressEvent(QMouseEvent *mouseEvent)

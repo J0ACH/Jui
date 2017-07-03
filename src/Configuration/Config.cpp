@@ -14,7 +14,7 @@ namespace Jui
 		connect(test, SIGNAL(actMousePressed()), this, SLOT(onClose()));
 	}
 	
-	/*
+	
 	Config::Config(int x, int y, int width, int height) : Canvas(x, y, width, height)
 	{
 		qDebug("Config new x, y, w, h");
@@ -29,14 +29,14 @@ namespace Jui
 
 		connect(test, SIGNAL(actMousePressed()), this, SLOT(onClose()));
 	}
-	*/
-
+	
 
 	Config::~Config()
 	{
 		qDebug("Config closed");
 		//emit actClosed(this);
 		//emit actClosed();
+		Canvas::onClose();
 	}
 }
 

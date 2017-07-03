@@ -2,7 +2,6 @@
 #define CANVAS_H
 
 #include <QWidget>
-//#include <QMetaObject>
 #include <QDebug>
 #include <QPainter>
 #include <QMouseEvent>
