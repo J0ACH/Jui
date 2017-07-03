@@ -3,13 +3,13 @@
 
 namespace Jui
 {
-	Canvas::Canvas(QWidget *parent) : QWidget(parent)
+	Canvas::Canvas(Canvas *parent) : QWidget(parent)
 	{
 		qDebug("Canvan new parent ");
 		Canvas::init(0, 0, 100, 100);
 	}
 
-	Canvas::Canvas(QWidget *parent, int x, int y, int width, int height) : QWidget(parent)
+	Canvas::Canvas(Canvas *parent, int x, int y, int width, int height) : QWidget(parent)
 	{
 		qDebug("Canvan new parent ");
 		Canvas::init(x, y, width, height);
@@ -31,7 +31,7 @@ namespace Jui
 		this->setGeometry(x, y, width, height);
 		this->setName("Canvan");
 		this->setBackgroundColor(30, 30, 30);
-		this->setBackgroundAlpha(0);
+		this->setBackgroundAlpha(255);
 		this->setFrameColor(120, 120, 120);
 		this->setFrameAlpha(255);
 
@@ -39,6 +39,7 @@ namespace Jui
 	}
 
 	void Canvas::setName(QString name) { this->name = name; }
+	QString Canvas::getName() { return name; }
 
 	void Canvas::setBackgroundAlpha(int alpha) {
 		if (alpha < 1) alpha = 1;
@@ -64,37 +65,108 @@ namespace Jui
 		this->colorFrame.setBlue(blue);
 	}
 
+	void Canvas::connect2(QString signal, Canvas *target, QString slot)
+	{
+		/*
+			connect(
+				this, SIGNAL(signal),
+				target, SLOT(slot)
+			);
+		*/
+
+
+		qDebug("tohle je connect2");
+		//qDebug(signal);
+	}
+
 	void Canvas::onClose()
 	{
 		qDebug("Canvas onClose");
+		emit actClosed(this);
 		this->close();
 	}
 
-	void Canvas::mousePressEvent(QMouseEvent *mouseEvent)
+	void Canvas::mousePressEvent(QMouseEvent *event)
 	{
-		QPoint gPos = mouseEvent->globalPos();
-		//QPoint *mCursorGlobal = new QPoint(&mouseEvent->globalPos()));
-		//QPoint *mCursorLocal = event->pos();
-		qDebug("Canvas mouse pressed event");
+		this->setFocus(Qt::MouseFocusReason);
 
-		qDebug()
-			<< "Name:" << this->name
-			<< "gPosX:" << gPos.x()
-			<< "gPosY:" << gPos.y();
+		//this->focusWidget();
+		QPoint gPos = event->globalPos();
+		qDebug() << tr("MPressed target: %1 [%2, %3]").arg(
+			this->name,
+			QString::number(gPos.x()),
+			QString::number(gPos.y())
+		);
 
 		//emit actMousePressed(this, gPos.x(), gPos.y());
-		emit actMousePressed();
+		emit actMousePressed(this, event->x(), event->y());
+
+		//this->update();
+	}
+	void Canvas::mouseReleaseEvent(QMouseEvent *event)
+	{
+		QPoint gPos = event->globalPos();
+		qDebug() << tr("MReleased target: %1 [%2, %3]").arg(
+			this->name,
+			QString::number(gPos.x()),
+			QString::number(gPos.y())
+		);
+
+		//emit actMousePressed(this, gPos.x(), gPos.y());
+		emit actMouseReleased(this, event->x(), event->y());
+	}
+
+	void Canvas::focusInEvent(QFocusEvent *event)
+	{
+		qDebug() << tr("%1 focusInEvent").arg(this->name);
+		//emit actMouseEntered(this);
+		this->update();
+	}
+	void Canvas::focusOutEvent(QFocusEvent *event)
+	{
+		qDebug() << tr("%1 focusOutEvent").arg(this->name);
+		//emit actMouseLeaved(this);
+		this->update();
+	}
+
+	void Canvas::enterEvent(QEvent *event)
+	{
+		qDebug() << tr("%1 enterEvent").arg(this->name);
+		emit actMouseEntered(this);
+	}
+	void Canvas::leaveEvent(QEvent *event)
+	{
+		qDebug() << tr("%1 leaveEvent").arg(this->name);
+		emit actMouseLeaved(this);
 	}
 
 	void Canvas::paintEvent(QPaintEvent *event)
 	{
-		QPainter painter(this);
-		painter.fillRect(QRect(0, 0, width(), height()), this->colorBackround);
-		painter.setPen(this->colorFrame);
-		painter.drawRect(QRect(0, 0, width() - 1, height() - 1));
+		qDebug() << tr("%1 redraw").arg(this->name);
 
-		// QToolBar::paintEvent(event);
+		QPainter painter(this);
+		QColor colFrame, colBackg;
+		
+		if (this->hasFocus())
+		{
+			colFrame = QColor(255, 255, 255);
+			colBackg = QColor(
+				this->colorBackround.red(),
+				this->colorBackround.green(),
+				this->colorBackround.blue(),
+				200
+			);
+		}
+		else {
+			colFrame = this->colorFrame;
+			colBackg = this->colorBackround;
+		}
+
+		painter.fillRect(QRect(0, 0, width(), height()), colBackg);
+		painter.setPen(colFrame);
+		painter.drawRect(QRect(0, 0, width() - 1, height() - 1));
 	}
+
 
 	Canvas::~Canvas()
 	{

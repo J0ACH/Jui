@@ -13,28 +13,41 @@ namespace Jui
 		Q_OBJECT
 
 	public:
-		Canvas(QWidget *parent = 0);
-		Canvas(QWidget *parent, int x, int y, int width, int height);
+		Canvas(Canvas *parent = 0);
+		Canvas(Canvas *parent, int x, int y, int width, int height);
 		Canvas(int x, int y, int width, int height);
 		~Canvas();
 
 		void setName(QString name);
+		QString getName();
+		
+
 		void setBackgroundAlpha(int alpha);
 		void setBackgroundColor(int red, int green, int blue);
 		void setFrameAlpha(int alpha);
 		void setFrameColor(int red, int green, int blue);
 
-	public slots:
+		void connect2(QString signal, Canvas *target, QString slot);
+
+		public slots:
 		void onClose();
 
 	signals:
-		//void actClosed(Canvan *obj);
-		//void actMousePressed(Canvas *obj, int x, int y);
-		void actMousePressed();
-		//void actClosed();
-
+		void actClosed(Canvas *target);
+		void actMousePressed(Canvas *target, int x, int y);
+		void actMouseReleased(Canvas *target, int x, int y);
+		void actMouseEntered(Canvas *target);
+		void actMouseLeaved(Canvas *target);
+		
 	protected:
+		void focusInEvent(QFocusEvent *event);
+		void focusOutEvent(QFocusEvent *event);
+
+		void enterEvent(QEvent *event);
+		void leaveEvent(QEvent *event);
+
 		void mousePressEvent(QMouseEvent *event);
+		void mouseReleaseEvent(QMouseEvent *event);
 		void paintEvent(QPaintEvent *event);
 
 	private:

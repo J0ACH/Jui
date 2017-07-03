@@ -3,40 +3,44 @@
 
 namespace Jui
 {
-	//Config::Config(QWidget *parent) : QWidget(parent) 
-	Config::Config(QWidget *parent) : Canvas(parent)
-	{
-		Canvas *test = new Canvas(this, 100, 100, 50, 50);
-		test->setName("test");
-		test->setBackgroundAlpha(200);
-		test->setBackgroundColor(150, 30, 30);
-
-		connect(test, SIGNAL(actMousePressed()), this, SLOT(onClose()));
-	}
-	
-	
 	Config::Config(int x, int y, int width, int height) : Canvas(x, y, width, height)
 	{
 		qDebug("Config new x, y, w, h");
 
-		//Canvas *win = new Canvas(700, 100, 400, 400);
-		//win->setFrameColor(255, 0, 0);
+		this->setName("Configuration");
+		this->setBackgroundAlpha(0);
 
-		Canvas *test = new Canvas(this, 100, 100, 50, 50);
+		Button *test = new Button(this, 100, 100, 50, 50);
 		test->setName("test");
-		test->setBackgroundAlpha(200);
-		test->setBackgroundColor(150, 30, 30);
 
-		connect(test, SIGNAL(actMousePressed()), this, SLOT(onClose()));
+		Button *test2 = new Button(this, 100, 200, 50, 50);
+		test2->setName("test2");
+		//test->setBackgroundAlpha(200);
+		//test->setBackgroundColor(150, 30, 30);
+
+		Button *closeButton = new Button(this, this->width() - 45, 10, 35, 35);
+		closeButton->setName("close");
+		//closeButton->setBackgroundColor(250, 30, 30);
+		
+
+		connect(
+			closeButton, SIGNAL(actMousePressed(Canvas*, int, int)),
+			this, SLOT(onClose())
+		);
+
+		//test->connect2("ahoj", this, "onPrint");
 	}
-	
+
+	void Config::onPrint()
+	{
+		qDebug("Config onPrint");
+	}
 
 	Config::~Config()
 	{
 		qDebug("Config closed");
 		//emit actClosed(this);
 		//emit actClosed();
-		Canvas::onClose();
 	}
 }
 

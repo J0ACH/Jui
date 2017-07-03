@@ -2,11 +2,13 @@
 
 SET(Core_hdr
 	${CMAKE_CURRENT_LIST_DIR}/Canvas.h
+	${CMAKE_CURRENT_LIST_DIR}/Button.h
 	PARENT_SCOPE
 )
 
 SET(Core_src
 	${CMAKE_CURRENT_LIST_DIR}/Canvas.cpp
+	${CMAKE_CURRENT_LIST_DIR}/Button.cpp
 	PARENT_SCOPE
 )
 
