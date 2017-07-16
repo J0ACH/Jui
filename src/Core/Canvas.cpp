@@ -100,8 +100,6 @@ namespace Jui
 
 		//emit actMousePressed(this, gPos.x(), gPos.y());
 		emit actMousePressed(this, event->x(), event->y());
-
-		//this->update();
 	}
 	void Canvas::mouseReleaseEvent(QMouseEvent *event)
 	{
@@ -119,25 +117,25 @@ namespace Jui
 	void Canvas::focusInEvent(QFocusEvent *event)
 	{
 		qDebug() << tr("%1 focusInEvent").arg(this->name);
-		//emit actMouseEntered(this);
+		emit actFocusIn(this);
 		this->update();
 	}
 	void Canvas::focusOutEvent(QFocusEvent *event)
 	{
 		qDebug() << tr("%1 focusOutEvent").arg(this->name);
-		//emit actMouseLeaved(this);
+		emit actFocusOut(this);
 		this->update();
 	}
 
 	void Canvas::enterEvent(QEvent *event)
 	{
 		qDebug() << tr("%1 enterEvent").arg(this->name);
-		emit actMouseEntered(this);
+		emit actOverIn(this);
 	}
 	void Canvas::leaveEvent(QEvent *event)
 	{
 		qDebug() << tr("%1 leaveEvent").arg(this->name);
-		emit actMouseLeaved(this);
+		emit actOverOut(this);
 	}
 
 	void Canvas::paintEvent(QPaintEvent *event)
@@ -146,7 +144,7 @@ namespace Jui
 
 		QPainter painter(this);
 		QColor colFrame, colBackg;
-		
+
 		if (this->hasFocus())
 		{
 			colFrame = QColor(255, 255, 255);

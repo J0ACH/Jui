@@ -8,7 +8,13 @@
       "buildRoot": "${projectDir}\\build\\cache\\${name}",
       "cmakeCommandArgs": "",
       "buildCommandArgs": "-m -v:minimal",
-      "ctestCommandArgs": ""
+      "ctestCommandArgs": "",
+      "variables": [
+        {
+          "name": "CMAKE_INSTALL_PREFIX",
+          "value": "${projectDir}\\build"
+        }
+      ]
     },
     {
       "name": "Release",
@@ -17,7 +23,13 @@
       "buildRoot": "${projectDir}\\build\\cache\\${name}",
       "cmakeCommandArgs": "",
       "buildCommandArgs": "-m -v:minimal",
-      "ctestCommandArgs": ""
+      "ctestCommandArgs": "",
+      "variables": [
+        {
+          "name": "CMAKE_INSTALL_PREFIX",
+          "value": "${projectDir}\\build"
+        }
+      ]
     }
   ]
 }

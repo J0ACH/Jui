@@ -36,8 +36,10 @@ namespace Jui
 		void actClosed(Canvas *target);
 		void actMousePressed(Canvas *target, int x, int y);
 		void actMouseReleased(Canvas *target, int x, int y);
-		void actMouseEntered(Canvas *target);
-		void actMouseLeaved(Canvas *target);
+		void actOverIn(Canvas *target);
+		void actOverOut(Canvas *target);
+		void actFocusIn(Canvas *target);
+		void actFocusOut(Canvas *target);
 		
 	protected:
 		void focusInEvent(QFocusEvent *event);
