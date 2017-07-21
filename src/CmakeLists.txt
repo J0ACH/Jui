@@ -12,67 +12,117 @@ add_library(Jui SHARED
 	${Core_src}
 	${Core_res}
 )
-
-add_custom_command(TARGET Jui
-	PRE_BUILD
-	COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_INSTALL_PREFIX}/include
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${Core_hdr} ${CMAKE_INSTALL_PREFIX}/include
+target_include_directories(Jui 
+	PRIVATE
+		${CMAKE_CURRENT_LIST_DIR}/Core
+	INTERFACE 
+		$<INSTALL_INTERFACE:include>
+)
+target_link_libraries(Jui 
+	PRIVATE 
+		Qt5::Core
+		Qt5::Gui
+		Qt5::Widgets
 )
 
-target_include_directories(Jui PUBLIC 
-	${CMAKE_INSTALL_PREFIX}/include
-)
+# JUI INSTALL ###################################################
 
-target_include_directories(Jui PRIVATE
-	$<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
-	$<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
-	$<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
-)
-
-target_link_libraries(Jui PRIVATE 
-	$<TARGET_LINKER_FILE:Qt5::Core> 
-	$<TARGET_LINKER_FILE:Qt5::Gui>
-	$<TARGET_LINKER_FILE:Qt5::Widgets>
-)
-
-install( TARGETS Jui 
+install( 
+	TARGETS Jui 
 	EXPORT JuiTargets
-	ARCHIVE DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
-    LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
-	RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
-	#COMPONENT applications
+	ARCHIVE DESTINATION lib
+    LIBRARY DESTINATION lib
+	RUNTIME DESTINATION bin
 )
+install(
+	FILES 
+		$<TARGET_FILE:Qt5::Core> 
+		$<TARGET_FILE:Qt5::Gui>
+		$<TARGET_FILE:Qt5::Widgets>
+	DESTINATION bin
+)
+
+#[[
+install(
+	FILES ${Core_hdr}
+	DESTINATION include
+)
+#]]
+
 
 #RegPackage(Jui)
 
 # CONFIG SETUP ###################################################
-
 
 add_executable(Config
 	${Config_hdr}
 	${Config_src}
 )
 
-target_include_directories(Config PRIVATE 
-	${CMAKE_CURRENT_LIST_DIR}/Configuration
-	$<TARGET_PROPERTY:Jui,INTERFACE_INCLUDE_DIRECTORIES>
-	$<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
+target_include_directories(Config 
+	PRIVATE 
+		${CMAKE_CURRENT_LIST_DIR}/Configuration
+		${CMAKE_CURRENT_LIST_DIR}/Core
+)
+target_link_libraries(Config 
+	PRIVATE 
+		Jui
+		Qt5::Core
+		Qt5::Widgets
+		Qt5::WinMain # dulezity pro main() funkci
 )
 
-target_link_libraries(Config PRIVATE 
-	$<TARGET_LINKER_FILE:Jui> 
-	$<TARGET_LINKER_FILE:Qt5::Core> 
-	$<TARGET_LINKER_FILE:Qt5::Widgets>
-	$<TARGET_LINKER_FILE:Qt5::WinMain> # dulezity pro main() funkci
-)
+if(WIN32)
+	if( ${CMAKE_CONFIGURATION_TYPES} STREQUAL "Release" )
+		set_target_properties(Config PROPERTIES WIN32_EXECUTABLE TRUE)
+	endif()
+endif(WIN32)
 
-IF(WIN32)
-	IF( ${CMAKE_CONFIGURATION_TYPES} STREQUAL "Release" )
-		SET_TARGET_PROPERTIES( Config PROPERTIES WIN32_EXECUTABLE TRUE )
-	ENDIF()
-ENDIF(WIN32)
+# CONFIG INSTALL ###################################################
 
 install(
 	TARGETS Config
-	RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
+	EXPORT JuiTargets
+	RUNTIME DESTINATION bin
 )
+
+# JUI PACKAGE ###################################################
+
+set(INCLUDE_INSTALL_DIR include/)
+set(LIB_INSTALL_DIR lib/)
+set(SYSCONFIG_INSTALL_DIR etc/foo/)
+
+include(CMakePackageConfigHelpers)
+configure_package_config_file(
+	JuiConfig.cmake.in
+	${CMAKE_CURRENT_BINARY_DIR}/JuiConfig.cmake
+	INSTALL_DESTINATION lib/cmake
+	PATH_VARS INCLUDE_INSTALL_DIR SYSCONFIG_INSTALL_DIR
+)
+write_basic_package_version_file(
+	${CMAKE_CURRENT_BINARY_DIR}/JuiConfigVersion.cmake
+	VERSION ${PROJECT_VERSION}
+	COMPATIBILITY AnyNewerVersion 
+)
+export(
+	TARGETS Jui Config		
+	FILE ${CMAKE_CURRENT_BINARY_DIR}/JuiTargets2.cmake
+)
+
+install(
+	FILES 
+		${CMAKE_CURRENT_BINARY_DIR}/JuiConfig.cmake
+		${CMAKE_CURRENT_BINARY_DIR}/JuiConfigVersion.cmake
+		${CMAKE_CURRENT_BINARY_DIR}/JuiTargets2.cmake
+	DESTINATION
+		lib/cmake 
+)
+#[[
+#]]
+install(
+	EXPORT JuiTargets
+	DESTINATION lib/cmake
+	#FILE JuiTargets.cmake
+	#CONFIGURATIONS Release
+)
+install(CODE "MESSAGE(\"Sample install message.\")")
