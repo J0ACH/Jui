@@ -1,6 +1,6 @@
 cmake_minimum_required( VERSION 3.7.2 )
 cmake_policy(SET CMP0048 NEW)
-project (Jui VERSION 0.0.1)
+project (Jui VERSION 0.0.2)
 
 message(STATUS "")
 message(STATUS "Jui [${PROJECT_VERSION}] config init...")
