@@ -1,2 +1,4 @@
-build/
 .vs/
+cache/
+build/
+install/
