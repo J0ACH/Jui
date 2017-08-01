@@ -1,6 +1,4 @@
 
-#INCLUDE(RegPackageMacro)
-
 find_package(Qt5 COMPONENTS Core Widgets Gui REQUIRED)
 add_subdirectory(Core)
 add_subdirectory(Configuration)
