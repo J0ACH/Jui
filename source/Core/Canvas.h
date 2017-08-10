@@ -19,8 +19,7 @@ namespace Jui
 		~Canvas();
 
 		void setName(QString name);
-		QString getName();
-		
+		QString getName();		
 
 		void setBackgroundAlpha(int alpha);
 		void setBackgroundColor(int red, int green, int blue);
@@ -58,6 +57,8 @@ namespace Jui
 		QString name;
 		QColor colorBackround, colorFrame;
 	};
+
+	
 }
 
 #endif // CANVAS_H

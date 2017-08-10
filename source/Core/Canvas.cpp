@@ -1,6 +1,5 @@
 #include "Canvas.h"
 
-
 namespace Jui
 {
 	Canvas::Canvas(Canvas *parent) : QWidget(parent)
@@ -172,4 +171,5 @@ namespace Jui
 		//emit actClosed(this);
 		//emit actClosed();
 	}
+
 }

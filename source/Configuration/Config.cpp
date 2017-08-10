@@ -22,13 +22,10 @@ namespace Jui
 		closeButton->setName("close");
 		//closeButton->setBackgroundColor(250, 30, 30);
 		
-
 		connect(
 			closeButton, SIGNAL(actMousePressed(Canvas*, int, int)),
 			this, SLOT(onClose())
 		);
-
-		//test->connect2("ahoj", this, "onPrint");
 	}
 
 	void Config::onPrint()
