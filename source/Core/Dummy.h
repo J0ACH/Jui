@@ -23,7 +23,10 @@ namespace Jui
 
 	private:
 
-		QPoint lastPressedMousePosition;
+		
+
+		QPoint lastPressedMousePosition, temp;
+		QRect temp2;
 	};
 
 }

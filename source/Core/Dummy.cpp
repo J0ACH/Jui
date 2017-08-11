@@ -19,20 +19,39 @@ namespace Jui
 	{
 		this->parentWidget()->setFocus(Qt::MouseFocusReason);
 		lastPressedMousePosition = QPoint(event->x(), event->y());
+		temp = QPoint(event->globalPos().x(), event->globalPos().y());
+		temp2 = this->getParent()->geometry();
 	}
 	void Header::mouseMoveEvent(QMouseEvent *event)
 	{
+		Canvas *parent = this->getParent();
 		QPoint globalPt(event->globalPos().x(), event->globalPos().y());
-		QPoint resultPt(
-			globalPt.x() - lastPressedMousePosition.x(),
-			globalPt.y() - lastPressedMousePosition.y()
-		);
-		/*
+		QPoint localPt(event->x(), event->y());
+		QPoint resultPt;
+
+		if (parent->isWin())
+		{
+			resultPt.setX(globalPt.x() - lastPressedMousePosition.x());
+			resultPt.setY(globalPt.y() - lastPressedMousePosition.y());
+		}
+		else
+		{
+			QPoint difPt(
+				globalPt.x() - temp.x(),
+				globalPt.y() - temp.y()
+			);
+
+			QPoint resultPt(
+				temp2.topLeft().x() + lastPressedMousePosition.x() + difPt.x(),
+				temp2.topLeft().y() + lastPressedMousePosition.y() + difPt.y()
+			);
+		}
+
 		qDebug() << tr("Header mouseMoveEvent: pt [%1, %2]").arg(
 			QString::number(resultPt.x()),
 			QString::number(resultPt.y())
 		);
-		 */
+
 		emit actMoved(resultPt);
 	}
 
@@ -43,7 +62,7 @@ namespace Jui
 		QPainter painter(this);
 
 		painter.setPen(QColor(200, 30, 30));
-		painter.drawText(0, 0, this->width(), this->height(), Qt::AlignCenter, 
+		painter.drawText(0, 0, this->width(), this->height(), Qt::AlignCenter,
 			this->getParent()->getName()
 		);
 		//painter.stroke();

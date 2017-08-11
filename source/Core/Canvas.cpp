@@ -4,24 +4,23 @@ namespace Jui
 {
 	Canvas::Canvas(Canvas *parent) : QWidget(parent)
 	{
-		qDebug("Canvan new parent ");
 		Canvas::init(0, 0, 100, 100);
 		mParent = parent;
+		mType = Canvas::type::Panel;
 	}
 
 	Canvas::Canvas(Canvas *parent, int x, int y, int width, int height) : QWidget(parent)
 	{
-		qDebug("Canvan new parent ");
 		Canvas::init(x, y, width, height);
 		mParent = parent;
+		mType = Canvas::type::Panel;
 	}
 
 	Canvas::Canvas(int x, int y, int width, int height) : QWidget()
 	{
-		qDebug("Canvan new x, y, w, h, ");
-		//this->setWindowTitle("Canvan");
 		Canvas::init(x, y, width, height);
 		mParent = NULL;
+		mType = Canvas::type::Windows;
 	}
 
 	void Canvas::init(int x, int y, int width, int height)
@@ -43,6 +42,17 @@ namespace Jui
 
 	void Canvas::setName(QString name) { this->name = name; }
 	QString Canvas::getName() { return name; }
+
+	bool Canvas::isWin() {
+		if (mParent == NULL)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 
 	void Canvas::setBackgroundAlpha(int alpha) {
 		if (alpha < 1) alpha = 1;

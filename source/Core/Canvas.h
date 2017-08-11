@@ -18,10 +18,13 @@ namespace Jui
 		Canvas(int x, int y, int width, int height);
 		~Canvas();
 
+		enum type { Windows, Panel };
+
 		void setName(QString name);
-		QString getName();		
+		QString getName();
 
 		Canvas *getParent();
+		bool isWin();
 
 		void setBackgroundAlpha(int alpha);
 		void setBackgroundColor(int red, int green, int blue);
@@ -44,7 +47,7 @@ namespace Jui
 		void actOverOut(Canvas *target);
 		void actFocusIn(Canvas *target);
 		void actFocusOut(Canvas *target);
-		
+
 	protected:
 		void focusInEvent(QFocusEvent *event);
 		void focusOutEvent(QFocusEvent *event);
@@ -60,14 +63,15 @@ namespace Jui
 
 	private:
 		void init(int x, int y, int width, int height);
-		
+
 		Canvas *mParent;
+		Canvas::type mType;
 		QString name;
 		QColor colorBackround, colorFrame;
-		
+
 	};
 
-	
+
 }
 
 #endif // CANVAS_H

@@ -24,6 +24,10 @@ namespace Jui
 		closeButton->setName("close");
 		//closeButton->setBackgroundColor(250, 30, 30);		
 
+		Canvas *test3 = new Canvas(this, 100, 300, 100, 100);
+		test3->setName("test3");
+		Header *headerTest3 = new Header(test3, 25);
+
 		connect(
 			closeButton, SIGNAL(actMousePressed(QPoint, QPoint)),
 			this, SLOT(onClose())
