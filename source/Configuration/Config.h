@@ -2,6 +2,7 @@
 #define CONFIG_H
 
 #include "Canvas.h"
+#include "Dummy.h"
 #include "Button.h"
 
 namespace Jui
@@ -15,6 +16,7 @@ namespace Jui
 
 	public slots:
 		void onPrint();
+			
 	};
 }
 

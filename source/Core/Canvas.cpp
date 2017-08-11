@@ -6,20 +6,22 @@ namespace Jui
 	{
 		qDebug("Canvan new parent ");
 		Canvas::init(0, 0, 100, 100);
+		mParent = parent;
 	}
 
 	Canvas::Canvas(Canvas *parent, int x, int y, int width, int height) : QWidget(parent)
 	{
 		qDebug("Canvan new parent ");
 		Canvas::init(x, y, width, height);
+		mParent = parent;
 	}
 
 	Canvas::Canvas(int x, int y, int width, int height) : QWidget()
 	{
 		qDebug("Canvan new x, y, w, h, ");
 		//this->setWindowTitle("Canvan");
-
 		Canvas::init(x, y, width, height);
+		mParent = NULL;
 	}
 
 	void Canvas::init(int x, int y, int width, int height)
@@ -36,6 +38,8 @@ namespace Jui
 
 		this->show();
 	}
+
+	Canvas* Canvas::getParent() { return mParent; }
 
 	void Canvas::setName(QString name) { this->name = name; }
 	QString Canvas::getName() { return name; }
@@ -78,6 +82,30 @@ namespace Jui
 		//qDebug(signal);
 	}
 
+
+	void Canvas::onMousePress(QPoint pt)
+	{
+		qDebug() << tr("Canvas onMousePress: pt [%1, %2]").arg(
+			QString::number(pt.x()),
+			QString::number(pt.y())
+		);
+	}
+
+	void Canvas::onMove(QPoint pt)
+	{
+		qDebug() << tr("Canvas onMove: pt [%1, %2]").arg(
+			QString::number(pt.x()),
+			QString::number(pt.y())
+		);
+
+		this->setGeometry(
+			pt.x(),
+			pt.y(),
+			this->width(),
+			this->height()
+		);
+	}
+
 	void Canvas::onClose()
 	{
 		qDebug("Canvas onClose");
@@ -89,16 +117,17 @@ namespace Jui
 	{
 		this->setFocus(Qt::MouseFocusReason);
 
-		//this->focusWidget();
-		QPoint gPos = event->globalPos();
-		qDebug() << tr("MPressed target: %1 [%2, %3]").arg(
-			this->name,
-			QString::number(gPos.x()),
-			QString::number(gPos.y())
-		);
+		QPoint globalPt(event->globalPos().x(), event->globalPos().y());
+		QPoint localPt(event->x(), event->y());
 
-		//emit actMousePressed(this, gPos.x(), gPos.y());
-		emit actMousePressed(this, event->x(), event->y());
+		emit actMousePressed(globalPt, localPt);
+	}
+	void Canvas::mouseMoveEvent(QMouseEvent *event)
+	{
+		QPoint globalPt(event->globalPos().x(), event->globalPos().y());
+		QPoint localPt(event->x(), event->y());
+
+		emit actMouseMoved(globalPt, localPt);
 	}
 	void Canvas::mouseReleaseEvent(QMouseEvent *event)
 	{

@@ -21,6 +21,8 @@ namespace Jui
 		void setName(QString name);
 		QString getName();		
 
+		Canvas *getParent();
+
 		void setBackgroundAlpha(int alpha);
 		void setBackgroundColor(int red, int green, int blue);
 		void setFrameAlpha(int alpha);
@@ -29,11 +31,14 @@ namespace Jui
 		void connect2(QString signal, Canvas *target, QString slot);
 
 		public slots:
+		void onMousePress(QPoint);
+		void onMove(QPoint);
 		void onClose();
 
 	signals:
 		void actClosed(Canvas *target);
-		void actMousePressed(Canvas *target, int x, int y);
+		void actMousePressed(QPoint globalPt, QPoint localPt);
+		void actMouseMoved(QPoint globalPt, QPoint localPt);
 		void actMouseReleased(Canvas *target, int x, int y);
 		void actOverIn(Canvas *target);
 		void actOverOut(Canvas *target);
@@ -49,13 +54,17 @@ namespace Jui
 
 		void mousePressEvent(QMouseEvent *event);
 		void mouseReleaseEvent(QMouseEvent *event);
+		void mouseMoveEvent(QMouseEvent *event);
+
 		void paintEvent(QPaintEvent *event);
 
 	private:
 		void init(int x, int y, int width, int height);
-
+		
+		Canvas *mParent;
 		QString name;
 		QColor colorBackround, colorFrame;
+		
 	};
 
 	
