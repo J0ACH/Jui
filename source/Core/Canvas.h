@@ -18,14 +18,14 @@ namespace Jui
 		Canvas(int x, int y, int width, int height);
 		~Canvas();
 
-		enum type { Windows, Panel };
-
-		void setName(QString name);
+		enum type { Window, Panel };
+		
 		QString getName();
-
-		Canvas *getParent();
-		bool isWin();
-
+		Canvas::type getType();
+		Canvas *parent();
+		QPoint getOrigin();
+				
+		void setName(QString name);
 		void setBackgroundAlpha(int alpha);
 		void setBackgroundColor(int red, int green, int blue);
 		void setFrameAlpha(int alpha);
@@ -66,7 +66,10 @@ namespace Jui
 
 		Canvas *mParent;
 		Canvas::type mType;
+
 		QString name;
+		QPoint origin;
+
 		QColor colorBackround, colorFrame;
 
 	};

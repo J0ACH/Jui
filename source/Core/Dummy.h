@@ -22,11 +22,7 @@ namespace Jui
 		void paintEvent(QPaintEvent *event);
 
 	private:
-
-		
-
-		QPoint lastPressedMousePosition, temp;
-		QRect temp2;
+		QPoint mousePressedParentCoor, mousePressedGlobalCoor, mousePressedLocalCoor;
 	};
 
 }

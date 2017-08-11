@@ -20,14 +20,17 @@ namespace Jui
 	{
 		Canvas::init(x, y, width, height);
 		mParent = NULL;
-		mType = Canvas::type::Windows;
+		mType = Canvas::type::Window;
 	}
 
 	void Canvas::init(int x, int y, int width, int height)
 	{
 		this->setWindowFlags(Qt::FramelessWindowHint);
 		this->setAttribute(Qt::WA_TranslucentBackground);
-
+		
+		origin.setX(x);
+		origin.setY(y);
+		
 		this->setGeometry(x, y, width, height);
 		this->setName("Canvan");
 		this->setBackgroundColor(30, 30, 30);
@@ -38,21 +41,12 @@ namespace Jui
 		this->show();
 	}
 
-	Canvas* Canvas::getParent() { return mParent; }
+	Canvas* Canvas::parent() { return mParent; }
+	Canvas::type Canvas::getType() { return mType; }
+	QPoint Canvas::getOrigin() { return origin; }
 
 	void Canvas::setName(QString name) { this->name = name; }
 	QString Canvas::getName() { return name; }
-
-	bool Canvas::isWin() {
-		if (mParent == NULL)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
 
 	void Canvas::setBackgroundAlpha(int alpha) {
 		if (alpha < 1) alpha = 1;
@@ -91,7 +85,6 @@ namespace Jui
 		qDebug("tohle je connect2");
 		//qDebug(signal);
 	}
-
 
 	void Canvas::onMousePress(QPoint pt)
 	{
@@ -178,7 +171,7 @@ namespace Jui
 
 	void Canvas::paintEvent(QPaintEvent *event)
 	{
-		qDebug() << tr("%1 redraw").arg(this->name);
+		//qDebug() << tr("%1 redraw").arg(this->name);
 
 		QPainter painter(this);
 		QColor colFrame, colBackg;
