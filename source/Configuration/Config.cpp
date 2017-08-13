@@ -29,7 +29,7 @@ namespace Jui
 		Header *headerTest3 = new Header(test3, 25);
 
 		connect(
-			closeButton, SIGNAL(actMousePressed(QPoint, QPoint)),
+			closeButton, SIGNAL(actMousePressed(Canvas*, QPoint)),
 			this, SLOT(onClose())
 		);
 	}

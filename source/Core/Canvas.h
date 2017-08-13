@@ -20,18 +20,16 @@ namespace Jui
 
 		enum type { Window, Panel };
 		
+		Canvas *getParent();
+		QPoint getOrigin();
 		QString getName();
 		Canvas::type getType();
-		Canvas *parent();
-		QPoint getOrigin();
 				
 		void setName(QString name);
 		void setBackgroundAlpha(int alpha);
 		void setBackgroundColor(int red, int green, int blue);
 		void setFrameAlpha(int alpha);
 		void setFrameColor(int red, int green, int blue);
-
-		void connect2(QString signal, Canvas *target, QString slot);
 
 		public slots:
 		void onMousePress(QPoint);
@@ -40,13 +38,13 @@ namespace Jui
 
 	signals:
 		void actClosed(Canvas *target);
-		void actMousePressed(QPoint globalPt, QPoint localPt);
-		void actMouseMoved(QPoint globalPt, QPoint localPt);
-		void actMouseReleased(Canvas *target, int x, int y);
 		void actOverIn(Canvas *target);
 		void actOverOut(Canvas *target);
 		void actFocusIn(Canvas *target);
 		void actFocusOut(Canvas *target);
+		void actMousePressed(Canvas *target, QPoint gPt);
+		void actMouseMoved(Canvas *target, QPoint gPt);
+		void actMouseReleased(Canvas *target, QPoint gPt);
 
 	protected:
 		void focusInEvent(QFocusEvent *event);

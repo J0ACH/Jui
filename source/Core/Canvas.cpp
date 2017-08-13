@@ -27,10 +27,10 @@ namespace Jui
 	{
 		this->setWindowFlags(Qt::FramelessWindowHint);
 		this->setAttribute(Qt::WA_TranslucentBackground);
-		
+
 		origin.setX(x);
 		origin.setY(y);
-		
+
 		this->setGeometry(x, y, width, height);
 		this->setName("Canvan");
 		this->setBackgroundColor(30, 30, 30);
@@ -41,7 +41,7 @@ namespace Jui
 		this->show();
 	}
 
-	Canvas* Canvas::parent() { return mParent; }
+	Canvas* Canvas::getParent() { return mParent; }
 	Canvas::type Canvas::getType() { return mType; }
 	QPoint Canvas::getOrigin() { return origin; }
 
@@ -71,21 +71,7 @@ namespace Jui
 		this->colorFrame.setGreen(green);
 		this->colorFrame.setBlue(blue);
 	}
-
-	void Canvas::connect2(QString signal, Canvas *target, QString slot)
-	{
-		/*
-			connect(
-				this, SIGNAL(signal),
-				target, SLOT(slot)
-			);
-		*/
-
-
-		qDebug("tohle je connect2");
-		//qDebug(signal);
-	}
-
+		
 	void Canvas::onMousePress(QPoint pt)
 	{
 		qDebug() << tr("Canvas onMousePress: pt [%1, %2]").arg(
@@ -110,53 +96,41 @@ namespace Jui
 	void Canvas::mousePressEvent(QMouseEvent *event)
 	{
 		this->setFocus(Qt::MouseFocusReason);
-
 		QPoint globalPt(event->globalPos().x(), event->globalPos().y());
-		QPoint localPt(event->x(), event->y());
-
-		emit actMousePressed(globalPt, localPt);
+		emit actMousePressed(this, globalPt);
 	}
 	void Canvas::mouseMoveEvent(QMouseEvent *event)
 	{
 		QPoint globalPt(event->globalPos().x(), event->globalPos().y());
-		QPoint localPt(event->x(), event->y());
-
-		emit actMouseMoved(globalPt, localPt);
+		emit actMouseMoved(this, globalPt);
 	}
 	void Canvas::mouseReleaseEvent(QMouseEvent *event)
 	{
-		QPoint gPos = event->globalPos();
-		qDebug() << tr("MReleased target: %1 [%2, %3]").arg(
-			this->name,
-			QString::number(gPos.x()),
-			QString::number(gPos.y())
-		);
-
-		//emit actMousePressed(this, gPos.x(), gPos.y());
-		emit actMouseReleased(this, event->x(), event->y());
+		QPoint globalPt(event->globalPos().x(), event->globalPos().y());
+		emit actMouseReleased(this, globalPt);
 	}
 
 	void Canvas::focusInEvent(QFocusEvent *event)
 	{
-		qDebug() << tr("%1 focusInEvent").arg(this->name);
+		//qDebug() << tr("%1 focusInEvent").arg(this->name);
 		emit actFocusIn(this);
 		this->update();
 	}
 	void Canvas::focusOutEvent(QFocusEvent *event)
 	{
-		qDebug() << tr("%1 focusOutEvent").arg(this->name);
+		//qDebug() << tr("%1 focusOutEvent").arg(this->name);
 		emit actFocusOut(this);
 		this->update();
 	}
 
 	void Canvas::enterEvent(QEvent *event)
 	{
-		qDebug() << tr("%1 enterEvent").arg(this->name);
+		//	qDebug() << tr("%1 enterEvent").arg(this->name);
 		emit actOverIn(this);
 	}
 	void Canvas::leaveEvent(QEvent *event)
 	{
-		qDebug() << tr("%1 leaveEvent").arg(this->name);
+		//qDebug() << tr("%1 leaveEvent").arg(this->name);
 		emit actOverOut(this);
 	}
 
