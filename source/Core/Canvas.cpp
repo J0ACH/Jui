@@ -96,17 +96,8 @@ namespace Jui
 
 	void Canvas::onMove(QPoint pt)
 	{
-		qDebug() << tr("Canvas onMove: pt [%1, %2]").arg(
-			QString::number(pt.x()),
-			QString::number(pt.y())
-		);
-
-		this->setGeometry(
-			pt.x(),
-			pt.y(),
-			this->width(),
-			this->height()
-		);
+		this->move(pt);
+		origin = pt;
 	}
 
 	void Canvas::onClose()

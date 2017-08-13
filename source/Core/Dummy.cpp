@@ -69,8 +69,8 @@ namespace Jui
 		}
 		
 		qDebug() << tr("Header mouseMoveEvent: pt [%1, %2]").arg(
-			QString::number(resultPt.x()),
-			QString::number(resultPt.y())
+			QString::number(deltaPt.x()),
+			QString::number(deltaPt.y())
 		);
 
 		emit actMoved(resultPt);
