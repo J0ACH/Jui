@@ -32,9 +32,9 @@ namespace Jui
 		void setFrameColor(int red, int green, int blue);
 
 		public slots:
-		void onMousePress(QPoint);
-		void onMove(QPoint);
+		//void onMousePress(QPoint);
 		void onClose();
+		void onMove(QPoint);
 
 	signals:
 		void actClosed(Canvas *target);

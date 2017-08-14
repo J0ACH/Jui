@@ -2,6 +2,7 @@
 
 namespace Jui
 {
+	// Header /////////////////////////////////////////////////////
 
 	Header::Header(Canvas *parent, int height) :
 		Canvas(parent, 1, 1, parent->width() - 2, height)
@@ -69,12 +70,23 @@ namespace Jui
 		);
 		//painter.stroke();
 	}
-
-
+	
 	Header::~Header()
 	{
 		//qDebug("Button closed");
 	}
 
+	// Edges ///////////////////////////////////////////////////// 
+
+	Edge::Edge(Canvas *parent, int height)
+	{
+		test = new Canvas(parent, 1, 1, height, parent->height());
+		test->setBackgroundColor(30, 230, 30);
+		test->setFrameAlpha(0);
+	}
+
+	Edge::~Edge()
+	{
+	}
 }
 

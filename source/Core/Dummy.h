@@ -25,6 +25,15 @@ namespace Jui
 		QPoint mousePressedParentCoor, mousePressedGlobalCoor, mousePressedLocalCoor;
 	};
 
+	class Edge
+	{
+	public:
+		Edge(Canvas *parent, int height);
+		~Edge();
+
+	private:
+		Canvas *test;
+	};
 }
 
 #endif // DUMMY_H

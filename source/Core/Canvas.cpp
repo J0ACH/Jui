@@ -71,26 +71,27 @@ namespace Jui
 		this->colorFrame.setGreen(green);
 		this->colorFrame.setBlue(blue);
 	}
-		
-	void Canvas::onMousePress(QPoint pt)
-	{
-		qDebug() << tr("Canvas onMousePress: pt [%1, %2]").arg(
-			QString::number(pt.x()),
-			QString::number(pt.y())
-		);
-	}
-
-	void Canvas::onMove(QPoint pt)
-	{
-		this->move(pt);
-		origin = pt;
-	}
+	
+	/*
+		void Canvas::onMousePress(QPoint pt)
+		{
+			qDebug() << tr("Canvas onMousePress: pt [%1, %2]").arg(
+				QString::number(pt.x()),
+				QString::number(pt.y())
+			);
+		}
+	*/
 
 	void Canvas::onClose()
 	{
 		qDebug("Canvas onClose");
 		emit actClosed(this);
 		this->close();
+	}
+	void Canvas::onMove(QPoint pt)
+	{
+		this->move(pt);
+		origin = pt;
 	}
 
 	void Canvas::mousePressEvent(QMouseEvent *event)
