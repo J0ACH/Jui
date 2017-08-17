@@ -78,10 +78,10 @@ namespace Jui
 
 	// Edges ///////////////////////////////////////////////////// 
 
-	Edge::Edge(Canvas *parent) : QObject(parent)
+	Edge::Edge(Canvas *parent) :
+		QObject(parent),
+		mParent(parent)
 	{
-		mParent = parent;
-
 		thickness = 20;
 		offset = 5;
 		corner = 30;
