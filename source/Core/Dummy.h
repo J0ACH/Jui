@@ -25,14 +25,33 @@ namespace Jui
 		QPoint mousePressedParentCoor, mousePressedGlobalCoor, mousePressedLocalCoor;
 	};
 
-	class Edge
+	class Edge : public QObject
 	{
+		Q_OBJECT
+
 	public:
-		Edge(Canvas *parent, int height);
+		Edge(Canvas *parent);
 		~Edge();
 
+		enum direction { Right, Bottom, Left, Top };
+
+		void setDirection(Edge::direction dir, bool visibilty);
+
+	public slots:
+		void onMousePress(Canvas*, QPoint);
+		void onMouseMoved(Canvas*, QPoint);
+
+	signals:
+		void actResized(QSize size);
+
 	private:
-		Canvas *test;
+		//void fitPosition();
+		Canvas* mParent;
+		QMap<Edge::direction, Canvas*> mEdges;
+		int thickness, offset, corner, gap;
+
+		QPoint mousePressedParentCoor, mousePressedGlobalCoor, mousePressedLocalCoor;
+		QSize mousePressedParentSize;
 	};
 }
 

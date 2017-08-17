@@ -28,6 +28,8 @@ namespace Jui
 		test3->setName("test3");
 		Header *headerTest3 = new Header(test3, 25);
 
+		Edge *e1 = new Edge(this);
+		
 		connect(
 			closeButton, SIGNAL(actMousePressed(Canvas*, QPoint)),
 			this, SLOT(onClose())

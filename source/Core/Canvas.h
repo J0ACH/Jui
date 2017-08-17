@@ -21,7 +21,7 @@ namespace Jui
 		enum type { Window, Panel };
 		
 		Canvas *getParent();
-		QPoint getOrigin();
+		QPoint getOrigin(bool global = false);
 		QString getName();
 		Canvas::type getType();
 				
@@ -32,9 +32,9 @@ namespace Jui
 		void setFrameColor(int red, int green, int blue);
 
 		public slots:
-		//void onMousePress(QPoint);
 		void onClose();
 		void onMove(QPoint);
+		void onResize(QSize);
 
 	signals:
 		void actClosed(Canvas *target);

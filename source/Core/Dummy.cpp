@@ -20,7 +20,7 @@ namespace Jui
 	{
 		this->getParent()->setFocus(Qt::MouseFocusReason);
 
-		mousePressedGlobalCoor = QPoint( event->globalPos().x(), event->globalPos().y());
+		mousePressedGlobalCoor = QPoint(event->globalPos().x(), event->globalPos().y());
 		mousePressedLocalCoor = QPoint(event->x(), event->y());
 
 		switch (this->getParent()->getType())
@@ -34,7 +34,7 @@ namespace Jui
 				event->y() + this->getParent()->getOrigin().y()
 			);
 			break;
-		}	
+		}
 	}
 	void Header::mouseMoveEvent(QMouseEvent *event)
 	{
@@ -52,7 +52,7 @@ namespace Jui
 			break;
 		case Canvas::Panel:
 			resultPt.setX(mousePressedParentCoor.x() + deltaPt.x() - mousePressedLocalCoor.x());
-			resultPt.setY(mousePressedParentCoor.y() + deltaPt.y() - mousePressedLocalCoor.y());			
+			resultPt.setY(mousePressedParentCoor.y() + deltaPt.y() - mousePressedLocalCoor.y());
 			break;
 		}
 		emit actMoved(resultPt);
@@ -70,7 +70,7 @@ namespace Jui
 		);
 		//painter.stroke();
 	}
-	
+
 	Header::~Header()
 	{
 		//qDebug("Button closed");
@@ -78,12 +78,126 @@ namespace Jui
 
 	// Edges ///////////////////////////////////////////////////// 
 
-	Edge::Edge(Canvas *parent, int height)
+	Edge::Edge(Canvas *parent) : QObject(parent)
 	{
-		test = new Canvas(parent, 1, 1, height, parent->height());
-		test->setBackgroundColor(30, 230, 30);
-		test->setFrameAlpha(0);
+		mParent = parent;
+
+		thickness = 20;
+		offset = 5;
+		corner = 30;
+		gap = 5;
+
+		mEdges.insert(
+			Edge::direction::Right,
+			new Canvas(parent,
+				parent->width() - thickness - offset,
+				offset + corner + gap,
+				thickness,
+				parent->height() - 2 * offset - 2 * corner - 2 * gap
+			)
+		);
+
+		mEdges.insert(
+			Edge::direction::Bottom,
+			new Canvas(parent,
+				offset + corner + gap,
+				parent->height() - offset - thickness,
+				parent->width() - 2 * offset - 2 * corner - 2 * gap,
+				thickness
+			)
+		);
+
+		mEdges.insert(
+			Edge::direction::Left,
+			new Canvas(parent,
+				offset,
+				offset + corner + gap,
+				thickness,
+				parent->height() - 2 * offset - 2 * corner - 2 * gap
+			)
+		);
+
+		mEdges.insert(
+			Edge::direction::Top,
+			new Canvas(parent,
+				offset + corner + gap,
+				offset,
+				parent->width() - 2 * offset - 2 * corner - 2 * gap,
+				thickness
+			)
+		);
+
+		foreach(Canvas* oneEdge, mEdges.values())
+		{
+			oneEdge->setBackgroundColor(30, 200, 30);
+			oneEdge->setFrameAlpha(0);
+
+			connect(
+				oneEdge, SIGNAL(actMousePressed(Canvas*, QPoint)),
+				this, SLOT(onMousePress(Canvas*, QPoint))
+			);
+			connect(
+				oneEdge, SIGNAL(actMouseMoved(Canvas*, QPoint)),
+				this, SLOT(onMouseMoved(Canvas*, QPoint))
+			);
+			connect(
+				this, SIGNAL(actResized(QSize)),
+				mParent, SLOT(onResize(QSize))
+			);
+		};
 	}
+
+	void Edge::setDirection(Edge::direction dir, bool visibilty)
+	{
+
+	}
+
+	void Edge::onMousePress(Canvas* from, QPoint gpt)
+	{
+		/*
+		qDebug() << tr("Edge onPress: pt [%1, %2]").arg(
+			QString::number(gpt.x()),
+			QString::number(gpt.y())
+		);
+		*/
+
+		mousePressedGlobalCoor = gpt;
+		mousePressedLocalCoor = from->mapFromGlobal(gpt);
+		mousePressedParentCoor = from->getOrigin();
+		mousePressedParentSize = mParent->size();
+
+		/*
+		qDebug() << tr("Edge onPress: parentOrigin [%1, %2]").arg(
+			QString::number(mousePressedParentCoor.x()),
+			QString::number(mousePressedParentCoor.y())
+		);
+		*/
+	}
+	void Edge::onMouseMoved(Canvas* from, QPoint gpt)
+	{
+		QPoint deltaPt(
+			gpt.x() - mousePressedGlobalCoor.x(),
+			gpt.y() - mousePressedGlobalCoor.y()
+		);
+		QSize size(
+			mousePressedParentSize.width() + deltaPt.x(),
+			mousePressedParentSize.height() + deltaPt.y()
+		);
+
+		qDebug() << tr("Edge onMouseMoved: size [%1, %2]").arg(
+			QString::number(size.width()),
+			QString::number(size.height())
+		);
+
+		emit actResized(size);
+	}
+	/*
+
+		Edge::fitPosition()
+		{
+
+		}
+	*/
 
 	Edge::~Edge()
 	{

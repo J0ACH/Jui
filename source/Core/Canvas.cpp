@@ -43,7 +43,18 @@ namespace Jui
 
 	Canvas* Canvas::getParent() { return mParent; }
 	Canvas::type Canvas::getType() { return mType; }
-	QPoint Canvas::getOrigin() { return origin; }
+	QPoint Canvas::getOrigin(bool global) {
+		QPoint origin;
+		if (global)
+		{
+			origin = this->mapToGlobal(QPoint(0, 0));
+		}
+		else
+		{
+			origin = this->mapToParent(QPoint(0, 0));
+		}
+		return origin;
+	}
 
 	void Canvas::setName(QString name) { this->name = name; }
 	QString Canvas::getName() { return name; }
@@ -71,28 +82,14 @@ namespace Jui
 		this->colorFrame.setGreen(green);
 		this->colorFrame.setBlue(blue);
 	}
-	
-	/*
-		void Canvas::onMousePress(QPoint pt)
-		{
-			qDebug() << tr("Canvas onMousePress: pt [%1, %2]").arg(
-				QString::number(pt.x()),
-				QString::number(pt.y())
-			);
-		}
-	*/
 
-	void Canvas::onClose()
-	{
-		qDebug("Canvas onClose");
-		emit actClosed(this);
-		this->close();
-	}
+	void Canvas::onClose() { this->close(); }
 	void Canvas::onMove(QPoint pt)
 	{
 		this->move(pt);
 		origin = pt;
 	}
+	void Canvas::onResize(QSize size) { this->resize(size); }
 
 	void Canvas::mousePressEvent(QMouseEvent *event)
 	{
@@ -113,32 +110,28 @@ namespace Jui
 
 	void Canvas::focusInEvent(QFocusEvent *event)
 	{
-		//qDebug() << tr("%1 focusInEvent").arg(this->name);
 		emit actFocusIn(this);
 		this->update();
 	}
 	void Canvas::focusOutEvent(QFocusEvent *event)
 	{
-		//qDebug() << tr("%1 focusOutEvent").arg(this->name);
 		emit actFocusOut(this);
 		this->update();
 	}
 
 	void Canvas::enterEvent(QEvent *event)
 	{
-		//	qDebug() << tr("%1 enterEvent").arg(this->name);
 		emit actOverIn(this);
+		this->update();
 	}
 	void Canvas::leaveEvent(QEvent *event)
 	{
-		//qDebug() << tr("%1 leaveEvent").arg(this->name);
 		emit actOverOut(this);
+		this->update();
 	}
 
 	void Canvas::paintEvent(QPaintEvent *event)
 	{
-		//qDebug() << tr("%1 redraw").arg(this->name);
-
 		QPainter painter(this);
 		QColor colFrame, colBackg;
 
@@ -162,12 +155,9 @@ namespace Jui
 		painter.drawRect(QRect(0, 0, width() - 1, height() - 1));
 	}
 
-
 	Canvas::~Canvas()
 	{
-		qDebug("Canvas closed");
-		//emit actClosed(this);
-		//emit actClosed();
+		emit actClosed(this);
 	}
 
 }
