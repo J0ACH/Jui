@@ -89,7 +89,10 @@ namespace Jui
 		this->move(pt);
 		origin = pt;
 	}
-	void Canvas::onResize(QSize size) { this->resize(size); }
+	void Canvas::setSize(QSize size) {
+		this->resize(size); 
+		emit actResized(this, this->size());
+	}
 
 	void Canvas::mousePressEvent(QMouseEvent *event)
 	{

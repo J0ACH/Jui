@@ -87,45 +87,12 @@ namespace Jui
 		corner = 30;
 		gap = 5;
 
-		mEdges.insert(
-			Edge::direction::Right,
-			new Canvas(parent,
-				parent->width() - thickness - offset,
-				offset + corner + gap,
-				thickness,
-				parent->height() - 2 * offset - 2 * corner - 2 * gap
-			)
-		);
+		mEdges.insert(Edge::direction::Right, new Canvas(parent));
+		mEdges.insert(Edge::direction::Bottom, new Canvas(parent));
+		mEdges.insert(Edge::direction::Left, new Canvas(parent));
+		mEdges.insert(Edge::direction::Top, new Canvas(parent));
 
-		mEdges.insert(
-			Edge::direction::Bottom,
-			new Canvas(parent,
-				offset + corner + gap,
-				parent->height() - offset - thickness,
-				parent->width() - 2 * offset - 2 * corner - 2 * gap,
-				thickness
-			)
-		);
-
-		mEdges.insert(
-			Edge::direction::Left,
-			new Canvas(parent,
-				offset,
-				offset + corner + gap,
-				thickness,
-				parent->height() - 2 * offset - 2 * corner - 2 * gap
-			)
-		);
-
-		mEdges.insert(
-			Edge::direction::Top,
-			new Canvas(parent,
-				offset + corner + gap,
-				offset,
-				parent->width() - 2 * offset - 2 * corner - 2 * gap,
-				thickness
-			)
-		);
+		this->onParentResize(parent, parent->size());
 
 		foreach(Canvas* oneEdge, mEdges.values())
 		{
@@ -142,7 +109,11 @@ namespace Jui
 			);
 			connect(
 				this, SIGNAL(actResized(QSize)),
-				mParent, SLOT(onResize(QSize))
+				mParent, SLOT(setSize(QSize))
+			);
+			connect(
+				mParent, SIGNAL(actResized(Canvas*, QSize)),
+				this, SLOT(onParentResize(Canvas*, QSize))
 			);
 		};
 	}
@@ -183,6 +154,13 @@ namespace Jui
 			mousePressedParentSize.width() + deltaPt.x(),
 			mousePressedParentSize.height() + deltaPt.y()
 		);
+		/*
+		switch (oneDir)
+		{
+		case Edge::direction::Right:
+			break;
+		}
+		*/
 
 		qDebug() << tr("Edge onMouseMoved: size [%1, %2]").arg(
 			QString::number(size.width()),
@@ -191,13 +169,53 @@ namespace Jui
 
 		emit actResized(size);
 	}
-	/*
 
-		Edge::fitPosition()
+
+	void Edge::onParentResize(Canvas* from, QSize size)
+	{
+		foreach(Edge::direction oneDir, mEdges.keys())
 		{
+			Canvas *edge = mEdges.value(oneDir);
 
+			switch (oneDir)
+			{
+			case Edge::direction::Right:
+				edge->setGeometry(
+					from->width() - thickness - offset,
+					offset + corner + gap,
+					thickness,
+					from->height() - 2 * offset - 2 * corner - 2 * gap
+				);
+				break;
+			case Edge::direction::Bottom:
+				edge->setGeometry(
+					offset + corner + gap,
+					from->height() - offset - thickness,
+					from->width() - 2 * offset - 2 * corner - 2 * gap,
+					thickness
+				);
+				break;
+			case Edge::direction::Left:
+				edge->setGeometry(
+					offset,
+					offset + corner + gap,
+					thickness,
+					from->height() - 2 * offset - 2 * corner - 2 * gap
+				);
+				break;
+			case Edge::direction::Top:
+				edge->setGeometry(
+					offset + corner + gap,
+					offset,
+					from->width() - 2 * offset - 2 * corner - 2 * gap,
+					thickness
+				);
+				break;
+			}
 		}
-	*/
+
+	}
+
 
 	Edge::~Edge()
 	{

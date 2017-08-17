@@ -40,6 +40,7 @@ namespace Jui
 	public slots:
 		void onMousePress(Canvas*, QPoint);
 		void onMouseMoved(Canvas*, QPoint);
+		void onParentResize(Canvas*, QSize);
 
 	signals:
 		void actResized(QSize size);

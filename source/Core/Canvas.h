@@ -34,7 +34,7 @@ namespace Jui
 		public slots:
 		void onClose();
 		void onMove(QPoint);
-		void onResize(QSize);
+		void setSize(QSize);
 
 	signals:
 		void actClosed(Canvas *target);
@@ -45,6 +45,7 @@ namespace Jui
 		void actMousePressed(Canvas *target, QPoint gPt);
 		void actMouseMoved(Canvas *target, QPoint gPt);
 		void actMouseReleased(Canvas *target, QPoint gPt);
+		void actResized(Canvas *target, QSize size);
 
 	protected:
 		void focusInEvent(QFocusEvent *event);
