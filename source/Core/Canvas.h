@@ -19,12 +19,12 @@ namespace Jui
 		~Canvas();
 
 		enum type { Window, Panel };
-		
+				
 		Canvas *getParent();
 		QPoint getOrigin(bool global = false);
 		QString getName();
 		Canvas::type getType();
-				
+						
 		void setName(QString name);
 		void setBackgroundAlpha(int alpha);
 		void setBackgroundColor(int red, int green, int blue);
@@ -65,7 +65,7 @@ namespace Jui
 
 		Canvas *mParent;
 		Canvas::type mType;
-
+		
 		QString name;
 		QPoint origin;
 

@@ -46,10 +46,10 @@ namespace Jui
 		void actResized(QSize size);
 
 	private:
-		//void fitPosition();
 		Canvas* mParent;
 		QMap<Edge::direction, Canvas*> mEdges;
 		int thickness, offset, corner, gap;
+		Edge::direction getDirection(Canvas*);
 
 		QPoint mousePressedParentCoor, mousePressedGlobalCoor, mousePressedLocalCoor;
 		QSize mousePressedParentSize;

@@ -98,6 +98,11 @@ namespace Jui
 		{
 			oneEdge->setBackgroundColor(30, 200, 30);
 			oneEdge->setFrameAlpha(0);
+			oneEdge->setName(
+				tr("CanvasEdge_%1").arg(
+					QString::number(mEdges.key(oneEdge))
+				)
+			);
 
 			connect(
 				oneEdge, SIGNAL(actMousePressed(Canvas*, QPoint)),
@@ -123,6 +128,25 @@ namespace Jui
 
 	}
 
+	Edge::direction Edge::getDirection(Canvas* from)
+	{
+		if (from->getName() == "CanvasEdge_0")
+		{
+			qDebug() << tr("Edge name right");
+			return Edge::direction::Right;
+		}
+		else if (from->getName() == "CanvasEdge_1")
+		{
+			qDebug() << tr("Edge name bottom");
+			return Edge::direction::Bottom;
+		}
+		else
+		{
+			qDebug() << tr("Edge name [%1]").arg(from->getName());
+			return Edge::direction::Right;
+		}
+	}
+
 	void Edge::onMousePress(Canvas* from, QPoint gpt)
 	{
 		/*
@@ -137,12 +161,8 @@ namespace Jui
 		mousePressedParentCoor = from->getOrigin();
 		mousePressedParentSize = mParent->size();
 
-		/*
-		qDebug() << tr("Edge onPress: parentOrigin [%1, %2]").arg(
-			QString::number(mousePressedParentCoor.x()),
-			QString::number(mousePressedParentCoor.y())
-		);
-		*/
+		this->getDirection(from);
+
 	}
 	void Edge::onMouseMoved(Canvas* from, QPoint gpt)
 	{
