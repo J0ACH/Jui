@@ -101,7 +101,7 @@ namespace Jui
 			this, SIGNAL(actMoved(EdgeControler::direction, QPoint)),
 			edges, SLOT(onControlerMoved(EdgeControler::direction, QPoint))
 		);
-	}
+			}
 
 	EdgeControler::direction EdgeControler::getDirection() { return mDirection; }
 
@@ -154,6 +154,10 @@ namespace Jui
 			mParent, SLOT(setSize(QSize))
 		);
 		connect(
+			this, SIGNAL(actMoved(QPoint)),
+			mParent, SLOT(onMove(QPoint))
+		);
+		connect(
 			mParent, SIGNAL(actResized(Canvas*, QSize)),
 			this, SLOT(onParentResize(Canvas*, QSize))
 		);
@@ -164,21 +168,38 @@ namespace Jui
 	void Edges::onControlerPressed()
 	{
 		mousePressedParentSize = mParent->size();
+		mousePressedGlobalCoor = mParent->getOrigin(true);
 		//qDebug() << tr("Edges onControlerPressed");
 	}
 	void Edges::onControlerMoved(EdgeControler::direction dir, QPoint deltaPt)
 	{
+		QPoint origin(
+			mousePressedGlobalCoor.x() + deltaPt.x(),
+			mousePressedGlobalCoor.y() + deltaPt.y()
+		);
 		QSize size(
 			mousePressedParentSize.width() + deltaPt.x(),
 			mousePressedParentSize.height() + deltaPt.y()
 		);
-		/*
-		switch (oneDir)
+
+		switch (dir)
 		{
-		case Edge::direction::Right:
-		break;
-		}
-		*/
+		case EdgeControler::direction::Left:
+			origin.setY(mousePressedGlobalCoor.y());
+			size.setWidth(-deltaPt.x() + mousePressedParentSize.width());
+			emit actMoved(origin);
+		case EdgeControler::direction::Right:
+			size.setHeight(mousePressedParentSize.height());
+			break;
+
+		case EdgeControler::direction::Top:
+			origin.setX(mousePressedGlobalCoor.x());
+			size.setHeight(-deltaPt.y() + mousePressedParentSize.height());
+			emit actMoved(origin);
+		case EdgeControler::direction::Bottom:
+			size.setWidth(mousePressedParentSize.width());
+			break;
+		}	
 
 		/*
 		qDebug() << tr("Edges onMouseMoved: size [%1, %2]").arg(

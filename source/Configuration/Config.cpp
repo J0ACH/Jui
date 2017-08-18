@@ -10,16 +10,18 @@ namespace Jui
 		this->setName("Configuration");
 		this->setBackgroundAlpha(0);
 
+		Edges *e1 = new Edges(this);
+
 		Header *header = new Header(this, 55);
 		Button *closeButton = new Button(header, this->width() - 45, 10, 35, 35);
 		closeButton->setName("close");
 		
 
-		Canvas *test = new Canvas(this, 100, 300, 100, 100);
+		Canvas *test = new Canvas(this, 100, 300, 200, 200);
 		test->setName("test");
 		Header *headerTest3 = new Header(test, 25);
-		Edges *e1 = new Edges(this);
-		
+		Edges *e2 = new Edges(test);
+
 		connect(
 			closeButton, SIGNAL(actMousePressed(Canvas*, QPoint)),
 			this, SLOT(onClose())

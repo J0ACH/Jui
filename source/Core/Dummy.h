@@ -68,6 +68,7 @@ namespace Jui
 
 	signals:
 		void actResized(QSize size);
+		void actMoved(QPoint pt);
 
 	private:
 		Canvas* mParent;
@@ -76,6 +77,7 @@ namespace Jui
 		int thickness, offset, corner, gap;
 
 		QSize mousePressedParentSize;
+		QPoint mousePressedGlobalCoor;
 	};
 }
 
