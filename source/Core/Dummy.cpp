@@ -78,6 +78,7 @@ namespace Jui
 
 	// EdgeControler ///////////////////////////////////////////////////// 
 
+	/*
 	EdgeControler::EdgeControler(Canvas* parent, EdgeControler::direction dir) :
 		Canvas(parent),
 		mDirection(dir)
@@ -93,10 +94,11 @@ namespace Jui
 			this, SLOT(onMouseMoved(Canvas*, QPoint))
 		);
 	}
+	*/
 
-	/*
-	EdgeControler::EdgeControler(Edges* parent, EdgeControler::direction dir) :
-		Canvas(parent->getParent()),
+	
+	EdgeControler::EdgeControler(Canvas* parent, QObject* edges, EdgeControler::direction dir) :
+		Canvas(parent),
 		mDirection(dir)
 	{
 		this->setBackgroundColor(30, 200, 130);
@@ -109,8 +111,16 @@ namespace Jui
 			this, SIGNAL(actMouseMoved(Canvas*, QPoint)),
 			this, SLOT(onMouseMoved(Canvas*, QPoint))
 		);
-	}
-	*/
+
+		connect(
+			this, SIGNAL(actMousePressed(Canvas*, QPoint)),
+			edges, SLOT(onControlerPressed())
+		);		
+		connect(
+			this, SIGNAL(actMoved(EdgeControler::direction, QPoint)),
+			edges, SLOT(onControlerMoved(EdgeControler::direction, QPoint))
+		);
+	}	
 
 	EdgeControler::direction EdgeControler::getDirection() { return mDirection; }
 
@@ -137,6 +147,7 @@ namespace Jui
 			QString::number(deltaPt.y())
 		);
 		*/
+		
 	}
 	/*
 	void EdgeControler::onParentResize(Canvas* from, QSize size)
@@ -194,14 +205,15 @@ namespace Jui
 
 		mEdges.insert(
 			EdgeControler::direction::Right,
-			new EdgeControler(parent, EdgeControler::direction::Right)
-		);
-		mEdges.insert(
-			EdgeControler::direction::Bottom,
-			new EdgeControler(parent, EdgeControler::direction::Bottom)
+			new EdgeControler(parent, this, EdgeControler::direction::Right)
 		);
 
 		/*
+		mEdges.insert(
+			EdgeControler::direction::Bottom,
+			new EdgeControler(parent, this, EdgeControler::direction::Bottom)
+		);
+
 		mEdges.insert(
 			EdgeControler::direction::Right,
 			new EdgeControler(parent, EdgeControler::direction::Right)
@@ -220,6 +232,16 @@ namespace Jui
 		*/
 
 		this->onParentResize(parent, parent->size());
+
+		connect(
+			this, SIGNAL(actResized(QSize)),
+			mParent, SLOT(setSize(QSize))
+		);
+		connect(
+			mParent, SIGNAL(actResized(Canvas*, QSize)),
+			this, SLOT(onParentResize(Canvas*, QSize))
+		);
+
 		/*
 		foreach(Canvas* oneEdge, mEdges.values())
 		{
@@ -310,11 +332,12 @@ namespace Jui
 		}
 	*/
 
-	//Canvas Edges::getParent() { return mParent; }
+	Canvas* Edges::getParent() { return mParent; }
 
 	void Edges::onControlerPressed()
 	{
 		mousePressedParentSize = mParent->size();
+		//qDebug() << tr("Edges onControlerPressed");
 	}
 	void Edges::onControlerMoved(EdgeControler::direction dir, QPoint deltaPt)
 	{
@@ -330,10 +353,12 @@ namespace Jui
 		}
 		*/
 
-		qDebug() << tr("Edge onMouseMoved: size [%1, %2]").arg(
+		/*
+		qDebug() << tr("Edges onMouseMoved: size [%1, %2]").arg(
 			QString::number(size.width()),
 			QString::number(size.height())
 		);
+		*/
 
 		emit actResized(size);
 	}
@@ -342,7 +367,6 @@ namespace Jui
 	{
 		foreach(EdgeControler* oneEdge, mEdges.values())
 		{
-			//EdgeControler *edgCnt = dynamic_cast<EdgeControler*>(oneEdge);
 			switch (oneEdge->getDirection())
 			{
 			case EdgeControler::direction::Right:

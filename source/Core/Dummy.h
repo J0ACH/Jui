@@ -32,8 +32,10 @@ namespace Jui
 	public:
 		enum direction { Right, Bottom, Left, Top };
 
-		EdgeControler(Canvas* parent, EdgeControler::direction dir);
+		//EdgeControler(Canvas* parent, EdgeControler::direction dir);
 		//EdgeControler(Edges* parent, EdgeControler::direction dir);
+		EdgeControler(Canvas* parent, QObject* edges, EdgeControler::direction dir);
+		
 		~EdgeControler();
 
 		EdgeControler::direction getDirection();
@@ -48,7 +50,6 @@ namespace Jui
 
 	private:
 		EdgeControler::direction mDirection;
-		//int thickness, offset, corner, gap;
 		QPoint mousePressedGlobalCoor;
 		
 	};
@@ -60,11 +61,7 @@ namespace Jui
 	public:
 		Edges(Canvas *parent);
 		~Edges();
-
-		//enum direction { Right, Bottom, Left, Top };
-
-		//void setDirection(Edges::direction dir, bool visibilty);
-
+		
 		public slots:
 		//void onMousePress(Canvas*, QPoint);
 		//void onMouseMoved(Canvas*, QPoint);
@@ -72,7 +69,7 @@ namespace Jui
 		void onControlerMoved(EdgeControler::direction, QPoint);
 		void onParentResize(Canvas*, QSize);
 
-		//Canvas getParent();
+		Canvas* getParent();
 
 	signals:
 		void actResized(QSize size);
@@ -80,11 +77,9 @@ namespace Jui
 	private:
 		Canvas* mParent;
 		QMap<EdgeControler::direction, EdgeControler*> mEdges;
-		//QMap<Edges::direction, Canvas*> mEdges;
-		
+				
 		int thickness, offset, corner, gap;
 		
-		//QPoint mousePressedParentCoor, mousePressedGlobalCoor, mousePressedLocalCoor;
 		QSize mousePressedParentSize;
 	};
 }
