@@ -78,25 +78,6 @@ namespace Jui
 
 	// EdgeControler ///////////////////////////////////////////////////// 
 
-	/*
-	EdgeControler::EdgeControler(Canvas* parent, EdgeControler::direction dir) :
-		Canvas(parent),
-		mDirection(dir)
-	{
-		this->setBackgroundColor(30, 200, 130);
-		
-		connect(
-			this, SIGNAL(actMousePressed(Canvas*, QPoint)),
-			this, SLOT(onMousePress(Canvas*, QPoint))
-		);
-		connect(
-			this, SIGNAL(actMouseMoved(Canvas*, QPoint)),
-			this, SLOT(onMouseMoved(Canvas*, QPoint))
-		);
-	}
-	*/
-
-	
 	EdgeControler::EdgeControler(Canvas* parent, QObject* edges, EdgeControler::direction dir) :
 		Canvas(parent),
 		mDirection(dir)
@@ -115,24 +96,18 @@ namespace Jui
 		connect(
 			this, SIGNAL(actMousePressed(Canvas*, QPoint)),
 			edges, SLOT(onControlerPressed())
-		);		
+		);
 		connect(
 			this, SIGNAL(actMoved(EdgeControler::direction, QPoint)),
 			edges, SLOT(onControlerMoved(EdgeControler::direction, QPoint))
 		);
-	}	
+	}
 
 	EdgeControler::direction EdgeControler::getDirection() { return mDirection; }
 
 	void EdgeControler::onMousePress(Canvas* from, QPoint gpt)
 	{
 		mousePressedGlobalCoor = gpt;
-		/*
-		qDebug() << tr("EdgeControler onMousePress: pt [%1, %2]").arg(
-			QString::number(mousePressedGlobalCoor.x()),
-			QString::number(mousePressedGlobalCoor.y())
-		);
-		*/
 	}
 	void EdgeControler::onMouseMoved(Canvas* from, QPoint gpt)
 	{
@@ -141,55 +116,7 @@ namespace Jui
 			gpt.y() - mousePressedGlobalCoor.y()
 		);
 		emit actMoved(mDirection, deltaPt);
-		/*
-		qDebug() << tr("EdgeControler onMouseMoved: deltaPt [%1, %2]").arg(
-			QString::number(deltaPt.x()),
-			QString::number(deltaPt.y())
-		);
-		*/
-		
 	}
-	/*
-	void EdgeControler::onParentResize(Canvas* from, QSize size)
-	{
-		switch (mDirection)
-		{
-		case EdgeControler::direction::Right:
-			this->setGeometry(
-				from->width() - thickness - offset,
-				offset + corner + gap,
-				thickness,
-				from->height() - 2 * offset - 2 * corner - 2 * gap
-			);
-			break;
-		case EdgeControler::direction::Bottom:
-			this->setGeometry(
-				offset + corner + gap,
-				from->height() - offset - thickness,
-				from->width() - 2 * offset - 2 * corner - 2 * gap,
-				thickness
-			);
-			break;
-		case EdgeControler::direction::Left:
-			this->setGeometry(
-				offset,
-				offset + corner + gap,
-				thickness,
-				from->height() - 2 * offset - 2 * corner - 2 * gap
-			);
-			break;
-		case EdgeControler::direction::Top:
-			this->setGeometry(
-				offset + corner + gap,
-				offset,
-				from->width() - 2 * offset - 2 * corner - 2 * gap,
-				thickness
-			);
-			break;
-		}
-	}
-	*/
-
 	EdgeControler::~EdgeControler() {}
 
 	// Edges ///////////////////////////////////////////////////// 
@@ -207,29 +134,18 @@ namespace Jui
 			EdgeControler::direction::Right,
 			new EdgeControler(parent, this, EdgeControler::direction::Right)
 		);
-
-		/*
 		mEdges.insert(
 			EdgeControler::direction::Bottom,
 			new EdgeControler(parent, this, EdgeControler::direction::Bottom)
 		);
-
 		mEdges.insert(
-			EdgeControler::direction::Right,
-			new EdgeControler(parent, EdgeControler::direction::Right)
+			EdgeControler::direction::Left,
+			new EdgeControler(parent, this, EdgeControler::direction::Left)
 		);
 		mEdges.insert(
-			EdgeControler::direction::Bottom,
-			new EdgeControler(parent, EdgeControler::direction::Bottom)
+			EdgeControler::direction::Top,
+			new EdgeControler(parent, this, EdgeControler::direction::Top)
 		);
-		*/
-
-		/*
-				//mEdges.insert(Edges::direction::Right, new Canvas(parent));
-				mEdges.insert(Edges::direction::Bottom, new Canvas(parent));
-				mEdges.insert(Edges::direction::Left, new Canvas(parent));
-				mEdges.insert(Edges::direction::Top, new Canvas(parent));
-		*/
 
 		this->onParentResize(parent, parent->size());
 
@@ -241,96 +157,7 @@ namespace Jui
 			mParent, SIGNAL(actResized(Canvas*, QSize)),
 			this, SLOT(onParentResize(Canvas*, QSize))
 		);
-
-		/*
-		foreach(Canvas* oneEdge, mEdges.values())
-		{
-			oneEdge->setBackgroundColor(30, 200, 30);
-			oneEdge->setFrameAlpha(0);
-			oneEdge->setName(
-				tr("CanvasEdge_%1").arg(
-					QString::number(mEdges.key(oneEdge))
-				)
-			);
-
-			connect(
-				oneEdge, SIGNAL(actMousePressed(Canvas*, QPoint)),
-				this, SLOT(onMousePress(Canvas*, QPoint))
-			);
-			connect(
-				oneEdge, SIGNAL(actMouseMoved(Canvas*, QPoint)),
-				this, SLOT(onMouseMoved(Canvas*, QPoint))
-			);
-			connect(
-				this, SIGNAL(actResized(QSize)),
-				mParent, SLOT(setSize(QSize))
-			);
-			connect(
-				mParent, SIGNAL(actResized(Canvas*, QSize)),
-				this, SLOT(onParentResize(Canvas*, QSize))
-			);
-		};
-		*/
 	}
-
-	/*
-	void Edges::setDirection(Edges::direction dir, bool visibilty)
-	{
-
-	}
-	*/
-
-	/*
-		Edges::direction Edges::getDirection(Canvas* from)
-		{
-			if (from->getName() == "CanvasEdge_0")
-			{
-				qDebug() << tr("Edge name right");
-				return Edges::direction::Right;
-			}
-			else if (from->getName() == "CanvasEdge_1")
-			{
-				qDebug() << tr("Edge name bottom");
-				return Edges::direction::Bottom;
-			}
-			else
-			{
-				qDebug() << tr("Edge name [%1]").arg(from->getName());
-				return Edges::direction::Right;
-			}
-		}
-
-		void Edges::onMousePress(Canvas* from, QPoint gpt)
-		{
-
-			mousePressedGlobalCoor = gpt;
-			mousePressedLocalCoor = from->mapFromGlobal(gpt);
-			mousePressedParentCoor = from->getOrigin();
-			mousePressedParentSize = mParent->size();
-
-			this->getDirection(from);
-
-		}
-		void Edges::onMouseMoved(Canvas* from, QPoint gpt)
-		{
-			QPoint deltaPt(
-				gpt.x() - mousePressedGlobalCoor.x(),
-				gpt.y() - mousePressedGlobalCoor.y()
-			);
-			QSize size(
-				mousePressedParentSize.width() + deltaPt.x(),
-				mousePressedParentSize.height() + deltaPt.y()
-			);
-
-
-			qDebug() << tr("Edge onMouseMoved: size [%1, %2]").arg(
-				QString::number(size.width()),
-				QString::number(size.height())
-			);
-
-			emit actResized(size);
-		}
-	*/
 
 	Canvas* Edges::getParent() { return mParent; }
 
@@ -402,52 +229,8 @@ namespace Jui
 				);
 				break;
 			}
-
 		}
-		/*
-				foreach(Edges::direction oneDir, mEdges.keys())
-				{
-					Canvas *edge = mEdges.value(oneDir);
-					switch (oneDir)
-					{
-					case Edges::direction::Right:
-						edge->setGeometry(
-							from->width() - thickness - offset,
-							offset + corner + gap,
-							thickness,
-							from->height() - 2 * offset - 2 * corner - 2 * gap
-						);
-						break;
-					case Edges::direction::Bottom:
-						edge->setGeometry(
-							offset + corner + gap,
-							from->height() - offset - thickness,
-							from->width() - 2 * offset - 2 * corner - 2 * gap,
-							thickness
-						);
-						break;
-					case Edges::direction::Left:
-						edge->setGeometry(
-							offset,
-							offset + corner + gap,
-							thickness,
-							from->height() - 2 * offset - 2 * corner - 2 * gap
-						);
-						break;
-					case Edges::direction::Top:
-						edge->setGeometry(
-							offset + corner + gap,
-							offset,
-							from->width() - 2 * offset - 2 * corner - 2 * gap,
-							thickness
-						);
-						break;
-					}
-				}
-
-		*/
 	}
-
 
 	Edges::~Edges()
 	{
