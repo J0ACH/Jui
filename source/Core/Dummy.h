@@ -25,33 +25,66 @@ namespace Jui
 		QPoint mousePressedParentCoor, mousePressedGlobalCoor, mousePressedLocalCoor;
 	};
 
-	class Edge : public QObject
+	class EdgeControler : public Canvas
 	{
 		Q_OBJECT
 
 	public:
-		Edge(Canvas *parent);
-		~Edge();
-
 		enum direction { Right, Bottom, Left, Top };
 
-		void setDirection(Edge::direction dir, bool visibilty);
+		EdgeControler(Canvas* parent, EdgeControler::direction dir);
+		//EdgeControler(Edges* parent, EdgeControler::direction dir);
+		~EdgeControler();
 
-	public slots:
+		EdgeControler::direction getDirection();
+
+	signals:
+		void actMoved(EdgeControler::direction, QPoint);
+
+		public slots:
 		void onMousePress(Canvas*, QPoint);
 		void onMouseMoved(Canvas*, QPoint);
+		//void onParentResize(Canvas*, QSize);
+
+	private:
+		EdgeControler::direction mDirection;
+		//int thickness, offset, corner, gap;
+		QPoint mousePressedGlobalCoor;
+		
+	};
+
+	class Edges : public QObject
+	{
+		Q_OBJECT
+
+	public:
+		Edges(Canvas *parent);
+		~Edges();
+
+		//enum direction { Right, Bottom, Left, Top };
+
+		//void setDirection(Edges::direction dir, bool visibilty);
+
+		public slots:
+		//void onMousePress(Canvas*, QPoint);
+		//void onMouseMoved(Canvas*, QPoint);
+		void onControlerPressed();
+		void onControlerMoved(EdgeControler::direction, QPoint);
 		void onParentResize(Canvas*, QSize);
+
+		//Canvas getParent();
 
 	signals:
 		void actResized(QSize size);
 
 	private:
 		Canvas* mParent;
-		QMap<Edge::direction, Canvas*> mEdges;
+		QMap<EdgeControler::direction, EdgeControler*> mEdges;
+		//QMap<Edges::direction, Canvas*> mEdges;
+		
 		int thickness, offset, corner, gap;
-		Edge::direction getDirection(Canvas*);
-
-		QPoint mousePressedParentCoor, mousePressedGlobalCoor, mousePressedLocalCoor;
+		
+		//QPoint mousePressedParentCoor, mousePressedGlobalCoor, mousePressedLocalCoor;
 		QSize mousePressedParentSize;
 	};
 }

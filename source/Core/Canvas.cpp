@@ -2,21 +2,24 @@
 
 namespace Jui
 {
-	Canvas::Canvas(Canvas *parent) : QWidget(parent)
+	Canvas::Canvas(Canvas *parent) : 
+		QWidget(parent)
 	{
 		Canvas::init(0, 0, 100, 100);
 		mParent = parent;
 		mType = Canvas::type::Panel;
 	}
-
-	Canvas::Canvas(Canvas *parent, int x, int y, int width, int height) : QWidget(parent)
+	
+	Canvas::Canvas(Canvas *parent, int x, int y, int width, int height) :
+		QWidget(parent)
 	{
 		Canvas::init(x, y, width, height);
 		mParent = parent;
 		mType = Canvas::type::Panel;
 	}
 
-	Canvas::Canvas(int x, int y, int width, int height) : QWidget()
+	Canvas::Canvas(int x, int y, int width, int height) : 
+		QWidget(0)
 	{
 		Canvas::init(x, y, width, height);
 		mParent = NULL;
