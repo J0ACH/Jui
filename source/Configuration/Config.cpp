@@ -9,10 +9,9 @@ namespace Jui
 
 		this->setName("Configuration");
 		this->setBackgroundAlpha(0);
-
-		Edges *e1 = new Edges(this);
-
+		
 		Header *header = new Header(this, 55);
+		Edges *e1 = new Edges(this);
 		Button *closeButton = new Button(header, this->width() - 45, 10, 35, 35);
 		closeButton->setName("close");
 		

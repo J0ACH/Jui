@@ -72,8 +72,6 @@ namespace Jui
 		QColor colorBackround, colorFrame;
 
 	};
-
-
 }
 
 #endif // CANVAS_H

@@ -32,8 +32,7 @@ namespace Jui
 	public:
 		enum direction { Right, Bottom, Left, Top };
 
-		EdgeControler(Canvas* parent, QObject* edges, EdgeControler::direction dir);
-
+		EdgeControler(Canvas* parent, EdgeControler::direction dir);
 		~EdgeControler();
 
 		EdgeControler::direction getDirection();

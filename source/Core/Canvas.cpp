@@ -89,8 +89,29 @@ namespace Jui
 	void Canvas::onClose() { this->close(); }
 	void Canvas::onMove(QPoint pt)
 	{
-		this->move(pt);
-		origin = pt;
+		QPoint resultPt;
+		switch (mType)
+		{
+		case Jui::Canvas::Window:
+			resultPt = pt;
+			this->move(resultPt);
+			origin = resultPt;
+			break;
+		case Jui::Canvas::Panel:
+			resultPt.setX(0);; //pt.x() - this->getOrigin(false).x());
+			//resultPt.setY(pt.y() - this->getOrigin(true).y());
+			resultPt = pt;
+			this->move(resultPt);
+			origin = resultPt;
+			break;
+		default:
+			break;
+		};		
+
+		qDebug() << tr("Canvas onMove: pt [%1, %2]").arg(
+			QString::number(resultPt.x()),
+			QString::number(resultPt.y())
+		);		
 	}
 	void Canvas::setSize(QSize size) {
 		this->resize(size); 
