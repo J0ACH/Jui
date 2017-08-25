@@ -1,32 +1,38 @@
 #include "Canvas.h"
 
-
 namespace Jui
 {
-	Canvas::Canvas(Canvas *parent) : QWidget(parent)
+	Canvas::Canvas(Canvas *parent) :
+		QWidget(parent)
 	{
-		qDebug("Canvan new parent ");
 		Canvas::init(0, 0, 100, 100);
+		mParent = parent;
+		mType = Canvas::type::Panel;
 	}
 
-	Canvas::Canvas(Canvas *parent, int x, int y, int width, int height) : QWidget(parent)
+	Canvas::Canvas(Canvas *parent, int x, int y, int width, int height) :
+		QWidget(parent)
 	{
-		qDebug("Canvan new parent ");
 		Canvas::init(x, y, width, height);
+		mParent = parent;
+		mType = Canvas::type::Panel;
 	}
 
-	Canvas::Canvas(int x, int y, int width, int height) : QWidget()
+	Canvas::Canvas(int x, int y, int width, int height) :
+		QWidget(0)
 	{
-		qDebug("Canvan new x, y, w, h, ");
-		//this->setWindowTitle("Canvan");
-
 		Canvas::init(x, y, width, height);
+		mParent = NULL;
+		mType = Canvas::type::Window;
 	}
 
 	void Canvas::init(int x, int y, int width, int height)
 	{
 		this->setWindowFlags(Qt::FramelessWindowHint);
 		this->setAttribute(Qt::WA_TranslucentBackground);
+
+		origin.setX(x);
+		origin.setY(y);
 
 		this->setGeometry(x, y, width, height);
 		this->setName("Canvan");
@@ -36,6 +42,21 @@ namespace Jui
 		this->setFrameAlpha(255);
 
 		this->show();
+	}
+
+	Canvas* Canvas::getParent() { return mParent; }
+	QPoint Canvas::getOrigin() {
+		QPoint origin;
+		switch (mType)
+		{
+		case Jui::Canvas::Window:
+			origin = this->mapToGlobal(QPoint(0, 0));
+			break;
+		case Jui::Canvas::Panel:
+			origin = this->mapToParent(QPoint(0, 0));
+			break;
+		}
+		return origin;
 	}
 
 	void Canvas::setName(QString name) { this->name = name; }
@@ -65,83 +86,64 @@ namespace Jui
 		this->colorFrame.setBlue(blue);
 	}
 
-	void Canvas::connect2(QString signal, Canvas *target, QString slot)
+	void Canvas::onClose() { this->close(); }
+	void Canvas::onMove(QPoint pt)
 	{
+		this->move(pt);
+		emit actMoved(this, this->getOrigin());
 		/*
-			connect(
-				this, SIGNAL(signal),
-				target, SLOT(slot)
-			);
+		qDebug() << tr("Canvas onMove: pt [%1, %2]").arg(
+			QString::number(this->getOrigin().x()),
+			QString::number(this->getOrigin().y())
+		);
 		*/
-
-
-		qDebug("tohle je connect2");
-		//qDebug(signal);
 	}
-
-	void Canvas::onClose()
-	{
-		qDebug("Canvas onClose");
-		emit actClosed(this);
-		this->close();
+	void Canvas::setSize(QSize size) {
+		this->resize(size);
+		emit actResized(this, this->size());
 	}
 
 	void Canvas::mousePressEvent(QMouseEvent *event)
 	{
 		this->setFocus(Qt::MouseFocusReason);
-
-		//this->focusWidget();
-		QPoint gPos = event->globalPos();
-		qDebug() << tr("MPressed target: %1 [%2, %3]").arg(
-			this->name,
-			QString::number(gPos.x()),
-			QString::number(gPos.y())
-		);
-
-		//emit actMousePressed(this, gPos.x(), gPos.y());
-		emit actMousePressed(this, event->x(), event->y());
+		QPoint globalPt(event->globalPos().x(), event->globalPos().y());
+		emit actMousePressed(this, globalPt);
+	}
+	void Canvas::mouseMoveEvent(QMouseEvent *event)
+	{
+		QPoint globalPt(event->globalPos().x(), event->globalPos().y());
+		emit actMouseMoved(this, globalPt);
 	}
 	void Canvas::mouseReleaseEvent(QMouseEvent *event)
 	{
-		QPoint gPos = event->globalPos();
-		qDebug() << tr("MReleased target: %1 [%2, %3]").arg(
-			this->name,
-			QString::number(gPos.x()),
-			QString::number(gPos.y())
-		);
-
-		//emit actMousePressed(this, gPos.x(), gPos.y());
-		emit actMouseReleased(this, event->x(), event->y());
+		QPoint globalPt(event->globalPos().x(), event->globalPos().y());
+		emit actMouseReleased(this, globalPt);
 	}
 
 	void Canvas::focusInEvent(QFocusEvent *event)
 	{
-		qDebug() << tr("%1 focusInEvent").arg(this->name);
 		emit actFocusIn(this);
 		this->update();
 	}
 	void Canvas::focusOutEvent(QFocusEvent *event)
 	{
-		qDebug() << tr("%1 focusOutEvent").arg(this->name);
 		emit actFocusOut(this);
 		this->update();
 	}
 
 	void Canvas::enterEvent(QEvent *event)
 	{
-		qDebug() << tr("%1 enterEvent").arg(this->name);
 		emit actOverIn(this);
+		this->update();
 	}
 	void Canvas::leaveEvent(QEvent *event)
 	{
-		qDebug() << tr("%1 leaveEvent").arg(this->name);
 		emit actOverOut(this);
+		this->update();
 	}
 
 	void Canvas::paintEvent(QPaintEvent *event)
 	{
-		qDebug() << tr("%1 redraw").arg(this->name);
-
 		QPainter painter(this);
 		QColor colFrame, colBackg;
 
@@ -165,11 +167,9 @@ namespace Jui
 		painter.drawRect(QRect(0, 0, width() - 1, height() - 1));
 	}
 
-
 	Canvas::~Canvas()
 	{
-		qDebug("Canvas closed");
-		//emit actClosed(this);
-		//emit actClosed();
+		emit actClosed(this);
 	}
+
 }

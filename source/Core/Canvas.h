@@ -18,29 +18,33 @@ namespace Jui
 		Canvas(int x, int y, int width, int height);
 		~Canvas();
 
-		void setName(QString name);
+		Canvas *getParent();
+		QPoint getOrigin();
 		QString getName();
-		
-
+								
+		void setName(QString name);
 		void setBackgroundAlpha(int alpha);
 		void setBackgroundColor(int red, int green, int blue);
 		void setFrameAlpha(int alpha);
 		void setFrameColor(int red, int green, int blue);
 
-		void connect2(QString signal, Canvas *target, QString slot);
-
 		public slots:
 		void onClose();
+		void onMove(QPoint);
+		void setSize(QSize);
 
 	signals:
 		void actClosed(Canvas *target);
-		void actMousePressed(Canvas *target, int x, int y);
-		void actMouseReleased(Canvas *target, int x, int y);
 		void actOverIn(Canvas *target);
 		void actOverOut(Canvas *target);
 		void actFocusIn(Canvas *target);
 		void actFocusOut(Canvas *target);
-		
+		void actMousePressed(Canvas *target, QPoint gPt);
+		void actMouseMoved(Canvas *target, QPoint gPt);
+		void actMouseReleased(Canvas *target, QPoint gPt);
+		void actResized(Canvas *target, QSize size);
+		void actMoved(Canvas *target, QPoint gPt);
+
 	protected:
 		void focusInEvent(QFocusEvent *event);
 		void focusOutEvent(QFocusEvent *event);
@@ -50,13 +54,23 @@ namespace Jui
 
 		void mousePressEvent(QMouseEvent *event);
 		void mouseReleaseEvent(QMouseEvent *event);
+		void mouseMoveEvent(QMouseEvent *event);
+
 		void paintEvent(QPaintEvent *event);
 
 	private:
+		enum type { Window, Panel };
+		
 		void init(int x, int y, int width, int height);
 
+		Canvas *mParent;
+		Canvas::type mType;
+		
 		QString name;
+		QPoint origin;
+
 		QColor colorBackround, colorFrame;
+
 	};
 }
 

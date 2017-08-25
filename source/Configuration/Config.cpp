@@ -1,34 +1,30 @@
-
 #include "Config.h"
 
 namespace Jui
 {
+
 	Config::Config(int x, int y, int width, int height) : Canvas(x, y, width, height)
 	{
 		qDebug("Config new x, y, w, h");
 
 		this->setName("Configuration");
 		this->setBackgroundAlpha(0);
-
-		Button *test = new Button(this, 100, 100, 50, 50);
-		test->setName("test");
-
-		Button *test2 = new Button(this, 100, 200, 50, 50);
-		test2->setName("test2");
-		//test->setBackgroundAlpha(200);
-		//test->setBackgroundColor(150, 30, 30);
-
-		Button *closeButton = new Button(this, this->width() - 45, 10, 35, 35);
-		closeButton->setName("close");
-		//closeButton->setBackgroundColor(250, 30, 30);
 		
+		Header *header = new Header(this);
+		Edges *e1 = new Edges(this);
+					
+		Canvas *test = new Canvas(this, 100, 100, 200, 200);
+		test->setName("test");
+		Header *headerTest = new Header(test);
+		Edges *e2 = new Edges(test);
+
+		Button *closeButton = new Button(header, this->width() - 45, 10, 25, 25);
+		closeButton->setName("close");
 
 		connect(
-			closeButton, SIGNAL(actMousePressed(Canvas*, int, int)),
+			closeButton, SIGNAL(actMousePressed(Canvas*, QPoint)),
 			this, SLOT(onClose())
 		);
-
-		//test->connect2("ahoj", this, "onPrint");
 	}
 
 	void Config::onPrint()

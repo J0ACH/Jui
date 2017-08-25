@@ -29,8 +29,8 @@
       "variables": [
         {
           "name": "CMAKE_INSTALL_PREFIX",
-          "value": "${env.ProgramFiles}\\Jui",
-          //"value": "${projectDir}\\install"
+          //"value": "${env.ProgramFiles}\\Jui",
+          "value": "${projectDir}\\install"
         }
       ]
     }
