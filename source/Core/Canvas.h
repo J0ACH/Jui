@@ -30,8 +30,10 @@ namespace Jui
 
 		public slots:
 		void onClose();
-		void onMove(QPoint);
 		void setSize(QSize);
+		void setOrigin(QPoint);
+
+		virtual void draw();
 
 	signals:
 		void actClosed(Canvas *target);
@@ -44,6 +46,7 @@ namespace Jui
 		void actMouseReleased(Canvas *target, QPoint gPt);
 		void actResized(Canvas *target, QSize size);
 		void actMoved(Canvas *target, QPoint gPt);
+		void actRefreshed(Canvas *target);
 
 	protected:
 		void focusInEvent(QFocusEvent *event);
@@ -60,7 +63,7 @@ namespace Jui
 
 	private:
 		enum type { Window, Panel };
-		
+				
 		void init(int x, int y, int width, int height);
 
 		Canvas *mParent;

@@ -21,9 +21,15 @@ namespace Jui
 		public slots:
 		void onMousePress(Canvas*, QPoint);
 		void onMouseMoved(Canvas*, QPoint);
+		void onMouseOverIn(Canvas*);
+		void onMouseOverOut(Canvas*);
+		void draw();
 		void onParentResize(Canvas*, QSize);
 
 	private:
+		enum mouseState { off, over, active };
+		mouseState mMouseState;
+
 		int thickness;
 		QPoint mousePressedGlobalCoor, mousePressedOriginCoor;
 	};

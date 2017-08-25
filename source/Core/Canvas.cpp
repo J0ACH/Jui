@@ -42,6 +42,11 @@ namespace Jui
 		this->setFrameAlpha(255);
 
 		this->show();
+
+		connect(
+			this, SIGNAL(actRefreshed(Canvas*)),
+			this, SLOT(draw())
+		);
 	}
 
 	Canvas* Canvas::getParent() { return mParent; }
@@ -66,12 +71,14 @@ namespace Jui
 		if (alpha < 1) alpha = 1;
 		if (alpha > 255) alpha = 255;
 		this->colorBackround.setAlpha(alpha);
+		//this->update();
 	}
 	void Canvas::setBackgroundColor(int red, int green, int blue)
 	{
 		this->colorBackround.setRed(red);
 		this->colorBackround.setGreen(green);
 		this->colorBackround.setBlue(blue);
+		//this->update();
 	}
 
 	void Canvas::setFrameAlpha(int alpha) {
@@ -87,12 +94,12 @@ namespace Jui
 	}
 
 	void Canvas::onClose() { this->close(); }
-	void Canvas::onMove(QPoint pt)
+	void Canvas::setOrigin(QPoint pt)
 	{
 		this->move(pt);
 		emit actMoved(this, this->getOrigin());
 		/*
-		qDebug() << tr("Canvas onMove: pt [%1, %2]").arg(
+		qDebug() << tr("Canvas setOrigin: pt [%1, %2]").arg(
 			QString::number(this->getOrigin().x()),
 			QString::number(this->getOrigin().y())
 		);
@@ -144,7 +151,9 @@ namespace Jui
 
 	void Canvas::paintEvent(QPaintEvent *event)
 	{
+		qDebug() << tr("Canvas::paintEvent()");
 		QPainter painter(this);
+
 		QColor colFrame, colBackg;
 
 		if (this->hasFocus())
@@ -165,6 +174,12 @@ namespace Jui
 		painter.fillRect(QRect(0, 0, width(), height()), colBackg);
 		painter.setPen(colFrame);
 		painter.drawRect(QRect(0, 0, width() - 1, height() - 1));
+
+		emit actRefreshed(this);
+	}
+
+	void Canvas::draw() {
+		//	qDebug() << tr("Canvas::draw()");
 	}
 
 	Canvas::~Canvas()

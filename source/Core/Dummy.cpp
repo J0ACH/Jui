@@ -7,9 +7,9 @@ namespace Jui
 	Header::Header(Canvas *parent) :
 		Canvas(parent),
 		thickness(35)
-	{
-		this->setBackgroundColor(120, 30, 30);
-		this->setFrameAlpha(0);
+			{
+		this->setFrameColor(255,255,255);
+		//this->setFrameAlpha(0);
 
 		connect(
 			this, SIGNAL(actMousePressed(Canvas*, QPoint)),
@@ -20,8 +20,16 @@ namespace Jui
 			this, SLOT(onMouseMoved(Canvas*, QPoint))
 		);
 		connect(
+			this, SIGNAL(actOverIn(Canvas*)),
+			this, SLOT(onMouseOverIn(Canvas*))
+		);
+		connect(
+			this, SIGNAL(actOverOut(Canvas*)),
+			this, SLOT(onMouseOverOut(Canvas*))
+		);
+		connect(
 			this, SIGNAL(actHeaderMoved(QPoint)),
-			parent, SLOT(onMove(QPoint))
+			parent, SLOT(setOrigin(QPoint))
 		);
 		connect(
 			parent, SIGNAL(actResized(Canvas*, QSize)),
@@ -62,6 +70,36 @@ namespace Jui
 		);
 		*/
 	}
+	void Header::onMouseOverIn(Canvas* from) {
+		
+		qDebug() << tr("Header onMouseOverIn");
+		mMouseState = mouseState::over;
+	}
+	void Header::onMouseOverOut(Canvas* from) {
+
+		qDebug() << tr("Header onMouseOverOut");
+		mMouseState = mouseState::off;
+	}
+
+	void Header::draw() {
+				
+		QPainter painter(this);
+		
+		switch (mMouseState)
+		{
+		case Header::mouseState::over:
+			painter.fillRect(QRect(0, 0, width(), height()), QColor(150, 30, 30));
+			//this->setBackgroundColor(120, 30, 30);
+			break;
+		default:
+			painter.fillRect(QRect(0, 0, width(), height()), QColor(50, 30, 30));
+			//this->setBackgroundColor(50, 30, 30);
+			break;
+		}
+		
+		qDebug() << tr("Header::draw()");
+	}
+
 	void Header::onParentResize(Canvas* from, QSize size)
 	{
 		this->move(1, 1);
@@ -102,18 +140,14 @@ namespace Jui
 			gpt.x() - mousePressedGlobalCoor.x(),
 			gpt.y() - mousePressedGlobalCoor.y()
 		);
-		/*
-		QPoint newOrigin(
-			parentOriginCoor.x() + deltaPt.x(),
-			parentOriginCoor.y() + deltaPt.y()
-		);
-		*/
 		emit actControlerMoved(mDirection, deltaPt);
 
+		/*
 		qDebug() << tr("EdgeControler onMouseMoved: deltaPt [%1, %2]").arg(
 			QString::number(deltaPt.x()),
 			QString::number(deltaPt.y())
 		);
+		*/
 	}
 	EdgeControler::~EdgeControler() {}
 
@@ -165,7 +199,7 @@ namespace Jui
 		);
 		connect(
 			this, SIGNAL(actEdgeMoved(QPoint)),
-			mParent, SLOT(onMove(QPoint))
+			mParent, SLOT(setOrigin(QPoint))
 		);
 		connect(
 			mParent, SIGNAL(actResized(Canvas*, QSize)),
