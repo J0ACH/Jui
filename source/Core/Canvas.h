@@ -18,13 +18,10 @@ namespace Jui
 		Canvas(int x, int y, int width, int height);
 		~Canvas();
 
-		enum type { Window, Panel };
-				
 		Canvas *getParent();
-		QPoint getOrigin(bool global = false);
+		QPoint getOrigin();
 		QString getName();
-		Canvas::type getType();
-						
+								
 		void setName(QString name);
 		void setBackgroundAlpha(int alpha);
 		void setBackgroundColor(int red, int green, int blue);
@@ -46,6 +43,7 @@ namespace Jui
 		void actMouseMoved(Canvas *target, QPoint gPt);
 		void actMouseReleased(Canvas *target, QPoint gPt);
 		void actResized(Canvas *target, QSize size);
+		void actMoved(Canvas *target, QPoint gPt);
 
 	protected:
 		void focusInEvent(QFocusEvent *event);
@@ -61,6 +59,8 @@ namespace Jui
 		void paintEvent(QPaintEvent *event);
 
 	private:
+		enum type { Window, Panel };
+		
 		void init(int x, int y, int width, int height);
 
 		Canvas *mParent;

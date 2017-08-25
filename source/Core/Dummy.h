@@ -5,25 +5,30 @@
 
 namespace Jui
 {
+	// Header /////////////////////////////////////////////////////
+
 	class Header : public Canvas
 	{
 		Q_OBJECT
 
 	public:
-		Header(Canvas *parent, int height);
+		Header(Canvas *parent);
 		~Header();
 
 	signals:
-		void actMoved(QPoint pt);
+		void actHeaderMoved(QPoint);
 
-	protected:
-		void mousePressEvent(QMouseEvent *event);
-		void mouseMoveEvent(QMouseEvent *event);
-		void paintEvent(QPaintEvent *event);
+		public slots:
+		void onMousePress(Canvas*, QPoint);
+		void onMouseMoved(Canvas*, QPoint);
+		void onParentResize(Canvas*, QSize);
 
 	private:
-		QPoint mousePressedParentCoor, mousePressedGlobalCoor, mousePressedLocalCoor;
+		int thickness;
+		QPoint mousePressedGlobalCoor, parentOriginCoor;
 	};
+
+	// EdgeControler ///////////////////////////////////////////////////// 
 
 	class EdgeControler : public Canvas
 	{
@@ -38,7 +43,7 @@ namespace Jui
 		EdgeControler::direction getDirection();
 
 	signals:
-		void actMoved(EdgeControler::direction, QPoint);
+		void actControlerMoved(EdgeControler::direction, QPoint);
 
 		public slots:
 		void onMousePress(Canvas*, QPoint);
@@ -49,6 +54,8 @@ namespace Jui
 		QPoint mousePressedGlobalCoor;
 
 	};
+
+	// Edges ///////////////////////////////////////////////////// 
 
 	class Edges : public QObject
 	{
@@ -66,8 +73,8 @@ namespace Jui
 		Canvas* getParent();
 
 	signals:
-		void actResized(QSize size);
-		void actMoved(QPoint pt);
+		void actEdgeResized(QSize size);
+		void actEdgeMoved(QPoint pt);
 
 	private:
 		Canvas* mParent;

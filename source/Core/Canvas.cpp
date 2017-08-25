@@ -2,14 +2,14 @@
 
 namespace Jui
 {
-	Canvas::Canvas(Canvas *parent) : 
+	Canvas::Canvas(Canvas *parent) :
 		QWidget(parent)
 	{
 		Canvas::init(0, 0, 100, 100);
 		mParent = parent;
 		mType = Canvas::type::Panel;
 	}
-	
+
 	Canvas::Canvas(Canvas *parent, int x, int y, int width, int height) :
 		QWidget(parent)
 	{
@@ -18,7 +18,7 @@ namespace Jui
 		mType = Canvas::type::Panel;
 	}
 
-	Canvas::Canvas(int x, int y, int width, int height) : 
+	Canvas::Canvas(int x, int y, int width, int height) :
 		QWidget(0)
 	{
 		Canvas::init(x, y, width, height);
@@ -45,16 +45,16 @@ namespace Jui
 	}
 
 	Canvas* Canvas::getParent() { return mParent; }
-	Canvas::type Canvas::getType() { return mType; }
-	QPoint Canvas::getOrigin(bool global) {
+	QPoint Canvas::getOrigin() {
 		QPoint origin;
-		if (global)
+		switch (mType)
 		{
+		case Jui::Canvas::Window:
 			origin = this->mapToGlobal(QPoint(0, 0));
-		}
-		else
-		{
+			break;
+		case Jui::Canvas::Panel:
 			origin = this->mapToParent(QPoint(0, 0));
+			break;
 		}
 		return origin;
 	}
@@ -89,32 +89,17 @@ namespace Jui
 	void Canvas::onClose() { this->close(); }
 	void Canvas::onMove(QPoint pt)
 	{
-		QPoint resultPt;
-		switch (mType)
-		{
-		case Jui::Canvas::Window:
-			resultPt = pt;
-			this->move(resultPt);
-			origin = resultPt;
-			break;
-		case Jui::Canvas::Panel:
-			resultPt.setX(0);; //pt.x() - this->getOrigin(false).x());
-			//resultPt.setY(pt.y() - this->getOrigin(true).y());
-			resultPt = pt;
-			this->move(resultPt);
-			origin = resultPt;
-			break;
-		default:
-			break;
-		};		
-
+		this->move(pt);
+		emit actMoved(this, this->getOrigin());
+		/*
 		qDebug() << tr("Canvas onMove: pt [%1, %2]").arg(
-			QString::number(resultPt.x()),
-			QString::number(resultPt.y())
-		);		
+			QString::number(this->getOrigin().x()),
+			QString::number(this->getOrigin().y())
+		);
+		*/
 	}
 	void Canvas::setSize(QSize size) {
-		this->resize(size); 
+		this->resize(size);
 		emit actResized(this, this->size());
 	}
 
