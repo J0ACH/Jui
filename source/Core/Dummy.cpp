@@ -34,12 +34,12 @@ namespace Jui
 	void Header::onMousePress(Canvas* from, QPoint gpt)
 	{
 		mousePressedGlobalCoor = gpt;
-		parentOriginCoor = this->getParent()->getOrigin();
+		mousePressedOriginCoor = this->getParent()->getOrigin();
 		this->getParent()->setFocus(Qt::MouseFocusReason);
 		/*
 		qDebug() << tr("Header2 onMousePress: parentOriginCoor [%1, %2]").arg(
-			QString::number(parentOriginCoor.x()),
-			QString::number(parentOriginCoor.y())
+			QString::number(mousePressedOriginCoor.x()),
+			QString::number(mousePressedOriginCoor.y())
 		);
 		*/
 	}
@@ -50,8 +50,8 @@ namespace Jui
 			gpt.y() - mousePressedGlobalCoor.y()
 		);
 		QPoint newOrigin(
-			parentOriginCoor.x() + deltaPt.x(),
-			parentOriginCoor.y() + deltaPt.y()
+			mousePressedOriginCoor.x() + deltaPt.x(),
+			mousePressedOriginCoor.y() + deltaPt.y()
 		);
 		emit actHeaderMoved(newOrigin);
 
@@ -62,7 +62,6 @@ namespace Jui
 		);
 		*/
 	}
-
 	void Header::onParentResize(Canvas* from, QSize size)
 	{
 		this->move(1, 1);
@@ -95,6 +94,7 @@ namespace Jui
 	void EdgeControler::onMousePress(Canvas* from, QPoint gpt)
 	{
 		mousePressedGlobalCoor = gpt;
+		this->getParent()->setFocus(Qt::MouseFocusReason);
 	}
 	void EdgeControler::onMouseMoved(Canvas* from, QPoint gpt)
 	{
@@ -102,7 +102,18 @@ namespace Jui
 			gpt.x() - mousePressedGlobalCoor.x(),
 			gpt.y() - mousePressedGlobalCoor.y()
 		);
+		/*
+		QPoint newOrigin(
+			parentOriginCoor.x() + deltaPt.x(),
+			parentOriginCoor.y() + deltaPt.y()
+		);
+		*/
 		emit actControlerMoved(mDirection, deltaPt);
+
+		qDebug() << tr("EdgeControler onMouseMoved: deltaPt [%1, %2]").arg(
+			QString::number(deltaPt.x()),
+			QString::number(deltaPt.y())
+		);
 	}
 	EdgeControler::~EdgeControler() {}
 
@@ -112,7 +123,7 @@ namespace Jui
 		QObject(parent),
 		mParent(parent)
 	{
-		thickness = 20;
+		thickness = 10;
 		offset = 5;
 		corner = 30;
 		gap = 5;
@@ -166,48 +177,41 @@ namespace Jui
 
 	void Edges::onControlerPressed()
 	{
+		mousePressedOriginCoor = mParent->getOrigin();
 		mousePressedParentSize = mParent->size();
-		mousePressedGlobalCoor = mParent->getOrigin();
-		//qDebug() << tr("Edges onControlerPressed");
 	}
 	void Edges::onControlerMoved(EdgeControler::direction dir, QPoint deltaPt)
 	{
-		/*
-				QPoint origin(
-			mousePressedGlobalCoor.x() + deltaPt.x(),
-			mousePressedGlobalCoor.y() + deltaPt.y()
-		);
-		*/
-
-		QSize size(
-			mousePressedParentSize.width() + deltaPt.x(),
-			mousePressedParentSize.height() + deltaPt.y()
-		);
+		QPoint origin(mousePressedOriginCoor);
+		QSize size(mousePressedParentSize);
 
 		switch (dir)
 		{
 		case EdgeControler::direction::Left:
-			//origin.setY(mousePressedGlobalCoor.y());
-			size.setWidth(-deltaPt.x() + mousePressedParentSize.width());
-			emit actEdgeMoved(deltaPt);
+			size.setWidth(mousePressedParentSize.width() - deltaPt.x());
+			origin.setX(mousePressedOriginCoor.x() + deltaPt.x());
+			emit actEdgeMoved(origin);
+			break;
 		case EdgeControler::direction::Right:
-			size.setHeight(mousePressedParentSize.height());
+			size.setWidth(mousePressedParentSize.width() + deltaPt.x());			
 			break;
 
 		case EdgeControler::direction::Top:
-			//origin.setX(mousePressedGlobalCoor.x());
-			//origin.setX(origin.x());
-			size.setHeight(-deltaPt.y() + mousePressedParentSize.height());
-			emit actEdgeMoved(deltaPt);
+			size.setHeight(mousePressedParentSize.height() - deltaPt.y());
+			origin.setY(mousePressedOriginCoor.y() + deltaPt.y());
+			emit actEdgeMoved(origin);
+			break;
 		case EdgeControler::direction::Bottom:
-			size.setWidth(mousePressedParentSize.width());
+			size.setHeight(mousePressedParentSize.height() + deltaPt.y());
 			break;
 		}
 
+		/*
 		qDebug() << tr("Edges onMouseMoved: deltaPt [%1, %2]").arg(
 			QString::number(deltaPt.x()),
 			QString::number(deltaPt.y())
 		);
+		*/
 		/*
 		qDebug() << tr("Edges onMouseMoved: size [%1, %2]").arg(
 			QString::number(size.width()),

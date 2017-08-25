@@ -11,19 +11,14 @@ namespace Jui
 		this->setBackgroundAlpha(0);
 		
 		Header *header = new Header(this);
-		//Edges *e1 = new Edges(this);
-		/*
-		Header *header = new Header(this, 55);
-		
-
-		
-		Edges *e2 = new Edges(test);
-		*/
+		Edges *e1 = new Edges(this);
+					
 		Canvas *test = new Canvas(this, 100, 100, 200, 200);
 		test->setName("test");
 		Header *headerTest = new Header(test);
+		Edges *e2 = new Edges(test);
 
-		Button *closeButton = new Button(header, this->width() - 45, 10, 35, 35);
+		Button *closeButton = new Button(header, this->width() - 45, 10, 25, 25);
 		closeButton->setName("close");
 
 		connect(

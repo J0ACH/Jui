@@ -25,7 +25,7 @@ namespace Jui
 
 	private:
 		int thickness;
-		QPoint mousePressedGlobalCoor, parentOriginCoor;
+		QPoint mousePressedGlobalCoor, mousePressedOriginCoor;
 	};
 
 	// EdgeControler ///////////////////////////////////////////////////// 
@@ -43,7 +43,7 @@ namespace Jui
 		EdgeControler::direction getDirection();
 
 	signals:
-		void actControlerMoved(EdgeControler::direction, QPoint);
+		void actControlerMoved(EdgeControler::direction, QPoint deltaPt);
 
 		public slots:
 		void onMousePress(Canvas*, QPoint);
@@ -83,7 +83,7 @@ namespace Jui
 		int thickness, offset, corner, gap;
 
 		QSize mousePressedParentSize;
-		QPoint mousePressedGlobalCoor;
+		QPoint mousePressedOriginCoor;
 	};
 }
 
