@@ -88,7 +88,7 @@ namespace Jui
 		}
 		painter.drawLine(0, height() - 2, width() - 1, height() - 2);
 		painter.drawText(
-			0, 0, this->width(), this->height(), Qt::AlignCenter, 
+			0, 0, this->width(), this->height(), Qt::AlignCenter,
 			this->getParent()->getName()
 		);
 	}
@@ -152,6 +152,14 @@ namespace Jui
 		connect(
 			buttonClose, SIGNAL(actPressed(Button*)),
 			parent, SLOT(onClose())
+		);
+		connect(
+			buttonMaximize, SIGNAL(actPressed(Button*)),
+			parent, SLOT(showMaximized())
+		);
+		connect(
+			buttonMinimize, SIGNAL(actPressed(Button*)),
+			parent, SLOT(showMinimized())
 		);
 		connect(
 			parent, SIGNAL(actResized(Canvas*, QSize)),

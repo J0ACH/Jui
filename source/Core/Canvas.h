@@ -41,7 +41,6 @@ namespace Jui
 		void onClose();
 		void setSize(QSize);
 		void setOrigin(QPoint);
-
 		virtual void draw();
 
 	signals:
@@ -57,7 +56,6 @@ namespace Jui
 		void actMoved(Canvas *target, QPoint gPt);
 		void actUpdated();
 
-
 	protected:
 		void focusInEvent(QFocusEvent *event);
 		void focusOutEvent(QFocusEvent *event);
@@ -68,6 +66,8 @@ namespace Jui
 		void mousePressEvent(QMouseEvent *event);
 		void mouseReleaseEvent(QMouseEvent *event);
 		void mouseMoveEvent(QMouseEvent *event);
+
+		void resizeEvent(QResizeEvent *event);
 
 		void paintEvent(QPaintEvent *event);
 

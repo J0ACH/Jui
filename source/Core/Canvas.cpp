@@ -127,7 +127,7 @@ namespace Jui
 	}
 	void Canvas::setSize(QSize size) {
 		this->resize(size);
-		emit actResized(this, this->size());
+		//emit actResized(this, this->size());
 	}
 
 	void Canvas::mousePressEvent(QMouseEvent *event)
@@ -172,6 +172,11 @@ namespace Jui
 	{
 		mState = Canvas::states::normal;
 		emit actOverOut(this);
+		this->update();
+	}
+
+	void Canvas::resizeEvent(QResizeEvent *event) {
+		emit actResized(this, this->size());
 		this->update();
 	}
 

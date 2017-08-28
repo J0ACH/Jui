@@ -22,7 +22,9 @@ namespace Jui
 		void draw();
 
 	private:
-		//QString mName;
+		enum stateSwitch {on, off};
+		Button::stateSwitch mSwitch;
+		
 		void init();
 	};
 
