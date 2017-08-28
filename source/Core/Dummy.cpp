@@ -7,9 +7,11 @@ namespace Jui
 	Header::Header(Canvas *parent) :
 		Canvas(parent),
 		thickness(35)
-			{
-		this->setFrameColor(255,255,255);
-		//this->setFrameAlpha(0);
+	{
+		this->setBackgroundColor(50, 30, 30);
+		this->setFrameVisible(false);
+		
+		mMouseState = Header::mouseState::off;
 
 		connect(
 			this, SIGNAL(actMousePressed(Canvas*, QPoint)),
@@ -71,33 +73,47 @@ namespace Jui
 		*/
 	}
 	void Header::onMouseOverIn(Canvas* from) {
-		
-		qDebug() << tr("Header onMouseOverIn");
+		//qDebug() << tr("Header onMouseOverIn");
 		mMouseState = mouseState::over;
 	}
 	void Header::onMouseOverOut(Canvas* from) {
 
-		qDebug() << tr("Header onMouseOverOut");
+		//qDebug() << tr("Header onMouseOverOut");
 		mMouseState = mouseState::off;
 	}
 
 	void Header::draw() {
-				
+
 		QPainter painter(this);
-		
+		/*
 		switch (mMouseState)
 		{
-		case Header::mouseState::over:
-			painter.fillRect(QRect(0, 0, width(), height()), QColor(150, 30, 30));
-			//this->setBackgroundColor(120, 30, 30);
+		case Header::mouseState::off:
+			painter.setPen(QPen(QColor(130, 130, 130)));
+			painter.drawRect(QRect(5, 5, width() - 10, height() - 10));
+			//painter.fillRect(QRect(0, 0, width(), height()), QColor(50, 30, 30));
 			break;
-		default:
-			painter.fillRect(QRect(0, 0, width(), height()), QColor(50, 30, 30));
-			//this->setBackgroundColor(50, 30, 30);
+		case Header::mouseState::over:
+			//painter.fillRect(QRect(0, 0, width(), height()), QColor(150, 30, 30));
+			painter.setPen(QPen(QColor(250, 0, 0)));
+			painter.drawRect(QRect(5, 5, width() - 10, height() - 10));
+			break;
+			//default:
+		}
+		*/
+
+		switch (this->getState())
+		{
+		case Canvas::states::normal:
+			painter.setPen(QColor(50, 50, 50));
+			break;
+		case Canvas::states::over:
+			painter.setPen(QColor(250, 130, 130));
 			break;
 		}
-		
-		qDebug() << tr("Header::draw()");
+		painter.drawLine(0, height() - 2, width() - 1, height() - 2);
+
+		//qDebug() << tr("Header::draw()");
 	}
 
 	void Header::onParentResize(Canvas* from, QSize size)
@@ -115,7 +131,8 @@ namespace Jui
 		Canvas(parent),
 		mDirection(dir)
 	{
-		this->setBackgroundColor(30, 200, 130);
+		this->setBackgroundVisible(false);
+		this->setFrameVisible(false);
 
 		connect(
 			this, SIGNAL(actMousePressed(Canvas*, QPoint)),
@@ -149,6 +166,37 @@ namespace Jui
 		);
 		*/
 	}
+	void EdgeControler::draw() {
+
+		QPainter painter(this);
+
+		switch (this->getState())
+		{
+		case Canvas::states::normal:
+			painter.setPen(QColor(50, 50, 50));
+			break;
+		case Canvas::states::over:
+			painter.setPen(QColor(250, 130, 130));
+			break;
+		}
+
+		switch (mDirection)
+		{
+		case EdgeControler::direction::Left:
+			painter.drawLine(1, 0, 1, height());
+			break;
+		case EdgeControler::direction::Bottom:
+			painter.drawLine(0, height() - 2, width() - 1, height() - 2);
+			break;
+		case EdgeControler::direction::Right:
+			painter.drawLine(width() - 2, 0, width() - 2, height() - 1);
+			break;
+		case EdgeControler::direction::Top:
+			painter.drawLine(0, 1, width(), 1);
+			break;
+		}
+	}
+
 	EdgeControler::~EdgeControler() {}
 
 	// Edges ///////////////////////////////////////////////////// 
@@ -158,8 +206,8 @@ namespace Jui
 		mParent(parent)
 	{
 		thickness = 10;
-		offset = 5;
-		corner = 30;
+		offset = 1;
+		corner = 20;
 		gap = 5;
 
 		mEdges.insert(
@@ -227,7 +275,7 @@ namespace Jui
 			emit actEdgeMoved(origin);
 			break;
 		case EdgeControler::direction::Right:
-			size.setWidth(mousePressedParentSize.width() + deltaPt.x());			
+			size.setWidth(mousePressedParentSize.width() + deltaPt.x());
 			break;
 
 		case EdgeControler::direction::Top:

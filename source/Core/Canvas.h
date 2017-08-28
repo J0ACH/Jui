@@ -18,13 +18,22 @@ namespace Jui
 		Canvas(int x, int y, int width, int height);
 		~Canvas();
 
+		enum states { normal, over, active, frozen };
+
 		Canvas *getParent();
 		QPoint getOrigin();
 		QString getName();
-								
+		Canvas::states getState();
+
+		QRect bounds();
+										
 		void setName(QString name);
+		
+		void setBackgroundVisible(bool);
 		void setBackgroundAlpha(int alpha);
 		void setBackgroundColor(int red, int green, int blue);
+
+		void setFrameVisible(bool);
 		void setFrameAlpha(int alpha);
 		void setFrameColor(int red, int green, int blue);
 
@@ -46,7 +55,8 @@ namespace Jui
 		void actMouseReleased(Canvas *target, QPoint gPt);
 		void actResized(Canvas *target, QSize size);
 		void actMoved(Canvas *target, QPoint gPt);
-		void actRefreshed(Canvas *target);
+		void actUpdated();
+
 
 	protected:
 		void focusInEvent(QFocusEvent *event);
@@ -63,17 +73,22 @@ namespace Jui
 
 	private:
 		enum type { Window, Panel };
-				
+								
 		void init(int x, int y, int width, int height);
 
 		Canvas *mParent;
 		Canvas::type mType;
+		Canvas::states mState;
 		
 		QString name;
 		QPoint origin;
+		
+		bool visibleFrame, visibleBackground;
 
 		QColor colorBackround, colorFrame;
+		//QColor frameColor;
 
+		//Canvas::visible frameVisibility, backgroundVisibility;
 	};
 }
 

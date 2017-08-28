@@ -54,6 +54,7 @@ namespace Jui
 		public slots:
 		void onMousePress(Canvas*, QPoint);
 		void onMouseMoved(Canvas*, QPoint);
+		void draw();
 
 	private:
 		EdgeControler::direction mDirection;

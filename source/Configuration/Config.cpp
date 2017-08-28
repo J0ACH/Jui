@@ -8,7 +8,7 @@ namespace Jui
 		qDebug("Config new x, y, w, h");
 
 		this->setName("Configuration");
-		this->setBackgroundAlpha(0);
+		//this->setBackgroundAlpha(0);
 		
 		Header *header = new Header(this);
 		Edges *e1 = new Edges(this);

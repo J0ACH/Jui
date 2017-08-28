@@ -9,7 +9,6 @@ namespace Jui
 		mParent = parent;
 		mType = Canvas::type::Panel;
 	}
-
 	Canvas::Canvas(Canvas *parent, int x, int y, int width, int height) :
 		QWidget(parent)
 	{
@@ -17,7 +16,6 @@ namespace Jui
 		mParent = parent;
 		mType = Canvas::type::Panel;
 	}
-
 	Canvas::Canvas(int x, int y, int width, int height) :
 		QWidget(0)
 	{
@@ -36,15 +34,21 @@ namespace Jui
 
 		this->setGeometry(x, y, width, height);
 		this->setName("Canvan");
+
+		mState = Canvas::states::normal;
+
+		this->setBackgroundVisible(true);
 		this->setBackgroundColor(30, 30, 30);
 		this->setBackgroundAlpha(255);
-		this->setFrameColor(120, 120, 120);
+
+		this->setFrameVisible(true);
+		this->setFrameColor(50, 50, 50);
 		this->setFrameAlpha(255);
 
 		this->show();
 
 		connect(
-			this, SIGNAL(actRefreshed(Canvas*)),
+			this, SIGNAL(actUpdated()),
 			this, SLOT(draw())
 		);
 	}
@@ -63,10 +67,16 @@ namespace Jui
 		}
 		return origin;
 	}
+	QRect Canvas::bounds() { return QRect(0, 0, width() - 1, height() - 1); }
+	Canvas::states Canvas::getState() { return mState; }
 
 	void Canvas::setName(QString name) { this->name = name; }
 	QString Canvas::getName() { return name; }
 
+	void Canvas::setBackgroundVisible(bool visibility) {
+		visibleBackground = visibility;
+		this->update();
+	}
 	void Canvas::setBackgroundAlpha(int alpha) {
 		if (alpha < 1) alpha = 1;
 		if (alpha > 255) alpha = 255;
@@ -81,16 +91,24 @@ namespace Jui
 		//this->update();
 	}
 
+	void Canvas::setFrameVisible(bool visibility) {
+		visibleFrame = visibility;
+		//if (visibility) { frameVisibility = Canvas::visible::normal; }
+		//else { frameVisibility = Canvas::visible::off; }
+		this->update();
+	}
 	void Canvas::setFrameAlpha(int alpha) {
 		if (alpha < 1) alpha = 1;
 		if (alpha > 255) alpha = 255;
 		this->colorFrame.setAlpha(alpha);
+		this->update();
 	}
 	void Canvas::setFrameColor(int red, int green, int blue)
 	{
 		this->colorFrame.setRed(red);
 		this->colorFrame.setGreen(green);
 		this->colorFrame.setBlue(blue);
+		this->update();
 	}
 
 	void Canvas::onClose() { this->close(); }
@@ -129,58 +147,57 @@ namespace Jui
 
 	void Canvas::focusInEvent(QFocusEvent *event)
 	{
+		mState = Canvas::states::active;
 		emit actFocusIn(this);
 		this->update();
 	}
 	void Canvas::focusOutEvent(QFocusEvent *event)
 	{
+		mState = Canvas::states::over;
 		emit actFocusOut(this);
 		this->update();
 	}
 
 	void Canvas::enterEvent(QEvent *event)
 	{
+		mState = Canvas::states::over;
 		emit actOverIn(this);
 		this->update();
 	}
 	void Canvas::leaveEvent(QEvent *event)
 	{
+		mState = Canvas::states::normal;
 		emit actOverOut(this);
 		this->update();
 	}
 
 	void Canvas::paintEvent(QPaintEvent *event)
 	{
-		qDebug() << tr("Canvas::paintEvent()");
+		//qDebug() << tr("Canvas::paintEvent()");
 		QPainter painter(this);
 
-		QColor colFrame, colBackg;
-
-		if (this->hasFocus())
+		switch (mState)
 		{
-			colFrame = QColor(255, 255, 255);
-			colBackg = QColor(
-				this->colorBackround.red(),
-				this->colorBackround.green(),
-				this->colorBackround.blue(),
-				200
-			);
+		case Canvas::states::normal:
+			if (visibleBackground) painter.fillRect(this->bounds(), colorBackround);
+			painter.setPen(colorFrame);
+			if (visibleFrame) painter.drawRect(this->bounds());
+			break;
+		case Canvas::states::over:
+			if (visibleBackground) painter.fillRect(this->bounds(), colorBackround);
+			painter.setPen(QColor(130, 130, 130));
+			if (visibleFrame) painter.drawRect(this->bounds());
+			break;
+		case Canvas::states::active:
+			if (visibleBackground) painter.fillRect(this->bounds(), colorBackround);
+			painter.setPen(QColor(255, 255, 255));
+			if (visibleFrame) painter.drawRect(this->bounds());
+			break;
 		}
-		else {
-			colFrame = this->colorFrame;
-			colBackg = this->colorBackround;
-		}
 
-		painter.fillRect(QRect(0, 0, width(), height()), colBackg);
-		painter.setPen(colFrame);
-		painter.drawRect(QRect(0, 0, width() - 1, height() - 1));
-
-		emit actRefreshed(this);
+		emit actUpdated();
 	}
-
-	void Canvas::draw() {
-		//	qDebug() << tr("Canvas::draw()");
-	}
+	void Canvas::draw() { }
 
 	Canvas::~Canvas()
 	{
