@@ -5,19 +5,21 @@ namespace Jui
 
 	Config::Config(int x, int y, int width, int height) : Canvas(x, y, width, height)
 	{
-		qDebug("Config new x, y, w, h");
-
 		this->setName("Configuration");
+		this->setBackgroundColor(20, 20, 20);
 		//this->setBackgroundAlpha(0);
 		
-		Header *header = new Header(this);
+		//Header *header = new Header(this);
+		HeaderWindow *headerWindow = new HeaderWindow(this);
 		Edges *e1 = new Edges(this);
 					
 		Canvas *test = new Canvas(this, 100, 100, 200, 200);
 		test->setName("test");
-		Header *headerTest = new Header(test);
+		HeaderDialog *headerTest = new HeaderDialog(test);
+		
 		Edges *e2 = new Edges(test);
 
+		/*
 		Button *closeButton = new Button(header, this->width() - 45, 10, 25, 25);
 		closeButton->setName("close");
 
@@ -25,6 +27,7 @@ namespace Jui
 			closeButton, SIGNAL(actMousePressed(Canvas*, QPoint)),
 			this, SLOT(onClose())
 		);
+		*/
 	}
 
 	void Config::onPrint()

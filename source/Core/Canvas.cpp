@@ -26,6 +26,8 @@ namespace Jui
 
 	void Canvas::init(int x, int y, int width, int height)
 	{
+		qDebug() << tr("Canvas::init()");
+
 		this->setWindowFlags(Qt::FramelessWindowHint);
 		this->setAttribute(Qt::WA_TranslucentBackground);
 
@@ -70,8 +72,8 @@ namespace Jui
 	QRect Canvas::bounds() { return QRect(0, 0, width() - 1, height() - 1); }
 	Canvas::states Canvas::getState() { return mState; }
 
-	void Canvas::setName(QString name) { this->name = name; }
-	QString Canvas::getName() { return name; }
+	void Canvas::setName(QString name) { mName = name; }
+	QString Canvas::getName() { return mName; }
 
 	void Canvas::setBackgroundVisible(bool visibility) {
 		visibleBackground = visibility;
@@ -130,9 +132,11 @@ namespace Jui
 
 	void Canvas::mousePressEvent(QMouseEvent *event)
 	{
+		mState = Canvas::states::active;
 		this->setFocus(Qt::MouseFocusReason);
 		QPoint globalPt(event->globalPos().x(), event->globalPos().y());
 		emit actMousePressed(this, globalPt);
+		this->update();
 	}
 	void Canvas::mouseMoveEvent(QMouseEvent *event)
 	{
@@ -141,19 +145,19 @@ namespace Jui
 	}
 	void Canvas::mouseReleaseEvent(QMouseEvent *event)
 	{
+		mState = Canvas::states::over;
 		QPoint globalPt(event->globalPos().x(), event->globalPos().y());
 		emit actMouseReleased(this, globalPt);
+		this->update();
 	}
 
 	void Canvas::focusInEvent(QFocusEvent *event)
-	{
-		mState = Canvas::states::active;
+	{		
 		emit actFocusIn(this);
 		this->update();
 	}
 	void Canvas::focusOutEvent(QFocusEvent *event)
-	{
-		mState = Canvas::states::over;
+	{		
 		emit actFocusOut(this);
 		this->update();
 	}

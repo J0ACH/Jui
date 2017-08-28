@@ -6,12 +6,10 @@ namespace Jui
 
 	Header::Header(Canvas *parent) :
 		Canvas(parent),
-		thickness(35)
+		thickness(40)
 	{
 		this->setBackgroundColor(50, 30, 30);
 		this->setFrameVisible(false);
-		
-		mMouseState = Header::mouseState::off;
 
 		connect(
 			this, SIGNAL(actMousePressed(Canvas*, QPoint)),
@@ -20,14 +18,6 @@ namespace Jui
 		connect(
 			this, SIGNAL(actMouseMoved(Canvas*, QPoint)),
 			this, SLOT(onMouseMoved(Canvas*, QPoint))
-		);
-		connect(
-			this, SIGNAL(actOverIn(Canvas*)),
-			this, SLOT(onMouseOverIn(Canvas*))
-		);
-		connect(
-			this, SIGNAL(actOverOut(Canvas*)),
-			this, SLOT(onMouseOverOut(Canvas*))
 		);
 		connect(
 			this, SIGNAL(actHeaderMoved(QPoint)),
@@ -72,35 +62,17 @@ namespace Jui
 		);
 		*/
 	}
-	void Header::onMouseOverIn(Canvas* from) {
-		//qDebug() << tr("Header onMouseOverIn");
-		mMouseState = mouseState::over;
-	}
-	void Header::onMouseOverOut(Canvas* from) {
 
-		//qDebug() << tr("Header onMouseOverOut");
-		mMouseState = mouseState::off;
+	void Header::onParentResize(Canvas* from, QSize size)
+	{
+		this->move(1, 1);
+		this->setFixedWidth(size.width() - 1);
+		this->setFixedHeight(thickness);
 	}
 
 	void Header::draw() {
 
 		QPainter painter(this);
-		/*
-		switch (mMouseState)
-		{
-		case Header::mouseState::off:
-			painter.setPen(QPen(QColor(130, 130, 130)));
-			painter.drawRect(QRect(5, 5, width() - 10, height() - 10));
-			//painter.fillRect(QRect(0, 0, width(), height()), QColor(50, 30, 30));
-			break;
-		case Header::mouseState::over:
-			//painter.fillRect(QRect(0, 0, width(), height()), QColor(150, 30, 30));
-			painter.setPen(QPen(QColor(250, 0, 0)));
-			painter.drawRect(QRect(5, 5, width() - 10, height() - 10));
-			break;
-			//default:
-		}
-		*/
 
 		switch (this->getState())
 		{
@@ -110,20 +82,93 @@ namespace Jui
 		case Canvas::states::over:
 			painter.setPen(QColor(250, 130, 130));
 			break;
+		case Canvas::states::active:
+			painter.setPen(QColor(255, 255, 255));
+			break;
 		}
 		painter.drawLine(0, height() - 2, width() - 1, height() - 2);
-
-		//qDebug() << tr("Header::draw()");
-	}
-
-	void Header::onParentResize(Canvas* from, QSize size)
-	{
-		this->move(1, 1);
-		this->setFixedWidth(size.width() - 2);
-		this->setFixedHeight(thickness);
+		painter.drawText(
+			0, 0, this->width(), this->height(), Qt::AlignCenter, 
+			this->getParent()->getName()
+		);
 	}
 
 	Header::~Header() {	}
+
+	// HeaderDialog /////////////////////////////////////////////////////
+
+	HeaderDialog::HeaderDialog(Canvas *parent) :
+		Header(parent),
+		buttonClose(new Button(this))
+	{
+		this->setBackgroundColor(100, 30, 30);
+
+		buttonClose->setName("X");
+		buttonClose->setBackgroundVisible(false);
+		buttonClose->setSize(QSize(30, 30));
+
+		connect(
+			buttonClose, SIGNAL(actPressed(Button*)),
+			parent, SLOT(onClose())
+		);
+		connect(
+			parent, SIGNAL(actResized(Canvas*, QSize)),
+			this, SLOT(onParentResize(Canvas*, QSize))
+		);
+
+		this->onParentResize(parent, parent->size());
+	}
+
+	void HeaderDialog::onParentResize(Canvas* from, QSize size)
+	{
+		buttonClose->move(from->width() - 35, 5);
+	}
+
+	HeaderDialog::~HeaderDialog() {}
+
+	// HeaderWindow /////////////////////////////////////////////////////
+
+	HeaderWindow::HeaderWindow(Canvas *parent) :
+		Header(parent),
+		buttonClose(new Button(this)),
+		buttonMaximize(new Button(this)),
+		buttonMinimize(new Button(this))
+
+	{
+		this->setBackgroundColor(30, 30, 30);
+
+		buttonClose->setName("X");
+		buttonClose->setBackgroundVisible(false);
+		buttonClose->setSize(QSize(30, 30));
+
+		buttonMaximize->setName("[]");
+		buttonMaximize->setBackgroundVisible(false);
+		buttonMaximize->setSize(QSize(30, 30));
+
+		buttonMinimize->setName("_");
+		buttonMinimize->setBackgroundVisible(false);
+		buttonMinimize->setSize(QSize(30, 30));
+
+		connect(
+			buttonClose, SIGNAL(actPressed(Button*)),
+			parent, SLOT(onClose())
+		);
+		connect(
+			parent, SIGNAL(actResized(Canvas*, QSize)),
+			this, SLOT(onParentResize(Canvas*, QSize))
+		);
+
+		this->onParentResize(parent, parent->size());
+	}
+
+	void HeaderWindow::onParentResize(Canvas* from, QSize size)
+	{
+		buttonClose->move(from->width() - 35, 5);
+		buttonMaximize->move(from->width() - 70, 5);
+		buttonMinimize->move(from->width() - 105, 5);
+	}
+
+	HeaderWindow::~HeaderWindow() {}
 
 	// EdgeControler ///////////////////////////////////////////////////// 
 
@@ -177,6 +222,9 @@ namespace Jui
 			break;
 		case Canvas::states::over:
 			painter.setPen(QColor(250, 130, 130));
+			break;
+		case Canvas::states::active:
+			painter.setPen(QColor(255, 255, 255));
 			break;
 		}
 

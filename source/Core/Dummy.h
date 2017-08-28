@@ -2,6 +2,7 @@
 #define DUMMY_H
 
 #include "Canvas.h"
+#include "Button.h"
 
 namespace Jui
 {
@@ -21,17 +22,46 @@ namespace Jui
 		public slots:
 		void onMousePress(Canvas*, QPoint);
 		void onMouseMoved(Canvas*, QPoint);
-		void onMouseOverIn(Canvas*);
-		void onMouseOverOut(Canvas*);
+		void onParentResize(Canvas*, QSize);
 		void draw();
+
+	private:
+		int thickness;
+		QPoint mousePressedGlobalCoor, mousePressedOriginCoor;
+	};
+
+	// HeaderDialog /////////////////////////////////////////////////////
+
+	class HeaderDialog : public Header
+	{
+		Q_OBJECT
+
+	public:
+		HeaderDialog(Canvas *parent);
+		~HeaderDialog();
+
+		public slots:
 		void onParentResize(Canvas*, QSize);
 
 	private:
-		enum mouseState { off, over, active };
-		mouseState mMouseState;
+		Button* buttonClose;
+	};
 
-		int thickness;
-		QPoint mousePressedGlobalCoor, mousePressedOriginCoor;
+	// HeaderWindow /////////////////////////////////////////////////////
+
+	class HeaderWindow : public Header
+	{
+		Q_OBJECT
+
+	public:
+		HeaderWindow(Canvas *parent);
+		~HeaderWindow();
+
+		public slots:
+		void onParentResize(Canvas*, QSize);
+
+	private:
+		Button* buttonClose, *buttonMaximize, *buttonMinimize;
 	};
 
 	// EdgeControler ///////////////////////////////////////////////////// 

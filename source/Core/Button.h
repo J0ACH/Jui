@@ -7,17 +7,23 @@ namespace Jui
 {
 	class Button : public Canvas
 	{
+		Q_OBJECT
 
 	public:
+		Button(Canvas *parent);
 		Button(Canvas *parent, int x, int y, int width, int height);
 		~Button();
 
-	protected:
-		void paintEvent(QPaintEvent *event);
-		
+	signals:
+		void actPressed(Button*);
+
+		public slots:
+		void onPress();
+		void draw();
+
 	private:
-		QString name;
-		QColor colorOver;
+		//QString mName;
+		void init();
 	};
 
 }

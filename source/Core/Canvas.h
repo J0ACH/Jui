@@ -80,7 +80,7 @@ namespace Jui
 		Canvas::type mType;
 		Canvas::states mState;
 		
-		QString name;
+		QString mName;
 		QPoint origin;
 		
 		bool visibleFrame, visibleBackground;
