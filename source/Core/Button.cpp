@@ -16,42 +16,73 @@ namespace Jui
 
 	void Button::init()
 	{
-		mSwitch = Button::stateSwitch::off;
+		intCounter = -1;
+		maxCounter = -1;
 
 		connect(
 			this, SIGNAL(actMousePressed(Canvas*, QPoint)),
-			this, SLOT(onPress())
+			this, SLOT(prOnPressed())
+		);
+		connect(
+			this, SIGNAL(actPressed(Button*)),
+			this, SLOT(changed())
 		);
 	}
 
-	void Button::onPress() {
-		switch (mSwitch)
-		{
-		case Button::stateSwitch::on:
-			mSwitch = Button::stateSwitch::off;
-			break;
-		case Button::stateSwitch::off:
-			mSwitch = Button::stateSwitch::on;
-			break;
-		}
-		emit actPressed(this);
+	void Button::addState(QString name) {
+		qDebug() << tr("Button::setStateName %2 [%1]").arg(
+			QString::number(stateNames.size()),
+			name
+		);
+		stateNames.append(name);
+		maxCounter++;
+		this->update();
 	}
+
+	int Button::getState() { return intCounter; }
+	QString Button::getStateName() {
+		QString currentName(stateNames.value(intCounter, "NaN"));
+		return currentName;
+	}
+
+	void Button::setStateCounter(int cnt) {
+		intCounter = cnt;
+		if (intCounter > maxCounter) intCounter = maxCounter;
+	}
+
+	void Button::changed() { }
 
 	void Button::draw() {
 		QPainter painter(this);
 
-		switch (mSwitch)
+		switch (intCounter)
 		{
-		case Button::stateSwitch::on:
-			painter.fillRect(QRect(1, 1, width() - 2, height() - 2), QColor(120, 30, 30));
+		case 1:
+			//painter.fillRect(QRect(1, 1, width() - 2, height() - 2), QColor(120, 30, 30));
 			break;
-		case Button::stateSwitch::off:
+		default:
 			break;
 		}
 
 		painter.setPen(QColor(200, 30, 30));
-		painter.drawText(0, 0, this->width(), this->height(), Qt::AlignCenter, this->getName());
+		painter.drawText(
+			0, 0, this->width(), this->height(), Qt::AlignCenter,
+			//this->getName()
+			this->getStateName()
+		);
+
 	}
+
+	void Button::prOnPressed() {
+		intCounter++;
+		if (intCounter > maxCounter) intCounter = 0;
+		qDebug() << tr("Button::onPress %1 [%2]").arg(
+			QString::number(intCounter),
+			this->getStateName()
+		);
+		emit actPressed(this);
+	}
+
 
 	Button::~Button()
 	{

@@ -137,15 +137,19 @@ namespace Jui
 	{
 		this->setBackgroundColor(30, 30, 30);
 
-		buttonClose->setName("X");
+		buttonClose->addState("X");
+		buttonClose->setStateCounter(0);
 		buttonClose->setBackgroundVisible(false);
 		buttonClose->setSize(QSize(30, 30));
 
-		buttonMaximize->setName("[]");
+		buttonMaximize->addState("[]");
+		buttonMaximize->addState("n");
+		buttonMaximize->setStateCounter(0);
 		buttonMaximize->setBackgroundVisible(false);
 		buttonMaximize->setSize(QSize(30, 30));
 
-		buttonMinimize->setName("_");
+		buttonMinimize->addState("_");
+		buttonMinimize->setStateCounter(0);
 		buttonMinimize->setBackgroundVisible(false);
 		buttonMinimize->setSize(QSize(30, 30));
 

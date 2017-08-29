@@ -14,18 +14,30 @@ namespace Jui
 		Button(Canvas *parent, int x, int y, int width, int height);
 		~Button();
 
+		void addState(QString name);
+
+		int getState();
+		QString getStateName();
+
+		void setStateCounter(int cnt);
+
 	signals:
 		void actPressed(Button*);
 
 		public slots:
-		void onPress();
 		void draw();
+		virtual void changed();
 
 	private:
-		enum stateSwitch {on, off};
-		Button::stateSwitch mSwitch;
-		
 		void init();
+
+		int intCounter, maxCounter;
+		QList<QString> stateNames;
+		
+		private slots:
+		void prOnPressed();
+
+
 	};
 
 }
