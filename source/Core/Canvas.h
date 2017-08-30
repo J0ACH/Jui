@@ -37,6 +37,8 @@ namespace Jui
 		void setFrameAlpha(int alpha);
 		void setFrameColor(int red, int green, int blue);
 
+		//virtual void parentResized(QSize);
+
 		public slots:
 		void onClose();
 		void setSize(QSize);
@@ -65,6 +67,7 @@ namespace Jui
 		void mouseReleaseEvent(QMouseEvent *event);
 		void mouseMoveEvent(QMouseEvent *event);
 
+		void moveEvent(QMoveEvent *event);
 		void resizeEvent(QResizeEvent *event);
 		void paintEvent(QPaintEvent *event);
 

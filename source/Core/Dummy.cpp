@@ -63,6 +63,12 @@ namespace Jui
 		);
 		*/
 	}
+	/*
+	void Header::parentResized(QSize size) {
+		this->setFixedWidth(size.width() - 1);
+		this->setFixedHeight(thickness);
+	}
+	*/
 
 	void Header::onParentResize(Canvas* from, QSize size)
 	{		

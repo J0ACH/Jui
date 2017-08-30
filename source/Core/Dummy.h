@@ -16,6 +16,8 @@ namespace Jui
 		Header(Canvas *parent);
 		~Header();
 
+		//void parentResized(QSize);
+
 	signals:
 		void actHeaderMoved(QPoint);
 

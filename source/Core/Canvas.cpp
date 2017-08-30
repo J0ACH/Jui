@@ -52,17 +52,15 @@ namespace Jui
 
 	Canvas* Canvas::getParent() { return mParent; }
 	QPoint Canvas::getOrigin() {
-		QPoint origin;
 		switch (mType)
 		{
 		case Jui::Canvas::Window:
-			origin = this->mapToGlobal(QPoint(0, 0));
+			return this->mapToGlobal(QPoint(0, 0));
 			break;
 		case Jui::Canvas::Panel:
-			origin = this->mapToParent(QPoint(0, 0));
+			return this->mapToParent(QPoint(0, 0));
 			break;
 		}
-		return origin;
 	}
 	QRect Canvas::bounds() { return QRect(0, 0, width() - 1, height() - 1); }
 	Canvas::states Canvas::getState() { return mState; }
@@ -109,21 +107,8 @@ namespace Jui
 	}
 
 	void Canvas::onClose() { this->close(); }
-	void Canvas::setOrigin(QPoint pt)
-	{
-		this->move(pt);
-		emit actMoved(this, this->getOrigin());
-		/*
-		qDebug() << tr("Canvas setOrigin: pt [%1, %2]").arg(
-			QString::number(this->getOrigin().x()),
-			QString::number(this->getOrigin().y())
-		);
-		*/
-	}
-	void Canvas::setSize(QSize size) {
-		this->resize(size);
-		//emit actResized(this, this->size());
-	}
+	void Canvas::setOrigin(QPoint pt) { this->move(pt); }
+	void Canvas::setSize(QSize size) { this->resize(size); }
 
 	void Canvas::mousePressEvent(QMouseEvent *event)
 	{
@@ -149,12 +134,10 @@ namespace Jui
 	void Canvas::focusInEvent(QFocusEvent *event)
 	{
 		emit actFocusIn(this);
-		this->update();
 	}
 	void Canvas::focusOutEvent(QFocusEvent *event)
 	{
 		emit actFocusOut(this);
-		this->update();
 	}
 
 	void Canvas::enterEvent(QEvent *event)
@@ -170,9 +153,11 @@ namespace Jui
 		this->update();
 	}
 
+	void Canvas::moveEvent(QMoveEvent *event) {
+		emit actMoved(this, event->pos());
+	}
 	void Canvas::resizeEvent(QResizeEvent *event) {
 		emit actResized(this, this->size());
-		this->update();
 	}
 
 	void Canvas::paintEvent(QPaintEvent *event)
