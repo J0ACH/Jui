@@ -52,6 +52,19 @@ namespace Jui
 
 	void Button::changed() { }
 
+	void Button::paintEvent(QPaintEvent *event)
+	{
+		Canvas::paintEvent(event);
+		QPainter painter(this);
+
+		painter.setPen(QColor(200, 30, 30));
+		painter.drawText(
+			0, 0, this->width(), this->height(), Qt::AlignCenter,
+			this->getStateName()
+		);
+	}
+
+	/*
 	void Button::draw() {
 		QPainter painter(this);
 
@@ -72,6 +85,7 @@ namespace Jui
 		);
 
 	}
+	*/
 
 	void Button::prOnPressed() {
 		intCounter++;
@@ -82,7 +96,6 @@ namespace Jui
 		);
 		emit actPressed(this);
 	}
-
 
 	Button::~Button()
 	{

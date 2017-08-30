@@ -16,7 +16,7 @@ namespace Jui
 		test->setName("test");
 		HeaderDialog *headerTest = new HeaderDialog(test);
 		Edges *e2 = new Edges(test);
-
+		
 		Button *testButton = new Button(test, 50, 50, 25, 25);
 		testButton->addState("A");
 		testButton->addState("B");

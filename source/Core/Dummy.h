@@ -23,7 +23,9 @@ namespace Jui
 		void onMousePress(Canvas*, QPoint);
 		void onMouseMoved(Canvas*, QPoint);
 		void onParentResize(Canvas*, QSize);
-		void draw();
+		
+	protected:
+		void paintEvent(QPaintEvent *event);
 
 	private:
 		int thickness;

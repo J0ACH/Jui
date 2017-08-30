@@ -21,12 +21,16 @@ namespace Jui
 
 		void setStateCounter(int cnt);
 
+		//void draw();
+
 	signals:
 		void actPressed(Button*);
 
 		public slots:
-		void draw();
 		virtual void changed();
+
+	protected:
+		void paintEvent(QPaintEvent *event);
 
 	private:
 		void init();

@@ -48,11 +48,6 @@ namespace Jui
 		this->setFrameAlpha(255);
 
 		this->show();
-
-		connect(
-			this, SIGNAL(actUpdated()),
-			this, SLOT(draw())
-		);
 	}
 
 	Canvas* Canvas::getParent() { return mParent; }
@@ -152,12 +147,12 @@ namespace Jui
 	}
 
 	void Canvas::focusInEvent(QFocusEvent *event)
-	{		
+	{
 		emit actFocusIn(this);
 		this->update();
 	}
 	void Canvas::focusOutEvent(QFocusEvent *event)
-	{		
+	{
 		emit actFocusOut(this);
 		this->update();
 	}
@@ -204,9 +199,10 @@ namespace Jui
 			break;
 		}
 
-		emit actUpdated();
+		//this->draw();
 	}
-	void Canvas::draw() { }
+
+	//void Canvas::draw() { }
 
 	Canvas::~Canvas()
 	{

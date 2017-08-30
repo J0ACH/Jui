@@ -70,8 +70,9 @@ namespace Jui
 		this->setFixedHeight(thickness);
 	}
 
-	void Header::draw() {
+	void Header::paintEvent(QPaintEvent *event) {
 
+		Canvas::paintEvent(event);
 		QPainter painter(this);
 
 		switch (this->getState())

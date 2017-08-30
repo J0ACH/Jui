@@ -37,11 +37,12 @@ namespace Jui
 		void setFrameAlpha(int alpha);
 		void setFrameColor(int red, int green, int blue);
 
+		//virtual void draw();
+
 		public slots:
 		void onClose();
 		void setSize(QSize);
 		void setOrigin(QPoint);
-		virtual void draw();
 
 	signals:
 		void actClosed(Canvas *target);
@@ -54,8 +55,7 @@ namespace Jui
 		void actMouseReleased(Canvas *target, QPoint gPt);
 		void actResized(Canvas *target, QSize size);
 		void actMoved(Canvas *target, QPoint gPt);
-		void actUpdated();
-
+		
 	protected:
 		void focusInEvent(QFocusEvent *event);
 		void focusOutEvent(QFocusEvent *event);
@@ -68,7 +68,6 @@ namespace Jui
 		void mouseMoveEvent(QMouseEvent *event);
 
 		void resizeEvent(QResizeEvent *event);
-
 		void paintEvent(QPaintEvent *event);
 
 	private:
@@ -86,9 +85,6 @@ namespace Jui
 		bool visibleFrame, visibleBackground;
 
 		QColor colorBackround, colorFrame;
-		//QColor frameColor;
-
-		//Canvas::visible frameVisibility, backgroundVisibility;
 	};
 }
 
