@@ -37,8 +37,6 @@ namespace Jui
 		void setFrameAlpha(int alpha);
 		void setFrameColor(int red, int green, int blue);
 
-		//virtual void draw();
-
 		public slots:
 		void onClose();
 		void setSize(QSize);

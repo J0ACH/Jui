@@ -177,7 +177,6 @@ namespace Jui
 
 	void Canvas::paintEvent(QPaintEvent *event)
 	{
-		//qDebug() << tr("Canvas::paintEvent()");
 		QPainter painter(this);
 
 		switch (mState)
@@ -198,11 +197,7 @@ namespace Jui
 			if (visibleFrame) painter.drawRect(this->bounds());
 			break;
 		}
-
-		//this->draw();
 	}
-
-	//void Canvas::draw() { }
 
 	Canvas::~Canvas()
 	{

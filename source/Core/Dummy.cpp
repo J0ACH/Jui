@@ -10,6 +10,7 @@ namespace Jui
 	{
 		this->setBackgroundColor(50, 30, 30);
 		this->setFrameVisible(false);
+		this->move(1, 1);
 
 		connect(
 			this, SIGNAL(actMousePressed(Canvas*, QPoint)),
@@ -27,7 +28,7 @@ namespace Jui
 			parent, SIGNAL(actResized(Canvas*, QSize)),
 			this, SLOT(onParentResize(Canvas*, QSize))
 		);
-
+	
 		this->onParentResize(parent, parent->size());
 	}
 
@@ -64,8 +65,7 @@ namespace Jui
 	}
 
 	void Header::onParentResize(Canvas* from, QSize size)
-	{
-		this->move(1, 1);
+	{		
 		this->setFixedWidth(size.width() - 1);
 		this->setFixedHeight(thickness);
 	}
@@ -224,8 +224,9 @@ namespace Jui
 		);
 		*/
 	}
-	void EdgeControler::draw() {
+	void EdgeControler::paintEvent(QPaintEvent *event) {
 
+		Canvas::paintEvent(event);
 		QPainter painter(this);
 
 		switch (this->getState())

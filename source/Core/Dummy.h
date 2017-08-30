@@ -23,7 +23,7 @@ namespace Jui
 		void onMousePress(Canvas*, QPoint);
 		void onMouseMoved(Canvas*, QPoint);
 		void onParentResize(Canvas*, QSize);
-		
+
 	protected:
 		void paintEvent(QPaintEvent *event);
 
@@ -86,7 +86,9 @@ namespace Jui
 		public slots:
 		void onMousePress(Canvas*, QPoint);
 		void onMouseMoved(Canvas*, QPoint);
-		void draw();
+
+	protected:
+		void paintEvent(QPaintEvent *event);
 
 	private:
 		EdgeControler::direction mDirection;

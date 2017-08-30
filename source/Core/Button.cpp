@@ -64,29 +64,6 @@ namespace Jui
 		);
 	}
 
-	/*
-	void Button::draw() {
-		QPainter painter(this);
-
-		switch (intCounter)
-		{
-		case 1:
-			//painter.fillRect(QRect(1, 1, width() - 2, height() - 2), QColor(120, 30, 30));
-			break;
-		default:
-			break;
-		}
-
-		painter.setPen(QColor(200, 30, 30));
-		painter.drawText(
-			0, 0, this->width(), this->height(), Qt::AlignCenter,
-			//this->getName()
-			this->getStateName()
-		);
-
-	}
-	*/
-
 	void Button::prOnPressed() {
 		intCounter++;
 		if (intCounter > maxCounter) intCounter = 0;

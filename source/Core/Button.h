@@ -21,8 +21,6 @@ namespace Jui
 
 		void setStateCounter(int cnt);
 
-		//void draw();
-
 	signals:
 		void actPressed(Button*);
 
