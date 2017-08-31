@@ -26,9 +26,9 @@ namespace Jui
 		Canvas::states getState();
 
 		QRect bounds();
-										
+
 		void setName(QString name);
-		
+
 		void setBackgroundVisible(bool);
 		void setBackgroundAlpha(int alpha);
 		void setBackgroundColor(int red, int green, int blue);
@@ -55,34 +55,34 @@ namespace Jui
 		void actMouseReleased(Canvas *target, QPoint gPt);
 		void actResized(Canvas *target, QSize size);
 		void actMoved(Canvas *target, QPoint gPt);
-		
+
 	protected:
-		void focusInEvent(QFocusEvent *event);
-		void focusOutEvent(QFocusEvent *event);
+		void focusInEvent(QFocusEvent *event) override;
+		void focusOutEvent(QFocusEvent *event) override;
 
-		void enterEvent(QEvent *event);
-		void leaveEvent(QEvent *event);
+		void enterEvent(QEvent *event) override;
+		void leaveEvent(QEvent *event) override;
 
-		void mousePressEvent(QMouseEvent *event);
-		void mouseReleaseEvent(QMouseEvent *event);
-		void mouseMoveEvent(QMouseEvent *event);
+		void mousePressEvent(QMouseEvent *event) override;
+		void mouseReleaseEvent(QMouseEvent *event) override;
+		void mouseMoveEvent(QMouseEvent *event) override;
 
-		void moveEvent(QMoveEvent *event);
-		void resizeEvent(QResizeEvent *event);
-		void paintEvent(QPaintEvent *event);
+		void moveEvent(QMoveEvent *event) override;
+		void resizeEvent(QResizeEvent *event) override;
+		void paintEvent(QPaintEvent *event) override;
 
 	private:
 		enum type { Window, Panel };
-								
+
 		void init(int x, int y, int width, int height);
 
 		Canvas *mParent;
 		Canvas::type mType;
 		Canvas::states mState;
-		
+
 		QString mName;
 		QPoint origin;
-		
+
 		bool visibleFrame, visibleBackground;
 
 		QColor colorBackround, colorFrame;

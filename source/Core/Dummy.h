@@ -27,7 +27,7 @@ namespace Jui
 		void onParentResize(Canvas*, QSize);
 
 	protected:
-		void paintEvent(QPaintEvent *event);
+		void paintEvent(QPaintEvent *event) override;
 
 	private:
 		int thickness;
@@ -90,7 +90,7 @@ namespace Jui
 		void onMouseMoved(Canvas*, QPoint);
 
 	protected:
-		void paintEvent(QPaintEvent *event);
+		void paintEvent(QPaintEvent *event) override;
 
 	private:
 		EdgeControler::direction mDirection;

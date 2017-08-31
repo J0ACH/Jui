@@ -26,7 +26,7 @@ namespace Jui
 
 	void Canvas::init(int x, int y, int width, int height)
 	{
-		qDebug() << tr("Canvas::init()");
+		//qDebug() << tr("Canvas::init()");
 
 		this->setWindowFlags(Qt::FramelessWindowHint);
 		this->setAttribute(Qt::WA_TranslucentBackground);
