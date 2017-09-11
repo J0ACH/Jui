@@ -44,6 +44,10 @@ namespace Jui
 		void setSize(QSize);
 		void setOrigin(QPoint);
 
+		virtual void changed();
+		virtual void draw(QPainter&);
+		virtual void draw2(QPainter *painter);
+
 	signals:
 		void actClosed(Canvas *target);
 		void actOverIn(Canvas *target);

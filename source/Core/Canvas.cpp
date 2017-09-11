@@ -182,6 +182,22 @@ namespace Jui
 			if (visibleFrame) painter.drawRect(this->bounds());
 			break;
 		}
+
+		//Canvas::draw(painter);
+		Canvas::draw2(&painter);
+	}
+
+	void Canvas::changed() {
+
+	}
+
+	void Canvas::draw(QPainter &painter) {
+		painter.setPen(QColor(255, 30, 30));
+		painter.drawLine(0, 0, 100, 100);
+	}
+	void Canvas::draw2(QPainter *painter) {
+		painter->setPen(QColor(255, 30, 30));
+		painter->drawLine(0, 0, 100, 100);
 	}
 
 	Canvas::~Canvas()
