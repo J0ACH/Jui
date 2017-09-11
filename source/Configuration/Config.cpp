@@ -23,6 +23,25 @@ namespace Jui
 		testButton->addState("C");
 		testButton->addState("D");		
 		testButton->setStateCounter(1);
+
+		Layer *L1 = new Layer(test);
+		L1->alpha_(0.2);
+
+		Layer *L2 = new Layer(test);
+		L2->alpha_(0.8);
+		//L1->alpha();
+		//Layer::alpha()
+		Layer::alpha2(L2);
+
+		Layer::drawTest(L2);
+		
+	}
+
+	void Layer::drawTest(Layer* l) {
+		
+		//QPainter painter(l);
+		//painter.fillRect(this->bounds(), QColor(200,30,30));
+		
 	}
 
 	void Config::onPrint()

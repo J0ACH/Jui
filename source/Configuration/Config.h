@@ -2,6 +2,7 @@
 #define CONFIG_H
 
 #include "Canvas.h"
+#include "Draw.h"
 #include "Dummy.h"
 #include "Button.h"
 
