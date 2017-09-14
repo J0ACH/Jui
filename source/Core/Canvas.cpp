@@ -60,7 +60,8 @@ namespace Jui
 		case Jui::Canvas::Panel:
 			return this->mapToParent(QPoint(0, 0));
 			break;
-		}
+		};
+		return QPoint(0, 0);
 	}
 	QRect Canvas::bounds() { return QRect(0, 0, width() - 1, height() - 1); }
 	Canvas::states Canvas::getState() { return mState; }
@@ -160,6 +161,16 @@ namespace Jui
 		emit actResized(this, this->size());
 	}
 
+	Layer* Canvas::addLayer(QString name) {
+		qDebug() << tr("Canvas::addLayer (%1)").arg(name);
+		Layer* newLayer = new Layer(this, name);
+		layers.insert(name, newLayer);
+		return newLayer;
+	}
+	Layer* Canvas::getLayer(QString name) {
+		return layers.value(name);
+	}
+
 	void Canvas::paintEvent(QPaintEvent *event)
 	{
 		QPainter painter(this);
@@ -183,14 +194,17 @@ namespace Jui
 			break;
 		}
 
-		//Canvas::draw(painter);
-		draw(painter);
-		//Canvas::draw2(&painter);
+		this->draw(painter);
+		//draw2(&painter);
+
+		foreach(Layer* oneLayer, layers)
+		{
+			qDebug() << tr("Canvas::paintEvent layer(%1)").arg(oneLayer->name());
+			oneLayer->draw(painter);
+		};
 	}
 
-	void Canvas::changed() {
-
-	}
+	void Canvas::changed() { }
 
 	void Canvas::draw(QPainter &painter) {	}
 	/*

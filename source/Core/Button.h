@@ -19,20 +19,16 @@ namespace Jui
 		int getState();
 		QString getStateName();
 
-		void setStateCounter(int cnt);
-
-		
+		void setStateCounter(int cnt);		
 
 	signals:
 		void actPressed(Button*);
 
 		public slots:
-		virtual void changed();
+		//virtual void changed();
 
-	protected:
-		//void paintEvent(QPaintEvent *event);
-		void draw(QPainter &painter) override;
-		
+	protected:		
+		void draw(QPainter &painter) override;		
 
 	private:
 		void init();

@@ -23,10 +23,12 @@ namespace Jui
 			this, SIGNAL(actMousePressed(Canvas*, QPoint)),
 			this, SLOT(prOnPressed())
 		);
+		/*
 		connect(
 			this, SIGNAL(actPressed(Button*)),
 			this, SLOT(changed())
 		);
+		*/
 	}
 
 	void Button::addState(QString name) {
@@ -50,20 +52,6 @@ namespace Jui
 		if (intCounter > maxCounter) intCounter = maxCounter;
 	}
 
-	void Button::changed() { }
-	/*
-	void Button::paintEvent(QPaintEvent *event)
-	{
-		Canvas::paintEvent(event);
-		QPainter painter(this);
-
-		painter.setPen(QColor(200, 30, 30));
-		painter.drawText(
-			0, 0, this->width(), this->height(), Qt::AlignCenter,
-			this->getStateName()
-		);
-	}
-	*/
 	void Button::draw(QPainter &painter) {
 		painter.setPen(QColor(200, 30, 30));
 		painter.drawText(

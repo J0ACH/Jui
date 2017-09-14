@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QPainter>
 #include <QMouseEvent>
+#include "Draw.h"
 
 namespace Jui
 {
@@ -38,8 +39,9 @@ namespace Jui
 		void setFrameColor(int red, int green, int blue);
 
 		//virtual void parentResized(QSize);
-		//virtual void draw(QPainter &painter);
-		//virtual void draw2(QPainter *painter);
+		
+		Layer* addLayer(QString name);
+		Layer* getLayer(QString name);
 
 		public slots:
 		void onClose();
@@ -77,6 +79,7 @@ namespace Jui
 		void paintEvent(QPaintEvent *event) override;
 
 		virtual void draw(QPainter &painter);
+		//virtual void draw2(QPainter *painter);
 
 
 	private:
@@ -94,6 +97,8 @@ namespace Jui
 		bool visibleFrame, visibleBackground;
 
 		QColor colorBackround, colorFrame;
+
+		QHash<QString, Layer*> layers;
 	};
 }
 

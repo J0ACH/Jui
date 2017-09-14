@@ -1,9 +1,9 @@
 #ifndef DRAW_H
 #define DRAW_H
 
-//#include <QWidget>
-//#include <QPainter>
-#include "Canvas.h"
+#include <QWidget>
+#include <QPainter>
+//#include "Canvas.h"
 
 namespace Jui
 {
@@ -12,21 +12,27 @@ namespace Jui
 		Q_OBJECT
 
 	public:
-		Layer(Canvas *parent = 0);
+		Layer(QWidget *parent, QString name);
 		~Layer();
+
+		QString name();
 
 		void alpha_(double);
 		double alpha();
-		static double alpha2(Layer*);
+
+
+		//static double alpha2(Layer*);
 		//double alpha2(Layer*);
 
-		static void drawTest(Layer*);
+		//static void drawTest(Layer*);
+		virtual void draw(QPainter &painter);
 
-			protected:
+	protected:
 		//void paintEvent(QPaintEvent *event) override;
 
 	private:
 		//QPainter *mPainter;
+		QString m_name;
 		double mAlpha;
 
 	};
