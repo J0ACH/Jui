@@ -38,6 +38,8 @@ namespace Jui
 		void setFrameColor(int red, int green, int blue);
 
 		//virtual void parentResized(QSize);
+		//virtual void draw(QPainter &painter);
+		//virtual void draw2(QPainter *painter);
 
 		public slots:
 		void onClose();
@@ -45,8 +47,7 @@ namespace Jui
 		void setOrigin(QPoint);
 
 		virtual void changed();
-		virtual void draw(QPainter&);
-		virtual void draw2(QPainter *painter);
+
 
 	signals:
 		void actClosed(Canvas *target);
@@ -74,6 +75,9 @@ namespace Jui
 		void moveEvent(QMoveEvent *event) override;
 		void resizeEvent(QResizeEvent *event) override;
 		void paintEvent(QPaintEvent *event) override;
+
+		virtual void draw(QPainter &painter);
+
 
 	private:
 		enum type { Window, Panel };

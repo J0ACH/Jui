@@ -21,6 +21,8 @@ namespace Jui
 
 		void setStateCounter(int cnt);
 
+		
+
 	signals:
 		void actPressed(Button*);
 
@@ -28,7 +30,9 @@ namespace Jui
 		virtual void changed();
 
 	protected:
-		void paintEvent(QPaintEvent *event);
+		//void paintEvent(QPaintEvent *event);
+		void draw(QPainter &painter) override;
+		
 
 	private:
 		void init();

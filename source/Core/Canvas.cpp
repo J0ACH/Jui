@@ -184,21 +184,21 @@ namespace Jui
 		}
 
 		//Canvas::draw(painter);
-		Canvas::draw2(&painter);
+		draw(painter);
+		//Canvas::draw2(&painter);
 	}
 
 	void Canvas::changed() {
 
 	}
 
-	void Canvas::draw(QPainter &painter) {
-		painter.setPen(QColor(255, 30, 30));
-		painter.drawLine(0, 0, 100, 100);
-	}
+	void Canvas::draw(QPainter &painter) {	}
+	/*
 	void Canvas::draw2(QPainter *painter) {
-		painter->setPen(QColor(255, 30, 30));
-		painter->drawLine(0, 0, 100, 100);
+		//painter->setPen(QColor(30, 230, 30));
+		//painter->drawLine(30, 0, 0, 30);
 	}
+	*/
 
 	Canvas::~Canvas()
 	{

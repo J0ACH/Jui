@@ -22,7 +22,7 @@ namespace Jui
 
 		static void drawTest(Layer*);
 
-	protected:
+			protected:
 		//void paintEvent(QPaintEvent *event) override;
 
 	private:
