@@ -5,21 +5,19 @@ namespace Jui
 	class LayerTest : public Layer
 	{
 	public:
-		void draw(QPainter &painter) override 
+		void draw(QPainter *painter, QRect bounds) override
 		{
-			painter.setPen(QColor(230, 30, 30));
-			painter.drawLine(0, 0, 25, 25);
+			painter->setPen(QColor(230, 30, 30));
+			painter->drawLine(0, 0, 25, 25);
 		}
-	};	
+	};
 
-	class LayerTest2 : public Layer
+	class LayerPlocha : public Layer
 	{
 	public:
-		void draw(QPainter &painter) override
+		void draw(QPainter *painter, QRect bounds) override
 		{
-			painter.fillRect(QRect(0, 0, 20, 20), QColor(30, 100, 30));
-			//painter.setPen(QColor(30, 230, 30));
-			//painter.drawLine(25, 0, 0, 25);
+			painter->fillRect(QRect(0, 0, 20, 20), QColor(30, 100, 30));
 		}
 	};
 
@@ -36,26 +34,28 @@ namespace Jui
 		test->setName("test");
 		HeaderDialog *headerTest = new HeaderDialog(test);
 		Edges *e2 = new Edges(test);
-		
+
 		Button *testButton = new Button(test, 50, 50, 25, 25);
 		testButton->addState("A");
 		testButton->addState("B");
 		testButton->addState("C");
-		testButton->addState("D");		
-		testButton->setStateCounter(1);				
-		
+		testButton->addState("D");
+		testButton->setStateCounter(1);
+
 		LayerTest* L3 = new LayerTest();
 		L3->name_("cara");
+
+		LayerPlocha* L2 = new LayerPlocha();
+		L2->name_("plocha");
+		//L2->alpha_(0.5);
+
+		testButton->addLayer(L2);
 		testButton->addLayer(L3);
 
-		LayerTest2* L2 = new LayerTest2();
-		L2->name_("plocha");
-		L2->alpha_(0.5);
-		testButton->addLayer(L2);
 
 	}
 
-	
+
 	void Config::onPrint()
 	{
 		qDebug("Config onPrint");

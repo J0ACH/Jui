@@ -28,7 +28,7 @@ namespace Jui
 		//virtual void changed();
 
 	protected:		
-		void draw(QPainter &painter) override;		
+		//void draw(QPainter &painter) override;		
 
 	private:
 		void init();

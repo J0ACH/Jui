@@ -9,8 +9,6 @@ namespace Jui
 {
 	class Layer
 	{
-		//Q_OBJECT
-
 	public:
 		Layer();
 		Layer(QString name);
@@ -22,12 +20,23 @@ namespace Jui
 		void alpha_(double);
 		double alpha();
 
-		virtual void draw(QPainter &painter);
+		virtual void draw(QPainter *painter, QRect bounds);
 
-	private:
+	protected:
 		QString m_name;
 		double m_alpha;
+	};
 
+	class LayerBackground : public Layer
+	{
+	public:
+		LayerBackground();
+		LayerBackground(QString name);		
+		void background_(QColor color);
+		void background_(int r, int g, int b, int a = 255);
+		void draw(QPainter *painter, QRect bounds) override;
+	private:
+		QColor m_background;
 	};
 
 

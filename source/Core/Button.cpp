@@ -23,6 +23,10 @@ namespace Jui
 			this, SIGNAL(actMousePressed(Canvas*, QPoint)),
 			this, SLOT(prOnPressed())
 		);
+
+		LayerBackground *backG = new LayerBackground();
+		backG->background_(QColor(30, 30, 90));
+		this->addLayer(backG);
 		/*
 		connect(
 			this, SIGNAL(actPressed(Button*)),
@@ -52,6 +56,7 @@ namespace Jui
 		if (intCounter > maxCounter) intCounter = maxCounter;
 	}
 
+	/*
 	void Button::draw(QPainter &painter) {
 		painter.setPen(QColor(200, 30, 30));
 		painter.drawText(
@@ -59,6 +64,7 @@ namespace Jui
 			this->getStateName()
 		);
 	}
+	*/
 
 	void Button::prOnPressed() {
 		intCounter++;

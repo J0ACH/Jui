@@ -164,6 +164,7 @@ namespace Jui
 	void Canvas::addLayer(Layer* layer) {
 		qDebug() << tr("Canvas::addLayer * (%1)").arg(layer->name());
 		layers.insert(layer->name(), layer);
+		order.append(layer);
 	}
 	Layer* Canvas::getLayer(QString name) {
 		return layers.value(name);
@@ -192,25 +193,22 @@ namespace Jui
 			break;
 		}
 
-		this->draw(painter);
-		//draw2(&painter);
+		//this->draw(painter);
+		//this->draw2(&painter);
 
-		foreach(Layer* oneLayer, layers)
+		foreach(Layer* oneLayer, order)
 		{
 			painter.setOpacity(oneLayer->alpha());
-			oneLayer->draw(painter);
+			oneLayer->draw(&painter, this->rect());
 		};
 		
 	}
 
 	void Canvas::changed() { }
 
-	void Canvas::draw(QPainter &painter) {	}
 	/*
-	void Canvas::draw2(QPainter *painter) {
-		//painter->setPen(QColor(30, 230, 30));
-		//painter->drawLine(30, 0, 0, 30);
-	}
+	void Canvas::draw(QPainter &painter) {	}
+	void Canvas::draw2(QPainter *painter) {  }
 	*/
 
 	Canvas::~Canvas()

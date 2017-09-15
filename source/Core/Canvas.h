@@ -39,7 +39,7 @@ namespace Jui
 		void setFrameColor(int red, int green, int blue);
 
 		//virtual void parentResized(QSize);
-		
+
 		void addLayer(Layer* layer);
 		Layer* getLayer(QString name);
 
@@ -49,7 +49,7 @@ namespace Jui
 		void setOrigin(QPoint);
 
 		virtual void changed();
-		
+
 	signals:
 		void actClosed(Canvas *target);
 		void actOverIn(Canvas *target);
@@ -77,7 +77,7 @@ namespace Jui
 		void resizeEvent(QResizeEvent *event) override;
 		void paintEvent(QPaintEvent *event) override;
 
-		virtual void draw(QPainter &painter);
+		//virtual void draw(QPainter &painter);
 		//virtual void draw2(QPainter *painter);
 
 
@@ -98,7 +98,8 @@ namespace Jui
 		QColor colorBackround, colorFrame;
 
 		QHash<QString, Layer*> layers;
-			};
+		QList<Layer*> order;
+	};
 }
 
 #endif // CANVAS_H
