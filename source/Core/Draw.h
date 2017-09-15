@@ -4,42 +4,33 @@
 #include <QWidget>
 #include <QPainter>
 #include <QDebug>
-//#include "Canvas.h"
 
 namespace Jui
 {
-	class Layer //: public QWidget
+	class Layer
 	{
 		//Q_OBJECT
 
 	public:
-		Layer() {};
-		Layer(QWidget *parent, QString name);
+		Layer();
+		Layer(QString name);
 		~Layer();
 
+		void name_(QString name);
 		QString name();
 
 		void alpha_(double);
 		double alpha();
 
-
-		//static double alpha2(Layer*);
-		//double alpha2(Layer*);
-
-		//static void drawTest(Layer*);
 		virtual void draw(QPainter &painter);
 
-	protected:
-		//void paintEvent(QPaintEvent *event) override;
-
 	private:
-		QPainter m_painter;
 		QString m_name;
-		double mAlpha;
+		double m_alpha;
 
 	};
 
-	
+
 }
 
 #endif // DRAW_H

@@ -40,8 +40,7 @@ namespace Jui
 
 		//virtual void parentResized(QSize);
 		
-		void addLayer(QString name, Layer* layer);
-		Layer* addLayer(QString name);
+		void addLayer(Layer* layer);
 		Layer* getLayer(QString name);
 
 		public slots:
@@ -50,8 +49,7 @@ namespace Jui
 		void setOrigin(QPoint);
 
 		virtual void changed();
-
-
+		
 	signals:
 		void actClosed(Canvas *target);
 		void actOverIn(Canvas *target);
@@ -100,7 +98,7 @@ namespace Jui
 		QColor colorBackround, colorFrame;
 
 		QHash<QString, Layer*> layers;
-	};
+			};
 }
 
 #endif // CANVAS_H
