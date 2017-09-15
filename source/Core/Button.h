@@ -2,6 +2,8 @@
 #define BUTTON_H
 
 #include "Canvas.h"
+#include <QPushButton>
+
 
 namespace Jui
 {
@@ -40,6 +42,30 @@ namespace Jui
 		void prOnPressed();
 
 
+	};
+
+	class Button2 : public QPushButton
+	{
+	public :
+		Button2(QWidget *parent = 0);
+
+	protected:
+		void enterEvent(QEvent *event) override;
+		void leaveEvent(QEvent *event) override;
+		void mousePressEvent(QMouseEvent *event) override;
+		void mouseReleaseEvent(QMouseEvent *event) override;
+		void paintEvent(QPaintEvent *e) override;
+
+		virtual void draw_OffOut(QPainter* painter);
+		virtual void draw_OffOver(QPainter* painter);
+		virtual void draw_Press(QPainter* painter);
+		virtual void draw_OnOut(QPainter* painter);
+		virtual void draw_OnOver(QPainter* painter);
+
+	private:
+		enum state {offOut, offOver, press, onOut, onOver};
+		state m_state, prev_state;
+		
 	};
 
 }

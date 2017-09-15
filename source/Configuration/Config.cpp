@@ -52,7 +52,11 @@ namespace Jui
 		testButton->addLayer(L2);
 		testButton->addLayer(L3);
 
-
+		Button2* B2 = new Button2(this);
+		B2->setGeometry(100, 50, 50, 30);
+		B2->setText("B2");
+		B2->setFlat(true);
+		B2->show();
 	}
 
 
