@@ -3,7 +3,7 @@
 namespace Jui
 {
 	Layer::Layer(QWidget *parent, QString name) :
-		QWidget(parent),
+		//QWidget(parent),
 		m_name(name),
 		mAlpha(0)
 	{
@@ -12,7 +12,10 @@ namespace Jui
 
 	QString Layer::name() { return m_name; }
 
-	void Layer::alpha_(double a) { mAlpha = a; }
+	void Layer::alpha_(double a) { 
+		mAlpha = a; 
+		m_painter.setOpacity(a);
+	}
 	double Layer::alpha() { return mAlpha; }
 /*
 	double Layer::alpha2(Layer* l) {
@@ -24,8 +27,13 @@ namespace Jui
 */
 
 	void Layer::draw(QPainter &painter) {
+		//qDebug() << tr("Layer::draw (%1)").arg(m_name);
+
 		painter.setPen(QColor(30, 230, 30));
 		painter.drawLine(0, 0, 30, 30);
+
+		//m_painter.setPen(QColor(230, 30, 30));
+		//m_painter.drawLine(30, 0, 0, 30);
 	}
 
 	Layer::~Layer()

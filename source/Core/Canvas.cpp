@@ -161,6 +161,10 @@ namespace Jui
 		emit actResized(this, this->size());
 	}
 
+	void Canvas::addLayer(QString name, Layer* layer) {
+		qDebug() << tr("Canvas::addLayer (%1)").arg(name);
+		layers.insert(name, layer);
+	}
 	Layer* Canvas::addLayer(QString name) {
 		qDebug() << tr("Canvas::addLayer (%1)").arg(name);
 		Layer* newLayer = new Layer(this, name);
@@ -199,7 +203,6 @@ namespace Jui
 
 		foreach(Layer* oneLayer, layers)
 		{
-			qDebug() << tr("Canvas::paintEvent layer(%1)").arg(oneLayer->name());
 			oneLayer->draw(painter);
 		};
 	}

@@ -2,6 +2,14 @@
 
 namespace Jui
 {
+	class LayerTest : public Layer
+	{
+	public:
+		void draw(QPainter &painter) override {
+			painter.setPen(QColor(230, 30, 30));
+			painter.drawLine(25, 0, 0, 25);
+		}
+	};	
 
 	Config::Config(int x, int y, int width, int height) : Canvas(x, y, width, height)
 	{
@@ -25,6 +33,9 @@ namespace Jui
 		testButton->setStateCounter(1);
 				
 		Layer* L1 = testButton->addLayer("pokus");
+		
+		LayerTest* L2 = new LayerTest();
+		testButton->addLayer("pokus2", L2);
 	}
 
 	

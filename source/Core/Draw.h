@@ -3,15 +3,17 @@
 
 #include <QWidget>
 #include <QPainter>
+#include <QDebug>
 //#include "Canvas.h"
 
 namespace Jui
 {
-	class Layer : public QWidget
+	class Layer //: public QWidget
 	{
-		Q_OBJECT
+		//Q_OBJECT
 
 	public:
+		Layer() {};
 		Layer(QWidget *parent, QString name);
 		~Layer();
 
@@ -31,11 +33,13 @@ namespace Jui
 		//void paintEvent(QPaintEvent *event) override;
 
 	private:
-		//QPainter *mPainter;
+		QPainter m_painter;
 		QString m_name;
 		double mAlpha;
 
 	};
+
+	
 }
 
 #endif // DRAW_H

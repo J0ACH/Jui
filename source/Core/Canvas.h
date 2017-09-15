@@ -40,6 +40,7 @@ namespace Jui
 
 		//virtual void parentResized(QSize);
 		
+		void addLayer(QString name, Layer* layer);
 		Layer* addLayer(QString name);
 		Layer* getLayer(QString name);
 
