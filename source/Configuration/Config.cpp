@@ -57,10 +57,11 @@ namespace Jui
 		B1->setText("B1");
 		B1->show();
 
+		//QPushButton* B2 = new QPushButton(this);
 		Button2* B2 = new Button2(this);
 		B2->setGeometry(175, 50, 50, 30);
 		B2->setText("B2");
-		B2->setFlat(true);
+		B2->setCheckable(true);
 		B2->show();
 
 	}

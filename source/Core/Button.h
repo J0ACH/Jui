@@ -52,10 +52,9 @@ namespace Jui
 		Button2(QWidget *parent = 0);
 
 		void colorFrame_(QColor normal, QColor over);
-		QColor colorFrame();
 		void colorBackground_(QColor off, QColor on);
+		QColor colorFrame();
 		QColor colorBackground();
-
 
 	protected:
 		void enterEvent(QEvent *e) override;
@@ -63,13 +62,7 @@ namespace Jui
 		void mousePressEvent(QMouseEvent *e) override;
 		void mouseReleaseEvent(QMouseEvent *e) override;
 		void paintEvent(QPaintEvent *e) override;
-		
-		virtual void draw_OffOut(QPainter* painter);
-		virtual void draw_OffOver(QPainter* painter);
-		virtual void draw_Press(QPainter* painter);
-		virtual void draw_OnOut(QPainter* painter);
-		virtual void draw_OnOver(QPainter* painter);
-		
+	
 	private:
 		enum state {offOut, offOver, press, onOut, onOver};
 		state m_state, prev_state;

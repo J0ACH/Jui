@@ -91,18 +91,12 @@ namespace Jui
 	Button2::Button2(QWidget *parent) : QPushButton(parent) {
 		m_state = state::offOut;
 
-		this->colorFrame_(
-			QColor(30, 30, 30),
-			QColor(230, 30, 30)
-		);
+		this->colorFrame_(QColor(30, 30, 30), QColor(230, 30, 30));
+		this->colorBackground_(QColor(50, 20, 20), QColor(200, 30, 30));
+		
 		connect(
 			&fade_colorFrame, SIGNAL(valueChanged(QVariant)),
 			this, SLOT(update())
-		);
-
-		this->colorBackground_(
-			QColor(50, 20, 20),
-			QColor(200, 30, 30)
 		);
 		connect(
 			&fade_colorBackground, SIGNAL(valueChanged(QVariant)),
@@ -114,12 +108,11 @@ namespace Jui
 		fade_colorFrame.setStartValue(normal);
 		fade_colorFrame.setEndValue(over);
 	}
-	QColor Button2::colorFrame() { return fade_colorFrame.currentValue().value<QColor>(); }
-
 	void Button2::colorBackground_(QColor off, QColor on) {
 		fade_colorBackground.setStartValue(off);
 		fade_colorBackground.setEndValue(on);
 	}
+	QColor Button2::colorFrame() { return fade_colorFrame.currentValue().value<QColor>(); }
 	QColor Button2::colorBackground() { return fade_colorBackground.currentValue().value<QColor>(); }
 
 	void Button2::enterEvent(QEvent *event)
@@ -153,15 +146,17 @@ namespace Jui
 
 		update();
 	}
-	void Button2::mousePressEvent(QMouseEvent *event) {
+	void Button2::mousePressEvent(QMouseEvent *e) {
 		prev_state = m_state;
 		m_state = state::press;
-		this->fadeVariant(fade_colorBackground, fade::in, 100);
+		
+		QPushButton::mousePressEvent(e);
+		if (!this->isChecked()) {
+			this->fadeVariant(fade_colorBackground, fade::in, 100);
+		}
 		update();
 	}
-	void Button2::mouseReleaseEvent(QMouseEvent *event) {
-
-
+	void Button2::mouseReleaseEvent(QMouseEvent *e) {
 		switch (prev_state)
 		{
 		case state::offOver:
@@ -172,7 +167,11 @@ namespace Jui
 			m_state = state::offOver;
 			break;
 		}
-		this->fadeVariant(fade_colorBackground, fade::out, 250);
+		QPushButton::mouseReleaseEvent(e);
+
+		if (!this->isChecked()) {
+			this->fadeVariant(fade_colorBackground, fade::out, 250);
+		}		
 		update();
 	}
 
@@ -180,28 +179,6 @@ namespace Jui
 		QPainter painter(this);
 		QRect frameRect = QRect(0, 0, width() - 1, height() - 1);
 		QRect fillRect = QRect(0, 0, width(), height());;
-
-
-		/*
-		switch (m_state)
-		{
-		case state::offOut:
-			draw_OffOut(&painter);
-			break;
-		case state::offOver:
-			draw_OffOver(&painter);
-			break;
-		case state::press:
-			draw_Press(&painter);
-			break;
-		case state::onOut:
-			draw_OnOut(&painter);
-			break;
-		case state::onOver:
-			draw_OnOver(&painter);
-			break;
-		}
-		*/
 
 		painter.fillRect(fillRect, this->colorBackground());
 
@@ -231,35 +208,14 @@ namespace Jui
 
 		switch (var.state())
 		{
-		case QAbstractAnimation::State::Paused: 
+		case QAbstractAnimation::State::Paused:
 			var.resume();
 			break;
-		default: 
+		default:
 			var.start();
 			break;
 		}
 
-	}
-
-
-	void Button2::draw_OffOut(QPainter* painter) {
-		painter->setPen(QColor(30, 30, 30));
-		painter->drawRect(QRect(0, 0, width() - 1, height() - 1));
-	}
-	void Button2::draw_OffOver(QPainter* painter) {
-		painter->setPen(QColor(150, 150, 150));
-		painter->drawRect(QRect(0, 0, width() - 1, height() - 1));
-	}
-	void Button2::draw_Press(QPainter* painter) {
-		painter->fillRect(QRect(0, 0, width(), height()), QColor(250, 50, 50));
-	}
-	void Button2::draw_OnOut(QPainter* painter) {
-		painter->fillRect(QRect(0, 0, width(), height()), QColor(100, 30, 30));
-	}
-	void Button2::draw_OnOver(QPainter* painter) {
-		painter->fillRect(QRect(0, 0, width(), height()), QColor(100, 30, 30));
-		painter->setPen(QColor(150, 150, 150));
-		painter->drawRect(QRect(0, 0, width() - 1, height() - 1));
 	}
 
 }
