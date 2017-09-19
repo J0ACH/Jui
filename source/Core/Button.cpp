@@ -89,7 +89,7 @@ namespace Jui
 	// Button2 /////////////////////////////////
 
 	Button2::Button2(QWidget *parent) : QPushButton(parent) {
-		this->colorFrame_(QColor(30, 30, 30), QColor(230, 30, 30));
+		this->colorFrame_(QColor(0, 0, 0, 0), QColor(50, 50, 50));
 		this->colorBackground_(QColor(0, 0, 0, 0), QColor(130, 30, 30));
 
 		connect(
@@ -141,9 +141,9 @@ namespace Jui
 	void Button2::paintEvent(QPaintEvent *e) {
 		QPainter painter(this);
 		QRect frameRect = QRect(0, 0, width() - 1, height() - 1);
-		QRect fillRect = QRect(0, 0, width(), height());;
+		QRect fillRect = QRect(0, 0, width(), height());
 
-		painter.fillRect(fillRect, this->colorBackground());
+		painter.fillRect(QRect(5, height() - 3, width() - 10, 1), this->colorBackground());
 
 		painter.setPen(this->colorFrame());
 		painter.drawRect(frameRect);
@@ -177,6 +177,8 @@ namespace Jui
 		}
 
 	}
+
+	
 
 }
 

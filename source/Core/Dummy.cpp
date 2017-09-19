@@ -28,7 +28,7 @@ namespace Jui
 			parent, SIGNAL(actResized(Canvas*, QSize)),
 			this, SLOT(onParentResize(Canvas*, QSize))
 		);
-	
+
 		this->onParentResize(parent, parent->size());
 	}
 
@@ -71,7 +71,7 @@ namespace Jui
 	*/
 
 	void Header::onParentResize(Canvas* from, QSize size)
-	{		
+	{
 		this->setFixedWidth(size.width() - 1);
 		this->setFixedHeight(thickness);
 	}
@@ -137,39 +137,37 @@ namespace Jui
 
 	HeaderWindow::HeaderWindow(Canvas *parent) :
 		Header(parent),
-		buttonClose(new Button(this)),
-		buttonMaximize(new Button(this)),
-		buttonMinimize(new Button(this))
+		buttonClose(new Button2(this)),
+		buttonMaximize(new Button2(this)),
+		buttonMinimize(new Button2(this))
 
 	{
 		this->setBackgroundColor(30, 30, 30);
 
-		buttonClose->addState("X");
-		buttonClose->setStateCounter(0);
-		buttonClose->setBackgroundVisible(false);
-		buttonClose->setSize(QSize(30, 30));
+		buttonClose->setFixedSize(30, 30);
+		buttonClose->setText("X");
+		buttonClose->show();
 
-		buttonMaximize->addState("[]");
-		buttonMaximize->addState("n");
-		buttonMaximize->setStateCounter(0);
-		buttonMaximize->setBackgroundVisible(false);
-		buttonMaximize->setSize(QSize(30, 30));
+		buttonMaximize->setFixedSize(30, 30);
+		buttonMaximize->setText("[]");
+		buttonMaximize->setCheckable(true);
+		buttonMaximize->show();
 
-		buttonMinimize->addState("_");
-		buttonMinimize->setStateCounter(0);
-		buttonMinimize->setBackgroundVisible(false);
-		buttonMinimize->setSize(QSize(30, 30));
+		buttonMinimize->setFixedSize(30, 30);
+		buttonMinimize->setText("_");
+		buttonMinimize->setCheckable(false);
+		buttonMinimize->show();
 
 		connect(
-			buttonClose, SIGNAL(actPressed(Button*)),
+			buttonClose, SIGNAL(pressed()),
 			parent, SLOT(onClose())
 		);
 		connect(
-			buttonMaximize, SIGNAL(actPressed(Button*)),
+			buttonMaximize, SIGNAL(pressed()),
 			parent, SLOT(showMaximized())
 		);
 		connect(
-			buttonMinimize, SIGNAL(actPressed(Button*)),
+			buttonMinimize, SIGNAL(pressed()),
 			parent, SLOT(showMinimized())
 		);
 		connect(

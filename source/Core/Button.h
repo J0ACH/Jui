@@ -68,6 +68,7 @@ namespace Jui
 		QVariantAnimation fade_colorFrame, fade_colorBackground;
 	};
 
+	
 
 }
 

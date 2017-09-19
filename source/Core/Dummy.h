@@ -65,7 +65,7 @@ namespace Jui
 		void onParentResize(Canvas*, QSize);
 
 	private:
-		Button* buttonClose, *buttonMaximize, *buttonMinimize;
+		Button2 *buttonClose, *buttonMaximize, *buttonMinimize;
 	};
 
 	// EdgeControler ///////////////////////////////////////////////////// 

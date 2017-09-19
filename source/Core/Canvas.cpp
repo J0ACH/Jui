@@ -216,4 +216,26 @@ namespace Jui
 		emit actClosed(this);
 	}
 
+	// Win /////////////////////////////////
+
+	Win::Win(int x, int y, int w, int h) : QWidget(0) {
+		setGeometry(x, y, w, h);
+		setWindowFlags(Qt::FramelessWindowHint);
+		setAttribute(Qt::WA_TranslucentBackground);		
+	}
+
+	void Win::paintEvent(QPaintEvent *e) {
+		QPainter painter(this);
+		QRect frameRect = QRect(0, 0, width() - 1, height() - 1);
+		QRect fillRect = QRect(0, 0, width(), height());
+
+		painter.fillRect(fillRect, QColor(20, 20, 20, 1));
+
+		painter.setPen(QColor(50, 50, 50));
+		painter.drawRect(frameRect);
+
+		//painter.setPen(QColor(255, 255, 255));
+		//painter.drawText(fillRect, Qt::AlignCenter, this->text());
+	}
+
 }

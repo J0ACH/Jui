@@ -6,6 +6,7 @@
 #include <QPainter>
 #include <QMouseEvent>
 #include "Draw.h"
+//#include "Button.h"
 
 namespace Jui
 {
@@ -99,6 +100,18 @@ namespace Jui
 
 		QHash<QString, Layer*> layers;
 		QList<Layer*> order;
+	};
+
+	class Win : public QWidget
+	{
+	public:
+		Win(int x, int y, int w, int h);
+
+	protected:
+		void paintEvent(QPaintEvent *e) override;
+
+	private:
+		//Button2 *buttonClose;
 	};
 }
 
