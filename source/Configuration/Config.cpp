@@ -57,68 +57,12 @@ namespace Jui
 		B1->setText("B1");
 		B1->show();
 
-		/*
-		QPropertyAnimation *anim = new QPropertyAnimation(B1, "colorFrame");
-		anim->setStartValue(QColor(30, 30, 30));
-		anim->setEndValue(QColor(250, 0, 0));
-		anim->setDuration(10000);
-
-		anim->start();
-		*/
-
-
-		/*
 		Button2* B2 = new Button2(this);
 		B2->setGeometry(175, 50, 50, 30);
 		B2->setText("B2");
 		B2->setFlat(true);
 		B2->show();
-		*/
 
-
-		QPushButton* B2 = new QPushButton(this);
-		B2->setGeometry(175, 50, 50, 30);
-		B2->setText("B2");
-		B2->show();
-
-		QStateMachine machine;
-		QState *s1 = new QState();
-		QState *s2 = new QState();
-		QState *s3 = new QState();
-
-		s1->addTransition(B2, SIGNAL(clicked()), s2);
-		s2->addTransition(B2, SIGNAL(clicked()), s3);
-		s3->addTransition(B2, SIGNAL(clicked()), s1);
-
-		machine.addState(s1);
-		machine.addState(s2);
-		machine.addState(s3);
-		machine.setInitialState(s1);
-
-		s1->assignProperty(B2, "text", "In state s1");
-		s2->assignProperty(B2, "text", "In state s2");
-		s3->assignProperty(B2, "text", "In state s3");
-
-		machine.start();
-/*
-		QStateMachine *machine = new QStateMachine;
-
-		QState *state1 = new QState(machine);
-		state1->assignProperty(B2, "colorFrame", QColor(30, 30, 30));
-		machine->setInitialState(state1);
-
-		QState *state2 = new QState(machine);
-		state2->assignProperty(B2, "colorFrame", QColor(230, 30, 30));
-
-		QSignalTransition *transition1 = state1->addTransition(B2, SIGNAL(clicked()), state2);
-		transition1->addAnimation(new QPropertyAnimation(B2, "colorFrame"));
-
-		QSignalTransition *transition2 = state2->addTransition(B2, SIGNAL(clicked()), state1);
-		transition2->addAnimation(new QPropertyAnimation(B2, "colorFrame"));
-
-
-		machine->start();
-*/
 	}
 
 

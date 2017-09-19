@@ -53,7 +53,10 @@ namespace Jui
 
 		void colorFrame_(QColor normal, QColor over);
 		QColor colorFrame();
-		
+		void colorBackground_(QColor off, QColor on);
+		QColor colorBackground();
+
+
 	protected:
 		void enterEvent(QEvent *e) override;
 		void leaveEvent(QEvent *e) override;
@@ -72,10 +75,10 @@ namespace Jui
 		state m_state, prev_state;
 
 				
-		QVariantAnimation fade_colorFrame;
+		QVariantAnimation fade_colorFrame, fade_colorBackground;
 		
 		enum fade { out, in };
-		void fadeFrame(Button2::fade fade, int duration);
+		void fadeVariant(QVariantAnimation &var, Button2::fade fade, int duration);
 	};
 
 

@@ -91,9 +91,21 @@ namespace Jui
 	Button2::Button2(QWidget *parent) : QPushButton(parent) {
 		m_state = state::offOut;
 
-		this->colorFrame_(QColor(30, 30, 30), QColor(230, 30, 30));
+		this->colorFrame_(
+			QColor(30, 30, 30),
+			QColor(230, 30, 30)
+		);
 		connect(
 			&fade_colorFrame, SIGNAL(valueChanged(QVariant)),
+			this, SLOT(update())
+		);
+
+		this->colorBackground_(
+			QColor(50, 20, 20),
+			QColor(200, 30, 30)
+		);
+		connect(
+			&fade_colorBackground, SIGNAL(valueChanged(QVariant)),
 			this, SLOT(update())
 		);
 	}
@@ -103,6 +115,12 @@ namespace Jui
 		fade_colorFrame.setEndValue(over);
 	}
 	QColor Button2::colorFrame() { return fade_colorFrame.currentValue().value<QColor>(); }
+
+	void Button2::colorBackground_(QColor off, QColor on) {
+		fade_colorBackground.setStartValue(off);
+		fade_colorBackground.setEndValue(on);
+	}
+	QColor Button2::colorBackground() { return fade_colorBackground.currentValue().value<QColor>(); }
 
 	void Button2::enterEvent(QEvent *event)
 	{
@@ -116,13 +134,13 @@ namespace Jui
 			break;
 		}
 
-		this->fadeFrame(fade::in, 500);
+		this->fadeVariant(fade_colorFrame, fade::in, 500);
 		update();
 	}
 	void Button2::leaveEvent(QEvent *event)
 	{
-		this->fadeFrame(fade::out, 2000);
-		
+		this->fadeVariant(fade_colorFrame, fade::out, 2000);
+
 		switch (m_state)
 		{
 		case state::offOver:
@@ -138,6 +156,7 @@ namespace Jui
 	void Button2::mousePressEvent(QMouseEvent *event) {
 		prev_state = m_state;
 		m_state = state::press;
+		this->fadeVariant(fade_colorBackground, fade::in, 100);
 		update();
 	}
 	void Button2::mouseReleaseEvent(QMouseEvent *event) {
@@ -153,6 +172,7 @@ namespace Jui
 			m_state = state::offOver;
 			break;
 		}
+		this->fadeVariant(fade_colorBackground, fade::out, 250);
 		update();
 	}
 
@@ -183,7 +203,8 @@ namespace Jui
 		}
 		*/
 
-		//painter.setPen(m_colorFrame);
+		painter.fillRect(fillRect, this->colorBackground());
+
 		painter.setPen(this->colorFrame());
 		painter.drawRect(frameRect);
 
@@ -194,33 +215,30 @@ namespace Jui
 		);
 	}
 
-	void Button2::fadeFrame(Button2::fade fade, int duration) {
-		
-		if (fade_colorFrame.state() == QAbstractAnimation::State::Running) {
-			fade_colorFrame.pause();
-		}
-		
-		fade_colorFrame.setDuration(duration);
+	void Button2::fadeVariant(QVariantAnimation &var, Button2::fade fade, int duration) {
+
+		if (var.state() == QAbstractAnimation::State::Running) { var.pause(); }
+		var.setDuration(duration);
 		switch (fade)
 		{
 		case Button2::fade::in:
-			fade_colorFrame.setDirection(QVariantAnimation::Direction::Forward);
+			var.setDirection(QVariantAnimation::Direction::Forward);
 			break;
 		case Button2::fade::out:
-			fade_colorFrame.setDirection(QVariantAnimation::Direction::Backward);
+			var.setDirection(QVariantAnimation::Direction::Backward);
 			break;
 		}
-		
-		switch (fade_colorFrame.state())
+
+		switch (var.state())
 		{
-		case QAbstractAnimation::State::Paused:
-			fade_colorFrame.resume();
+		case QAbstractAnimation::State::Paused: 
+			var.resume();
 			break;
-		default:
-			fade_colorFrame.start();
+		default: 
+			var.start();
 			break;
 		}
-		
+
 	}
 
 
