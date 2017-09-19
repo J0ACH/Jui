@@ -91,8 +91,7 @@ namespace Jui
 	Button2::Button2(QWidget *parent) : QPushButton(parent) {
 		m_state = state::offOut;
 
-		fade_colorFrame.setStartValue(QColor(30, 30, 30));
-		fade_colorFrame.setEndValue(QColor(250, 0, 0));
+		this->colorFrame_(QColor(30, 30, 30), QColor(230, 30, 30));
 		connect(
 			&fade_colorFrame, SIGNAL(valueChanged(QVariant)),
 			this, SLOT(update())
@@ -117,20 +116,13 @@ namespace Jui
 			break;
 		}
 
-		fade_colorFrame.stop();
-		fade_colorFrame.setDirection(QAbstractAnimation::Direction::Forward);
-		fade_colorFrame.setDuration(500);
-		fade_colorFrame.start();
-
+		this->fadeFrame(fade::in, 500);
 		update();
 	}
 	void Button2::leaveEvent(QEvent *event)
 	{
-		fade_colorFrame.stop();
-		fade_colorFrame.setDuration(2000);
-		fade_colorFrame.setDirection(QAbstractAnimation::Direction::Backward);
-		fade_colorFrame.start();
-
+		this->fadeFrame(fade::out, 2000);
+		
 		switch (m_state)
 		{
 		case state::offOver:
@@ -140,6 +132,7 @@ namespace Jui
 			m_state = state::onOut;
 			break;
 		}
+
 		update();
 	}
 	void Button2::mousePressEvent(QMouseEvent *event) {
@@ -199,6 +192,35 @@ namespace Jui
 			0, 0, this->width(), this->height(), Qt::AlignCenter,
 			this->text()
 		);
+	}
+
+	void Button2::fadeFrame(Button2::fade fade, int duration) {
+		
+		if (fade_colorFrame.state() == QAbstractAnimation::State::Running) {
+			fade_colorFrame.pause();
+		}
+		
+		fade_colorFrame.setDuration(duration);
+		switch (fade)
+		{
+		case Button2::fade::in:
+			fade_colorFrame.setDirection(QVariantAnimation::Direction::Forward);
+			break;
+		case Button2::fade::out:
+			fade_colorFrame.setDirection(QVariantAnimation::Direction::Backward);
+			break;
+		}
+		
+		switch (fade_colorFrame.state())
+		{
+		case QAbstractAnimation::State::Paused:
+			fade_colorFrame.resume();
+			break;
+		default:
+			fade_colorFrame.start();
+			break;
+		}
+		
 	}
 
 

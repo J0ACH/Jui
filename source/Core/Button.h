@@ -66,16 +66,16 @@ namespace Jui
 		virtual void draw_Press(QPainter* painter);
 		virtual void draw_OnOut(QPainter* painter);
 		virtual void draw_OnOver(QPainter* painter);
-
-		//virtual void fadeFrameColor(QColor from, QColor to, int duration);
-
+		
 	private:
 		enum state {offOut, offOver, press, onOut, onOver};
 		state m_state, prev_state;
-		
+
+				
 		QVariantAnimation fade_colorFrame;
 		
-		void frameFadeIn(int duration);
+		enum fade { out, in };
+		void fadeFrame(Button2::fade fade, int duration);
 	};
 
 
