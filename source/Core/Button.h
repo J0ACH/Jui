@@ -3,7 +3,7 @@
 
 #include "Canvas.h"
 #include <QPushButton>
-
+#include <QPropertyAnimation>
 
 namespace Jui
 {
@@ -30,7 +30,7 @@ namespace Jui
 		//virtual void changed();
 
 	protected:		
-		//void draw(QPainter &painter) override;		
+		
 
 	private:
 		void init();
@@ -46,27 +46,38 @@ namespace Jui
 
 	class Button2 : public QPushButton
 	{
+		Q_OBJECT
+		
 	public :
 		Button2(QWidget *parent = 0);
 
+		void colorFrame_(QColor normal, QColor over);
+		QColor colorFrame();
+		
 	protected:
-		void enterEvent(QEvent *event) override;
-		void leaveEvent(QEvent *event) override;
-		void mousePressEvent(QMouseEvent *event) override;
-		void mouseReleaseEvent(QMouseEvent *event) override;
+		void enterEvent(QEvent *e) override;
+		void leaveEvent(QEvent *e) override;
+		void mousePressEvent(QMouseEvent *e) override;
+		void mouseReleaseEvent(QMouseEvent *e) override;
 		void paintEvent(QPaintEvent *e) override;
-
+		
 		virtual void draw_OffOut(QPainter* painter);
 		virtual void draw_OffOver(QPainter* painter);
 		virtual void draw_Press(QPainter* painter);
 		virtual void draw_OnOut(QPainter* painter);
 		virtual void draw_OnOver(QPainter* painter);
 
+		//virtual void fadeFrameColor(QColor from, QColor to, int duration);
+
 	private:
 		enum state {offOut, offOver, press, onOut, onOver};
 		state m_state, prev_state;
 		
+		QVariantAnimation fade_colorFrame;
+		
+		void frameFadeIn(int duration);
 	};
+
 
 }
 
