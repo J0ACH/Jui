@@ -89,11 +89,9 @@ namespace Jui
 	// Button2 /////////////////////////////////
 
 	Button2::Button2(QWidget *parent) : QPushButton(parent) {
-		m_state = state::offOut;
-
 		this->colorFrame_(QColor(30, 30, 30), QColor(230, 30, 30));
-		this->colorBackground_(QColor(50, 20, 20), QColor(200, 30, 30));
-		
+		this->colorBackground_(QColor(0, 0, 0, 0), QColor(130, 30, 30));
+
 		connect(
 			&fade_colorFrame, SIGNAL(valueChanged(QVariant)),
 			this, SLOT(update())
@@ -117,39 +115,15 @@ namespace Jui
 
 	void Button2::enterEvent(QEvent *event)
 	{
-		switch (m_state)
-		{
-		case state::offOut:
-			m_state = state::offOver;
-			break;
-		case state::onOut:
-			m_state = state::onOver;
-			break;
-		}
-
-		this->fadeVariant(fade_colorFrame, fade::in, 500);
+		this->fadeVariant(fade_colorFrame, fade::in, 200);
 		update();
 	}
 	void Button2::leaveEvent(QEvent *event)
 	{
-		this->fadeVariant(fade_colorFrame, fade::out, 2000);
-
-		switch (m_state)
-		{
-		case state::offOver:
-			m_state = state::offOut;
-			break;
-		case state::onOver:
-			m_state = state::onOut;
-			break;
-		}
-
+		this->fadeVariant(fade_colorFrame, fade::out, 1000);
 		update();
 	}
 	void Button2::mousePressEvent(QMouseEvent *e) {
-		prev_state = m_state;
-		m_state = state::press;
-		
 		QPushButton::mousePressEvent(e);
 		if (!this->isChecked()) {
 			this->fadeVariant(fade_colorBackground, fade::in, 100);
@@ -157,21 +131,10 @@ namespace Jui
 		update();
 	}
 	void Button2::mouseReleaseEvent(QMouseEvent *e) {
-		switch (prev_state)
-		{
-		case state::offOver:
-			if (!isFlat()) { m_state = state::onOver; }
-			else { m_state = state::offOver; }
-			break;
-		case state::onOver:
-			m_state = state::offOver;
-			break;
-		}
 		QPushButton::mouseReleaseEvent(e);
-
 		if (!this->isChecked()) {
-			this->fadeVariant(fade_colorBackground, fade::out, 250);
-		}		
+			this->fadeVariant(fade_colorBackground, fade::out, 500);
+		}
 		update();
 	}
 
@@ -186,10 +149,7 @@ namespace Jui
 		painter.drawRect(frameRect);
 
 		painter.setPen(QColor(255, 255, 255));
-		painter.drawText(
-			0, 0, this->width(), this->height(), Qt::AlignCenter,
-			this->text()
-		);
+		painter.drawText(fillRect, Qt::AlignCenter, this->text());
 	}
 
 	void Button2::fadeVariant(QVariantAnimation &var, Button2::fade fade, int duration) {

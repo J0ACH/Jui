@@ -21,7 +21,7 @@ namespace Jui
 		int getState();
 		QString getStateName();
 
-		void setStateCounter(int cnt);		
+		void setStateCounter(int cnt);
 
 	signals:
 		void actPressed(Button*);
@@ -29,15 +29,15 @@ namespace Jui
 		public slots:
 		//virtual void changed();
 
-	protected:		
-		
+	protected:
+
 
 	private:
 		void init();
 
 		int intCounter, maxCounter;
 		QList<QString> stateNames;
-		
+
 		private slots:
 		void prOnPressed();
 
@@ -46,9 +46,8 @@ namespace Jui
 
 	class Button2 : public QPushButton
 	{
-		Q_OBJECT
-		
-	public :
+
+	public:
 		Button2(QWidget *parent = 0);
 
 		void colorFrame_(QColor normal, QColor over);
@@ -62,16 +61,11 @@ namespace Jui
 		void mousePressEvent(QMouseEvent *e) override;
 		void mouseReleaseEvent(QMouseEvent *e) override;
 		void paintEvent(QPaintEvent *e) override;
-	
-	private:
-		enum state {offOut, offOver, press, onOut, onOver};
-		state m_state, prev_state;
 
-				
-		QVariantAnimation fade_colorFrame, fade_colorBackground;
-		
+	private:
 		enum fade { out, in };
 		void fadeVariant(QVariantAnimation &var, Button2::fade fade, int duration);
+		QVariantAnimation fade_colorFrame, fade_colorBackground;
 	};
 
 
