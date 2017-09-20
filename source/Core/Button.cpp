@@ -40,10 +40,12 @@ namespace Jui
 	}
 
 	void Button::addState(QString name) {
+		/*
 		qDebug() << tr("Button::setStateName %2 [%1]").arg(
 			QString::number(stateNames.size()),
 			name
 		);
+		*/
 		stateNames.append(name);
 		maxCounter++;
 		this->update();
@@ -74,10 +76,12 @@ namespace Jui
 	void Button::prOnPressed() {
 		intCounter++;
 		if (intCounter > maxCounter) intCounter = 0;
+		/*
 		qDebug() << tr("Button::onPress %1 [%2]").arg(
 			QString::number(intCounter),
 			this->getStateName()
 		);
+		*/
 		emit actPressed(this);
 	}
 	Button::~Button()
@@ -126,7 +130,7 @@ namespace Jui
 	void Button2::mousePressEvent(QMouseEvent *e) {
 		QPushButton::mousePressEvent(e);
 		if (!this->isChecked()) {
-			this->fadeVariant(fade_colorBackground, fade::in, 100);
+			this->fadeVariant(fade_colorBackground, fade::in, 50);
 		}
 		update();
 	}
@@ -178,7 +182,7 @@ namespace Jui
 
 	}
 
-	
+
 
 }
 

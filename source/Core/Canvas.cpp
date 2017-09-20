@@ -162,7 +162,7 @@ namespace Jui
 	}
 
 	void Canvas::addLayer(Layer* layer) {
-		qDebug() << tr("Canvas::addLayer * (%1)").arg(layer->name());
+		//qDebug() << tr("Canvas::addLayer * (%1)").arg(layer->name());
 		layers.insert(layer->name(), layer);
 		order.append(layer);
 	}
