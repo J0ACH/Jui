@@ -105,13 +105,19 @@ namespace Jui
 	class Win : public QWidget
 	{
 	public:
-		Win(int x, int y, int w, int h);
+		Win(Win *parent = 0);
+		Win(Win *parent, int x, int y, int width, int height);
+		Win(int x, int y, int width, int height);		
+
+		void origin_(int x, int y);
+		QPoint origin();
 
 	protected:
+		void moveEvent(QMoveEvent *event) override;
 		void paintEvent(QPaintEvent *e) override;
 
 	private:
-		//Button2 *buttonClose;
+		void init(int x = 10, int y = 10, int width = 50, int height = 50);
 	};
 }
 

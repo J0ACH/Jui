@@ -6,9 +6,6 @@
 #include "Dummy.h"
 #include "Button.h"
 
-#include <QStateMachine>
-#include <QSignalTransition>
-#include <QPropertyAnimation>
 
 namespace Jui
 {

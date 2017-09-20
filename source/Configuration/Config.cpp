@@ -21,6 +21,19 @@ namespace Jui
 		}
 	};
 
+	class RedWin : public Win {
+	public:
+		void paintEvent(QPaintEvent *e) {
+			QPainter painter(this);
+			QRect frameRect = QRect(0, 0, width() - 1, height() - 1);
+			QRect fillRect = QRect(0, 0, width(), height());
+
+			painter.fillRect(fillRect, QColor(220, 20, 20));
+			painter.setPen(QColor(50, 50, 50));
+			painter.drawRect(frameRect);
+		}
+	};
+
 	Config::Config(int x, int y, int width, int height) : Canvas(x, y, width, height)
 	{
 		this->setName("Configuration");
@@ -57,14 +70,27 @@ namespace Jui
 		B1->setText("B1");
 		B1->show();
 
+		//QPushButton* B2 = new QPushButton(this);
 		Button2* B2 = new Button2(this);
 		B2->setGeometry(175, 50, 50, 30);
 		B2->setText("B2");
 		B2->setCheckable(true);
 		B2->show();
+		B2->setFont(QFont("Consolas", 8));
+		//B2->setIcon(QIcon(":/close16.png"));
 
-		Win* w = new Win(50, 50, 300, 300);
-		w->show();
+		QPixmap pixmap(":/close16.png");
+		QIcon ButtonIcon(pixmap);
+		B2->setIcon(ButtonIcon);
+		B2->setIconSize(pixmap.rect().size());
+
+
+		//QImage(":/close16.png")
+
+		Win* w = new Win(250, 250, 300, 300);
+		Win* w2 = new Win(w);
+		//RedWin* w3 = new RedWin();
+
 		
 	}
 

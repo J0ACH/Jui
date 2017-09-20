@@ -201,7 +201,7 @@ namespace Jui
 			painter.setOpacity(oneLayer->alpha());
 			oneLayer->draw(&painter, this->rect());
 		};
-		
+
 	}
 
 	void Canvas::changed() { }
@@ -218,10 +218,16 @@ namespace Jui
 
 	// Win /////////////////////////////////
 
-	Win::Win(int x, int y, int w, int h) : QWidget(0) {
-		setGeometry(x, y, w, h);
+	Win::Win(Win *parent) : QWidget(parent) { Win::init(); }
+	Win::Win(Win *parent, int x, int y, int w, int h) : QWidget(parent) { Win::init(x, y, w, h); }
+	Win::Win(int x, int y, int w, int h) : QWidget(0) {	Win::init(x, y, w, h); }
+
+	void Win::init(int x, int y, int w, int h) {
 		setWindowFlags(Qt::FramelessWindowHint);
-		setAttribute(Qt::WA_TranslucentBackground);		
+		//setAttribute(Qt::WA_TranslucentBackground);		
+
+		setGeometry(x, y, w, h);
+		show();
 	}
 
 	void Win::paintEvent(QPaintEvent *e) {
@@ -229,13 +235,47 @@ namespace Jui
 		QRect frameRect = QRect(0, 0, width() - 1, height() - 1);
 		QRect fillRect = QRect(0, 0, width(), height());
 
-		painter.fillRect(fillRect, QColor(20, 20, 20, 1));
+		//painter.fillRect(fillRect, QColor(20, 20, 20, 1));
 
+		painter.fillRect(fillRect, QColor(20, 20, 20));
 		painter.setPen(QColor(50, 50, 50));
 		painter.drawRect(frameRect);
+
+
+		/*
+
+		QImage icon(":/close16.png");
+		float moveX = (this->width() - icon.width()) / 2;
+		float moveY = (this->height() - icon.height()) / 2;
+
+		QRectF target(moveX, moveY, icon.width(), icon.height());
+		//QRectF target(0, 0, icon.width(), icon.height());
+		QRectF source(0, 0, icon.width(), icon.height());
+
+		QImage renderedIcon(icon);
+		renderedIcon.fill(QColor(230,30,30));
+		renderedIcon.setAlphaChannel(icon);
+		painter.drawImage(target, renderedIcon, source);
+
+		painter.drawImage(QRect(0, 0, 16, 16), QImage(":/close16.png"));
+		*/
 
 		//painter.setPen(QColor(255, 255, 255));
 		//painter.drawText(fillRect, Qt::AlignCenter, this->text());
 	}
 
+	void Win::origin_(int x, int y) { this->move(x, y); }
+	QPoint Win::origin() {
+		if (this->isWindow()) { return this->mapToGlobal(QPoint(0, 0)); }
+		else { return this->mapToParent(QPoint(0, 0)); }
+	}
+
+	void Win::moveEvent(QMoveEvent *e) {
+		qDebug() << tr("move to origin [%1, %2]").arg(
+			QString::number(origin().x()),
+			QString::number(origin().y())
+		);
+	}
+
+	
 }
