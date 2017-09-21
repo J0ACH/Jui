@@ -2,6 +2,47 @@
 
 namespace Jui
 {
+
+	// Header2 /////////////////////////////////////////////////////
+
+
+	Header2::Header2(QWidget *parent) : Button(parent) {
+		colorBackground_(QColor(60, 20, 20), QColor(120, 20, 20));
+		thickness = 30;
+		fitGeometry();
+	}
+	void Header2::fitGeometry() {
+		setGeometry(1, 1, parentWidget()->width() - 2, thickness);
+	}
+	void Header2::mousePressEvent(QMouseEvent *e)
+	{
+		Button::mousePressEvent(e);
+		mousePressedGlobalCoor = e->globalPos();
+
+		if (this->parentWidget()->isWindow()) { 
+			mousePressedOriginCoor = this->parentWidget()->mapToGlobal(QPoint(0, 0));
+		}
+		else { 
+			mousePressedOriginCoor = this->parentWidget()->mapToParent(QPoint(0, 0));
+		}
+	}
+	void Header2::mouseMoveEvent(QMouseEvent *e)
+	{
+		QPoint deltaPt(
+			e->globalPos().x() - mousePressedGlobalCoor.x(),
+			e->globalPos().y() - mousePressedGlobalCoor.y()
+		);
+		QPoint newOrigin(
+			mousePressedOriginCoor.x() + deltaPt.x(),
+			mousePressedOriginCoor.y() + deltaPt.y()
+		);
+		this->parentWidget()->move(newOrigin);
+	}
+	void Header2::paintEvent(QPaintEvent *event) {
+		QPainter painter(this);
+		painter.fillRect(rect(), colorBackground());
+	}
+
 	// Header /////////////////////////////////////////////////////
 
 	Header::Header(Canvas *parent) :

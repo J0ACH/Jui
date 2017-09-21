@@ -104,19 +104,16 @@ namespace Jui
 	class Canvas2 : public QWidget
 	{
 	public:
-		//enum fade { out, in };
-
-		Canvas2(Canvas2 *parent = 0);
-		Canvas2(Canvas2 *parent, int x, int y, int width, int height);
+		Canvas2(QWidget *parent = 0);
+		Canvas2(QWidget *parent, int x, int y, int width, int height);
 		Canvas2(int x, int y, int width, int height);
 
 		void origin_(int x, int y);
 		QPoint origin();
 
 	protected:
-		void moveEvent(QMoveEvent *event) override;
 		void paintEvent(QPaintEvent *e) override;
-		
+				
 	private:
 		void init(int x = 10, int y = 10, int width = 50, int height = 50);
 	};

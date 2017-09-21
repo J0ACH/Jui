@@ -218,8 +218,8 @@ namespace Jui
 
 	// Win /////////////////////////////////
 
-	Canvas2::Canvas2(Canvas2 *parent) : QWidget(parent) { Canvas2::init(); }
-	Canvas2::Canvas2(Canvas2 *parent, int x, int y, int w, int h) : QWidget(parent) { Canvas2::init(x, y, w, h); }
+	Canvas2::Canvas2(QWidget *parent) : QWidget(parent) { Canvas2::init(); }
+	Canvas2::Canvas2(QWidget *parent, int x, int y, int w, int h) : QWidget(parent) { Canvas2::init(x, y, w, h); }
 	Canvas2::Canvas2(int x, int y, int w, int h) : QWidget(0) { Canvas2::init(x, y, w, h); }
 
 	void Canvas2::init(int x, int y, int w, int h) {
@@ -245,13 +245,4 @@ namespace Jui
 		painter.setPen(QColor(50, 50, 50));
 		painter.drawRect(frameRect);
 	}
-	
-	void Canvas2::moveEvent(QMoveEvent *e) {
-		qDebug() << tr("move to origin [%1, %2]").arg(
-			QString::number(origin().x()),
-			QString::number(origin().y())
-		);
-	}
-
-
 }

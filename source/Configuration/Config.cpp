@@ -23,9 +23,13 @@ namespace Jui
 
 	Config::Config(int x, int y, int width, int height) : Canvas2(x, y, width, height)
 	{
+		Header2 *configHeader = new Header2(this);
+
 		Button *b1 = new Button(this);
 		b1->setGeometry(50, 50, 50, 30);
 		b1->show();
+
+
 		/*
 		//this->setName("Configuration");
 		//this->setBackgroundColor(20, 20, 20);

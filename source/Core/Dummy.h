@@ -6,6 +6,23 @@
 
 namespace Jui
 {
+	// Header2 /////////////////////////////////////////////////////
+
+	class Header2 : public Button
+	{
+	public:
+		Header2(QWidget *parent);
+	protected:
+		void mousePressEvent(QMouseEvent *e) override;
+		void mouseMoveEvent(QMouseEvent *e) override;
+		void paintEvent(QPaintEvent *e) override;
+	private:
+		void fitGeometry();
+		int thickness;
+		QPoint mousePressedGlobalCoor, mousePressedOriginCoor;
+		
+	};
+
 	// Header /////////////////////////////////////////////////////
 
 	class Header : public Canvas
