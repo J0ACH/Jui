@@ -235,33 +235,9 @@ namespace Jui
 		QRect frameRect = QRect(0, 0, width() - 1, height() - 1);
 		QRect fillRect = QRect(0, 0, width(), height());
 
-		//painter.fillRect(fillRect, QColor(20, 20, 20, 1));
-
 		painter.fillRect(fillRect, QColor(20, 20, 20));
 		painter.setPen(QColor(50, 50, 50));
 		painter.drawRect(frameRect);
-
-
-		/*
-
-		QImage icon(":/close16.png");
-		float moveX = (this->width() - icon.width()) / 2;
-		float moveY = (this->height() - icon.height()) / 2;
-
-		QRectF target(moveX, moveY, icon.width(), icon.height());
-		//QRectF target(0, 0, icon.width(), icon.height());
-		QRectF source(0, 0, icon.width(), icon.height());
-
-		QImage renderedIcon(icon);
-		renderedIcon.fill(QColor(230,30,30));
-		renderedIcon.setAlphaChannel(icon);
-		painter.drawImage(target, renderedIcon, source);
-
-		painter.drawImage(QRect(0, 0, 16, 16), QImage(":/close16.png"));
-		*/
-
-		//painter.setPen(QColor(255, 255, 255));
-		//painter.drawText(fillRect, Qt::AlignCenter, this->text());
 	}
 
 	void Canvas2::origin_(int x, int y) { this->move(x, y); }
@@ -277,5 +253,5 @@ namespace Jui
 		);
 	}
 
-	
+
 }
