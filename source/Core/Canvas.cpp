@@ -246,6 +246,32 @@ namespace Jui
 		else { return this->mapToParent(QPoint(0, 0)); }
 	}
 
+	void Canvas2::fadeVariant(QVariantAnimation &variable, Canvas2::fade fade, int duration) {
+
+		if (variable.state() == QAbstractAnimation::State::Running) { variable.pause(); }
+		variable.setDuration(duration);
+		switch (fade)
+		{
+		case Canvas2::fade::in:
+			variable.setDirection(QVariantAnimation::Direction::Forward);
+			break;
+		case Canvas2::fade::out:
+			variable.setDirection(QVariantAnimation::Direction::Backward);
+			break;
+		}
+
+		switch (variable.state())
+		{
+		case QAbstractAnimation::State::Paused:
+			variable.resume();
+			break;
+		default:
+			variable.start();
+			break;
+		}
+
+	}
+
 	void Canvas2::moveEvent(QMoveEvent *e) {
 		qDebug() << tr("move to origin [%1, %2]").arg(
 			QString::number(origin().x()),

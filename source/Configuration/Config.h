@@ -9,16 +9,10 @@
 
 namespace Jui
 {
-	class Config : public Canvas
-	{
-		
+	class Config : public Canvas2
+	{		
 	public:
-		Config(int x, int y, int width, int height);
-		~Config();
-
-	public slots:
-		void onPrint();
-			
+		Config(int x, int y, int width, int height);	
 	};
 }
 

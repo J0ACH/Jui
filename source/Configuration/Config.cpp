@@ -21,10 +21,11 @@ namespace Jui
 		}
 	};
 
-	Config::Config(int x, int y, int width, int height) : Canvas(x, y, width, height)
+	Config::Config(int x, int y, int width, int height) : Canvas2(x, y, width, height)
 	{
-		this->setName("Configuration");
-		this->setBackgroundColor(20, 20, 20);
+		/*
+		//this->setName("Configuration");
+		//this->setBackgroundColor(20, 20, 20);
 		//this->setBackgroundAlpha(0);
 
 		HeaderWindow *headerWindow = new HeaderWindow(this);
@@ -77,19 +78,10 @@ namespace Jui
 		Canvas2* w = new Canvas2(250, 250, 300, 300);
 		Canvas2* w2 = new Canvas2(w);
 		//RedWin* w3 = new RedWin();
+		*/
 
 		
 	}
 
-
-	void Config::onPrint()
-	{
-		qDebug("Config onPrint");
-	}
-
-	Config::~Config()
-	{
-		qDebug("Config closed");
-	}
 }
 
