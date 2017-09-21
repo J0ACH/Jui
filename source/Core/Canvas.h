@@ -2,11 +2,8 @@
 #define CANVAS_H
 
 #include <QWidget>
-#include <QDebug>
-#include <QPainter>
-#include <QMouseEvent>
-#include <QVariantAnimation>
 #include "Draw.h"
+#include "Core.h"
 
 namespace Jui
 {
@@ -102,13 +99,12 @@ namespace Jui
 		QList<Layer*> order;
 	};
 
-	enum fade { out, in };
-	void fadeVariant(QVariantAnimation &variable, Jui::fade fade, int duration);
+	
 
 	class Canvas2 : public QWidget
 	{
 	public:
-		enum fade { out, in };
+		//enum fade { out, in };
 
 		Canvas2(Canvas2 *parent = 0);
 		Canvas2(Canvas2 *parent, int x, int y, int width, int height);
@@ -121,8 +117,6 @@ namespace Jui
 		void moveEvent(QMoveEvent *event) override;
 		void paintEvent(QPaintEvent *e) override;
 		
-		void fadeVariant(QVariantAnimation &variable, Canvas2::fade fade, int duration);
-
 	private:
 		void init(int x = 10, int y = 10, int width = 50, int height = 50);
 	};

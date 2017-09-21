@@ -110,9 +110,9 @@ namespace Jui
 	{
 		this->setBackgroundColor(100, 30, 30);
 
-		buttonClose->setName("X");
-		buttonClose->setBackgroundVisible(false);
-		buttonClose->setSize(QSize(30, 30));
+		//buttonClose->setName("X");
+		//buttonClose->setBackgroundVisible(false);
+		//buttonClose->setSize(QSize(30, 30));
 
 		connect(
 			buttonClose, SIGNAL(actPressed(Button*)),
@@ -137,9 +137,9 @@ namespace Jui
 
 	HeaderWindow::HeaderWindow(Canvas *parent) :
 		Header(parent),
-		buttonClose(new Button2(this)),
-		buttonMaximize(new Button2(this)),
-		buttonMinimize(new Button2(this))
+		buttonClose(new Button(this)),
+		buttonMaximize(new Button(this)),
+		buttonMinimize(new Button(this))
 
 	{
 		this->setBackgroundColor(30, 30, 30);

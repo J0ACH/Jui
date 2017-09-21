@@ -218,39 +218,6 @@ namespace Jui
 
 	// Win /////////////////////////////////
 
-	void fadeVariant(QVariantAnimation &variable, Jui::fade fade, int duration) {
-		/*
-		connect(
-			&variable, SIGNAL(valueChanged(QVariant)),
-			this, SLOT(update())
-		);
-		*/
-
-		if (variable.state() == QAbstractAnimation::State::Running) { variable.pause(); }
-		variable.setDuration(duration);
-		switch (fade)
-		{
-		case Canvas2::fade::in:
-			variable.setDirection(QVariantAnimation::Direction::Forward);
-			break;
-		case Canvas2::fade::out:
-			variable.setDirection(QVariantAnimation::Direction::Backward);
-			break;
-		}
-
-		switch (variable.state())
-		{
-		case QAbstractAnimation::State::Paused:
-			variable.resume();
-			break;
-		default:
-			variable.start();
-			break;
-		}
-
-	}
-
-
 	Canvas2::Canvas2(Canvas2 *parent) : QWidget(parent) { Canvas2::init(); }
 	Canvas2::Canvas2(Canvas2 *parent, int x, int y, int w, int h) : QWidget(parent) { Canvas2::init(x, y, w, h); }
 	Canvas2::Canvas2(int x, int y, int w, int h) : QWidget(0) { Canvas2::init(x, y, w, h); }
@@ -262,38 +229,6 @@ namespace Jui
 		setGeometry(x, y, w, h);
 		show();
 	}
-
-	void Canvas2::fadeVariant(QVariantAnimation &variable, Canvas2::fade fade, int duration) {
-
-		connect(
-			&variable, SIGNAL(valueChanged(QVariant)),
-			this, SLOT(update())
-		);
-
-		if (variable.state() == QAbstractAnimation::State::Running) { variable.pause(); }
-		variable.setDuration(duration);
-		switch (fade)
-		{
-		case Canvas2::fade::in:
-			variable.setDirection(QVariantAnimation::Direction::Forward);
-			break;
-		case Canvas2::fade::out:
-			variable.setDirection(QVariantAnimation::Direction::Backward);
-			break;
-		}
-
-		switch (variable.state())
-		{
-		case QAbstractAnimation::State::Paused:
-			variable.resume();
-			break;
-		default:
-			variable.start();
-			break;
-		}
-
-	}
-	
 
 	void Canvas2::origin_(int x, int y) { this->move(x, y); }
 	QPoint Canvas2::origin() {
