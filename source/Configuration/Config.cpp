@@ -21,19 +21,6 @@ namespace Jui
 		}
 	};
 
-	class RedWin : public Win {
-	public:
-		void paintEvent(QPaintEvent *e) {
-			QPainter painter(this);
-			QRect frameRect = QRect(0, 0, width() - 1, height() - 1);
-			QRect fillRect = QRect(0, 0, width(), height());
-
-			painter.fillRect(fillRect, QColor(220, 20, 20));
-			painter.setPen(QColor(50, 50, 50));
-			painter.drawRect(frameRect);
-		}
-	};
-
 	Config::Config(int x, int y, int width, int height) : Canvas(x, y, width, height)
 	{
 		this->setName("Configuration");
@@ -87,8 +74,8 @@ namespace Jui
 
 		//QImage(":/close16.png")
 
-		Win* w = new Win(250, 250, 300, 300);
-		Win* w2 = new Win(w);
+		Canvas2* w = new Canvas2(250, 250, 300, 300);
+		Canvas2* w2 = new Canvas2(w);
 		//RedWin* w3 = new RedWin();
 
 		

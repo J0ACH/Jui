@@ -5,8 +5,8 @@
 #include <QDebug>
 #include <QPainter>
 #include <QMouseEvent>
+#include <QVariantAnimation>
 #include "Draw.h"
-//#include "Button.h"
 
 namespace Jui
 {
@@ -102,12 +102,12 @@ namespace Jui
 		QList<Layer*> order;
 	};
 
-	class Win : public QWidget
+	class Canvas2 : public QWidget
 	{
 	public:
-		Win(Win *parent = 0);
-		Win(Win *parent, int x, int y, int width, int height);
-		Win(int x, int y, int width, int height);		
+		Canvas2(Canvas2 *parent = 0);
+		Canvas2(Canvas2 *parent, int x, int y, int width, int height);
+		Canvas2(int x, int y, int width, int height);
 
 		void origin_(int x, int y);
 		QPoint origin();

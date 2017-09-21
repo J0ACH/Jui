@@ -3,7 +3,7 @@
 
 #include "Canvas.h"
 #include <QPushButton>
-#include <QPropertyAnimation>
+#include <QVariantAnimation>
 
 namespace Jui
 {

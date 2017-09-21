@@ -218,11 +218,11 @@ namespace Jui
 
 	// Win /////////////////////////////////
 
-	Win::Win(Win *parent) : QWidget(parent) { Win::init(); }
-	Win::Win(Win *parent, int x, int y, int w, int h) : QWidget(parent) { Win::init(x, y, w, h); }
-	Win::Win(int x, int y, int w, int h) : QWidget(0) {	Win::init(x, y, w, h); }
+	Canvas2::Canvas2(Canvas2 *parent) : QWidget(parent) { Canvas2::init(); }
+	Canvas2::Canvas2(Canvas2 *parent, int x, int y, int w, int h) : QWidget(parent) { Canvas2::init(x, y, w, h); }
+	Canvas2::Canvas2(int x, int y, int w, int h) : QWidget(0) { Canvas2::init(x, y, w, h); }
 
-	void Win::init(int x, int y, int w, int h) {
+	void Canvas2::init(int x, int y, int w, int h) {
 		setWindowFlags(Qt::FramelessWindowHint);
 		//setAttribute(Qt::WA_TranslucentBackground);		
 
@@ -230,7 +230,7 @@ namespace Jui
 		show();
 	}
 
-	void Win::paintEvent(QPaintEvent *e) {
+	void Canvas2::paintEvent(QPaintEvent *e) {
 		QPainter painter(this);
 		QRect frameRect = QRect(0, 0, width() - 1, height() - 1);
 		QRect fillRect = QRect(0, 0, width(), height());
@@ -264,13 +264,13 @@ namespace Jui
 		//painter.drawText(fillRect, Qt::AlignCenter, this->text());
 	}
 
-	void Win::origin_(int x, int y) { this->move(x, y); }
-	QPoint Win::origin() {
+	void Canvas2::origin_(int x, int y) { this->move(x, y); }
+	QPoint Canvas2::origin() {
 		if (this->isWindow()) { return this->mapToGlobal(QPoint(0, 0)); }
 		else { return this->mapToParent(QPoint(0, 0)); }
 	}
 
-	void Win::moveEvent(QMoveEvent *e) {
+	void Canvas2::moveEvent(QMoveEvent *e) {
 		qDebug() << tr("move to origin [%1, %2]").arg(
 			QString::number(origin().x()),
 			QString::number(origin().y())
