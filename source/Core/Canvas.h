@@ -102,6 +102,9 @@ namespace Jui
 		QList<Layer*> order;
 	};
 
+	enum fade { out, in };
+	void fadeVariant(QVariantAnimation &variable, Jui::fade fade, int duration);
+
 	class Canvas2 : public QWidget
 	{
 	public:

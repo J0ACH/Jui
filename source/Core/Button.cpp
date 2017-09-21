@@ -93,7 +93,7 @@ namespace Jui
 	// Button2 /////////////////////////////////
 
 	Button2::Button2(QWidget *parent) : QPushButton(parent) {
-		this->colorFrame_(QColor(0, 0, 0, 0), QColor(50, 50, 50));
+		this->colorFrame_(QColor(0, 0, 0), QColor(50, 50, 50));
 		this->colorBackground_(QColor(0, 0, 0, 0), QColor(130, 30, 30));
 
 		connect(
@@ -105,6 +105,7 @@ namespace Jui
 			this, SLOT(update())
 		);
 	}
+	
 
 	void Button2::colorFrame_(QColor normal, QColor over) {
 		fade_colorFrame.setStartValue(normal);
@@ -119,27 +120,31 @@ namespace Jui
 
 	void Button2::enterEvent(QEvent *event)
 	{
-		this->fadeVariant(fade_colorFrame, fade::in, 200);
-		update();
+		Jui::fadeVariant(fade_colorFrame, Jui::fade::in, 200);
+		//this->fadeVariant(fade_colorFrame, fade::in, 200);
+		//update();
 	}
 	void Button2::leaveEvent(QEvent *event)
 	{
-		this->fadeVariant(fade_colorFrame, fade::out, 1000);
-		update();
+		Jui::fadeVariant(fade_colorFrame, fade::out, 1000);
+		//this->fadeVariant(fade_colorFrame, fade::out, 1000);
+		//update();
 	}
 	void Button2::mousePressEvent(QMouseEvent *e) {
 		QPushButton::mousePressEvent(e);
 		if (!this->isChecked()) {
-			this->fadeVariant(fade_colorBackground, fade::in, 50);
+			Jui::fadeVariant(fade_colorBackground, fade::in, 50);
+			//this->fadeVariant(fade_colorBackground, fade::in, 50);
 		}
-		update();
+		//update();
 	}
 	void Button2::mouseReleaseEvent(QMouseEvent *e) {
 		QPushButton::mouseReleaseEvent(e);
 		if (!this->isChecked()) {
-			this->fadeVariant(fade_colorBackground, fade::out, 500);
+			Jui::fadeVariant(fade_colorBackground, fade::out, 500);
+			//this->fadeVariant(fade_colorBackground, fade::out, 500);
 		}
-		update();
+		//update();
 	}
 
 	void Button2::paintEvent(QPaintEvent *e) {
@@ -155,7 +160,7 @@ namespace Jui
 		painter.setPen(QColor(255, 255, 255));
 		painter.drawText(fillRect, Qt::AlignCenter, this->text());
 	}
-
+/*
 	void Button2::fadeVariant(QVariantAnimation &var, Button2::fade fade, int duration) {
 
 		if (var.state() == QAbstractAnimation::State::Running) { var.pause(); }
@@ -181,8 +186,72 @@ namespace Jui
 		}
 
 	}
+*/
 
+	// Button3 /////////////////////////////////
 
+	Button3::Button3(Canvas2 *parent, int x, int y, int w, int h) :
+		Canvas2(parent, x, y, w, h),
+		m_button(new QPushButton(this))
+	{
+		this->colorFrame_(QColor(0, 0, 0), QColor(50, 50, 50));
+		this->colorBackground_(QColor(0, 0, 0), QColor(130, 30, 30));
+		//m_button->show();
+	}
+
+	void Button3::colorFrame_(QColor normal, QColor over) {
+		fade_colorFrame.setStartValue(normal);
+		fade_colorFrame.setEndValue(over);
+	}
+	void Button3::colorBackground_(QColor off, QColor on) {
+		fade_colorBackground.setStartValue(off);
+		fade_colorBackground.setEndValue(on);
+	}
+	QColor Button3::colorFrame() { return fade_colorFrame.currentValue().value<QColor>(); }
+	QColor Button3::colorBackground() { return fade_colorBackground.currentValue().value<QColor>(); }
+
+	void Button3::enterEvent(QEvent *event)
+	{
+		this->fadeVariant(fade_colorFrame, fade::in, 200);
+	}
+	void Button3::leaveEvent(QEvent *event)
+	{
+		this->fadeVariant(fade_colorFrame, fade::out, 1000);
+	}
+	void Button3::mousePressEvent(QMouseEvent *e) {
+		/*
+		QPushButton::mousePressEvent(e);
+		if (!this->isChecked()) {
+			this->fadeVariant(fade_colorBackground, fade::in, 50);
+		}
+		*/
+		//update();
+	}
+	void Button3::mouseReleaseEvent(QMouseEvent *e) {
+		/*
+		QPushButton::mouseReleaseEvent(e);
+		if (!this->isChecked()) {
+			this->fadeVariant(fade_colorBackground, fade::out, 500);
+		}
+		*/
+		//update();
+	}
+
+	void Button3::paintEvent(QPaintEvent *e) {
+		QPainter painter(this);
+		QRect frameRect = QRect(0, 0, width() - 1, height() - 1);
+		QRect fillRect = QRect(0, 0, width(), height());
+
+		painter.fillRect(QRect(5, height() - 3, width() - 10, 1), this->colorBackground());
+
+		painter.setPen(this->colorFrame());
+		painter.drawRect(frameRect);
+
+		/*
+			painter.setPen(QColor(255, 255, 255));
+			painter.drawText(fillRect, Qt::AlignCenter, this->text());
+		*/
+	}
 
 }
 
