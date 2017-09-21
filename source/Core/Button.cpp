@@ -1,8 +1,7 @@
 #include "Button.h"
 
 namespace Jui
-{
-	
+{	
 	Button::Button(QWidget *parent) : QPushButton(parent) {
 		colorFrame_(QColor(0, 0, 0), QColor(50, 50, 50));
 		colorBackground_(QColor(0, 0, 0, 0), QColor(130, 30, 30));
@@ -63,5 +62,9 @@ namespace Jui
 		painter.setPen(QColor(255, 255, 255));
 		painter.drawText(fillRect, Qt::AlignCenter, this->text());
 	}	
+
+	Text::Text(QWidget *parent) : QLabel(parent) {		
+		show();
+	}
 }
 

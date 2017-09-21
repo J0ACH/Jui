@@ -15,14 +15,16 @@ namespace Jui
 	protected:
 		void mousePressEvent(QMouseEvent *e) override;
 		void mouseMoveEvent(QMouseEvent *e) override;
+		bool eventFilter(QObject *object, QEvent *e) override;		
 		void paintEvent(QPaintEvent *e) override;
 	private:
-		void fitGeometry();
+		void fitSize();
 		int thickness;
 		QPoint mousePressedGlobalCoor, mousePressedOriginCoor;
 		
 	};
 
+	
 	// Header /////////////////////////////////////////////////////
 
 	class Header : public Canvas

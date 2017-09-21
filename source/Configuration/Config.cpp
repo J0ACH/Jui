@@ -25,9 +25,16 @@ namespace Jui
 	{
 		Header2 *configHeader = new Header2(this);
 
-		Button *b1 = new Button(this);
-		b1->setGeometry(50, 50, 50, 30);
+		Canvas2 *test = new Canvas2(this, 50, 50, 100, 100);
+		Header2 *testHeader = new Header2(test);
+		
+		Button *b1 = new Button(test);
+		b1->setGeometry(40, 40, 50, 30);
 		b1->show();
+		
+		Text *t1 = new Text(test);
+		t1->setGeometry(40, 80, 50, 20);
+		t1->setText("ahoj");
 
 
 		/*

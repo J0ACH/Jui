@@ -3,6 +3,7 @@
 
 #include "Core.h"
 #include <QPushButton>
+#include <QLabel>
 
 namespace Jui
 {
@@ -11,7 +12,7 @@ namespace Jui
 
 	public:
 		Button(QWidget *parent = 0);
-		
+
 		void colorFrame_(QColor normal, QColor over);
 		void colorBackground_(QColor off, QColor on);
 		QColor colorFrame();
@@ -27,7 +28,12 @@ namespace Jui
 	private:
 		QVariantAnimation fade_colorFrame, fade_colorBackground;
 	};
-		
+
+	class Text : public QLabel {
+	public:
+		Text(QWidget *parent = 0);
+	};
+
 }
 
 #endif // BUTTON_H

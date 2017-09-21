@@ -5,24 +5,37 @@ namespace Jui
 
 	// Header2 /////////////////////////////////////////////////////
 
-
 	Header2::Header2(QWidget *parent) : Button(parent) {
 		colorBackground_(QColor(60, 20, 20), QColor(120, 20, 20));
 		thickness = 30;
-		fitGeometry();
+		move(1, 1);
+		fitSize();
+		parent->installEventFilter(this);
 	}
-	void Header2::fitGeometry() {
-		setGeometry(1, 1, parentWidget()->width() - 2, thickness);
+	void Header2::fitSize() { 
+		setFixedSize(parentWidget()->size().width() - 2, thickness); 
 	}
+	bool Header2::eventFilter(QObject *object, QEvent *e) {
+		QWidget *parent = static_cast<QWidget *>(object);
+		switch (e->type())
+		{
+		case QEvent::Type::Resize:
+			fitSize();
+			return true;
+		default:
+			return false;
+		}
+	}
+
 	void Header2::mousePressEvent(QMouseEvent *e)
 	{
 		Button::mousePressEvent(e);
 		mousePressedGlobalCoor = e->globalPos();
 
-		if (this->parentWidget()->isWindow()) { 
+		if (this->parentWidget()->isWindow()) {
 			mousePressedOriginCoor = this->parentWidget()->mapToGlobal(QPoint(0, 0));
 		}
-		else { 
+		else {
 			mousePressedOriginCoor = this->parentWidget()->mapToParent(QPoint(0, 0));
 		}
 	}
