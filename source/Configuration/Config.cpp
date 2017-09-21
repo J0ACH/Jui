@@ -21,7 +21,7 @@ namespace Jui
 		}
 	};
 
-	class RedWin : public Win {
+	class RedWin : public Canvas2 {
 	public:
 		void paintEvent(QPaintEvent *e) {
 			QPainter painter(this);
@@ -87,8 +87,8 @@ namespace Jui
 
 		//QImage(":/close16.png")
 
-		Win* w = new Win(250, 250, 300, 300);
-		Win* w2 = new Win(w);
+		Canvas2* w = new Canvas2(250, 250, 300, 300);
+		Canvas2* w2 = new Canvas2(w);
 		//RedWin* w3 = new RedWin();
 
 		
