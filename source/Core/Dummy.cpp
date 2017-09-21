@@ -3,20 +3,19 @@
 namespace Jui
 {
 
-	// Header2 /////////////////////////////////////////////////////
+	// Header /////////////////////////////////////////////////////
 
-	Header2::Header2(QWidget *parent) : Button(parent) {
+	Header::Header(QWidget *parent) : Button(parent),
+		m_parent(parent)
+	{
 		colorBackground_(QColor(60, 20, 20), QColor(120, 20, 20));
 		thickness = 30;
 		move(1, 1);
 		fitSize();
-		parent->installEventFilter(this);
+		m_parent->installEventFilter(this);
 	}
-	void Header2::fitSize() { 
-		setFixedSize(parentWidget()->size().width() - 2, thickness); 
-	}
-	bool Header2::eventFilter(QObject *object, QEvent *e) {
-		QWidget *parent = static_cast<QWidget *>(object);
+	void Header::fitSize() { setFixedSize(m_parent->size().width() - 2, thickness); }
+	bool Header::eventFilter(QObject *object, QEvent *e) {
 		switch (e->type())
 		{
 		case QEvent::Type::Resize:
@@ -24,10 +23,9 @@ namespace Jui
 			return true;
 		default:
 			return false;
-		}
+		};
 	}
-
-	void Header2::mousePressEvent(QMouseEvent *e)
+	void Header::mousePressEvent(QMouseEvent *e)
 	{
 		Button::mousePressEvent(e);
 		mousePressedGlobalCoor = e->globalPos();
@@ -39,7 +37,7 @@ namespace Jui
 			mousePressedOriginCoor = this->parentWidget()->mapToParent(QPoint(0, 0));
 		}
 	}
-	void Header2::mouseMoveEvent(QMouseEvent *e)
+	void Header::mouseMoveEvent(QMouseEvent *e)
 	{
 		QPoint deltaPt(
 			e->globalPos().x() - mousePressedGlobalCoor.x(),
@@ -51,195 +49,11 @@ namespace Jui
 		);
 		this->parentWidget()->move(newOrigin);
 	}
-	void Header2::paintEvent(QPaintEvent *event) {
+	void Header::paintEvent(QPaintEvent *event) {
 		QPainter painter(this);
 		painter.fillRect(rect(), colorBackground());
 	}
 
-	// Header /////////////////////////////////////////////////////
-
-	Header::Header(Canvas *parent) :
-		Canvas(parent),
-		thickness(40)
-	{
-		this->setBackgroundColor(50, 30, 30);
-		this->setFrameVisible(false);
-		this->move(1, 1);
-
-		connect(
-			this, SIGNAL(actMousePressed(Canvas*, QPoint)),
-			this, SLOT(onMousePress(Canvas*, QPoint))
-		);
-		connect(
-			this, SIGNAL(actMouseMoved(Canvas*, QPoint)),
-			this, SLOT(onMouseMoved(Canvas*, QPoint))
-		);
-		connect(
-			this, SIGNAL(actHeaderMoved(QPoint)),
-			parent, SLOT(setOrigin(QPoint))
-		);
-		connect(
-			parent, SIGNAL(actResized(Canvas*, QSize)),
-			this, SLOT(onParentResize(Canvas*, QSize))
-		);
-
-		this->onParentResize(parent, parent->size());
-	}
-
-	void Header::onMousePress(Canvas* from, QPoint gpt)
-	{
-		mousePressedGlobalCoor = gpt;
-		mousePressedOriginCoor = this->getParent()->getOrigin();
-		this->getParent()->setFocus(Qt::MouseFocusReason);
-		/*
-		qDebug() << tr("Header2 onMousePress: parentOriginCoor [%1, %2]").arg(
-			QString::number(mousePressedOriginCoor.x()),
-			QString::number(mousePressedOriginCoor.y())
-		);
-		*/
-	}
-	void Header::onMouseMoved(Canvas* from, QPoint gpt)
-	{
-		QPoint deltaPt(
-			gpt.x() - mousePressedGlobalCoor.x(),
-			gpt.y() - mousePressedGlobalCoor.y()
-		);
-		QPoint newOrigin(
-			mousePressedOriginCoor.x() + deltaPt.x(),
-			mousePressedOriginCoor.y() + deltaPt.y()
-		);
-		emit actHeaderMoved(newOrigin);
-
-		/*
-		qDebug() << tr("Header2 onMouseMoved: deltaPt [%1, %2]").arg(
-			QString::number(deltaPt.x()),
-			QString::number(deltaPt.y())
-		);
-		*/
-	}
-	/*
-	void Header::parentResized(QSize size) {
-		this->setFixedWidth(size.width() - 1);
-		this->setFixedHeight(thickness);
-	}
-	*/
-
-	void Header::onParentResize(Canvas* from, QSize size)
-	{
-		this->setFixedWidth(size.width() - 1);
-		this->setFixedHeight(thickness);
-	}
-
-	void Header::paintEvent(QPaintEvent *event) {
-
-		Canvas::paintEvent(event);
-		QPainter painter(this);
-
-		switch (this->getState())
-		{
-		case Canvas::states::normal:
-			painter.setPen(QColor(50, 50, 50));
-			break;
-		case Canvas::states::over:
-			painter.setPen(QColor(250, 130, 130));
-			break;
-		case Canvas::states::active:
-			painter.setPen(QColor(255, 255, 255));
-			break;
-		}
-		painter.drawLine(0, height() - 2, width() - 1, height() - 2);
-		painter.drawText(
-			0, 0, this->width(), this->height(), Qt::AlignCenter,
-			this->getParent()->getName()
-		);
-	}
-
-	Header::~Header() {	}
-
-	// HeaderDialog /////////////////////////////////////////////////////
-
-	HeaderDialog::HeaderDialog(Canvas *parent) :
-		Header(parent),
-		buttonClose(new Button(this))
-	{
-		this->setBackgroundColor(100, 30, 30);
-
-		//buttonClose->setName("X");
-		//buttonClose->setBackgroundVisible(false);
-		//buttonClose->setSize(QSize(30, 30));
-
-		connect(
-			buttonClose, SIGNAL(actPressed(Button*)),
-			parent, SLOT(onClose())
-		);
-		connect(
-			parent, SIGNAL(actResized(Canvas*, QSize)),
-			this, SLOT(onParentResize(Canvas*, QSize))
-		);
-
-		this->onParentResize(parent, parent->size());
-	}
-
-	void HeaderDialog::onParentResize(Canvas* from, QSize size)
-	{
-		buttonClose->move(from->width() - 35, 5);
-	}
-
-	HeaderDialog::~HeaderDialog() {}
-
-	// HeaderWindow /////////////////////////////////////////////////////
-
-	HeaderWindow::HeaderWindow(Canvas *parent) :
-		Header(parent),
-		buttonClose(new Button(this)),
-		buttonMaximize(new Button(this)),
-		buttonMinimize(new Button(this))
-
-	{
-		this->setBackgroundColor(30, 30, 30);
-
-		buttonClose->setFixedSize(30, 30);
-		buttonClose->setText("X");
-		buttonClose->show();
-
-		buttonMaximize->setFixedSize(30, 30);
-		buttonMaximize->setText("[]");
-		buttonMaximize->setCheckable(true);
-		buttonMaximize->show();
-
-		buttonMinimize->setFixedSize(30, 30);
-		buttonMinimize->setText("_");
-		buttonMinimize->setCheckable(false);
-		buttonMinimize->show();
-
-		connect(
-			buttonClose, SIGNAL(pressed()),
-			parent, SLOT(onClose())
-		);
-		connect(
-			buttonMaximize, SIGNAL(pressed()),
-			parent, SLOT(showMaximized())
-		);
-		connect(
-			buttonMinimize, SIGNAL(pressed()),
-			parent, SLOT(showMinimized())
-		);
-		connect(
-			parent, SIGNAL(actResized(Canvas*, QSize)),
-			this, SLOT(onParentResize(Canvas*, QSize))
-		);
-
-		this->onParentResize(parent, parent->size());
-	}
-
-	void HeaderWindow::onParentResize(Canvas* from, QSize size)
-	{
-		buttonClose->move(from->width() - 35, 5);
-		buttonMaximize->move(from->width() - 70, 5);
-		buttonMinimize->move(from->width() - 105, 5);
-	}
-
-	HeaderWindow::~HeaderWindow() {}
 
 	// EdgeControler ///////////////////////////////////////////////////// 
 
@@ -318,6 +132,207 @@ namespace Jui
 	}
 
 	EdgeControler::~EdgeControler() {}
+
+	// EdgeControler2 /////////////////////////////////////////////////////
+
+	EdgeControler2::EdgeControler2(QWidget *parent, Jui::direction dir) :
+		Button(parent),
+		m_direction(dir)
+	{
+		colorBackground_(QColor(20, 60, 20), QColor(120, 20, 20));
+	}
+
+	Jui::direction EdgeControler2::direction() { return m_direction; }
+
+	void EdgeControler2::mousePressEvent(QMouseEvent *e)
+	{
+		Button::mousePressEvent(e);
+		mousePressedGlobalCoor = e->globalPos();
+	}
+	void EdgeControler2::mouseMoveEvent(QMouseEvent *e)
+	{
+		QPoint deltaPt(
+			e->globalPos().x() - mousePressedGlobalCoor.x(),
+			e->globalPos().y() - mousePressedGlobalCoor.y()
+		);
+		emit actControlerMoved(m_direction, deltaPt);
+
+		/*
+				qDebug() << tr("EdgeControler onMouseMoved: deltaPt [%1, %2]").arg(
+					QString::number(deltaPt.x()),
+					QString::number(deltaPt.y())
+				);
+		*/
+
+	}
+
+	void EdgeControler2::paintEvent(QPaintEvent *event) {
+		QPainter painter(this);
+		painter.fillRect(rect(), colorBackground());
+		painter.setPen(colorFrame());
+		painter.drawLine(0, 0, width(), 0);
+	}
+
+	// Edges2 /////////////////////////////////////////////////////
+
+	Edges2::Edges2(QWidget *parent) : QObject(parent),
+		m_parent(parent)
+	{
+		thickness = 10;
+		offset = 1;
+		corner = 20;
+		gap = 5;
+
+		mEdges.insert(
+			Jui::direction::right,
+			new EdgeControler2(parent, Jui::direction::right)
+		);
+		mEdges.insert(
+			Jui::direction::bottom,
+			new EdgeControler2(parent, Jui::direction::bottom)
+		);
+		mEdges.insert(
+			Jui::direction::left,
+			new EdgeControler2(parent, Jui::direction::left)
+		);
+		mEdges.insert(
+			Jui::direction::top,
+			new EdgeControler2(parent, Jui::direction::top)
+		);
+
+		fitSize();
+		m_parent->installEventFilter(this);
+
+		foreach(EdgeControler2 *oneEdge, mEdges.values())
+		{
+			connect(
+				oneEdge, SIGNAL(pressed()),
+				this, SLOT(onControlerPressed())
+			);
+			connect(
+				oneEdge, SIGNAL(actControlerMoved(Jui::direction, QPoint)),
+				this, SLOT(onControlerMoved(Jui::direction, QPoint))
+			);
+		};
+		/*
+
+		connect(
+			this, SIGNAL(actEdgeResized(QSize)),
+			mParent, SLOT(setSize(QSize))
+		);
+		connect(
+			this, SIGNAL(actEdgeMoved(QPoint)),
+			mParent, SLOT(setOrigin(QPoint))
+		);
+		connect(
+			mParent, SIGNAL(actResized(Canvas*, QSize)),
+			this, SLOT(onParentResize(Canvas*, QSize))
+		);
+		*/
+	}
+
+	bool Edges2::eventFilter(QObject *object, QEvent *e) {
+		switch (e->type())
+		{
+		case QEvent::Type::Resize:
+			fitSize();
+			break;
+		};
+		return false;
+	}
+
+	void Edges2::fitSize() {
+		foreach(EdgeControler2* oneEdge, mEdges.values())
+		{
+			switch (oneEdge->direction())
+			{
+			case Jui::direction::right:
+				oneEdge->setGeometry(
+					m_parent->width() - thickness - offset,
+					offset + corner + gap,
+					thickness,
+					m_parent->height() - 2 * offset - 2 * corner - 2 * gap
+				);
+				break;
+			case Jui::direction::bottom:
+				oneEdge->setGeometry(
+					offset + corner + gap,
+					m_parent->height() - offset - thickness,
+					m_parent->width() - 2 * offset - 2 * corner - 2 * gap,
+					thickness
+				);
+				break;
+			case Jui::direction::left:
+				oneEdge->setGeometry(
+					offset,
+					offset + corner + gap,
+					thickness,
+					m_parent->height() - 2 * offset - 2 * corner - 2 * gap
+				);
+				break;
+			case Jui::direction::top:
+				oneEdge->setGeometry(
+					offset + corner + gap,
+					offset,
+					m_parent->width() - 2 * offset - 2 * corner - 2 * gap,
+					thickness
+				);
+				break;
+			}
+		}
+	}
+
+	void Edges2::onControlerPressed() {
+		if (m_parent->isWindow()) {
+			mousePressedOriginCoor = m_parent->mapToGlobal(QPoint(0, 0));
+		}
+		else {
+			mousePressedOriginCoor = m_parent->mapToParent(QPoint(0, 0));
+		}
+		mousePressedParentSize = m_parent->size();
+	}
+	void Edges2::onControlerMoved(Jui::direction dir, QPoint deltaPt) {
+		QPoint origin(mousePressedOriginCoor);
+		QSize size(mousePressedParentSize);
+
+		switch (dir)
+		{
+		case Jui::direction::left:
+			size.setWidth(mousePressedParentSize.width() - deltaPt.x());
+			origin.setX(mousePressedOriginCoor.x() + deltaPt.x());
+			m_parent->move(origin);
+			//emit actEdgeMoved(origin);
+			break;
+		case Jui::direction::right:
+			size.setWidth(mousePressedParentSize.width() + deltaPt.x());
+			break;
+
+		case Jui::direction::top:
+			size.setHeight(mousePressedParentSize.height() - deltaPt.y());
+			origin.setY(mousePressedOriginCoor.y() + deltaPt.y());
+			m_parent->move(origin);
+			//emit actEdgeMoved(origin);
+			break;
+		case Jui::direction::bottom:
+			size.setHeight(mousePressedParentSize.height() + deltaPt.y());
+			break;
+		}
+
+		/*
+		qDebug() << tr("Edges onMouseMoved: deltaPt [%1, %2]").arg(
+		QString::number(deltaPt.x()),
+		QString::number(deltaPt.y())
+		);
+		*/
+		/*
+		qDebug() << tr("Edges onMouseMoved: size [%1, %2]").arg(
+		QString::number(size.width()),
+		QString::number(size.height())
+		);
+		*/
+		m_parent->setFixedSize(size);
+		//emit actEdgeResized(size);
+	}
 
 	// Edges ///////////////////////////////////////////////////// 
 

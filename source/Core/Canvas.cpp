@@ -223,7 +223,7 @@ namespace Jui
 	Canvas2::Canvas2(int x, int y, int w, int h) : QWidget(0) { Canvas2::init(x, y, w, h); }
 
 	void Canvas2::init(int x, int y, int w, int h) {
-		//setWindowFlags(Qt::FramelessWindowHint);
+		setWindowFlags(Qt::FramelessWindowHint);
 		//setAttribute(Qt::WA_TranslucentBackground);		
 
 		setGeometry(x, y, w, h);

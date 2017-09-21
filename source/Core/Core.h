@@ -10,6 +10,8 @@
 namespace Jui
 {
 	enum fade { out, in };
+	enum direction { right, bottom, left, top };
+
 	void fadeVariant(QVariantAnimation &variable, Jui::fade fade, int duration);
 }
 

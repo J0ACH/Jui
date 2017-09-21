@@ -6,86 +6,25 @@
 
 namespace Jui
 {
-	// Header2 /////////////////////////////////////////////////////
+	// Header /////////////////////////////////////////////////////
 
-	class Header2 : public Button
+	class Header : public Button
 	{
 	public:
-		Header2(QWidget *parent);
+		Header(QWidget *parent);
 	protected:
 		void mousePressEvent(QMouseEvent *e) override;
 		void mouseMoveEvent(QMouseEvent *e) override;
-		bool eventFilter(QObject *object, QEvent *e) override;		
+		bool eventFilter(QObject *object, QEvent *e) override;
 		void paintEvent(QPaintEvent *e) override;
 	private:
+		QWidget* m_parent;
 		void fitSize();
 		int thickness;
 		QPoint mousePressedGlobalCoor, mousePressedOriginCoor;
-		
 	};
 
-	
-	// Header /////////////////////////////////////////////////////
 
-	class Header : public Canvas
-	{
-		Q_OBJECT
-
-	public:
-		Header(Canvas *parent);
-		~Header();
-
-		//void parentResized(QSize);
-
-	signals:
-		void actHeaderMoved(QPoint);
-
-		public slots:
-		void onMousePress(Canvas*, QPoint);
-		void onMouseMoved(Canvas*, QPoint);
-		void onParentResize(Canvas*, QSize);
-
-	protected:
-		void paintEvent(QPaintEvent *event) override;
-
-	private:
-		int thickness;
-		QPoint mousePressedGlobalCoor, mousePressedOriginCoor;
-	};
-
-	// HeaderDialog /////////////////////////////////////////////////////
-
-	class HeaderDialog : public Header
-	{
-		Q_OBJECT
-
-	public:
-		HeaderDialog(Canvas *parent);
-		~HeaderDialog();
-
-		public slots:
-		void onParentResize(Canvas*, QSize);
-
-	private:
-		Button* buttonClose;
-	};
-
-	// HeaderWindow /////////////////////////////////////////////////////
-
-	class HeaderWindow : public Header
-	{
-		Q_OBJECT
-
-	public:
-		HeaderWindow(Canvas *parent);
-		~HeaderWindow();
-
-		public slots:
-		void onParentResize(Canvas*, QSize);
-
-	private:
-		Button *buttonClose, *buttonMaximize, *buttonMinimize;
-	};
 
 	// EdgeControler ///////////////////////////////////////////////////// 
 
@@ -116,6 +55,58 @@ namespace Jui
 		QPoint mousePressedGlobalCoor;
 
 	};
+
+	// EdgeControler2 /////////////////////////////////////////////////////
+
+	class EdgeControler2 : public Button
+	{
+		Q_OBJECT
+
+	public:
+		EdgeControler2(QWidget *parent, Jui::direction dir);
+		Jui::direction direction();
+
+	signals:
+		void actControlerMoved(Jui::direction, QPoint deltaPt);
+
+	protected:
+		void mousePressEvent(QMouseEvent *e) override;
+		void mouseMoveEvent(QMouseEvent *e) override;
+		void paintEvent(QPaintEvent *e) override;
+	private:
+		Jui::direction m_direction;
+		QPoint mousePressedGlobalCoor;
+		
+	};
+
+	// Edges2 ///////////////////////////////////////////////////// 
+
+	class Edges2 : public QObject {
+		Q_OBJECT
+	public:
+		Edges2(QWidget *parent);
+
+		public slots:
+		void onControlerPressed();
+		void onControlerMoved(Jui::direction, QPoint);
+
+	protected:
+		bool eventFilter(QObject *object, QEvent *e) override;
+
+	private:
+		QWidget* m_parent;
+		QMap<Jui::direction, EdgeControler2*> mEdges;
+		int thickness, offset, corner, gap;
+
+		void fitSize();
+
+		QSize mousePressedParentSize;
+		QPoint mousePressedOriginCoor;
+
+	};
+
+
+
 
 	// Edges ///////////////////////////////////////////////////// 
 
