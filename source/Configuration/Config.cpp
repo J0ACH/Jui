@@ -24,11 +24,11 @@ namespace Jui
 	Config::Config(int x, int y, int width, int height) : Canvas2(x, y, width, height)
 	{
 		Header *configHeader = new Header(this);
-		Edges2 *configEdges = new Edges2(this);
+		Edges *configEdges = new Edges(this);
 
 		Canvas2 *test = new Canvas2(this, 50, 50, 100, 100);
 		Header *testHeader = new Header(test);
-		Edges2 *testEdges = new Edges2(test);
+		Edges *testEdges = new Edges(test);
 
 		Button *b1 = new Button(test);
 		b1->setGeometry(40, 40, 50, 30);
