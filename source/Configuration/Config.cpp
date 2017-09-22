@@ -2,43 +2,26 @@
 
 namespace Jui
 {
-	class LayerTest : public Layer
-	{
-	public:
-		void draw(QPainter *painter, QRect bounds) override
-		{
-			painter->setPen(QColor(230, 30, 30));
-			painter->drawLine(0, 0, 25, 25);
-		}
-	};
-
-	class LayerPlocha : public Layer
-	{
-	public:
-		void draw(QPainter *painter, QRect bounds) override
-		{
-			painter->fillRect(QRect(0, 0, 20, 20), QColor(30, 100, 30));
-		}
-	};
-
-	Config::Config(int x, int y, int width, int height) : Canvas2(x, y, width, height)
+	Config::Config(int x, int y, int width, int height) : Canvas(x, y, width, height)
 	{
 		Header *configHeader = new Header(this);
 		Edges *configEdges = new Edges(this);
+		Button *configClose = new Button(configHeader);
+		configClose->setGeometry(this->width() - 25, 5, 20, 20);
+		configClose->setText("X");
+		configClose->colorFrame_(QColor(0, 0, 0, 0), QColor(90, 90, 90));
+		connect(
+			configClose, SIGNAL(pressed()),
+			this, SLOT(close())
+		);
 
-		Canvas2 *test = new Canvas2(this, 50, 50, 100, 100);
+		Canvas *test = new Canvas(this, 50, 50, 200, 200);
 		Header *testHeader = new Header(test);
 		Edges *testEdges = new Edges(test);
-
-		Button *b1 = new Button(test);
-		b1->setGeometry(40, 40, 50, 30);
-		b1->show();
-		
+				
 		Text *t1 = new Text(test);
 		t1->setGeometry(40, 80, 50, 20);
 		t1->setText("ahoj");
-
 	}
-
 }
 

@@ -1,7 +1,6 @@
 #ifndef DUMMIES_H
 #define DUMMIES_H
 
-#include "Canvas.h"
 #include "Button.h"
 
 namespace Jui
@@ -60,10 +59,10 @@ namespace Jui
 	protected:
 		bool eventFilter(QObject *object, QEvent *e) override;
 	private:
-		void fitSize();
-		int thickness, offset, corner, gap;
 		QWidget* m_parent;
 		QMap<Jui::direction, EdgeControler*> mEdges;
+		void fitSize();
+		int thickness, offset, corner, gap;
 		QSize mousePressedParentSize;
 		QPoint mousePressedOriginCoor;
 	};
