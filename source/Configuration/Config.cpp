@@ -22,6 +22,26 @@ namespace Jui
 		Text *t1 = new Text(test);
 		t1->setGeometry(40, 80, 50, 20);
 		t1->setText("ahoj");
+
+		a = new FadeVariable();
+		a->value_(7);
+		qDebug() << tr("vysledek = %1").arg(QString::number(a->value()));
+
+		text = new QLineEdit(this);
+		text->setGeometry(130, 30, 50, 50);
+		text->show();
+
+		Button *b = new Button(this);
+		b->setGeometry(30, 30, 50, 50);
+		connect(
+			b, SIGNAL(pressed()),
+			this, SLOT(click())
+		);		
+	}
+
+	void Config::click() {
+		a->value_(text->text().toDouble(), 500);
+		//qDebug() << tr("vysledek = %1").arg(QString::number(a->value()));
 	}
 }
 
