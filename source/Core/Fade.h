@@ -2,9 +2,10 @@
 #define FADE_H
 
 #include <QDebug>
-#include <QVariant>
-#include <QVariantAnimation>
 #include <QMetaObject>
+#include <QVariantAnimation>
+#include <QVariant>
+#include <QColor>
 
 namespace Jui
 {
@@ -30,24 +31,28 @@ namespace Jui
 		void onValueChanged();
 	};
 
-	// fDouble /////////////////////////////////////////////////////
+	// FDouble /////////////////////////////////////////////////////
 
-	class fDouble : public FadeVariable
+	class FDouble : public FadeVariable
 	{
 	public:
-		fDouble();
+		FDouble();
 		void value_(double value);
 		void value_(double value, double time);
 		double value();
 	};
 	
-	// fColor /////////////////////////////////////////////////////
-
-	/*
-	class fColor : public FadeVariable
+	// FColor /////////////////////////////////////////////////////
+	
+	class FColor : public FadeVariable
 	{
+	public:
+		FColor();
+		void value_(QColor value);
+		void value_(QColor value, double time);
+		QColor value();
 	};
-	*/
+	
 }
 
 #endif // FADE_H

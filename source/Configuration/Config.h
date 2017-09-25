@@ -7,18 +7,31 @@
 #include "Dummies.h"
 #include "Button.h"
 #include <QLineEdit>
+#include <QTime>
 
 
 namespace Jui
 {
+	class ColorTester : public QWidget
+	{
+	public:
+		ColorTester(QWidget *parent = 0);
+	protected:
+		void paintEvent(QPaintEvent *e) override;
+	private:
+		FColor backG;
+		QTime startTime;
+		int startSec, startMSec;
+	};
 	class Config : public Canvas
 	{
 		Q_OBJECT
 	public:
 		Config(int x, int y, int width, int height);
 	private:
-		fDouble a;
+		FDouble a;
 		QLineEdit *text;
+		QWidget *colorTester;
 
 		private slots:
 		void click();

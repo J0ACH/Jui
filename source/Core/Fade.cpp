@@ -32,11 +32,18 @@ namespace Jui
 		QMetaObject::invokeMethod(m_target, m_method);
 	}
 
-	// fDouble /////////////////////////////////////////////////////
+	// FDouble /////////////////////////////////////////////////////
 
-	fDouble::fDouble() { this->value_(0); }
-	void fDouble::value_(double value) { FadeVariable::value_(value); }
-	void fDouble::value_(double value, double time) { FadeVariable::value_(value, time); }
-	double fDouble::value() { return FadeVariable::value().value<double>(); }
+	FDouble::FDouble() { FadeVariable::value_(0); }
+	void FDouble::value_(double value) { FadeVariable::value_(value); }
+	void FDouble::value_(double value, double time) { FadeVariable::value_(value, time); }
+	double FDouble::value() { return FadeVariable::value().value<double>(); }
+
+	// FColor /////////////////////////////////////////////////////
+
+	FColor::FColor() { FadeVariable::value_(QColor(0,0,0,0)); }
+	void FColor::value_(QColor value) { FadeVariable::value_(value); }
+	void FColor::value_(QColor value, double time) { FadeVariable::value_(value, time); }
+	QColor FColor::value() { return FadeVariable::value().value<QColor>(); }
 
 }
