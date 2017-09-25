@@ -2,15 +2,7 @@
 
 namespace Jui
 {
-	FadeVariable::FadeVariable() :
-		m_target(this),
-		m_method("onVariableChanged")
-	{
-		connect(
-			&variable, SIGNAL(valueChanged(QVariant)),
-			this, SLOT(onValueChanged())
-		);
-	}
+	FadeVariable::FadeVariable() { this->value_(0); }
 	void FadeVariable::value_(double value) {
 		variable.setStartValue(value);
 		variable.setEndValue(value);
@@ -23,71 +15,19 @@ namespace Jui
 		variable.start();
 	}
 	double FadeVariable::value() { return variable.currentValue().value<double>(); }
-	void FadeVariable::target(QObject *object, const char * method)
+	void FadeVariable::reciever(QObject *object, const char * method)
 	{
-		//m_target = object->metaObject();
 		m_target = object;
 		m_method = method;
-		qDebug() << tr("FadeVariable::target qstring [%1 || %2]").arg(
-			object->metaObject()->className(),
-			method
+		connect(
+			&variable, SIGNAL(valueChanged(QVariant)),
+			this, SLOT(onValueChanged())
 		);
 	}
 	void FadeVariable::onValueChanged() {
 		QMetaObject::invokeMethod(m_target, m_method);
 	}
-	void FadeVariable::onVariableChanged() {
-		qDebug() << tr("FadeVariable::value = %1").arg(
-			QString::number(value())
-		);
-	}
-	/*
-	void FadeVariable::target2(void (*method)())
-	{
-		qDebug() << tr("FadeVariable::target qstring [%1]").arg(
-			"method"
-		);
-	}
-	*/
-	/*
-	void FadeVariable::target(QObject *object, std::function<bool(int)>)
-	{
-		qDebug() << tr("FadeVariable::target [%1 || %2]").arg(
-			object->objectName(), "method"
-		);
-
-		connect(
-			&variable, SIGNAL(valueChanged(QVariant)),
-			object, SLOT(update())
-		);
-	}
-	*/
-
-	/*
-	void FadeVariable::target(QObject *object, void *method)
-	{
-		qDebug() << tr("FadeVariable::target void [%1 || %2]").arg(
-			object->metaObject()->className(),
-			"method2"
-		);
-	}
-	void FadeVariable::target(QObject *object, const char* method)
-	{
-		const QMetaObject *mObj = object->metaObject();
-		int methodIndex = object->metaObject()->indexOfMethod(method);
-		QMetaMethod mMethod = object->metaObject()->method(methodIndex);
-
-		qDebug() << tr("FadeVariable::target qstring [%1 || %2]").arg(
-			mObj->className(), mMethod.tag()
-		);
-
-		connect(
-			&variable, SIGNAL(valueChanged(QVariant)),
-			object, SLOT()
-		);
-
-	}
-	*/
+	
 
 
 
