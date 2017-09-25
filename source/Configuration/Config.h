@@ -3,7 +3,7 @@
 
 #include "Core.h"
 #include "Canvas.h"
-#include "Dummy.h"
+#include "Dummies.h"
 #include "Button.h"
 #include <QLineEdit>
 
@@ -11,16 +11,17 @@
 namespace Jui
 {
 	class Config : public Canvas
-	{		
+	{
 		Q_OBJECT
 	public:
-		Config(int x, int y, int width, int height);	
-		public slots:
-		void click();
-		void result();
+		Config(int x, int y, int width, int height);
 	private:
 		FadeVariable a;
 		QLineEdit *text;
+
+		private slots:
+		void click();
+		void result();
 	};
 }
 

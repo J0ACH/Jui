@@ -14,7 +14,7 @@ namespace Jui
 			configClose, SIGNAL(pressed()),
 			this, SLOT(close())
 		);
-
+		/*
 		Canvas *test = new Canvas(this, 50, 50, 200, 200);
 		Header *testHeader = new Header(test);
 		Edges *testEdges = new Edges(test);
@@ -22,6 +22,7 @@ namespace Jui
 		Text *t1 = new Text(test);
 		t1->setGeometry(40, 80, 50, 20);
 		t1->setText("ahoj");
+		*/
 
 		//a = new FadeVariable();
 		a.value_(0);
@@ -45,7 +46,6 @@ namespace Jui
 
 	void Config::click() {
 		a.value_(text->text().toDouble(), 500);
-		//qDebug() << tr("vysledek = %1").arg(QString::number(a->value()));
 	}
 	void Config::result() {
 		qDebug() << tr("vysledek = %1").arg(QString::number(a.value()));

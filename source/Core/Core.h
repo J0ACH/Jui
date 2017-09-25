@@ -25,19 +25,25 @@ namespace Jui
 		void value_(double value);
 		void value_(double value, double time);
 
-		void target(QObject *object, QString method);
-		//void target(QObject *object, const char* method);
+		//void target(QObject *object, QString method);
+		void target(QObject *object, const char* method);
 		//void target(QObject *object, QMetaMethod method);
 		//void target(QObject *object, std::function<bool(int)>);
 		//void target(QObject *object, void *method);
 
 		double value();
-		
+
 		public slots:
 		void onVariableChanged();
 
 	private:
+		QObject *m_target;
+		const char * m_method;
+		//QString m_method;
 		QVariantAnimation variable;
+		
+		private slots :
+			void onValueChanged();
 	};
 }
 

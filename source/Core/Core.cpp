@@ -2,10 +2,13 @@
 
 namespace Jui
 {
-	FadeVariable::FadeVariable() {
+	FadeVariable::FadeVariable() :
+		m_target(this),
+		m_method("onVariableChanged")
+	{
 		connect(
 			&variable, SIGNAL(valueChanged(QVariant)),
-			this, SLOT(onVariableChanged())
+			this, SLOT(onValueChanged())
 		);
 	}
 	void FadeVariable::value_(double value) {
@@ -20,6 +23,19 @@ namespace Jui
 		variable.start();
 	}
 	double FadeVariable::value() { return variable.currentValue().value<double>(); }
+	void FadeVariable::target(QObject *object, const char * method)
+	{
+		//m_target = object->metaObject();
+		m_target = object;
+		m_method = method;
+		qDebug() << tr("FadeVariable::target qstring [%1 || %2]").arg(
+			object->metaObject()->className(),
+			method
+		);
+	}
+	void FadeVariable::onValueChanged() {
+		QMetaObject::invokeMethod(m_target, m_method);
+	}
 	void FadeVariable::onVariableChanged() {
 		qDebug() << tr("FadeVariable::value = %1").arg(
 			QString::number(value())
@@ -46,13 +62,7 @@ namespace Jui
 		);
 	}
 	*/
-	void FadeVariable::target(QObject *object, QString method)
-	{
-		qDebug() << tr("FadeVariable::target qstring [%1 || %2]").arg(
-			object->metaObject()->className(),
-			method
-		);
-	}
+
 	/*
 	void FadeVariable::target(QObject *object, void *method)
 	{
@@ -75,7 +85,7 @@ namespace Jui
 			&variable, SIGNAL(valueChanged(QVariant)),
 			object, SLOT()
 		);
-		
+
 	}
 	*/
 

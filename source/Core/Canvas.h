@@ -9,6 +9,7 @@ namespace Jui
 {
 	class Canvas : public QWidget
 	{
+		
 	public:
 		Canvas(QWidget *parent = 0);
 		Canvas(QWidget *parent, int x, int y, int width, int height);
