@@ -2,6 +2,7 @@
 #define CONFIG_H
 
 #include "Core.h"
+#include "Fade.h"
 #include "Canvas.h"
 #include "Dummies.h"
 #include "Button.h"
@@ -16,7 +17,6 @@ namespace Jui
 	public:
 		Config(int x, int y, int width, int height);
 	private:
-		//FadeVariable a;
 		fDouble a;
 		QLineEdit *text;
 
