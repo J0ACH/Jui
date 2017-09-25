@@ -3,21 +3,23 @@
 namespace Jui
 {
 	ColorTester::ColorTester(QWidget *parent) : QWidget(parent) {
-		backG.value_(QColor(255, 30, 30), 6000);
+		backG.value_(QColor(255, 30, 30), 16000);
 		backG.reciever(this, "update");
-		startSec = QTime::currentTime().second();
-		startMSec = QTime::currentTime().msec();
-		startTime.start();
+		startTime = QTime::currentTime();
+		cnt = 0;
 	}
 	void ColorTester::paintEvent(QPaintEvent *e) {
 		QPainter painter(this);
 		QRect fillRect = QRect(0, 0, width(), height());
 		painter.fillRect(fillRect, backG.value());
-		qDebug() << tr("paint %1 : %2").arg(
-			//startTime.currentTime().toString()
-			QString::number(startTime.currentTime().second()  - startSec),
-			QString::number(startTime.currentTime().msec() - startMSec)
+
+		QTime now = QTime::currentTime();
+		qDebug() << tr("%1 -> %2 : %3").arg(
+			QString::number(cnt),
+			QString::number(now.second() - startTime.second()),
+			QString::number(now.msec() - startTime.msec())
 		);
+		cnt++;
 	}
 
 	Config::Config(int x, int y, int width, int height) : Canvas(x, y, width, height)

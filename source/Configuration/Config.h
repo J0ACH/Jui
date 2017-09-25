@@ -21,7 +21,7 @@ namespace Jui
 	private:
 		FColor backG;
 		QTime startTime;
-		int startSec, startMSec;
+		int cnt;
 	};
 	class Config : public Canvas
 	{
