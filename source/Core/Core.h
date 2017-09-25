@@ -6,6 +6,8 @@
 #include <QPainter>
 #include <QMouseEvent>
 #include <QVariantAnimation>
+#include <QMetaMethod>
+
 
 namespace Jui
 {
@@ -23,13 +25,19 @@ namespace Jui
 		void value_(double value);
 		void value_(double value, double time);
 
+		void target(QObject *object, QString method);
+		//void target(QObject *object, const char* method);
+		//void target(QObject *object, QMetaMethod method);
+		//void target(QObject *object, std::function<bool(int)>);
+		//void target(QObject *object, void *method);
+
 		double value();
 		
 		public slots:
 		void onVariableChanged();
 
 	private:
-		QVariantAnimation *variable;
+		QVariantAnimation variable;
 	};
 }
 

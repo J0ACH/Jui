@@ -23,9 +23,13 @@ namespace Jui
 		t1->setGeometry(40, 80, 50, 20);
 		t1->setText("ahoj");
 
-		a = new FadeVariable();
-		a->value_(7);
-		qDebug() << tr("vysledek = %1").arg(QString::number(a->value()));
+		//a = new FadeVariable();
+		a.value_(0);
+		//a.target2(result());
+		//a.target(this, QMetaMethod(result()));
+		a.target(this, "result");
+		//a.target(this, result());
+		//qDebug() << tr("vysledek = %1").arg(QString::number(a.value()));
 
 		text = new QLineEdit(this);
 		text->setGeometry(130, 30, 50, 50);
@@ -40,8 +44,11 @@ namespace Jui
 	}
 
 	void Config::click() {
-		a->value_(text->text().toDouble(), 500);
+		a.value_(text->text().toDouble(), 500);
 		//qDebug() << tr("vysledek = %1").arg(QString::number(a->value()));
+	}
+	void Config::result() {
+		qDebug() << tr("vysledek = %1").arg(QString::number(a.value()));
 	}
 }
 
