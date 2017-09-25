@@ -43,8 +43,9 @@ namespace Jui
 	}
 
 	void Config::click() {
-		a.value_(text->text().toDouble(), 500);
+		//a.value_(text->text().toDouble(), 500);
 		//text->setText(QString::number(a.value()));
+		a.stop();
 	}
 	void Config::result() {
 		qDebug() << tr("vysledek = %1").arg(QString::number(a.value()));

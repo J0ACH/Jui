@@ -5,9 +5,9 @@
 #include <QDebug>
 #include <QPainter>
 #include <QMouseEvent>
+#include <QVariant>
 #include <QVariantAnimation>
 #include <QMetaMethod>
-
 
 namespace Jui
 {
@@ -16,26 +16,46 @@ namespace Jui
 
 	void fadeVariant(QVariantAnimation &variable, Jui::fade fade, int duration);
 
-	class FadeVariable : public QObject
+	class FadeVariable : private QObject
 	{
 		Q_OBJECT
 
 	public:
 		FadeVariable();
+		void value_(QVariant value);
+		void value_(QVariant value, double time);
+		QVariant value();
+		void stop();
+
+		void reciever(QObject *object, const char* method);
+
+	protected:
+		QVariantAnimation variable;
+		QObject *m_target;
+		const char * m_method;
+
+	private slots :
+		void onValueChanged();
+	};
+
+	// fDouble /////////////////////////////////////////////////////
+
+	class fDouble : public FadeVariable
+	{
+	public:
+		fDouble();
 		void value_(double value);
 		void value_(double value, double time);
 		double value();
-
-		void reciever(QObject *object, const char* method);
-				
-	private:
-		QObject *m_target;
-		const char * m_method;
-		QVariantAnimation variable;
-		
-		private slots :
-			void onValueChanged();
 	};
+	
+	// fColor /////////////////////////////////////////////////////
+
+	/*
+	class fColor : public FadeVariable
+	{
+	};
+	*/
 }
 
 #endif // CORE_H

@@ -16,7 +16,8 @@ namespace Jui
 	public:
 		Config(int x, int y, int width, int height);
 	private:
-		FadeVariable a;
+		//FadeVariable a;
+		fDouble a;
 		QLineEdit *text;
 
 		private slots:
