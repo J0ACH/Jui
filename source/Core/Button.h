@@ -1,6 +1,7 @@
 #ifndef BUTTON_H
 #define BUTTON_H
 
+#include "Fade.h"
 #include "Core.h"
 #include <QLabel>
 #include <QPushButton>
@@ -18,9 +19,11 @@ namespace Jui
 		QString text();
 
 	protected:
-		//void enterEvent(QEvent *e) override;
-		//void leaveEvent(QEvent *e) override;
+		void enterEvent(QEvent *e) override;
+		void leaveEvent(QEvent *e) override;
 		void paintEvent(QPaintEvent *e) override;
+	private:
+		FadeColor colorText;
 	};
 
 	// Button /////////////////////////////////////////////////////

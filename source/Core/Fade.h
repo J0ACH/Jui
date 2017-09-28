@@ -18,12 +18,13 @@ namespace Jui
 	public:
 		FadeAbstract();
 		void stop();
-		void reciever(QObject *object, const char* method);
+		void reciever(QObject *object, const char* method = "update");
 
 	protected:
 		QVariantAnimation variable;
 		QObject *m_target;
 		const char *m_method;
+	private:
 		void onValueChanged(QVariant);
 	};
 
@@ -54,6 +55,8 @@ namespace Jui
 	public:
 		FadeColor();
 		void value_(QColor value);
+		void value_(int r, int g, int b);
+		void value_(int r, int g, int b, float ftime);
 		void value_(QColor value, float time);
 		QColor value();
 	};

@@ -50,9 +50,14 @@ namespace Jui
 
 	// FadeColor /////////////////////////////////////////////////////
 
-
 	FadeColor::FadeColor() : FadeAbstract() { FadeColor::value_(QColor(0, 0, 0, 0)); }
 	void FadeColor::value_(QColor value) { FadeColor::value_(value, 0); }
+	void FadeColor::value_(int r, int g, int b) {
+		FadeColor::value_(QColor(r, g, b), 0);
+	}
+	void FadeColor::value_(int r, int g, int b, float ftime) {
+		FadeColor::value_(QColor(r, g, b), ftime);
+	}
 	void FadeColor::value_(QColor value, float ftime) {
 		this->stop();
 		variable.setStartValue(this->value());
@@ -61,6 +66,5 @@ namespace Jui
 		variable.start();
 	}
 	QColor FadeColor::value() { return variable.currentValue().value<QColor>(); }
-
 
 }

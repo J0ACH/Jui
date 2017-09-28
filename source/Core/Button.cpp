@@ -6,18 +6,29 @@ namespace Jui
 
 	Text::Text(QWidget *parent) : QLabel(parent) {
 		setText("NaN");
+		colorText.value_(50, 50, 50);
+		colorText.reciever(this);
 		show();
 	}
 	
 	void Text::text_(QString text) { QLabel::setText(text); }
 	QString Text::text() { return QLabel::text(); }
 	
+	void Text::enterEvent(QEvent *event)
+	{
+		colorText.value_(200, 200, 200, 0.5);
+	}
+	void Text::leaveEvent(QEvent *event)
+	{
+		colorText.value_(50, 50, 50, 2.5);
+	}
+
 	void Text::paintEvent(QPaintEvent *e) {
 		QPainter painter(this);
 		//QRect frameRect = QRect(0, 0, width() - 1, height() - 1);
 		QRect fillRect = QRect(0, 0, width(), height());
 
-		painter.setPen(QColor(250, 0, 0));
+		painter.setPen(colorText.value());
 		painter.drawText(fillRect, Qt::AlignCenter, this->text());
 	}
 

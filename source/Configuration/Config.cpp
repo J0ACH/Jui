@@ -4,10 +4,10 @@ namespace Jui
 {
 	
 	ColorTester::ColorTester(QWidget *parent) : QWidget(parent) {
-		backG.value_(QColor(255, 30, 30), 8);
+		backG.value_(QColor(255, 30, 30), 18);
 		backG.reciever(this, "update");
 		startTime = QTime::currentTime();
-		cnt = 0;
+		cnt = 0;		
 	}
 	void ColorTester::paintEvent(QPaintEvent *e) {
 		QPainter painter(this);
