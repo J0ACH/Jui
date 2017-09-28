@@ -2,6 +2,7 @@
 
 namespace Jui
 {
+	/*
 	ColorTester::ColorTester(QWidget *parent) : QWidget(parent) {
 		backG.value_(QColor(255, 30, 30), 16000);
 		backG.reciever(this, "update");
@@ -21,6 +22,7 @@ namespace Jui
 		);
 		cnt++;
 	}
+	*/
 
 	Config::Config(int x, int y, int width, int height) : Canvas(x, y, width, height)
 	{
@@ -45,14 +47,22 @@ namespace Jui
 		*/
 
 		//a = new FadeVariable();
-		a.value_(10, 10000);
-		a.reciever(this, "result");
+		//qDebug() << tr("a.value = %1").arg(a.value());
+		//a.value_(10, 10000);
+		//a.reciever(this, "result");
 		//a.target2(result());
-
+		
 
 		text = new QLineEdit(this);
-		text->setGeometry(130, 30, 50, 50);
+		text->setGeometry(130, 30, 50, 25);
 		text->show();
+		
+		label = new QLabel(this);
+		label->setGeometry(130, 60, 50, 25);
+		label->show();
+
+		fv.reciever(this, "result");
+		fv.value_(10, 2);
 
 		Button *b = new Button(this);
 		b->setGeometry(30, 30, 50, 50);
@@ -61,18 +71,24 @@ namespace Jui
 			this, SLOT(click())
 		);
 
+/*
 		ColorTester *ct = new ColorTester(this);
 		ct->setGeometry(30, 200, 100, 100);
 		ct->show();
+*/
 	}
 
 	void Config::click() {
-		a.value_(text->text().toDouble(), 2000);
+		qDebug() << tr("Config::click(%1)").arg(text->text());
+		fv.value_(text->text().toFloat(), 3);
+		//fv.value_(10.5, 2000);
+		label->setText(QString::number(fv.value()));
 		//text->setText(QString::number(a.value()));
 		//a.stop();
 	}
 	void Config::result() {
-		qDebug() << tr("vysledek = %1").arg(QString::number(a.value()));
+		label->setText(QString::number(fv.value()));
+		qDebug() << tr("vysledek = %1").arg(QString::number(fv.value()));
 	}
 }
 
