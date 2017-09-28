@@ -59,7 +59,8 @@ namespace Jui
 
 		label = new Text(this);
 		label->setGeometry(130, 60, 50, 25);
-
+		label->colorText_(100, 30, 30);
+		//fade.target(this, &Config::result);
 		fade.reciever(this, "result");
 		fade.value_(10, 2);
 

@@ -19,7 +19,7 @@ namespace Jui
 		FadeAbstract();
 		void stop();
 		void reciever(QObject *object, const char* method = "update");
-
+		
 	protected:
 		QVariantAnimation variable;
 		QObject *m_target;

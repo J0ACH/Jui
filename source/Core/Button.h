@@ -15,15 +15,20 @@ namespace Jui
 	public:
 		Text(QWidget *parent = 0);
 			
-		void text_(QString text);
 		QString text();
+
+		void text_(QString text);
+		void font_(QString font, int size);
+		void colorText_(int r, int g, int b);
 
 	protected:
 		void enterEvent(QEvent *e) override;
 		void leaveEvent(QEvent *e) override;
 		void paintEvent(QPaintEvent *e) override;
+
 	private:
 		FadeColor colorText;
+		QFont fontText;
 	};
 
 	// Button /////////////////////////////////////////////////////

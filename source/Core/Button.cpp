@@ -7,12 +7,16 @@ namespace Jui
 	Text::Text(QWidget *parent) : QLabel(parent) {
 		setText("NaN");
 		colorText.value_(50, 50, 50);
+		font_("Univers Condensed", 12);
 		colorText.reciever(this);
 		show();
 	}
-	
-	void Text::text_(QString text) { QLabel::setText(text); }
+
 	QString Text::text() { return QLabel::text(); }
+
+	void Text::text_(QString text) { QLabel::setText(text); }
+	void Text::font_(QString font, int size) { fontText = QFont(font, size); }
+	void Text::colorText_(int r, int g, int b) { colorText.value_(r, g, b); }
 	
 	void Text::enterEvent(QEvent *event)
 	{
@@ -29,6 +33,7 @@ namespace Jui
 		QRect fillRect = QRect(0, 0, width(), height());
 
 		painter.setPen(colorText.value());
+		painter.setFont(fontText);
 		painter.drawText(fillRect, Qt::AlignCenter, this->text());
 	}
 
