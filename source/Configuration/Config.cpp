@@ -2,9 +2,9 @@
 
 namespace Jui
 {
-	/*
+	
 	ColorTester::ColorTester(QWidget *parent) : QWidget(parent) {
-		backG.value_(QColor(255, 30, 30), 16000);
+		backG.value_(QColor(255, 30, 30), 8);
 		backG.reciever(this, "update");
 		startTime = QTime::currentTime();
 		cnt = 0;
@@ -22,7 +22,7 @@ namespace Jui
 		);
 		cnt++;
 	}
-	*/
+	
 
 	Config::Config(int x, int y, int width, int height) : Canvas(x, y, width, height)
 	{
@@ -59,7 +59,7 @@ namespace Jui
 
 		label = new Text(this);
 		label->setGeometry(130, 60, 50, 25);
-		
+
 		fade.reciever(this, "result");
 		fade.value_(10, 2);
 
@@ -70,11 +70,11 @@ namespace Jui
 			this, SLOT(click())
 		);
 
-		/*
-				ColorTester *ct = new ColorTester(this);
-				ct->setGeometry(30, 200, 100, 100);
-				ct->show();
-		*/
+
+		ColorTester *ct = new ColorTester(this);
+		ct->setGeometry(30, 200, 100, 100);
+		ct->show();
+
 	}
 
 	void Config::click() {
@@ -84,7 +84,7 @@ namespace Jui
 	}
 	void Config::result() {
 		label->text_(QString::number(fade.value()));
-		qDebug() << tr("vysledek = %1").arg(QString::number(fade.value()));
+		//qDebug() << tr("vysledek = %1").arg(QString::number(fade.value()));
 	}
 }
 

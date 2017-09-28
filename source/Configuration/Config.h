@@ -15,7 +15,7 @@
 
 namespace Jui
 {
-	/*
+	
 	class ColorTester : public QWidget
 	{
 	public:
@@ -23,11 +23,11 @@ namespace Jui
 	protected:
 		void paintEvent(QPaintEvent *e) override;
 	private:
-		FColor backG(this);
+		FadeColor backG;
 		QTime startTime;
 		int cnt;
 	};
-	*/
+	
 	class Config : public Canvas
 	{
 		Q_OBJECT

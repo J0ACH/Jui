@@ -27,7 +27,7 @@ namespace Jui
 	// FadeFloat /////////////////////////////////////////////////////
 
 	void FadeFloat::value_(float value) { FadeFloat::value_(value, 0); }
-	void FadeFloat::value_(float value, int ftime) {
+	void FadeFloat::value_(float value, float ftime) {
 		this->stop();
 		variable.setStartValue(this->value());
 		variable.setEndValue(value);
@@ -39,7 +39,7 @@ namespace Jui
 	// FadeInt /////////////////////////////////////////////////////
 
 	void FadeInt::value_(int value) { FadeInt::value_(value, 0); }
-	void FadeInt::value_(int value, int ftime) {
+	void FadeInt::value_(int value, float ftime) {
 		this->stop();
 		variable.setStartValue(this->value());
 		variable.setEndValue(value);
@@ -48,13 +48,19 @@ namespace Jui
 	}
 	int FadeInt::value() { return variable.currentValue().toInt(); }
 
-	// FColor /////////////////////////////////////////////////////
+	// FadeColor /////////////////////////////////////////////////////
 
-	/*
-	FColor::FColor() : FadeVariable() { FadeVariable::value_(QColor(0, 0, 0, 0)); }
-	void FColor::value_(QColor value) { FadeVariable::value_(value); }
-	void FColor::value_(QColor value, double time) { FadeVariable::value_(value, time); }
-	QColor FColor::value() { return FadeVariable::value().value<QColor>(); }
-	*/
+
+	FadeColor::FadeColor() : FadeAbstract() { FadeColor::value_(QColor(0, 0, 0, 0)); }
+	void FadeColor::value_(QColor value) { FadeColor::value_(value, 0); }
+	void FadeColor::value_(QColor value, float ftime) {
+		this->stop();
+		variable.setStartValue(this->value());
+		variable.setEndValue(value);
+		variable.setDuration(ftime * 1000);
+		variable.start();
+	}
+	QColor FadeColor::value() { return variable.currentValue().value<QColor>(); }
+
 
 }

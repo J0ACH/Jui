@@ -33,7 +33,7 @@ namespace Jui
 	{
 	public:
 		void value_(float value);
-		void value_(float value, int ftime);
+		void value_(float value, float ftime);
 		float value();
 	};
 
@@ -43,23 +43,21 @@ namespace Jui
 	{
 	public:
 		void value_(int value);
-		void value_(int value, int ftime);
+		void value_(int value, float ftime);
 		int value();
 	};
 
-	// FColor /////////////////////////////////////////////////////
-	/*
-	class FColor : public FadeVariable
-	{
-		Q_OBJECT
+	// FadeColor /////////////////////////////////////////////////////
 
+	class FadeColor : public FadeAbstract
+	{
 	public:
-		FColor();
+		FadeColor();
 		void value_(QColor value);
-		void value_(QColor value, double time);
+		void value_(QColor value, float time);
 		QColor value();
 	};
-	*/
+
 
 }
 
