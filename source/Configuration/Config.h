@@ -34,8 +34,8 @@ namespace Jui
 	public:
 		Config(int x, int y, int width, int height);
 	private:
-		FadeFloat fv;
-		//FDouble a;
+		FadeFloat fade;
+		//FadeInt fade;
 		QLineEdit *text;
 		Text *label;
 		QWidget *colorTester;

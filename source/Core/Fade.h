@@ -9,34 +9,39 @@
 
 namespace Jui
 {
-	class FadeFloat : public QObject
+	// FadeAbstract /////////////////////////////////////////////////////
+
+	class FadeAbstract : public QObject
 	{
 		Q_OBJECT
 
 	public:
-		FadeFloat();
-		void value_(float value);
-		void value_(float value, int ftime);
-		float value();
+		FadeAbstract();
 		void stop();
-
 		void reciever(QObject *object, const char* method);
 
 	protected:
+		QVariantAnimation variable;
 		QObject *m_target;
 		const char *m_method;
-		
-	private:
-		QVariantAnimation variable;
 		void onValueChanged(QVariant);
 	};
 
-	// FDouble /////////////////////////////////////////////////////
+	// FadeInt /////////////////////////////////////////////////////
 
-	class FadeInt : public FadeFloat
+	class FadeFloat : public FadeAbstract
 	{
 	public:
-		FadeInt();
+		void value_(float value);
+		void value_(float value, int ftime);
+		float value();
+	};
+
+	// FadeInt /////////////////////////////////////////////////////
+
+	class FadeInt : public FadeAbstract
+	{
+	public:
 		void value_(int value);
 		void value_(int value, int ftime);
 		int value();
@@ -50,7 +55,6 @@ namespace Jui
 
 	public:
 		FColor();
-		//FColor(QObject * parent);
 		void value_(QColor value);
 		void value_(QColor value, double time);
 		QColor value();

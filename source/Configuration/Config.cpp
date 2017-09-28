@@ -51,18 +51,17 @@ namespace Jui
 		//a.value_(10, 10000);
 		//a.reciever(this, "result");
 		//a.target2(result());
-		
+
 
 		text = new QLineEdit(this);
 		text->setGeometry(130, 30, 50, 25);
 		text->show();
-		
+
 		label = new Text(this);
 		label->setGeometry(130, 60, 50, 25);
-		//label->show();
-
-		fv.reciever(this, "result");
-		fv.value_(10, 2);
+		
+		fade.reciever(this, "result");
+		fade.value_(10, 2);
 
 		Button *b = new Button(this);
 		b->setGeometry(30, 30, 50, 50);
@@ -71,27 +70,21 @@ namespace Jui
 			this, SLOT(click())
 		);
 
-/*
-		ColorTester *ct = new ColorTester(this);
-		ct->setGeometry(30, 200, 100, 100);
-		ct->show();
-*/
+		/*
+				ColorTester *ct = new ColorTester(this);
+				ct->setGeometry(30, 200, 100, 100);
+				ct->show();
+		*/
 	}
 
 	void Config::click() {
-		qDebug() << tr("Config::click(%1)").arg(text->text());
-		fv.value_(text->text().toFloat(), 3);
-		//fv.value_(10.5, 2000);
-		//label->setText(QString::number(fv.value()));
-		label->text_(QString::number(fv.value()));
-		//text->setText(QString::number(a.value()));
-		//a.stop();
+		//qDebug() << tr("Config::click(%1)").arg(text->text());
+		fade.value_(text->text().toFloat(), 3);
+		label->text_(QString::number(fade.value()));
 	}
 	void Config::result() {
-		//label->setText(QString::number(fv.value()));
-		label->text_(QString::number(fv.value()));
-		
-		qDebug() << tr("vysledek = %1").arg(QString::number(fv.value()));
+		label->text_(QString::number(fade.value()));
+		qDebug() << tr("vysledek = %1").arg(QString::number(fade.value()));
 	}
 }
 

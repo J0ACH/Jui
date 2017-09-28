@@ -18,8 +18,8 @@ namespace Jui
 		QString text();
 
 	protected:
-		void enterEvent(QEvent *e) override;
-		void leaveEvent(QEvent *e) override;
+		//void enterEvent(QEvent *e) override;
+		//void leaveEvent(QEvent *e) override;
 		void paintEvent(QPaintEvent *e) override;
 	};
 
