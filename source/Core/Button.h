@@ -4,18 +4,20 @@
 #include "Fade.h"
 #include "Core.h"
 #include <QLabel>
+#include <QLineEdit>
 #include <QPushButton>
 
 namespace Jui
 {
+
 	// Text /////////////////////////////////////////////////////
 
 	class Text : public QLabel
 	{
 	public:
 		Text(QWidget *parent = 0);
-			
-		QString text();
+
+		//QString text();
 
 		void text_(QString text);
 		void font_(QString font, int size);
@@ -30,6 +32,28 @@ namespace Jui
 		FadeColor colorText;
 		QFont fontText;
 	};
+
+	// TextEdit /////////////////////////////////////////////////////
+
+	class TextEdit : public QLineEdit
+	{
+	public:
+		TextEdit(QWidget *parent = 0);
+
+		QString text();
+		void text_(QString text);
+
+	protected:
+		void paintEvent(QPaintEvent *e) override;
+		
+	private:
+		void onCursorPositionChanged(int, int);
+		void onReturnPressed();
+
+		QRect cursorText;
+		FadeColor colorFrame;
+	};
+	
 
 	// Button /////////////////////////////////////////////////////
 

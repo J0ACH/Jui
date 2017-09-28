@@ -2,28 +2,6 @@
 
 namespace Jui
 {
-	
-	ColorTester::ColorTester(QWidget *parent) : QWidget(parent) {
-		backG.value_(QColor(255, 30, 30), 18);
-		backG.reciever(this, "update");
-		startTime = QTime::currentTime();
-		cnt = 0;		
-	}
-	void ColorTester::paintEvent(QPaintEvent *e) {
-		QPainter painter(this);
-		QRect fillRect = QRect(0, 0, width(), height());
-		painter.fillRect(fillRect, backG.value());
-
-		QTime now = QTime::currentTime();
-		qDebug() << tr("%1 -> %2 : %3").arg(
-			QString::number(cnt),
-			QString::number(now.second() - startTime.second()),
-			QString::number(now.msec() - startTime.msec())
-		);
-		cnt++;
-	}
-	
-
 	Config::Config(int x, int y, int width, int height) : Canvas(x, y, width, height)
 	{
 		Header *configHeader = new Header(this);
@@ -53,6 +31,9 @@ namespace Jui
 		//a.target2(result());
 
 
+		eText = new TextEdit(this);
+		eText->setGeometry(230, 30, 50, 25);
+
 		text = new QLineEdit(this);
 		text->setGeometry(130, 30, 50, 25);
 		text->show();
@@ -70,11 +51,6 @@ namespace Jui
 			b, SIGNAL(pressed()),
 			this, SLOT(click())
 		);
-
-
-		ColorTester *ct = new ColorTester(this);
-		ct->setGeometry(30, 200, 100, 100);
-		ct->show();
 
 	}
 

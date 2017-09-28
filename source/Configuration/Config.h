@@ -12,22 +12,8 @@
 #include <QTime>
 #include <QDebug>
 
-
 namespace Jui
-{
-	
-	class ColorTester : public QWidget
-	{
-	public:
-		ColorTester(QWidget *parent = 0);
-	protected:
-		void paintEvent(QPaintEvent *e) override;
-	private:
-		FadeColor backG;
-		QTime startTime;
-		int cnt;
-	};
-	
+{		
 	class Config : public Canvas
 	{
 		Q_OBJECT
@@ -38,6 +24,7 @@ namespace Jui
 		//FadeInt fade;
 		QLineEdit *text;
 		Text *label;
+		TextEdit *eText;
 		QWidget *colorTester;
 
 		private slots:
