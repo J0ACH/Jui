@@ -1,7 +1,28 @@
 #include "Button.h"
 
 namespace Jui
-{	
+{
+	// Text /////////////////////////////////////////////////////
+
+	Text::Text(QWidget *parent) : QLabel(parent) {
+		setText("NaN");
+		show();
+	}
+	
+	void Text::text_(QString text) { QLabel::setText(text); }
+	QString Text::text() { return QLabel::text(); }
+	
+	void Text::paintEvent(QPaintEvent *e) {
+		QPainter painter(this);
+		//QRect frameRect = QRect(0, 0, width() - 1, height() - 1);
+		QRect fillRect = QRect(0, 0, width(), height());
+
+		painter.setPen(QColor(250, 0, 0));
+		painter.drawText(fillRect, Qt::AlignCenter, this->text());
+	}
+
+	// Button /////////////////////////////////////////////////////
+
 	Button::Button(QWidget *parent) : QPushButton(parent) {
 		colorFrame_(QColor(0, 0, 0), QColor(50, 50, 50));
 		colorBackground_(QColor(0, 0, 0, 0), QColor(130, 30, 30));
@@ -16,7 +37,7 @@ namespace Jui
 		);
 		show();
 	}
-	
+
 	void Button::colorFrame_(QColor normal, QColor over) {
 		fade_colorFrame.setStartValue(normal);
 		fade_colorFrame.setEndValue(over);
@@ -61,10 +82,8 @@ namespace Jui
 
 		painter.setPen(QColor(255, 255, 255));
 		painter.drawText(fillRect, Qt::AlignCenter, this->text());
-	}	
-
-	Text::Text(QWidget *parent) : QLabel(parent) {		
-		show();
 	}
+
+
 }
 

@@ -37,7 +37,7 @@ namespace Jui
 		FadeFloat fv;
 		//FDouble a;
 		QLineEdit *text;
-		QLabel *label;
+		Text *label;
 		QWidget *colorTester;
 
 		private slots:

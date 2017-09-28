@@ -57,9 +57,9 @@ namespace Jui
 		text->setGeometry(130, 30, 50, 25);
 		text->show();
 		
-		label = new QLabel(this);
+		label = new Text(this);
 		label->setGeometry(130, 60, 50, 25);
-		label->show();
+		//label->show();
 
 		fv.reciever(this, "result");
 		fv.value_(10, 2);
@@ -82,12 +82,15 @@ namespace Jui
 		qDebug() << tr("Config::click(%1)").arg(text->text());
 		fv.value_(text->text().toFloat(), 3);
 		//fv.value_(10.5, 2000);
-		label->setText(QString::number(fv.value()));
+		//label->setText(QString::number(fv.value()));
+		label->text_(QString::number(fv.value()));
 		//text->setText(QString::number(a.value()));
 		//a.stop();
 	}
 	void Config::result() {
-		label->setText(QString::number(fv.value()));
+		//label->setText(QString::number(fv.value()));
+		label->text_(QString::number(fv.value()));
+		
 		qDebug() << tr("vysledek = %1").arg(QString::number(fv.value()));
 	}
 }

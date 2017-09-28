@@ -5,10 +5,7 @@
 #include <QDebug>
 #include <QMetaObject>
 #include <QVariantAnimation>
-#include <QVariant>
 #include <QColor>
-#include <QString>
-#include <math.h>
 
 namespace Jui
 {
@@ -27,7 +24,7 @@ namespace Jui
 
 	protected:
 		QObject *m_target;
-		const char * m_method;
+		const char *m_method;
 		
 	private:
 		QVariantAnimation variable;

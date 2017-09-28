@@ -2,11 +2,29 @@
 #define BUTTON_H
 
 #include "Core.h"
-#include <QPushButton>
 #include <QLabel>
+#include <QPushButton>
 
 namespace Jui
 {
+	// Text /////////////////////////////////////////////////////
+
+	class Text : public QLabel
+	{
+	public:
+		Text(QWidget *parent = 0);
+			
+		void text_(QString text);
+		QString text();
+
+	protected:
+		void enterEvent(QEvent *e) override;
+		void leaveEvent(QEvent *e) override;
+		void paintEvent(QPaintEvent *e) override;
+	};
+
+	// Button /////////////////////////////////////////////////////
+
 	class Button : public QPushButton
 	{
 
@@ -28,12 +46,6 @@ namespace Jui
 	private:
 		QVariantAnimation fade_colorFrame, fade_colorBackground;
 	};
-
-	class Text : public QLabel {
-	public:
-		Text(QWidget *parent = 0);
-	};
-
 }
 
 #endif // BUTTON_H
