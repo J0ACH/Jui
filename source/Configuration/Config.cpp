@@ -32,7 +32,7 @@ namespace Jui
 
 
 		eText = new TextEdit(this);
-		eText->setGeometry(230, 30, 50, 25);
+		eText->setGeometry(230, 30, 150, 25);
 
 		text = new QLineEdit(this);
 		text->setGeometry(130, 30, 50, 25);

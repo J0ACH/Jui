@@ -42,16 +42,25 @@ namespace Jui
 	TextEdit::TextEdit(QWidget *parent) : QLineEdit(parent)
 	{
 		text_("aaa");
-		//setAlignment(Qt::AlignVCenter | Qt::AlignHCenter);
+		setAlignment(Qt::AlignVCenter | Qt::AlignHCenter);
 		setFont(QFont("Univers Condensed", 12));
-		setFrame(false);
+		//setFrame(false);
 		show();
 
 		colorFrame.value_(50, 50, 50);
+		colorFrame.reciever(this);
 
+		connect(
+			this, &QLineEdit::textChanged,
+			this, &TextEdit::onTextChanged
+		);
 		connect(
 			this, &QLineEdit::cursorPositionChanged,
 			this, &TextEdit::onCursorPositionChanged
+		);
+		connect(
+			this, &QLineEdit::selectionChanged,
+			this, &TextEdit::onSelectionChanged
 		);
 		connect(
 			this, &QLineEdit::returnPressed,
@@ -61,31 +70,73 @@ namespace Jui
 	QString TextEdit::text() { return QLineEdit::text(); }
 	void TextEdit::text_(QString text) { this->setText(text); }
 
+	void TextEdit::onTextChanged(QString text) {
+		//qDebug() << tr("TextEdit::onTextChanged (%1)").arg(text);
+		
+		QFontMetrics fm = this->fontMetrics();
+		textRect = fm.boundingRect(this->rect(), this->alignment(), text);
+		
+		//cursorRect = this->cursorRect();
+		textLine = QRect(
+			this->cursorRect().x() + textRect.left(),
+			this->cursorRect().y(),
+			1,
+			this->cursorRect().y() + this->cursorRect().height() - 1
+		);
+		update();
+	}
 	void TextEdit::onCursorPositionChanged(int oldIndex, int newIndex) {
+		/*
 		qDebug() << tr("TextEdit::onCursorPositionChanged %1 -> %2").arg(
 			QString::number(oldIndex),
 			QString::number(newIndex)
 		);
+
 		cursorText = QRect(
-			this->cursorRect().x() + 2,
+			this->cursorRect().x() + textRect.left(),
 			this->cursorRect().y(),
-			3,
+			1,
 			//this->cursorRect().x(),
 			this->cursorRect().y() + this->cursorRect().height() - 1
 		);
+		*/
+		cursorLine = QLine(
+			QPoint(textRect.left() + cursorRect().left() + 2, cursorRect().y()+2),
+			QPoint(textRect.left() + cursorRect().left() + 2, cursorRect().height() - 1)
+		);
+		qDebug() << tr("TextEdit::onCursorPositionChanged [%1, %2, %3, %4]").arg(
+			QString::number(cursorRect().left()),
+			QString::number(cursorRect().top()),
+			QString::number(cursorRect().right()),
+			QString::number(cursorRect().bottom())
+		);
+		update();
+	}
+	void TextEdit::onSelectionChanged() {
+		qDebug() << "TextEdit::onSelectionChanged";
 	}
 	void TextEdit::onReturnPressed() {
 		qDebug() << "TextEdit::onReturnPressed";
+		colorFrame.value_(200, 30, 30);
+		colorFrame.value_(50, 50, 50, 1.5);
 	}
 
 	void TextEdit::paintEvent(QPaintEvent *e) {
 		QPainter painter(this);
 		QRect fillRect = QRect(0, 0, width(), height());
-		painter.fillRect(QRect(5, height() - 3, width() - 10, 1), QColor(50, 50, 50));
-		painter.setPen(QColor(200, 30, 30));
-		painter.fillRect(cursorText, QColor(50, 50, 50));
-		//painter.drawText(fillRect, Qt::AlignCenter, this->text());
-		painter.drawText(fillRect, this->text());
+
+		//QFontMetrics fm = this->fontMetrics();
+		//QRect textRect = fm.boundingRect(fillRect, Qt::AlignCenter, this->text());
+		painter.setPen(QColor(30, 120, 30));
+		painter.drawRect(textRect);
+		//painter.fillRect(textRect, QColor(30, 120, 30));
+
+		painter.fillRect(QRect(5, height() - 3, width() - 10, 1), colorFrame.value());
+		painter.setPen(QColor(250, 30, 30));
+		//painter.fillRect(cursorText, QColor(50, 50, 50));
+		painter.drawLine(cursorLine);
+		painter.drawText(fillRect, this->alignment(), this->text());
+		//painter.drawText(fillRect, this->text());
 	}
 
 

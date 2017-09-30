@@ -47,10 +47,13 @@ namespace Jui
 		void paintEvent(QPaintEvent *e) override;
 		
 	private:
+		void onTextChanged(QString);
 		void onCursorPositionChanged(int, int);
+		void onSelectionChanged();
 		void onReturnPressed();
-
-		QRect cursorText;
+		
+		QRect textRect, textLine, cursorText;
+		QLine cursorLine;
 		FadeColor colorFrame;
 	};
 	
