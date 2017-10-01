@@ -41,11 +41,14 @@ namespace Jui
 
 	TextEdit::TextEdit(QWidget *parent) : QLineEdit(parent)
 	{
-		text_("aaa");
+		setPlaceholderText("vloz text");
+		//text_("aaa");
 		setAlignment(Qt::AlignVCenter | Qt::AlignHCenter);
 		setFont(QFont("Univers Condensed", 12));
-		//setFrame(false);
 		show();
+
+		colorText.value_(50, 50, 50);
+		colorText.reciever(this);
 
 		colorFrame.value_(50, 50, 50);
 		colorFrame.reciever(this);
@@ -72,10 +75,10 @@ namespace Jui
 
 	void TextEdit::onTextChanged(QString text) {
 		//qDebug() << tr("TextEdit::onTextChanged (%1)").arg(text);
-		
+
 		QFontMetrics fm = this->fontMetrics();
 		textRect = fm.boundingRect(this->rect(), this->alignment(), text);
-		
+
 		//cursorRect = this->cursorRect();
 		textLine = QRect(
 			this->cursorRect().x() + textRect.left(),
@@ -87,22 +90,9 @@ namespace Jui
 	}
 	void TextEdit::onCursorPositionChanged(int oldIndex, int newIndex) {
 		/*
-		qDebug() << tr("TextEdit::onCursorPositionChanged %1 -> %2").arg(
-			QString::number(oldIndex),
-			QString::number(newIndex)
-		);
-
-		cursorText = QRect(
-			this->cursorRect().x() + textRect.left(),
-			this->cursorRect().y(),
-			1,
-			//this->cursorRect().x(),
-			this->cursorRect().y() + this->cursorRect().height() - 1
-		);
-		*/
 		cursorLine = QLine(
-			QPoint(textRect.left() + cursorRect().left() + 2, cursorRect().y()+2),
-			QPoint(textRect.left() + cursorRect().left() + 2, cursorRect().height() - 1)
+			QPoint(textRect.left() + cursorRect().left() + 2, cursorRect().y() + 3),
+			QPoint(textRect.left() + cursorRect().left() + 2, cursorRect().height() + 2)
 		);
 		qDebug() << tr("TextEdit::onCursorPositionChanged [%1, %2, %3, %4]").arg(
 			QString::number(cursorRect().left()),
@@ -110,10 +100,14 @@ namespace Jui
 			QString::number(cursorRect().right()),
 			QString::number(cursorRect().bottom())
 		);
+		*/
 		update();
 	}
 	void TextEdit::onSelectionChanged() {
-		qDebug() << "TextEdit::onSelectionChanged";
+		QString selText = this->selectedText();
+		qDebug() << tr("TextEdit::onSelectionChanged (%1)").arg(
+			selText
+		);
 	}
 	void TextEdit::onReturnPressed() {
 		qDebug() << "TextEdit::onReturnPressed";
@@ -121,30 +115,61 @@ namespace Jui
 		colorFrame.value_(50, 50, 50, 1.5);
 	}
 
+	void TextEdit::enterEvent(QEvent *event)
+	{
+		colorText.value_(200, 200, 200, 0.5);
+	}
+	void TextEdit::leaveEvent(QEvent *event)
+	{
+		colorText.value_(50, 50, 50, 2.5);
+	}
+
+	void TextEdit::focusInEvent(QFocusEvent *e) {
+		qDebug() << "TextEdit::focusInEvent";
+		//this->cursorPositionAt(Point &pos)
+		update();
+	}
+
 	void TextEdit::paintEvent(QPaintEvent *e) {
 		QPainter painter(this);
 		QRect fillRect = QRect(0, 0, width(), height());
+		QRect frameRect = QRect(0, 0, width() - 1, height() - 1);
 
-		//QFontMetrics fm = this->fontMetrics();
-		//QRect textRect = fm.boundingRect(fillRect, Qt::AlignCenter, this->text());
+		painter.setPen(QColor(30, 30, 30));
+		painter.drawRect(frameRect);
+
+		painter.fillRect(QRect(5, height() - 3, width() - 10, 1), colorFrame.value());
+
 		painter.setPen(QColor(30, 120, 30));
 		painter.drawRect(textRect);
 		//painter.fillRect(textRect, QColor(30, 120, 30));
 
-		painter.fillRect(QRect(5, height() - 3, width() - 10, 1), colorFrame.value());
-		painter.setPen(QColor(250, 30, 30));
-		//painter.fillRect(cursorText, QColor(50, 50, 50));
-		painter.drawLine(cursorLine);
+		painter.setPen(colorText.value());
 		painter.drawText(fillRect, this->alignment(), this->text());
 		//painter.drawText(fillRect, this->text());
+
+		drawCursor(painter);
+	}
+
+	void TextEdit::drawCursor(QPainter &painter) {
+		QLine cursorLine(
+			QPoint(textRect.left() + cursorRect().left() + 2, cursorRect().y() + 3),
+			QPoint(textRect.left() + cursorRect().left() + 2, cursorRect().height() + 2)
+		);
+
+		painter.setPen(QColor(250, 30, 30));
+		painter.drawLine(cursorLine);
 	}
 
 
 	// Button /////////////////////////////////////////////////////
 
 	Button::Button(QWidget *parent) : QPushButton(parent) {
-		colorFrame_(QColor(0, 0, 0), QColor(50, 50, 50));
+		colorFrame_(QColor(20, 20, 20), QColor(50, 50, 50));
 		colorBackground_(QColor(0, 0, 0, 0), QColor(130, 30, 30));
+
+		colorFrame.value_(20, 20, 20);
+		colorFrame.reciever(this);
 
 		connect(
 			&fade_colorFrame, SIGNAL(valueChanged(QVariant)),
@@ -165,16 +190,17 @@ namespace Jui
 		fade_colorBackground.setStartValue(off);
 		fade_colorBackground.setEndValue(on);
 	}
-	QColor Button::colorFrame() { return fade_colorFrame.currentValue().value<QColor>(); }
 	QColor Button::colorBackground() { return fade_colorBackground.currentValue().value<QColor>(); }
 
 	void Button::enterEvent(QEvent *event)
 	{
 		Jui::fadeVariant(fade_colorFrame, Jui::fade::in, 200);
+		colorFrame.value_(80, 80, 80, 0.2);
 	}
 	void Button::leaveEvent(QEvent *event)
 	{
 		Jui::fadeVariant(fade_colorFrame, fade::out, 1000);
+		colorFrame.value_(20, 20, 20, 1);
 	}
 	void Button::mousePressEvent(QMouseEvent *e) {
 		QPushButton::mousePressEvent(e);
@@ -196,7 +222,7 @@ namespace Jui
 
 		painter.fillRect(QRect(5, height() - 3, width() - 10, 1), this->colorBackground());
 
-		painter.setPen(this->colorFrame());
+		painter.setPen(colorFrame.value());
 		painter.drawRect(frameRect);
 
 		painter.setPen(QColor(255, 255, 255));

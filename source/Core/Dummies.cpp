@@ -84,7 +84,7 @@ namespace Jui
 	void EdgeControler::paintEvent(QPaintEvent *event)
 	{
 		QPainter painter(this);
-		painter.setPen(colorFrame());
+		painter.setPen(colorFrame.value());
 		switch (m_direction)
 		{
 		case Jui::direction::right:

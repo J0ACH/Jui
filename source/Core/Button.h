@@ -44,6 +44,9 @@ namespace Jui
 		void text_(QString text);
 
 	protected:
+		void enterEvent(QEvent *e) override;
+		void leaveEvent(QEvent *e) override;
+		void focusInEvent(QFocusEvent *e) override;
 		void paintEvent(QPaintEvent *e) override;
 		
 	private:
@@ -51,10 +54,12 @@ namespace Jui
 		void onCursorPositionChanged(int, int);
 		void onSelectionChanged();
 		void onReturnPressed();
-		
-		QRect textRect, textLine, cursorText;
-		QLine cursorLine;
-		FadeColor colorFrame;
+
+		void drawCursor(QPainter &painter);
+				
+		QRect textRect, textLine;
+		//QLine cursorLine;
+		FadeColor colorText, colorFrame;
 	};
 	
 
@@ -68,7 +73,6 @@ namespace Jui
 
 		void colorFrame_(QColor normal, QColor over);
 		void colorBackground_(QColor off, QColor on);
-		QColor colorFrame();
 		QColor colorBackground();
 
 	protected:
@@ -78,6 +82,7 @@ namespace Jui
 		void mouseReleaseEvent(QMouseEvent *e) override;
 		void paintEvent(QPaintEvent *e) override;
 
+		FadeColor colorFrame;
 	private:
 		QVariantAnimation fade_colorFrame, fade_colorBackground;
 	};

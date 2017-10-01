@@ -32,21 +32,24 @@ namespace Jui
 
 
 		eText = new TextEdit(this);
-		eText->setGeometry(230, 30, 150, 25);
+		eText->setGeometry(230, 50, 150, 25);
 
+		/*
 		text = new QLineEdit(this);
 		text->setGeometry(130, 30, 50, 25);
 		text->show();
+		*/
 
 		label = new Text(this);
 		label->setGeometry(130, 60, 50, 25);
 		label->colorText_(100, 30, 30);
+		
 		//fade.target(this, &Config::result);
 		fade.reciever(this, "result");
 		fade.value_(10, 2);
 
 		Button *b = new Button(this);
-		b->setGeometry(30, 30, 50, 50);
+		b->setGeometry(30, 50, 50, 50);
 		connect(
 			b, SIGNAL(pressed()),
 			this, SLOT(click())
@@ -56,7 +59,7 @@ namespace Jui
 
 	void Config::click() {
 		//qDebug() << tr("Config::click(%1)").arg(text->text());
-		fade.value_(text->text().toFloat(), 3);
+		fade.value_(eText->text().toFloat(), 3);
 		label->text_(QString::number(fade.value()));
 	}
 	void Config::result() {

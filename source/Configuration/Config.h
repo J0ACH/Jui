@@ -22,11 +22,10 @@ namespace Jui
 	private:
 		FadeFloat fade;
 		//FadeInt fade;
-		QLineEdit *text;
+		//QLineEdit *text;
 		Text *label;
 		TextEdit *eText;
-		QWidget *colorTester;
-
+		
 		private slots:
 		void click();
 		void result();
