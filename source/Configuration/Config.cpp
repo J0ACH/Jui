@@ -29,11 +29,17 @@ namespace Jui
 		//a.value_(10, 10000);
 		//a.reciever(this, "result");
 		//a.target2(result());
-
+		PureText *pt = new PureText(this);
+		pt->font_("Univers Condensed", 18);
+		pt->setGeometry(30, 200, 150, 40);
 
 		eText = new TextEdit(this);
 		eText->setGeometry(230, 50, 150, 25);
-
+		connect(
+			eText, &TextEdit::returnPressed,
+			this, &Config::click
+		);
+		
 		/*
 		text = new QLineEdit(this);
 		text->setGeometry(130, 30, 50, 25);
@@ -41,8 +47,9 @@ namespace Jui
 		*/
 
 		label = new Text(this);
-		label->setGeometry(130, 60, 50, 25);
+		label->setGeometry(130, 60, 60, 35);
 		label->colorText_(100, 30, 30);
+		label->font_("Univers Condensed", 18);
 		
 		//fade.target(this, &Config::result);
 		fade.reciever(this, "result");
