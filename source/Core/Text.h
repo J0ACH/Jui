@@ -31,10 +31,9 @@ namespace Jui
 		QRect latterRect(int index);
 		QRect latterRect(int indexFrom, int indexTo);
 		QLine gapLine(int index);
+		QRect gapRect(int indexFrom, int indexTo);
 		int latterIndex(QPoint pt);
 		int gapIndex(QPoint pt);
-
-		int cursorIndex, selectFrom, selectTo;
 
 		void paintEvent(QPaintEvent *e) override;
 
@@ -55,7 +54,8 @@ namespace Jui
 
 		bool hasSelection();
 		void selectAll();
-		void select(int from, int to);
+		void selectFrom(int from);
+		void selectTo(int to);
 		void deselect();
 
 	signals:
@@ -74,6 +74,8 @@ namespace Jui
 		void keyPressEvent(QKeyEvent *e) override;
 		void paintEvent(QPaintEvent *e) override;
 	private:
+
+		int m_cursorIndex, m_selectFrom, m_selectTo;
 		QString previousText;
 		FadeColor colorFrame;
 	};

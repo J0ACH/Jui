@@ -50,7 +50,7 @@ namespace Jui
 	}
 	void Header::paintEvent(QPaintEvent *event) {
 		QPainter painter(this);
-		painter.fillRect(rect(), colorBackground());
+		painter.fillRect(rect(), colorBackground.value());
 	}
 
 	// EdgeControler /////////////////////////////////////////////////////

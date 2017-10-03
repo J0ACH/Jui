@@ -1,6 +1,7 @@
 #ifndef DUMMIES_H
 #define DUMMIES_H
 
+#include "Core.h"
 #include "Button.h"
 
 namespace Jui

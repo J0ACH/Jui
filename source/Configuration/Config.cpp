@@ -49,6 +49,7 @@ namespace Jui
 
 		Button *b = new Button(this);
 		b->setGeometry(30, 50, 50, 50);
+		b->setCheckable(true);
 		connect(
 			b, SIGNAL(pressed()),
 			this, SLOT(click())

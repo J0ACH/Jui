@@ -2,71 +2,12 @@
 #define BUTTON_H
 
 #include "Fade.h"
-#include "Core.h"
-#include <QLabel>
-#include <QLineEdit>
 #include <QPushButton>
+#include <QDebug>
+#include <QPainter>
 
 namespace Jui
 {
-	/*
-	// Text /////////////////////////////////////////////////////
-
-	class Text : public QLabel
-	{
-	public:
-		Text(QWidget *parent = 0);
-		void text_(QString text);
-		void font_(QString family, int size);
-		void colorText_(int r, int g, int b);
-
-	protected:
-		void paintEvent(QPaintEvent *e) override;
-
-	private:
-		FadeColor colorText;
-		QFont fontText;
-	};
-
-	// TextEdit /////////////////////////////////////////////////////
-
-	class TextEdit : public QLineEdit
-	{
-	public:
-		TextEdit(QWidget *parent = 0);
-
-		QString text();
-		void text_(QString text);
-		void font_(QString family, int size);
-
-	protected:
-		void enterEvent(QEvent *e) override;
-		void leaveEvent(QEvent *e) override;
-		void focusInEvent(QFocusEvent *e) override;
-		void focusOutEvent(QFocusEvent *e) override;
-		void mousePressEvent(QMouseEvent *e) override;
-		void mouseReleaseEvent(QMouseEvent *e) override;
-		void mouseDoubleClickEvent(QMouseEvent *e) override;
-		void paintEvent(QPaintEvent *e) override;
-
-	private:
-		void onTextChanged(QString);
-		void onCursorPositionChanged(int, int);
-		void onSelectionChanged();
-		void onReturnPressed();
-
-		QPoint letterPoint(int index);
-
-		void drawSelection(QPainter &painter);
-		void drawCursor(QPainter &painter);
-
-		QFontMetrics fontDim;
-		QRect textRect, textLine;
-		//QLine cursorLine;
-		FadeColor colorText, colorFrame;
-	};
-	*/
-
 
 	// Button /////////////////////////////////////////////////////
 
@@ -78,8 +19,7 @@ namespace Jui
 
 		void colorFrame_(QColor normal, QColor over);
 		void colorBackground_(QColor off, QColor on);
-		QColor colorBackground();
-
+		
 	protected:
 		void enterEvent(QEvent *e) override;
 		void leaveEvent(QEvent *e) override;
@@ -87,9 +27,9 @@ namespace Jui
 		void mouseReleaseEvent(QMouseEvent *e) override;
 		void paintEvent(QPaintEvent *e) override;
 
-		FadeColor colorFrame;
+		FadeColor colorFrame, colorBackground;
 	private:
-		QVariantAnimation fade_colorFrame, fade_colorBackground;
+		QColor colorNormal, colorOver, colorOff, colorOn;
 	};
 }
 

@@ -5,10 +5,7 @@ namespace Jui
 	// PureText /////////////////////////////////////////////////////
 
 	PureText::PureText(QWidget *parent) : QWidget(parent) {
-		text = "NaIyn";
-		cursorIndex = -1;
-		selectFrom = -1;
-		selectTo = -1;
+		text = "Nan";
 		flags = Qt::AlignCenter;
 		displayFrame = false;
 		show();
@@ -76,11 +73,21 @@ namespace Jui
 		return latterRect;
 	}
 	QLine PureText::gapLine(int index) {
+		QRect frameRect = QRect(0, 0, width() - 1, height() - 1);
 		QFontMetrics fm = this->fontMetrics();
-		QRect bbox = fm.boundingRect(rect(), flags, text);
+		QRect bbox = fm.boundingRect(frameRect, flags, text);
 		int gapPosX = fm.width(text, index) + bbox.left();
 		QLine gapLine(gapPosX, 0, gapPosX, height() - 1);
 		return gapLine;
+	}
+	QRect PureText::gapRect(int indexFrom, int indexTo) {
+		QRect frameRect = QRect(0, 0, width() - 1, height() - 1);
+		QFontMetrics fm = this->fontMetrics();
+		QRect bbox = fm.boundingRect(frameRect, flags, text);
+		int gapPosX = fm.width(text, indexFrom);
+		int rectWidth = fm.width(text, indexTo) - gapPosX;
+		QRect gapRect(gapPosX + bbox.left(), 0, rectWidth, height() - 1);
+		return gapRect;
 	}
 	int PureText::latterIndex(QPoint pt) {
 		for (int i = 0; i < text.size(); ++i)
@@ -106,31 +113,37 @@ namespace Jui
 	// LineText /////////////////////////////////////////////////////
 
 	LineText::LineText(QWidget *parent) : PureText(parent) {
+		m_cursorIndex = -1;
+		deselect();
 		previousText = text;
 		colorFrame.value_(30, 30, 30);
 		colorFrame.reciever(this);
 	}
 
 	bool LineText::hasSelection() {
-		if (selectFrom != -1 && selectTo != -1) { return true; }
+		if (m_selectFrom != -1 && m_selectTo != -1) { return true; }
 		return false;
 	}
 	void LineText::selectAll() {
-		selectFrom = 0;
-		selectTo = text.size();
-		cursorIndex = text.size();
+		m_selectFrom = 0;
+		m_selectTo = text.size();
+		m_cursorIndex = text.size();
 		update();
 	}
-	void LineText::select(int from, int to)
+	void LineText::selectFrom(int from)
 	{
-		selectFrom = from;
-		selectTo = to;
-		cursorIndex = from;
+		m_selectFrom = from;
+		m_cursorIndex = from;
+		update();
+	}
+	void LineText::selectTo(int to)
+	{
+		m_selectTo = to;
 		update();
 	}
 	void LineText::deselect() {
-		selectFrom = -1;
-		selectTo = -1;
+		m_selectFrom = -1;
+		m_selectTo = -1;
 		update();
 	}
 
@@ -147,26 +160,21 @@ namespace Jui
 
 	void LineText::mousePressEvent(QMouseEvent *e) {
 		setFocus(Qt::MouseFocusReason);
-
 		int mPressIndex = gapIndex(e->pos());
-		if (cursorIndex != mPressIndex) {
-			cursorIndex = mPressIndex;
-			emit cursorChanged(cursorIndex);
-
+		if (m_cursorIndex != mPressIndex) {
+			m_cursorIndex = mPressIndex;
+			emit cursorChanged(mPressIndex);
+			/*
 			qDebug() << tr("PureText::mousePressEvent cursorIndex[%1]").arg(
-				QString::number(cursorIndex)
+				QString::number(mPressIndex)
 			);
-
+			*/
 		}
-		selectFrom = latterIndex(e->pos());
-		selectTo = -1;
-		update();
+		selectFrom(mPressIndex);
 	}
 	void LineText::mouseMoveEvent(QMouseEvent *e) {
-		cursorIndex = selectFrom;
-		selectTo = latterIndex(e->pos());
-		//selectTo = gapIndex(e->pos());
-		update();
+		m_cursorIndex = m_selectFrom;
+		selectTo(gapIndex(e->pos()));
 	}
 	void LineText::mouseDoubleClickEvent(QMouseEvent *e) { selectAll(); }
 	void LineText::keyPressEvent(QKeyEvent *e) {
@@ -177,66 +185,54 @@ namespace Jui
 		case Qt::Key_Enter:
 			//qDebug() << "PureText::keyPressEvent(ENTER)";
 			previousText = text;
-			cursorIndex = -1;
+			m_cursorIndex = -1;
 			deselect();
 			emit enterPressed();
 			break;
 		case Qt::Key_Escape:
 			//qDebug() << "PureText::keyPressEvent(ESC)";
 			text = previousText;
-			cursorIndex = -1;
+			m_cursorIndex = -1;
 			deselect();
 			break;
 		case Qt::Key_Left:
-			if (cursorIndex > 0) {
-				cursorIndex--;
-				emit cursorChanged(cursorIndex);
+			if (m_cursorIndex > 0) {
+				m_cursorIndex--;
+				emit cursorChanged(m_cursorIndex);
 				//qDebug() << "PureText::keyPressEvent(LEFT)";
 			}
 			break;
 		case Qt::Key_Right:
-			if (cursorIndex < text.size()) {
-				cursorIndex++;
-				emit cursorChanged(cursorIndex);
+			if (m_cursorIndex < text.size()) {
+				m_cursorIndex++;
+				emit cursorChanged(m_cursorIndex);
 				//qDebug() << "PureText::keyPressEvent(RIGHT)";
 			}
 			break;
 		case Qt::Key_Backspace:
-			if (cursorIndex > 0) {
-				text.remove(cursorIndex - 1, 1);
-				cursorIndex--;
+			if (m_cursorIndex > 0) {
+				text.remove(m_cursorIndex - 1, 1);
+				m_cursorIndex--;
 				deselect();
 				emit textEdited();
-				emit cursorChanged(cursorIndex);
-				//qDebug() << "PureText::keyPressEvent(BACK)";
+				emit cursorChanged(m_cursorIndex);
 			}
 			break;
 		case Qt::Key_Delete:
-			if (hasSelection())
-			{
-				text.remove(selectFrom, selectTo - selectFrom + 1);
-			}
-			else { text.remove(cursorIndex, 1); }
+			if (hasSelection()) { text.remove(m_selectFrom, m_selectTo - m_selectFrom); }
+			else { text.remove(m_cursorIndex, 1); }
 			deselect();
 			emit textEdited();
-			//qDebug() << "PureText::keyPressEvent(DEL)";
 			break;
 		default:
-			//qDebug() << tr("PureText::keyPressEvent(%1)").arg(e->text());
-
-			qDebug() << tr("PureText::keyPressEvent hasSelection[%1] from[%2] to[%3]").arg(
-				QString::number(hasSelection()),
-				QString::number(selectFrom),
-				QString::number(selectTo)
-			);
-
 			if (hasSelection()) {
-				text.remove(selectFrom, selectTo - selectFrom + 1);
+				text.remove(m_selectFrom, m_selectTo - m_selectFrom);
+				m_cursorIndex = m_selectFrom;
 			}
-			text.insert(cursorIndex, e->text());
-			cursorIndex++;
+			text.insert(m_cursorIndex, e->text());
+			m_cursorIndex++;
 			deselect();
-			emit cursorChanged(cursorIndex);
+			emit cursorChanged(m_cursorIndex);
 			emit textEdited();
 			break;
 		}
@@ -250,12 +246,12 @@ namespace Jui
 
 		if (hasSelection())
 		{
-			painter.fillRect(latterRect(selectFrom, selectTo), QColor(50, 50, 150));
+			painter.fillRect(gapRect(m_selectFrom, m_selectTo), QColor(50, 50, 150));
 		}
 
-		if (cursorIndex != -1) {
+		if (m_cursorIndex != -1) {
 			painter.setPen(QColor(230, 30, 30));
-			painter.drawLine(gapLine(cursorIndex));
+			painter.drawLine(gapLine(m_cursorIndex));
 		}
 
 
