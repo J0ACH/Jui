@@ -36,6 +36,7 @@ namespace Jui
 
 		QRect boudingRect();
 		QRect latterRect(int index);
+		QLine gapLine(int index);
 		int latterIndex(QPoint pt);
 		int gapIndex(QPoint pt);
 	

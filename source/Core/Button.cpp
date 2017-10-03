@@ -9,7 +9,7 @@ namespace Jui
 		cursorIndex = -1;
 		colorFrame.reciever(this);
 		colorFrame.value_(30, 30, 30);
-		flags = Qt::AlignCenter;
+		//flags = Qt::AlignCenter;
 		show();
 	}
 	void PureText::geometry_(int x, int y, int w, int h)
@@ -48,12 +48,9 @@ namespace Jui
 	void PureText::mousePressEvent(QMouseEvent *e) {
 		QWidget::mousePressEvent(e);
 		setFocus(Qt::MouseFocusReason);
-		int idLatter = latterIndex(e->pos());
-		int idGap = gapIndex(e->pos());
-		//qDebug() << "PureText::mousePressEvent";
-		qDebug() << tr("PureText::mousePressEvent idLatter[%1] idGap[%2]").arg(
-			QString::number(idLatter),
-			QString::number(idGap)
+		cursorIndex = gapIndex(e->pos());
+		qDebug() << tr("PureText::mousePressEvent cursorIndex[%1]").arg(
+			QString::number(cursorIndex)
 		);
 		update();
 	}
@@ -83,6 +80,9 @@ namespace Jui
 		}
 		painter.setPen(QColor(130, 30, 30));
 		painter.drawRect(boudingRect());
+
+		painter.setPen(QColor(230, 30, 30));
+		painter.drawLine(gapLine(cursorIndex));
 	}
 
 	QRect PureText::boudingRect() {
@@ -97,6 +97,13 @@ namespace Jui
 		int latterWidth = fm.width(text, index + 1) - latterPosX;
 		QRect latterRect(latterPosX + bbox.left(), 0, latterWidth, height() - 1);
 		return latterRect;
+	}
+	QLine PureText::gapLine(int index) {
+		QFontMetrics fm = this->fontMetrics();
+		QRect bbox = fm.boundingRect(rect(), flags, text);
+		int gapPosX = fm.width(text, index) + bbox.left();
+		QLine gapLine(gapPosX, 0, gapPosX, height() - 1);
+		return gapLine;
 	}
 	int PureText::latterIndex(QPoint pt) {
 		for (int i = 0; i < text.size(); ++i)
