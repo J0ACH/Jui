@@ -10,54 +10,6 @@
 namespace Jui
 {
 
-	// PureText /////////////////////////////////////////////////////
-
-	class PureText : public QWidget
-	{
-		Q_OBJECT
-	public:
-		PureText(QWidget *parent = 0);
-
-		void geometry_(int x, int y, int w, int h);
-		void text_(QString text);
-		void font_(QString family);
-		void align_(Qt::Alignment f);
-
-		bool hasSelection();
-		void selectAll();
-		void deselect();
-		
-	signals:
-		void textChanged();
-		void textEdited();
-		void cursorChanged(int idGap);
-		void enterPressed();
-
-	protected:
-		void enterEvent(QEvent *e) override;
-		void leaveEvent(QEvent *e) override;
-		void mousePressEvent(QMouseEvent *e) override;
-		void mouseMoveEvent(QMouseEvent *e) override;
-		void mouseDoubleClickEvent(QMouseEvent *e) override;
-		void keyPressEvent(QKeyEvent *e) override;
-		void paintEvent(QPaintEvent *e) override;
-
-		QRect boudingRect();
-		QRect latterRect(int index);
-		QRect latterRect(int indexFrom, int indexTo);
-		QLine gapLine(int index);
-		QLine upperLine();
-		int latterIndex(QPoint pt);
-		int gapIndex(QPoint pt);
-
-	private:
-		QString text, previousText;
-		int cursorIndex, selectFrom, selectTo;
-		Qt::Alignment flags;
-		FadeColor colorFrame;
-	};
-
-
 	// Text /////////////////////////////////////////////////////
 
 	class Text : public QLabel

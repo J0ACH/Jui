@@ -3,6 +3,7 @@
 
 #include "Core.h"
 #include "Fade.h"
+#include "Text.h"
 #include "Canvas.h"
 #include "Dummies.h"
 #include "Button.h"
