@@ -9,7 +9,7 @@ namespace Jui
 		cursorIndex = -1;
 		colorFrame.reciever(this);
 		colorFrame.value_(30, 30, 30);
-		//flags = Qt::AlignCenter;
+		flags = Qt::AlignCenter;
 		show();
 	}
 	void PureText::geometry_(int x, int y, int w, int h)
@@ -48,7 +48,13 @@ namespace Jui
 	void PureText::mousePressEvent(QMouseEvent *e) {
 		QWidget::mousePressEvent(e);
 		setFocus(Qt::MouseFocusReason);
-		qDebug() << "PureText::mousePressEvent";
+		int idLatter = latterIndex(e->pos());
+		int idGap = gapIndex(e->pos());
+		//qDebug() << "PureText::mousePressEvent";
+		qDebug() << tr("PureText::mousePressEvent idLatter[%1] idGap[%2]").arg(
+			QString::number(idLatter),
+			QString::number(idGap)
+		);
 		update();
 	}
 	void PureText::keyPressEvent(QKeyEvent *e) {
@@ -91,6 +97,26 @@ namespace Jui
 		int latterWidth = fm.width(text, index + 1) - latterPosX;
 		QRect latterRect(latterPosX + bbox.left(), 0, latterWidth, height() - 1);
 		return latterRect;
+	}
+	int PureText::latterIndex(QPoint pt) {
+		for (int i = 0; i < text.size(); ++i)
+		{
+			if (latterRect(i).contains(pt)) { return(i); }
+		}
+		return -1;
+	}
+	int PureText::gapIndex(QPoint pt) {
+		for (int i = 0; i < text.size(); ++i)
+		{
+			int centerX = latterRect(i).center().x();
+			if (latterRect(i).contains(pt)) {
+				if (pt.x() < centerX) { return(i); }
+				if (pt.x() >= centerX) { return(i + 1); };
+			}
+		}
+		if (pt.x() > latterRect(text.size() - 1).right()) { return(text.size()); }
+		if (pt.x() < latterRect(0).left()) { return 0; }
+		return -1;
 	}
 
 	// Text /////////////////////////////////////////////////////
