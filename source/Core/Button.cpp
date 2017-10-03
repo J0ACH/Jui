@@ -6,10 +6,11 @@ namespace Jui
 
 	PureText::PureText(QWidget *parent) : QWidget(parent) {
 		text = "NaIyn";
+		previousText = text;
 		cursorIndex = -1;
 		colorFrame.reciever(this);
 		colorFrame.value_(30, 30, 30);
-		//flags = Qt::AlignCenter;
+		flags = Qt::AlignCenter;
 		show();
 	}
 	void PureText::geometry_(int x, int y, int w, int h)
@@ -63,15 +64,21 @@ namespace Jui
 		update();
 	}
 	void PureText::keyPressEvent(QKeyEvent *e) {
-		qDebug() << tr("PureText::keyPressEvent(%1)").arg(e->text());
+
 
 		switch (e->key())
 		{
 		case Qt::Key_Return:
-			qDebug() << "PureText::keyPressEvent(ENTER)";
+		case Qt::Key_Enter:
+			//qDebug() << "PureText::keyPressEvent(ENTER)";
+			previousText = text;
+			emit enterPressed();
+			cursorIndex = -1;
 			break;
 		case Qt::Key_Escape:
-			qDebug() << "PureText::keyPressEvent(ESC)";
+			//qDebug() << "PureText::keyPressEvent(ESC)";
+			text = previousText;
+			cursorIndex = -1;
 			break;
 		case Qt::Key_Left:
 			if (cursorIndex > 0) {
@@ -101,12 +108,8 @@ namespace Jui
 			emit textEdited();
 			//qDebug() << "PureText::keyPressEvent(DEL)";
 			break;
-			/*
-		case Qt::Key_Q:
-			emit QKey(obj);
-			break;
-			*/
 		default:
+			qDebug() << tr("PureText::keyPressEvent(%1)").arg(e->text());
 			text.insert(cursorIndex, e->text());
 			cursorIndex++;
 			emit cursorChanged(cursorIndex);

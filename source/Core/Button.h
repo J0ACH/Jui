@@ -27,6 +27,7 @@ namespace Jui
 		void textChanged();
 		void textEdited();
 		void cursorChanged(int idGap);
+		void enterPressed();
 
 	protected:
 		void enterEvent(QEvent *e) override;
@@ -42,7 +43,7 @@ namespace Jui
 		int gapIndex(QPoint pt);
 	
 	private:
-		QString text;
+		QString text, previousText;
 		int cursorIndex;
 		Qt::Alignment flags;
 		FadeColor colorFrame;
