@@ -8,6 +8,8 @@ namespace Jui
 		text = "NaIyn";
 		previousText = text;
 		cursorIndex = -1;
+		selectFrom = -1;
+		selectTo = -1;
 		colorFrame.reciever(this);
 		colorFrame.value_(30, 30, 30);
 		flags = Qt::AlignCenter;
@@ -17,8 +19,21 @@ namespace Jui
 	{
 		setGeometry(x, y, w, h);
 		QFont f = this->font();
-		f.setPixelSize(h);
+		f.setPixelSize(h-8);
+		//f.setPointSize(h);
 		setFont(f);
+
+		QFontMetrics fm = this->fontMetrics();
+		QRect bbox = fm.boundingRect(rect(), flags, text);
+		qDebug() << tr("PureText::geometry_ bbox.height[%1] lineSpacing[%2] height[%3] leading[%4] xHeight[%5]").arg(
+			QString::number(bbox.height()),
+			QString::number(fm.lineSpacing()),
+			QString::number(fm.height()),
+			QString::number(fm.leading()),
+			QString::number(fm.xHeight())
+
+		);
+
 	}
 	void PureText::text_(QString t) {
 		text = t;
@@ -28,11 +43,18 @@ namespace Jui
 	void PureText::font_(QString family) {
 		QFont f;
 		f.setFamily(family);
-		f.setPixelSize(height());
+		//f.setPixelSize(height());
 		setFont(f);
 	}
 	void PureText::align_(Qt::Alignment f) {
 		flags = f;
+	}
+
+	void PureText::selectAll() {
+		selectFrom = 0;
+		selectTo = text.size();
+		cursorIndex = text.size();
+		update();
 	}
 
 	void PureText::enterEvent(QEvent *event)
@@ -47,7 +69,7 @@ namespace Jui
 	}
 
 	void PureText::mousePressEvent(QMouseEvent *e) {
-		QWidget::mousePressEvent(e);
+		//QWidget::mousePressEvent(e);
 		setFocus(Qt::MouseFocusReason);
 
 		int mPressIndex = gapIndex(e->pos());
@@ -60,11 +82,24 @@ namespace Jui
 			);
 			*/
 		}
-
+		selectFrom = latterIndex(e->pos());
+		selectTo = -1;
 		update();
 	}
-	void PureText::keyPressEvent(QKeyEvent *e) {
+	void PureText::mouseMoveEvent(QMouseEvent *e) {
+		cursorIndex = selectFrom;
+		selectTo = latterIndex(e->pos());
+		update();
+	}
+	void PureText::mouseReleaseEvent(QMouseEvent *e) {
+		//QWidget::mouseReleaseEvent(e);
+		//selectTo = latterIndex(e->pos());
+		//if (selectFrom == selectTo) { selectTo = -1; }
+		//update();
+	}
+	void PureText::mouseDoubleClickEvent(QMouseEvent *e) { selectAll(); }
 
+	void PureText::keyPressEvent(QKeyEvent *e) {
 
 		switch (e->key())
 		{
@@ -72,8 +107,8 @@ namespace Jui
 		case Qt::Key_Enter:
 			//qDebug() << "PureText::keyPressEvent(ENTER)";
 			previousText = text;
-			emit enterPressed();
 			cursorIndex = -1;
+			emit enterPressed();
 			break;
 		case Qt::Key_Escape:
 			//qDebug() << "PureText::keyPressEvent(ESC)";
@@ -112,6 +147,8 @@ namespace Jui
 			qDebug() << tr("PureText::keyPressEvent(%1)").arg(e->text());
 			text.insert(cursorIndex, e->text());
 			cursorIndex++;
+			selectFrom = -1;
+			selectTo = -1;
 			emit cursorChanged(cursorIndex);
 			emit textEdited();
 			break;
@@ -122,14 +159,18 @@ namespace Jui
 	void PureText::paintEvent(QPaintEvent *e) {
 		QPainter painter(this);
 		QRect frameRect = QRect(0, 0, width() - 1, height() - 1);
-		QRect fillRect = QRect(0, 0, width(), height());
+
+		if (selectFrom != -1 && selectTo != -1)
+		{
+			painter.fillRect(latterRect(selectFrom, selectTo), QColor(50, 50, 150));
+		}
 
 		painter.setPen(colorFrame.value());
 		painter.drawRect(frameRect);
 
 		painter.setPen(QColor(200, 200, 200));
-		painter.setFont(font());
-		painter.drawText(this->rect(), flags, text);
+		//painter.setFont(font());
+		painter.drawText(rect(), flags, text);
 
 		/*
 		painter.setPen(QColor(30, 200, 30));
@@ -137,9 +178,10 @@ namespace Jui
 		{
 			painter.drawRect(latterRect(i));
 		}
+		*/
 		painter.setPen(QColor(130, 30, 30));
 		painter.drawRect(boudingRect());
-		*/
+
 		if (cursorIndex != -1) {
 			painter.setPen(QColor(230, 30, 30));
 			painter.drawLine(gapLine(cursorIndex));
@@ -152,10 +194,13 @@ namespace Jui
 		return bbox;
 	}
 	QRect PureText::latterRect(int index) {
+		return PureText::latterRect(index, index);
+	}
+	QRect PureText::latterRect(int indexFrom, int indexTo) {
 		QFontMetrics fm = this->fontMetrics();
 		QRect bbox = fm.boundingRect(rect(), flags, text);
-		int latterPosX = fm.width(text, index);
-		int latterWidth = fm.width(text, index + 1) - latterPosX;
+		int latterPosX = fm.width(text, indexFrom);
+		int latterWidth = fm.width(text, indexTo + 1) - latterPosX;
 		QRect latterRect(latterPosX + bbox.left(), 0, latterWidth, height() - 1);
 		return latterRect;
 	}
@@ -185,6 +230,12 @@ namespace Jui
 		if (pt.x() > latterRect(text.size() - 1).right()) { return(text.size()); }
 		if (pt.x() < latterRect(0).left()) { return 0; }
 		return -1;
+	}
+
+	QLine PureText::upperLine() {
+		QFontMetrics fm = this->fontMetrics();
+		fm.ascent();
+		return QLine();
 	}
 
 	// Text /////////////////////////////////////////////////////

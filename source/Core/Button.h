@@ -23,6 +23,8 @@ namespace Jui
 		void font_(QString family);
 		void align_(Qt::Alignment f);
 		
+		void selectAll();
+
 	signals:
 		void textChanged();
 		void textEdited();
@@ -33,18 +35,23 @@ namespace Jui
 		void enterEvent(QEvent *e) override;
 		void leaveEvent(QEvent *e) override;
 		void mousePressEvent(QMouseEvent *e) override;
+		void mouseMoveEvent(QMouseEvent *e) override;
+		void mouseReleaseEvent(QMouseEvent *e) override;
+		void mouseDoubleClickEvent(QMouseEvent *e) override;
 		void keyPressEvent(QKeyEvent *e) override;
 		void paintEvent(QPaintEvent *e) override;
 
 		QRect boudingRect();
 		QRect latterRect(int index);
+		QRect latterRect(int indexFrom, int indexTo);
 		QLine gapLine(int index);
+		QLine upperLine();
 		int latterIndex(QPoint pt);
 		int gapIndex(QPoint pt);
 	
 	private:
 		QString text, previousText;
-		int cursorIndex;
+		int cursorIndex, selectFrom, selectTo;
 		Qt::Alignment flags;
 		FadeColor colorFrame;
 	};

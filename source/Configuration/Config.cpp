@@ -31,7 +31,8 @@ namespace Jui
 		//a.target2(result());
 		PureText *pt = new PureText(this);
 		pt->font_("Consoloas");
-		pt->setGeometry(30, 200, 150, 40);
+		//pt->setGeometry(30, 200, 150, 40);
+		pt->geometry_(30, 200, 150, 40);
 
 		eText = new TextEdit(this);
 		eText->setGeometry(230, 50, 150, 25);
