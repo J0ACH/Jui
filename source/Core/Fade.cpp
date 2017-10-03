@@ -5,7 +5,7 @@ namespace Jui
 	// FadeAbstract /////////////////////////////////////////////////////
 
 	FadeAbstract::FadeAbstract() : QObject(0) {
-		qDebug() << tr("FadeAbstract::NEW()");
+		//qDebug() << tr("FadeAbstract::NEW()");
 	}
 	void FadeAbstract::stop() {
 		if (variable.state() == QAbstractAnimation::State::Running) { variable.stop(); }

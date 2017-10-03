@@ -9,7 +9,7 @@
 
 namespace Jui
 {
-
+	/*
 	// Text /////////////////////////////////////////////////////
 
 	class Text : public QLabel
@@ -65,6 +65,7 @@ namespace Jui
 		//QLine cursorLine;
 		FadeColor colorText, colorFrame;
 	};
+	*/
 
 
 	// Button /////////////////////////////////////////////////////

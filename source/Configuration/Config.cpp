@@ -18,47 +18,34 @@ namespace Jui
 		Canvas *test = new Canvas(this, 50, 50, 200, 200);
 		Header *testHeader = new Header(test);
 		Edges *testEdges = new Edges(test);
-
-		Text *t1 = new Text(test);
-		t1->setGeometry(40, 80, 50, 20);
-		t1->setText("ahoj");
 		*/
 
-		//a = new FadeVariable();
-		//qDebug() << tr("a.value = %1").arg(a.value());
-		//a.value_(10, 10000);
-		//a.reciever(this, "result");
-		//a.target2(result());
-		PureText *pt = new PureText(this);
-		//pt->font_("Consoloas");
+		pt = new PureText(this);
+		pt->font_("Consolas");
 		pt->geometry_(30, 200, 150, 40);
-		
-		LineText *lt = new LineText(this);
+		pt->displayFrame_(true);
+
+		lt = new LineText(this);
 		lt->font_("Univers Condensed");
-		lt->geometry_(30, 250,350, 90);
+		lt->geometry_(30, 250, 350, 90);
 
-
-		eText = new TextEdit(this);
-		eText->setGeometry(230, 50, 150, 25);
 		connect(
-			eText, &TextEdit::returnPressed,
+			lt, SIGNAL(enterPressed()),
+			this, SLOT(click())
+		);
+
+		/*
+			connect(
+			lt, &LineText::enterPressed,
 			this, &Config::click
 		);
-		
-		/*
-		text = new QLineEdit(this);
-		text->setGeometry(130, 30, 50, 25);
-		text->show();
 		*/
 
-		label = new Text(this);
-		label->setGeometry(130, 60, 60, 35);
-		label->colorText_(100, 30, 30);
-		label->font_("Univers Condensed", 18);
-		
+
 		//fade.target(this, &Config::result);
 		fade.reciever(this, "result");
 		fade.value_(10, 2);
+
 
 		Button *b = new Button(this);
 		b->setGeometry(30, 50, 50, 50);
@@ -67,15 +54,16 @@ namespace Jui
 			this, SLOT(click())
 		);
 
+
 	}
 
 	void Config::click() {
-		//qDebug() << tr("Config::click(%1)").arg(text->text());
-		fade.value_(eText->text().toFloat(), 3);
-		label->text_(QString::number(fade.value()));
+		qDebug() << tr("Config::click(%1)").arg(lt->text);
+		fade.value_(lt->text.toFloat(), 3);
+		//pt->text_(QString::number(fade.value()));
 	}
 	void Config::result() {
-		label->text_(QString::number(fade.value()));
+		pt->text_(QString::number(fade.value()));
 		//qDebug() << tr("vysledek = %1").arg(QString::number(fade.value()));
 	}
 }

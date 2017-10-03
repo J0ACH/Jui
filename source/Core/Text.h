@@ -14,7 +14,7 @@ namespace Jui
 
 	class PureText : public QWidget
 	{
-		Q_OBJECT
+
 	public:
 		PureText(QWidget *parent = 0);
 
@@ -22,6 +22,36 @@ namespace Jui
 		void text_(QString text);
 		void font_(QString family);
 		void align_(Qt::Alignment f);
+		void displayFrame_(bool b);
+
+		QString text;
+
+	protected:
+		QRect boudingRect();
+		QRect latterRect(int index);
+		QRect latterRect(int indexFrom, int indexTo);
+		QLine gapLine(int index);
+		int latterIndex(QPoint pt);
+		int gapIndex(QPoint pt);
+
+		int cursorIndex, selectFrom, selectTo;
+
+		void paintEvent(QPaintEvent *e) override;
+
+	private:
+		Qt::Alignment flags;
+		bool displayFrame;
+	};
+
+
+	// LineText /////////////////////////////////////////////////////
+
+	class LineText : public PureText
+	{
+		Q_OBJECT
+
+	public:
+		LineText(QWidget *parent = 0);
 
 		bool hasSelection();
 		void selectAll();
@@ -32,34 +62,9 @@ namespace Jui
 		void textChanged();
 		void textEdited();
 		void cursorChanged(int idGap);
+		void selectionChanged(int from, int to);
 		void enterPressed();
 
-	protected:		
-		void paintEvent(QPaintEvent *e) override;
-
-		QRect boudingRect();
-		QRect latterRect(int index);
-		QRect latterRect(int indexFrom, int indexTo);
-		QLine gapLine(int index);
-		QLine upperLine();
-		int latterIndex(QPoint pt);
-		int gapIndex(QPoint pt);
-
-		QString text;
-		int cursorIndex, selectFrom, selectTo;
-
-	private:
-		Qt::Alignment flags;
-		FadeColor colorFrame;
-	};
-
-
-	// LineText /////////////////////////////////////////////////////
-
-	class LineText : public PureText
-	{
-	public:
-		LineText(QWidget *parent = 0);
 	protected:
 		void enterEvent(QEvent *e) override;
 		void leaveEvent(QEvent *e) override;
@@ -69,7 +74,7 @@ namespace Jui
 		void keyPressEvent(QKeyEvent *e) override;
 		void paintEvent(QPaintEvent *e) override;
 	private:
-		QString previousText;		
+		QString previousText;
 		FadeColor colorFrame;
 	};
 }

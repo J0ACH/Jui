@@ -2,6 +2,7 @@
 
 namespace Jui
 {
+	/*
 	// Text /////////////////////////////////////////////////////
 
 	Text::Text(QWidget *parent) : QLabel(parent) {
@@ -93,18 +94,7 @@ namespace Jui
 		update();
 	}
 	void TextEdit::onCursorPositionChanged(int oldIndex, int newIndex) {
-		/*
-		cursorLine = QLine(
-			QPoint(textRect.left() + cursorRect().left() + 2, cursorRect().y() + 3),
-			QPoint(textRect.left() + cursorRect().left() + 2, cursorRect().height() + 2)
-		);
-		qDebug() << tr("TextEdit::onCursorPositionChanged [%1, %2, %3, %4]").arg(
-			QString::number(cursorRect().left()),
-			QString::number(cursorRect().top()),
-			QString::number(cursorRect().right()),
-			QString::number(cursorRect().bottom())
-		);
-		*/
+		
 		update();
 	}
 	void TextEdit::onSelectionChanged() {
@@ -151,14 +141,7 @@ namespace Jui
 	}
 	void TextEdit::mouseReleaseEvent(QMouseEvent *e) {
 		QLineEdit::mouseReleaseEvent(e);
-		/*
-		int latterIndex = cursorPositionAt(QPoint(e->x() - textRect.left(), e->y()));
-		qDebug() << tr("TextEdit::mouseReleaseEvent cursorPosition = %1").arg(
-			QString::number(latterIndex)
-		);
-		QLineEdit::setCursorPosition(latterIndex);
-		update();
-		*/
+		
 	}
 	void TextEdit::mouseDoubleClickEvent(QMouseEvent *e) {
 		//QLineEdit::mouseDoubleClickEvent(e);
@@ -212,7 +195,7 @@ namespace Jui
 		painter.setPen(QColor(250, 30, 30));
 		painter.drawLine(cursorLine);
 	}
-
+	*/
 
 	// Button /////////////////////////////////////////////////////
 

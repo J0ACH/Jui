@@ -10,18 +10,19 @@ namespace Jui
 		selectFrom = -1;
 		selectTo = -1;
 		flags = Qt::AlignCenter;
+		displayFrame = false;
 		show();
 	}
 	void PureText::geometry_(int x, int y, int w, int h)
 	{
-		setGeometry(x, y, w, h);
+		QWidget::setGeometry(x, y, w, h);
 		QFont f = this->font();
 		f.setPixelSize(h * 5 / 6);
 		setFont(f);
 	}
 	void PureText::text_(QString t) {
 		text = t;
-		emit textChanged();
+		update();
 	}
 
 	void PureText::font_(QString family) {
@@ -32,60 +33,28 @@ namespace Jui
 	void PureText::align_(Qt::Alignment f) {
 		flags = f;
 	}
-
-	bool PureText::hasSelection() {
-		if (selectFrom != -1 && selectTo != -1) { return true; }
-		return false;
-	}
-	void PureText::selectAll() {
-		selectFrom = 0;
-		selectTo = text.size();
-		cursorIndex = text.size();
-		update();
-	}
-	void PureText::select(int from, int to)
-	{
-		selectFrom = from;
-		selectTo = to;
-		cursorIndex = from;
-		update();
-	}
-	void PureText::deselect() {
-		selectFrom = -1;
-		selectTo = -1;
-		update();
-	}
+	void PureText::displayFrame_(bool b) { displayFrame = b; }
 
 	void PureText::paintEvent(QPaintEvent *e) {
 		QPainter painter(this);
 		QRect frameRect = QRect(0, 0, width() - 1, height() - 1);
 
-		if (hasSelection())
-		{
-			painter.fillRect(latterRect(selectFrom, selectTo), QColor(50, 50, 150));
-		}
+		if (displayFrame) {
+			painter.setPen(QColor(50, 50, 250));
+			painter.drawRect(frameRect);
 
-		painter.setPen(QColor(50, 50, 250));
-		painter.drawRect(frameRect);
+			painter.setPen(QColor(30, 200, 30));
+			for (int i = 0; i < text.size(); ++i)
+			{
+				painter.drawRect(latterRect(i));
+			}
+
+			painter.setPen(QColor(130, 30, 30));
+			painter.drawRect(boudingRect());
+		}
 
 		painter.setPen(QColor(200, 200, 200));
-		//painter.setFont(font());
 		painter.drawText(rect(), flags, text);
-
-		painter.setPen(QColor(30, 200, 30));
-		for (int i = 0; i < text.size(); ++i)
-		{
-			painter.drawRect(latterRect(i));
-		}
-		painter.setPen(QColor(130, 30, 30));
-		painter.drawRect(boudingRect());
-		/*
-		*/
-
-		if (cursorIndex != -1) {
-			painter.setPen(QColor(230, 30, 30));
-			painter.drawLine(gapLine(cursorIndex));
-		}
 	}
 
 	QRect PureText::boudingRect() {
@@ -134,19 +103,37 @@ namespace Jui
 		return -1;
 	}
 
-	QLine PureText::upperLine() {
-		QFontMetrics fm = this->fontMetrics();
-		fm.ascent();
-		return QLine();
-	}
-
 	// LineText /////////////////////////////////////////////////////
 
 	LineText::LineText(QWidget *parent) : PureText(parent) {
 		previousText = text;
-		colorFrame.reciever(this);
 		colorFrame.value_(30, 30, 30);
+		colorFrame.reciever(this);
 	}
+
+	bool LineText::hasSelection() {
+		if (selectFrom != -1 && selectTo != -1) { return true; }
+		return false;
+	}
+	void LineText::selectAll() {
+		selectFrom = 0;
+		selectTo = text.size();
+		cursorIndex = text.size();
+		update();
+	}
+	void LineText::select(int from, int to)
+	{
+		selectFrom = from;
+		selectTo = to;
+		cursorIndex = from;
+		update();
+	}
+	void LineText::deselect() {
+		selectFrom = -1;
+		selectTo = -1;
+		update();
+	}
+
 	void LineText::enterEvent(QEvent *event)
 	{
 		qDebug() << "LineText::enterEvent";
@@ -165,11 +152,11 @@ namespace Jui
 		if (cursorIndex != mPressIndex) {
 			cursorIndex = mPressIndex;
 			emit cursorChanged(cursorIndex);
-			/*
+
 			qDebug() << tr("PureText::mousePressEvent cursorIndex[%1]").arg(
-			QString::number(cursorIndex)
+				QString::number(cursorIndex)
 			);
-			*/
+
 		}
 		selectFrom = latterIndex(e->pos());
 		selectTo = -1;
@@ -257,14 +244,25 @@ namespace Jui
 	}
 
 	void LineText::paintEvent(QPaintEvent *e) {
-		PureText::paintEvent(e);
 
 		QPainter painter(this);
 		QRect frameRect = QRect(0, 0, width() - 1, height() - 1);
 
-		painter.setPen(colorFrame.value());
-		//painter.drawRect(frameRect);
+		if (hasSelection())
+		{
+			painter.fillRect(latterRect(selectFrom, selectTo), QColor(50, 50, 150));
+		}
 
+		if (cursorIndex != -1) {
+			painter.setPen(QColor(230, 30, 30));
+			painter.drawLine(gapLine(cursorIndex));
+		}
+
+
+		painter.setPen(colorFrame.value());
+
+		PureText::paintEvent(e);
+		//painter.drawRect(frameRect);
 	}
 
 }
