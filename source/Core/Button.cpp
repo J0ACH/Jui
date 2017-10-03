@@ -19,7 +19,7 @@ namespace Jui
 	{
 		setGeometry(x, y, w, h);
 		QFont f = this->font();
-		f.setPixelSize(h-8);
+		f.setPixelSize(h - 8);
 		//f.setPointSize(h);
 		setFont(f);
 
@@ -50,10 +50,19 @@ namespace Jui
 		flags = f;
 	}
 
+	bool PureText::hasSelection() {
+		if (selectFrom != -1 && selectTo != -1) { return true; }
+		return false;
+	}
 	void PureText::selectAll() {
 		selectFrom = 0;
 		selectTo = text.size();
 		cursorIndex = text.size();
+		update();
+	}
+	void PureText::deselect() {
+		selectFrom = -1;
+		selectTo = -1;
 		update();
 	}
 
@@ -69,7 +78,6 @@ namespace Jui
 	}
 
 	void PureText::mousePressEvent(QMouseEvent *e) {
-		//QWidget::mousePressEvent(e);
 		setFocus(Qt::MouseFocusReason);
 
 		int mPressIndex = gapIndex(e->pos());
@@ -89,14 +97,10 @@ namespace Jui
 	void PureText::mouseMoveEvent(QMouseEvent *e) {
 		cursorIndex = selectFrom;
 		selectTo = latterIndex(e->pos());
+		//selectTo = gapIndex(e->pos());
 		update();
 	}
-	void PureText::mouseReleaseEvent(QMouseEvent *e) {
-		//QWidget::mouseReleaseEvent(e);
-		//selectTo = latterIndex(e->pos());
-		//if (selectFrom == selectTo) { selectTo = -1; }
-		//update();
-	}
+
 	void PureText::mouseDoubleClickEvent(QMouseEvent *e) { selectAll(); }
 
 	void PureText::keyPressEvent(QKeyEvent *e) {
@@ -108,12 +112,14 @@ namespace Jui
 			//qDebug() << "PureText::keyPressEvent(ENTER)";
 			previousText = text;
 			cursorIndex = -1;
+			deselect();
 			emit enterPressed();
 			break;
 		case Qt::Key_Escape:
 			//qDebug() << "PureText::keyPressEvent(ESC)";
 			text = previousText;
 			cursorIndex = -1;
+			deselect();
 			break;
 		case Qt::Key_Left:
 			if (cursorIndex > 0) {
@@ -133,22 +139,37 @@ namespace Jui
 			if (cursorIndex > 0) {
 				text.remove(cursorIndex - 1, 1);
 				cursorIndex--;
+				deselect();
 				emit textEdited();
 				emit cursorChanged(cursorIndex);
 				//qDebug() << "PureText::keyPressEvent(BACK)";
 			}
 			break;
 		case Qt::Key_Delete:
-			text.remove(cursorIndex, 1);
+			if (hasSelection())
+			{
+				text.remove(selectFrom, selectTo - selectFrom + 1);
+			}
+			else { text.remove(cursorIndex, 1); }
+			deselect();
 			emit textEdited();
 			//qDebug() << "PureText::keyPressEvent(DEL)";
 			break;
 		default:
-			qDebug() << tr("PureText::keyPressEvent(%1)").arg(e->text());
+			//qDebug() << tr("PureText::keyPressEvent(%1)").arg(e->text());
+
+			qDebug() << tr("PureText::keyPressEvent hasSelection[%1] from[%2] to[%3]").arg(
+				QString::number(hasSelection()),
+				QString::number(selectFrom),
+				QString::number(selectTo)
+			);
+
+			if (hasSelection()) {
+				text.remove(selectFrom, selectTo - selectFrom + 1);
+			}
 			text.insert(cursorIndex, e->text());
 			cursorIndex++;
-			selectFrom = -1;
-			selectTo = -1;
+			deselect();
 			emit cursorChanged(cursorIndex);
 			emit textEdited();
 			break;
@@ -160,7 +181,7 @@ namespace Jui
 		QPainter painter(this);
 		QRect frameRect = QRect(0, 0, width() - 1, height() - 1);
 
-		if (selectFrom != -1 && selectTo != -1)
+		if (hasSelection())
 		{
 			painter.fillRect(latterRect(selectFrom, selectTo), QColor(50, 50, 150));
 		}
@@ -178,9 +199,9 @@ namespace Jui
 		{
 			painter.drawRect(latterRect(i));
 		}
-		*/
 		painter.setPen(QColor(130, 30, 30));
 		painter.drawRect(boudingRect());
+		*/
 
 		if (cursorIndex != -1) {
 			painter.setPen(QColor(230, 30, 30));
