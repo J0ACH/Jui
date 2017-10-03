@@ -18,8 +18,9 @@ namespace Jui
 	public:
 		PureText(QWidget *parent = 0);
 
+		void geometry_(int x, int y, int w, int h);
 		void text_(QString text);
-		void font_(QString family, int size);
+		void font_(QString family);
 		void align_(Qt::Alignment f);
 		
 	signals:
@@ -33,6 +34,7 @@ namespace Jui
 		void keyPressEvent(QKeyEvent *e) override;
 		void paintEvent(QPaintEvent *e) override;
 
+		QRect boudingRect();
 		QRect latterRect(int index);
 	
 	private:

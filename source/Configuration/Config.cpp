@@ -30,7 +30,7 @@ namespace Jui
 		//a.reciever(this, "result");
 		//a.target2(result());
 		PureText *pt = new PureText(this);
-		pt->font_("Univers Condensed", 18);
+		pt->font_("Consoloas");
 		pt->setGeometry(30, 200, 150, 40);
 
 		eText = new TextEdit(this);

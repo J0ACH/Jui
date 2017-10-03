@@ -5,20 +5,30 @@ namespace Jui
 	// PureText /////////////////////////////////////////////////////
 
 	PureText::PureText(QWidget *parent) : QWidget(parent) {
-		text = "Nan";
-		cursorIndex = 0;
+		text = "NaIyn";
+		cursorIndex = -1;
 		colorFrame.reciever(this);
 		colorFrame.value_(30, 30, 30);
 		//flags = Qt::AlignCenter;
 		show();
+	}
+	void PureText::geometry_(int x, int y, int w, int h)
+	{
+		setGeometry(x, y, w, h);
+		QFont f = this->font();
+		f.setPixelSize(h);
+		setFont(f);
 	}
 	void PureText::text_(QString t) {
 		text = t;
 		emit textChanged();
 	}
 
-	void PureText::font_(QString family, int size) {
-		setFont(QFont(family, size));
+	void PureText::font_(QString family) {
+		QFont f;
+		f.setFamily(family);
+		f.setPixelSize(height());
+		setFont(f);
 	}
 	void PureText::align_(Qt::Alignment f) {
 		flags = f;
@@ -60,37 +70,27 @@ namespace Jui
 		painter.setFont(font());
 		painter.drawText(this->rect(), flags, text);
 
-		int offsetX = 0;
-		for (int i = 0; i <= text.size(); ++i)
+		painter.setPen(QColor(30, 200, 30));
+		for (int i = 0; i < text.size(); ++i)
 		{
-			//if (i == 2)
-			//{
-			QRect lr = latterRect(i);
-			lr.setX(offsetX);
-			painter.setPen(QColor(30, 200, 30));
-			painter.drawRect(lr);
-			qDebug() << tr("PureText::offsetX[%1] = %2").arg(
-				QString::number(lr.width()),
-				QString::number(offsetX)
-			);
-			offsetX += lr.width();
-			//}
-
+			painter.drawRect(latterRect(i));
 		}
+		painter.setPen(QColor(130, 30, 30));
+		painter.drawRect(boudingRect());
 	}
 
+	QRect PureText::boudingRect() {
+		QFontMetrics fm = this->fontMetrics();
+		QRect bbox = fm.boundingRect(rect(), flags, text);
+		return bbox;
+	}
 	QRect PureText::latterRect(int index) {
 		QFontMetrics fm = this->fontMetrics();
-		//fm.boundingRect(this->rect(), this->alignment(), this->text());
-		QStringRef subText(&text, index, 1);
-		QRect latter = fm.boundingRect(rect(), flags, subText.toString());
-		int pixX = fm.width(text, index);
-		qDebug() << tr("PureText::i[%1] latter[%2] pixX[%3]").arg(
-			QString::number(index),
-			QString::number(latter.width()),
-			QString::number(pixX)
-		);
-		return latter;
+		QRect bbox = fm.boundingRect(rect(), flags, text);
+		int latterPosX = fm.width(text, index);
+		int latterWidth = fm.width(text, index + 1) - latterPosX;
+		QRect latterRect(latterPosX + bbox.left(), 0, latterWidth, height() - 1);
+		return latterRect;
 	}
 
 	// Text /////////////////////////////////////////////////////
