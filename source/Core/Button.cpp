@@ -48,16 +48,71 @@ namespace Jui
 	void PureText::mousePressEvent(QMouseEvent *e) {
 		QWidget::mousePressEvent(e);
 		setFocus(Qt::MouseFocusReason);
-		cursorIndex = gapIndex(e->pos());
-		qDebug() << tr("PureText::mousePressEvent cursorIndex[%1]").arg(
-			QString::number(cursorIndex)
-		);
+
+		int mPressIndex = gapIndex(e->pos());
+		if (cursorIndex != mPressIndex) {
+			cursorIndex = mPressIndex;
+			emit cursorChanged(cursorIndex);
+			/*
+			qDebug() << tr("PureText::mousePressEvent cursorIndex[%1]").arg(
+				QString::number(cursorIndex)
+			);
+			*/
+		}
+
 		update();
 	}
 	void PureText::keyPressEvent(QKeyEvent *e) {
-		//qDebug() << tr("PureText::keyPressEvent(%1)").arg(e->text());
-		text.insert(cursorIndex, e->text());
-		emit textEdited();
+		qDebug() << tr("PureText::keyPressEvent(%1)").arg(e->text());
+
+		switch (e->key())
+		{
+		case Qt::Key_Return:
+			qDebug() << "PureText::keyPressEvent(ENTER)";
+			break;
+		case Qt::Key_Escape:
+			qDebug() << "PureText::keyPressEvent(ESC)";
+			break;
+		case Qt::Key_Left:
+			if (cursorIndex > 0) {
+				cursorIndex--;
+				emit cursorChanged(cursorIndex);
+				//qDebug() << "PureText::keyPressEvent(LEFT)";
+			}
+			break;
+		case Qt::Key_Right:
+			if (cursorIndex < text.size()) {
+				cursorIndex++;
+				emit cursorChanged(cursorIndex);
+				//qDebug() << "PureText::keyPressEvent(RIGHT)";
+			}
+			break;
+		case Qt::Key_Backspace:
+			if (cursorIndex > 0) {
+				text.remove(cursorIndex - 1, 1);
+				cursorIndex--;
+				emit textEdited();
+				emit cursorChanged(cursorIndex);
+				//qDebug() << "PureText::keyPressEvent(BACK)";
+			}
+			break;
+		case Qt::Key_Delete:
+			text.remove(cursorIndex, 1);
+			emit textEdited();
+			//qDebug() << "PureText::keyPressEvent(DEL)";
+			break;
+			/*
+		case Qt::Key_Q:
+			emit QKey(obj);
+			break;
+			*/
+		default:
+			text.insert(cursorIndex, e->text());
+			cursorIndex++;
+			emit cursorChanged(cursorIndex);
+			emit textEdited();
+			break;
+		}
 		update();
 	}
 
@@ -73,6 +128,7 @@ namespace Jui
 		painter.setFont(font());
 		painter.drawText(this->rect(), flags, text);
 
+		/*
 		painter.setPen(QColor(30, 200, 30));
 		for (int i = 0; i < text.size(); ++i)
 		{
@@ -80,9 +136,11 @@ namespace Jui
 		}
 		painter.setPen(QColor(130, 30, 30));
 		painter.drawRect(boudingRect());
-
-		painter.setPen(QColor(230, 30, 30));
-		painter.drawLine(gapLine(cursorIndex));
+		*/
+		if (cursorIndex != -1) {
+			painter.setPen(QColor(230, 30, 30));
+			painter.drawLine(gapLine(cursorIndex));
+		}
 	}
 
 	QRect PureText::boudingRect() {

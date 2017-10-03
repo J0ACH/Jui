@@ -26,6 +26,7 @@ namespace Jui
 	signals:
 		void textChanged();
 		void textEdited();
+		void cursorChanged(int idGap);
 
 	protected:
 		void enterEvent(QEvent *e) override;
