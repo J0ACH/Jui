@@ -171,6 +171,7 @@ namespace Jui
 			*/
 		}
 		selectFrom(mPressIndex);
+		selectTo(mPressIndex);
 	}
 	void LineText::mouseMoveEvent(QMouseEvent *e) {
 		m_cursorIndex = m_selectFrom;
@@ -198,6 +199,7 @@ namespace Jui
 		case Qt::Key_Left:
 			if (m_cursorIndex > 0) {
 				m_cursorIndex--;
+				deselect();
 				emit cursorChanged(m_cursorIndex);
 				//qDebug() << "PureText::keyPressEvent(LEFT)";
 			}
@@ -205,6 +207,7 @@ namespace Jui
 		case Qt::Key_Right:
 			if (m_cursorIndex < text.size()) {
 				m_cursorIndex++;
+				deselect();
 				emit cursorChanged(m_cursorIndex);
 				//qDebug() << "PureText::keyPressEvent(RIGHT)";
 			}
