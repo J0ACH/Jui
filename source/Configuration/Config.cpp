@@ -45,8 +45,7 @@ namespace Jui
 		//fade.target(this, &Config::result);
 		fade.reciever(this, "result");
 		fade.value_(10, 2);
-
-
+		
 		Button *b = new Button(this);
 		b->setGeometry(30, 50, 50, 50);
 		b->setCheckable(true);

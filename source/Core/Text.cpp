@@ -21,7 +21,6 @@ namespace Jui
 		text = t;
 		update();
 	}
-
 	void PureText::font_(QString family) {
 		QFont f = this->font();
 		f.setFamily(family);
@@ -157,6 +156,10 @@ namespace Jui
 		qDebug() << "LineText::leaveEvent";
 		colorFrame.value_(50, 50, 50, 1);
 	}
+	void LineText::focusOutEvent(QFocusEvent *e) {
+		deselect();
+		m_cursorIndex = -1;
+	}
 
 	void LineText::mousePressEvent(QMouseEvent *e) {
 		setFocus(Qt::MouseFocusReason);
@@ -245,7 +248,14 @@ namespace Jui
 	void LineText::paintEvent(QPaintEvent *e) {
 
 		QPainter painter(this);
-		QRect frameRect = QRect(0, 0, width() - 1, height() - 1);
+
+
+		if (hasFocus())
+		{
+			QRect frameRect = QRect(0, 0, width() - 1, height() - 1);
+			painter.setPen(QColor(30, 30, 30));
+			painter.drawRect(frameRect);
+		}
 
 		if (hasSelection())
 		{
@@ -261,7 +271,7 @@ namespace Jui
 		painter.setPen(colorFrame.value());
 
 		PureText::paintEvent(e);
-		//painter.drawRect(frameRect);
+
 	}
 
 }

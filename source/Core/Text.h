@@ -68,6 +68,7 @@ namespace Jui
 	protected:
 		void enterEvent(QEvent *e) override;
 		void leaveEvent(QEvent *e) override;
+		void focusOutEvent(QFocusEvent *e) override;
 		void mousePressEvent(QMouseEvent *e) override;
 		void mouseMoveEvent(QMouseEvent *e) override;
 		void mouseDoubleClickEvent(QMouseEvent *e) override;
