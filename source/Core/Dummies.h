@@ -13,6 +13,8 @@ namespace Jui
 	{
 	public:
 		Header(QWidget *parent);
+		void font_(QString family);
+
 	protected:
 		void mousePressEvent(QMouseEvent *e) override;
 		void mouseMoveEvent(QMouseEvent *e) override;

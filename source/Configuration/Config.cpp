@@ -5,6 +5,7 @@ namespace Jui
 	Config::Config(int x, int y, int width, int height) : Canvas(x, y, width, height)
 	{
 		this->setObjectName("Configuration");
+
 		Header *configHeader = new Header(this);
 		Edges *configEdges = new Edges(this);
 		Button *configClose = new Button(configHeader);
@@ -22,7 +23,9 @@ namespace Jui
 		*/
 
 		pt = new PureText(this);
-		pt->font_("Consolas");
+		//pt->font_("Consolas");
+		//pt->font_("Univers Condensed");
+		pt->font_("Univers 57 Condensed");
 		pt->geometry_(30, 200, 150, 40);
 		pt->displayFrame_(true);
 

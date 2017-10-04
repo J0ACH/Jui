@@ -23,7 +23,9 @@ SET(Core_src
 )
 
 SET(Core_res
-	${CMAKE_CURRENT_LIST_DIR}/Icons.qrc
+	${CMAKE_CURRENT_LIST_DIR}/Resources.qrc
 	PARENT_SCOPE
 )
+
+
 

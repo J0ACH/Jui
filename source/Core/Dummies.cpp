@@ -8,7 +8,9 @@ namespace Jui
 		m_parent(parent),
 		m_text(new PureText(this))
 	{
+		//Jui::loadFonts();
 		colorBackground_(QColor(0, 0, 0, 0), QColor(120, 20, 20));
+		m_text->font_("Univers Condensed");
 		m_text->text_(parent->objectName());
 		m_text->align_(Qt::AlignVCenter | Qt::AlignLeft);
 		thickness = 30;
@@ -16,9 +18,10 @@ namespace Jui
 		fitSize();
 		m_parent->installEventFilter(this);
 	}
+	void Header::font_(QString family) { m_text->font_(family); }
 	void Header::fitSize() {
 		setFixedSize(m_parent->size().width() - 2, thickness);
-		m_text->geometry_(20, 8, m_parent->size().width() - 2, thickness-16);
+		m_text->geometry_(20, 6, m_parent->size().width() - 2, thickness - 12);
 	}
 	bool Header::eventFilter(QObject *object, QEvent *e) {
 		switch (e->type())

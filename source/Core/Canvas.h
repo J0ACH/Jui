@@ -19,6 +19,7 @@ namespace Jui
 		QPoint origin();
 
 	protected:
+		void mousePressEvent(QMouseEvent *e);
 		void paintEvent(QPaintEvent *e) override;
 				
 	private:

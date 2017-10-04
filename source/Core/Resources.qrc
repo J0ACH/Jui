@@ -1,0 +1,10 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+    <file alias="fontText.ttf">Resources/UniversCondensed.ttf</file>
+    <file alias="fontConsole.ttf">Resources/Univers_57_condensed.ttf</file>
+    <file alias="close16.png">Resources/IconClose_16px.png</file>
+    <file alias="smallClose16.png">Resources/IconSmallClose_16px.png</file>
+    <file alias="maximize16.png">Resources/IconMaximize_16px.png</file>
+    <file alias="minimize16.png">Resources/IconMinimize_16px.png</file>
+</qresource>
+</RCC>

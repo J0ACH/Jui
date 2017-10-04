@@ -6,6 +6,8 @@ namespace Jui
 
 	PureText::PureText(QWidget *parent) : QWidget(parent) {
 		text = "Nan";
+		//font_("Univers 57 Condensed");
+		//font_("Univers Condensed");
 		flags = Qt::AlignCenter;
 		displayFrame = false;
 		show();
@@ -25,6 +27,7 @@ namespace Jui
 		QFont f = this->font();
 		f.setFamily(family);
 		setFont(f);
+		update();
 	}
 	void PureText::align_(Qt::Alignment f) {
 		flags = f;
@@ -148,12 +151,12 @@ namespace Jui
 
 	void LineText::enterEvent(QEvent *event)
 	{
-		qDebug() << "LineText::enterEvent";
+		//qDebug() << "LineText::enterEvent";
 		colorFrame.value_(200, 200, 200, 0.5);
 	}
 	void LineText::leaveEvent(QEvent *event)
 	{
-		qDebug() << "LineText::leaveEvent";
+		//qDebug() << "LineText::leaveEvent";
 		colorFrame.value_(50, 50, 50, 1);
 	}
 	void LineText::focusOutEvent(QFocusEvent *e) {
@@ -249,7 +252,6 @@ namespace Jui
 
 		QPainter painter(this);
 
-
 		if (hasFocus())
 		{
 			QRect frameRect = QRect(0, 0, width() - 1, height() - 1);
@@ -267,11 +269,8 @@ namespace Jui
 			painter.drawLine(gapLine(m_cursorIndex));
 		}
 
-
 		painter.setPen(colorFrame.value());
-
 		PureText::paintEvent(e);
-
 	}
 
 }

@@ -19,7 +19,10 @@ namespace Jui
 		if (this->isWindow()) { return this->mapToGlobal(QPoint(0, 0)); }
 		else { return this->mapToParent(QPoint(0, 0)); }
 	}
-
+	void Canvas::mousePressEvent(QMouseEvent *e) {
+		setFocus();
+		//qDebug() << "Canvas::mousePressEvent";
+	}
 	void Canvas::paintEvent(QPaintEvent *e) {
 		QPainter painter(this);
 		QRect frameRect = QRect(0, 0, width() - 1, height() - 1);
