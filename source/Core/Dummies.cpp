@@ -8,7 +8,6 @@ namespace Jui
 		m_parent(parent),
 		m_text(new PureText(this))
 	{
-		//Jui::loadFonts();
 		colorBackground_(QColor(0, 0, 0, 0), QColor(120, 20, 20));
 		m_text->font_("Univers Condensed");
 		m_text->text_(parent->objectName());

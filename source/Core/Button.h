@@ -17,6 +17,7 @@ namespace Jui
 
 		void colorFrame_(QColor normal, QColor over);
 		void colorBackground_(QColor off, QColor on);
+		void icon_(QImage img, int offset);
 		
 	protected:
 		void enterEvent(QEvent *e) override;
@@ -28,6 +29,8 @@ namespace Jui
 		FadeColor colorFrame, colorBackground;
 	private:
 		QColor colorNormal, colorOver, colorOff, colorOn;
+		QImage icon;
+		int iconOffset;
 	};
 }
 

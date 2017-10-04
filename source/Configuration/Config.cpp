@@ -16,18 +16,16 @@ namespace Jui
 			configClose, SIGNAL(pressed()),
 			this, SLOT(close())
 		);
-		/*
 		Canvas *test = new Canvas(this, 50, 50, 200, 200);
+		test->setObjectName("Test");
 		Header *testHeader = new Header(test);
 		Edges *testEdges = new Edges(test);
-		*/
 
-		pt = new PureText(this);
-		//pt->font_("Consolas");
-		//pt->font_("Univers Condensed");
+		pt = new PureText(test);
 		pt->font_("Univers 57 Condensed");
-		pt->geometry_(30, 200, 150, 40);
-		pt->displayFrame_(true);
+		pt->geometry_(30, 150, 150, 40);
+		pt->align_(Qt::AlignLeft | Qt::AlignVCenter);
+		//pt->displayFrame_(true);
 
 		lt = new LineText(this);
 		lt->font_("Univers Condensed");
@@ -45,26 +43,24 @@ namespace Jui
 		);
 		*/
 
-
 		//fade.target(this, &Config::result);
 		fade.reciever(this, "result");
 		fade.value_(10, 2);
-		
+
 		Button *b = new Button(this);
 		b->setGeometry(30, 50, 50, 50);
 		b->setCheckable(true);
+		b->icon_(QImage(":/close16.png"), 0);
+		b->colorBackground_(QColor(40, 40, 40), QColor(120, 30, 30));
 		connect(
 			b, SIGNAL(pressed()),
 			this, SLOT(click())
 		);
-
-
 	}
 
 	void Config::click() {
-		qDebug() << tr("Config::click(%1)").arg(lt->text);
 		fade.value_(lt->text.toFloat(), 3);
-		//pt->text_(QString::number(fade.value()));
+		qDebug() << tr("Config::click(%1)").arg(lt->text);
 	}
 	void Config::result() {
 		pt->text_(QString::number(fade.value()));

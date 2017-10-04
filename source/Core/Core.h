@@ -26,12 +26,7 @@ namespace Jui
 {
 	enum fade { out, in };
 	enum direction { right, bottom, left, top };
-
 	void loadFonts();
-
-	void fadeVariant(QVariantAnimation &variable, Jui::fade fade, int duration);
-
-
 }
 
 #endif // CORE_H

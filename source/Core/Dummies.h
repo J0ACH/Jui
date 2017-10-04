@@ -20,10 +20,12 @@ namespace Jui
 		void mouseMoveEvent(QMouseEvent *e) override;
 		bool eventFilter(QObject *object, QEvent *e) override;
 		void paintEvent(QPaintEvent *e) override;
+		
+		virtual void fitSize();
+
 	private:
 		QWidget* m_parent;
 		PureText* m_text;
-		void fitSize();
 		int thickness;
 		QPoint mousePressedGlobalCoor, mousePressedOriginCoor;
 	};

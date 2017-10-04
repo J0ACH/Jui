@@ -22,6 +22,10 @@ namespace Jui
 		colorOn = on;
 		colorBackground.value_(off);
 	}
+	void Button::icon_(QImage img, int offset = 0) {
+		icon = img;
+		iconOffset = offset;
+	}
 	void Button::enterEvent(QEvent *event)
 	{
 		colorFrame.value_(80, 80, 80, 0.2);
@@ -46,14 +50,30 @@ namespace Jui
 		QPainter painter(this);
 		QRect frameRect = QRect(0, 0, width() - 1, height() - 1);
 		QRect fillRect = QRect(0, 0, width(), height());
-
-		painter.fillRect(QRect(5, height() - 3, width() - 10, 1), colorBackground.value());
-
+		
 		painter.setPen(colorFrame.value());
 		painter.drawRect(frameRect);
 
-		painter.setPen(QColor(255, 255, 255));
-		painter.drawText(fillRect, Qt::AlignCenter, this->text());
+		if (icon.isNull()) {
+			painter.setPen(QColor(255, 255, 255));
+			painter.drawText(fillRect, Qt::AlignCenter, this->text());
+			painter.fillRect(
+				QRect(5, height() - 3, width() - 10, 1),
+				colorBackground.value()
+			);
+		}
+		else {
+			float moveX = (this->width() - icon.width()) / 2;
+			float moveY = (this->height() - icon.height()) / 2;
+
+			QRectF target(moveX, moveY, icon.width(), icon.height());
+			QRectF source(0, 0, icon.width(), icon.height());
+
+			QImage renderedIcon(icon);
+			renderedIcon.fill(colorBackground.value());
+			renderedIcon.setAlphaChannel(icon);
+			painter.drawImage(target, renderedIcon, source);  // draw image to QWidget
+		}
 	}
 }
 
