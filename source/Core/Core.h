@@ -1,13 +1,16 @@
 #ifndef CORE_H
 #define CORE_H
 
+#include <QtCore>
+#include <QtGui>
+#include <QObject>
 #include <QWidget>
-#include <QDebug>
+#include <QPushButton>
 #include <QPainter>
-#include <QMouseEvent>
-#include <QVariant>
+#include <QDebug>
+#include <QMetaObject>
 #include <QVariantAnimation>
-#include <QMetaMethod>
+#include <QColor>
 
 namespace Jui
 {

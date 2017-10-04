@@ -1,10 +1,8 @@
 #ifndef BUTTON_H
 #define BUTTON_H
 
+#include "Core.h"
 #include "Fade.h"
-#include <QPushButton>
-#include <QDebug>
-#include <QPainter>
 
 namespace Jui
 {

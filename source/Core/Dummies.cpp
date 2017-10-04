@@ -5,15 +5,21 @@ namespace Jui
 	// Header /////////////////////////////////////////////////////
 
 	Header::Header(QWidget *parent) : Button(parent),
-		m_parent(parent)
+		m_parent(parent),
+		m_text(new PureText(this))
 	{
-		colorBackground_(QColor(60, 20, 20), QColor(120, 20, 20));
+		colorBackground_(QColor(0, 0, 0, 0), QColor(120, 20, 20));
+		m_text->text_(parent->objectName());
+		m_text->align_(Qt::AlignVCenter | Qt::AlignLeft);
 		thickness = 30;
 		move(1, 1);
 		fitSize();
 		m_parent->installEventFilter(this);
 	}
-	void Header::fitSize() { setFixedSize(m_parent->size().width() - 2, thickness); }
+	void Header::fitSize() {
+		setFixedSize(m_parent->size().width() - 2, thickness);
+		m_text->geometry_(20, 8, m_parent->size().width() - 2, thickness-16);
+	}
 	bool Header::eventFilter(QObject *object, QEvent *e) {
 		switch (e->type())
 		{

@@ -8,7 +8,6 @@
 #include "Dummies.h"
 #include "Button.h"
 #include <QDebug>
-#include <QMetaObject>
 
 namespace Jui
 {

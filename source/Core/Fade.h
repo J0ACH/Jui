@@ -1,11 +1,12 @@
 #ifndef FADE_H
 #define FADE_H
 
-#include <QObject>
-#include <QDebug>
-#include <QMetaObject>
-#include <QVariantAnimation>
-#include <QColor>
+#include "Core.h"
+//#include <QObject>
+//#include <QDebug>
+//#include <QMetaObject>
+//#include <QVariantAnimation>
+//#include <QColor>
 
 namespace Jui
 {

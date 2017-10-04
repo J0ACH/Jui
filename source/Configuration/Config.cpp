@@ -4,6 +4,7 @@ namespace Jui
 {
 	Config::Config(int x, int y, int width, int height) : Canvas(x, y, width, height)
 	{
+		this->setObjectName("Configuration");
 		Header *configHeader = new Header(this);
 		Edges *configEdges = new Edges(this);
 		Button *configClose = new Button(configHeader);

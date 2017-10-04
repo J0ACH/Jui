@@ -1,11 +1,8 @@
 #ifndef TEXT_H
 #define TEXT_H
 
+#include "Core.h"
 #include "Fade.h"
-#include <QWidget>
-#include <QDebug>
-#include <QKeyEvent>
-#include <QPainter>
 
 namespace Jui
 {

@@ -2,6 +2,7 @@
 #define DUMMIES_H
 
 #include "Core.h"
+#include "Text.h"
 #include "Button.h"
 
 namespace Jui
@@ -19,6 +20,7 @@ namespace Jui
 		void paintEvent(QPaintEvent *e) override;
 	private:
 		QWidget* m_parent;
+		PureText* m_text;
 		void fitSize();
 		int thickness;
 		QPoint mousePressedGlobalCoor, mousePressedOriginCoor;
