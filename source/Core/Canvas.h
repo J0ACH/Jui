@@ -15,6 +15,8 @@ namespace Jui
 		Canvas(int x, int y, int width, int height);
 
 		void origin_(int x, int y);
+		void geometry_(int x, int y, int w, int h);
+		
 		QPoint origin();
 
 	protected:

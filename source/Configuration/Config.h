@@ -21,6 +21,8 @@ namespace Jui
 		PureText *pt;
 		LineText *lt;
 
+		NumberBox *nb1;
+
 		private slots:
 		void click();
 		void result();

@@ -4,11 +4,7 @@ namespace Jui
 {
 	// FadeAbstract /////////////////////////////////////////////////////
 
-	FadeAbstract::FadeAbstract() : QObject(0) {
-		//qDebug() << tr("FadeAbstract::NEW()");
-		variable.setStartValue(0.0);
-		variable.setEndValue(0.0);
-	}
+	FadeAbstract::FadeAbstract() : QObject(0) {	}
 	void FadeAbstract::stop() {
 		if (variable.state() == QAbstractAnimation::State::Running) { variable.stop(); }
 	}
@@ -19,10 +15,14 @@ namespace Jui
 			&variable, &QVariantAnimation::valueChanged,
 			this, &FadeAbstract::onValueChanged
 		);
-		//qDebug() << "FadeVariable::reciever set";
+	}
+	void FadeAbstract::updater(QWidget *widget) {
+		QObject::connect(
+			&variable, SIGNAL(valueChanged()),
+			widget, SLOT(update())
+		);
 	}
 	void FadeAbstract::onValueChanged(QVariant val) {
-		//qDebug() << tr("FadeVariable::onValueChanged(%1)").arg(val.toString());
 		QMetaObject::invokeMethod(m_target, m_method);
 	}
 
@@ -75,7 +75,7 @@ namespace Jui
 		variable.setDuration(ftime * 1000);
 		variable.start();
 	}
-	void FadePoint::value_(int x, int y, double ftime) { FadePoint::value_(QPoint(x,y), ftime); }
+	void FadePoint::value_(int x, int y, double ftime) { FadePoint::value_(QPoint(x, y), ftime); }
 	QPoint FadePoint::value() { return variable.currentValue().toPoint(); }
 
 }

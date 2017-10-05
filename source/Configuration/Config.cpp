@@ -56,6 +56,10 @@ namespace Jui
 			b, SIGNAL(pressed()),
 			this, SLOT(click())
 		);
+
+		nb1 = new NumberBox(this);
+		nb1->geometry_(30, 90, 200, 80);
+
 	}
 
 	void Config::click() {
@@ -63,6 +67,9 @@ namespace Jui
 		qDebug() << tr("Config::click(%1)").arg(lt->text);
 	}
 	void Config::result() {
+		//double a = fade;
+		//pt->text_(QString::number(a));
+		//qDebug() << tr("vysledek = %1").arg(fade);
 		pt->text_(QString::number(fade.value()));
 		//qDebug() << tr("vysledek = %1").arg(QString::number(fade.value()));
 	}

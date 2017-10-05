@@ -13,7 +13,8 @@ namespace Jui
 		show();
 	}
 
-	void Canvas::origin_(int x, int y) { this->move(x, y); }
+	void Canvas::origin_(int x, int y) { QWidget::move(x, y); }
+	void Canvas::geometry_(int x, int y, int w, int h) { QWidget::setGeometry(x, y, w, h); }
 	QPoint Canvas::origin() {
 		if (this->isWindow()) { return this->mapToGlobal(QPoint(0, 0)); }
 		else { return this->mapToParent(QPoint(0, 0)); }

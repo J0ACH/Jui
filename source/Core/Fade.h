@@ -15,6 +15,7 @@ namespace Jui
 		FadeAbstract();
 		void stop();
 		void reciever(QObject *object, const char* method = "update");
+		void updater(QWidget *widget);
 		
 	protected:
 		QVariantAnimation variable;
@@ -31,7 +32,7 @@ namespace Jui
 	public:
 		void value_(double value);
 		void value_(double value, double ftime);
-		double value();
+		double value();		
 	};
 
 	// FadeInt /////////////////////////////////////////////////////

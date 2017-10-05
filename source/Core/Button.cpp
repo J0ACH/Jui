@@ -50,7 +50,7 @@ namespace Jui
 		QPainter painter(this);
 		QRect frameRect = QRect(0, 0, width() - 1, height() - 1);
 		QRect fillRect = QRect(0, 0, width(), height());
-		
+
 		painter.setPen(colorFrame.value());
 		painter.drawRect(frameRect);
 
@@ -74,6 +74,56 @@ namespace Jui
 			renderedIcon.setAlphaChannel(icon);
 			painter.drawImage(target, renderedIcon, source);  // draw image to QWidget
 		}
+	}
+
+	// NumberBox /////////////////////////////////////////////////////
+
+	NumberBox::NumberBox(QWidget *parent) : Canvas(parent),
+		label(new PureText(this)),
+		current(new PureText(this)),
+		target(new LineText(this)),
+		fadetime(new LineText(this))
+	{
+		cntDecNums = 2;
+
+		variable.reciever(this, "onCurrentChanged");
+		variable.value_(0);
+
+		label->geometry_(5, 5, 139, 16);
+		label->text_("value");
+		label->align_(Qt::AlignRight | Qt::AlignVCenter);
+
+		current->geometry_(5, 20, 140, 60);
+		current->align_(Qt::AlignRight | Qt::AlignVCenter);
+
+		target->geometry_(150, 27, 40, 20);
+		target->text_("0");
+		target->align_(Qt::AlignRight | Qt::AlignVCenter);
+
+		fadetime->geometry_(150, 50, 40, 20);
+		fadetime->text_("0");
+		fadetime->align_(Qt::AlignRight | Qt::AlignVCenter);
+
+		connect(
+			target, SIGNAL(enterPressed()),
+			this, SLOT(onSetChanged())
+		);
+		connect(
+			fadetime, SIGNAL(enterPressed()),
+			this, SLOT(onSetChanged())
+		);
+	}
+	void NumberBox::decimalNumbers_(int cnt) { cntDecNums = cnt; }
+	void NumberBox::onSetChanged() {
+		double newTarget = target->text.toDouble();
+		double newFTime = fadetime->text.toDouble();
+		variable.value_(newTarget, newFTime);
+	}
+	void NumberBox::onCurrentChanged() {
+		QString strVal = QString::number(variable.value(), 'f', cntDecNums);
+		current->text_(strVal);
+		emit numberChanged(variable.value());
+		//qDebug() << tr("NumberBox::onCurrentChanged = %1").arg(strVal);
 	}
 }
 
