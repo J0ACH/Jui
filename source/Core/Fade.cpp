@@ -43,6 +43,7 @@ namespace Jui
 		emit started();
 	}
 	double FadeDouble::value() { return variable.currentValue().toDouble(); }
+	FadeDouble::operator double() const { return variable.currentValue().toDouble(); }
 
 	// FadeInt /////////////////////////////////////////////////////
 

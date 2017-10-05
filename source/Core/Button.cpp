@@ -132,6 +132,10 @@ namespace Jui
 		QString strVal = QString::number(variable.value(), 'f', cntDecNums);
 		current->text_(strVal);
 		emit changed();
+		double currentVal = variable;
+		qDebug() << tr("NumberBox current double val = %1").arg(
+			QString::number(currentVal)
+		);
 	}
 	void NumberBox::onFinished() {
 		emit finished();

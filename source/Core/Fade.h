@@ -38,6 +38,7 @@ namespace Jui
 		void value_(double value);
 		void value_(double value, double ftime);
 		double value();		
+		operator double() const;
 	};
 
 	// FadeInt /////////////////////////////////////////////////////

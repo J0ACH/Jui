@@ -59,6 +59,7 @@ namespace Jui
 
 		nb1 = new NumberBox(this);
 		nb1->geometry_(30, 90, 200, 80);
+		Header *nb1Header = new Header(nb1);
 
 	}
 
