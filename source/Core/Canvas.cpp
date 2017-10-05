@@ -9,7 +9,6 @@ namespace Jui
 	void Canvas::init(int x, int y, int w, int h) {
 		setWindowFlags(Qt::FramelessWindowHint);
 		//setAttribute(Qt::WA_TranslucentBackground);		
-
 		setGeometry(x, y, w, h);
 		show();
 	}
@@ -19,10 +18,7 @@ namespace Jui
 		if (this->isWindow()) { return this->mapToGlobal(QPoint(0, 0)); }
 		else { return this->mapToParent(QPoint(0, 0)); }
 	}
-	void Canvas::mousePressEvent(QMouseEvent *e) {
-		setFocus();
-		//qDebug() << "Canvas::mousePressEvent";
-	}
+	void Canvas::mousePressEvent(QMouseEvent *e) { setFocus(); }
 	void Canvas::paintEvent(QPaintEvent *e) {
 		QPainter painter(this);
 		QRect frameRect = QRect(0, 0, width() - 1, height() - 1);

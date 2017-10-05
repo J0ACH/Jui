@@ -2,11 +2,6 @@
 #define FADE_H
 
 #include "Core.h"
-//#include <QObject>
-//#include <QDebug>
-//#include <QMetaObject>
-//#include <QVariantAnimation>
-//#include <QColor>
 
 namespace Jui
 {
@@ -29,14 +24,14 @@ namespace Jui
 		void onValueChanged(QVariant);
 	};
 
-	// FadeInt /////////////////////////////////////////////////////
+	// FadeDouble /////////////////////////////////////////////////////
 
-	class FadeFloat : public FadeAbstract
+	class FadeDouble : public FadeAbstract
 	{
 	public:
-		void value_(float value);
-		void value_(float value, float ftime);
-		float value();
+		void value_(double value);
+		void value_(double value, double ftime);
+		double value();
 	};
 
 	// FadeInt /////////////////////////////////////////////////////
@@ -45,7 +40,7 @@ namespace Jui
 	{
 	public:
 		void value_(int value);
-		void value_(int value, float ftime);
+		void value_(int value, double ftime);
 		int value();
 	};
 
@@ -57,10 +52,22 @@ namespace Jui
 		FadeColor();
 		void value_(QColor value);
 		void value_(int r, int g, int b);
-		void value_(int r, int g, int b, float ftime);
-		void value_(QColor value, float time);
+		void value_(int r, int g, int b, double ftime);
+		void value_(QColor value, double time);
 		QColor value();
 	};
+
+	// FadePoint /////////////////////////////////////////////////////
+
+	class FadePoint : public FadeAbstract
+	{
+	public:
+		void value_(QPoint value);
+		void value_(QPoint value, double ftime);
+		void value_(int x, int y, double ftime);
+		QPoint value();
+	};
+
 
 
 }

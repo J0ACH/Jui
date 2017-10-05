@@ -16,7 +16,7 @@ namespace Jui
 			configClose, SIGNAL(pressed()),
 			this, SLOT(close())
 		);
-		Canvas *test = new Canvas(this, 50, 50, 200, 200);
+		Canvas *test = new Canvas(this, 250, 50, 200, 200);
 		test->setObjectName("Test");
 		Header *testHeader = new Header(test);
 		Edges *testEdges = new Edges(test);
@@ -45,7 +45,7 @@ namespace Jui
 
 		//fade.target(this, &Config::result);
 		fade.reciever(this, "result");
-		fade.value_(10, 2);
+		fade.value_(10.0, 2.0);
 
 		Button *b = new Button(this);
 		b->setGeometry(30, 50, 50, 50);
@@ -59,7 +59,7 @@ namespace Jui
 	}
 
 	void Config::click() {
-		fade.value_(lt->text.toFloat(), 3);
+		fade.value_(lt->text.toDouble(), 3.0);
 		qDebug() << tr("Config::click(%1)").arg(lt->text);
 	}
 	void Config::result() {

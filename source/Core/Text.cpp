@@ -6,8 +6,7 @@ namespace Jui
 
 	PureText::PureText(QWidget *parent) : QWidget(parent) {
 		text = "Nan";
-		//font_("Univers 57 Condensed");
-		//font_("Univers Condensed");
+		font_("Univers Condensed");
 		flags = Qt::AlignCenter;
 		displayFrame = false;
 		show();

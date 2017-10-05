@@ -17,7 +17,7 @@ namespace Jui
 	public:
 		Config(int x, int y, int width, int height);
 	private:
-		FadeFloat fade;
+		FadeDouble fade;
 		PureText *pt;
 		LineText *lt;
 

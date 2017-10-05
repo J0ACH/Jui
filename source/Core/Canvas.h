@@ -1,9 +1,8 @@
 #ifndef CANVAS_H
 #define CANVAS_H
 
-#include <QWidget>
-#include "Draw.h"
 #include "Core.h"
+#include "Fade.h"
 
 namespace Jui
 {
@@ -23,6 +22,7 @@ namespace Jui
 		void paintEvent(QPaintEvent *e) override;
 				
 	private:
+		FadePoint m_origin;
 		void init(int x = 10, int y = 10, int width = 50, int height = 50);
 	};
 }
