@@ -2,107 +2,69 @@
 
 namespace Jui
 {
-	class LayerTest : public Layer
-	{
-	public:
-		void draw(QPainter *painter, QRect bounds) override
-		{
-			painter->setPen(QColor(230, 30, 30));
-			painter->drawLine(0, 0, 25, 25);
-		}
-	};
-
-	class LayerPlocha : public Layer
-	{
-	public:
-		void draw(QPainter *painter, QRect bounds) override
-		{
-			painter->fillRect(QRect(0, 0, 20, 20), QColor(30, 100, 30));
-		}
-	};
-
-	class RedWin : public Canvas2 {
-	public:
-		void paintEvent(QPaintEvent *e) {
-			QPainter painter(this);
-			QRect frameRect = QRect(0, 0, width() - 1, height() - 1);
-			QRect fillRect = QRect(0, 0, width(), height());
-
-			painter.fillRect(fillRect, QColor(220, 20, 20));
-			painter.setPen(QColor(50, 50, 50));
-			painter.drawRect(frameRect);
-		}
-	};
-
 	Config::Config(int x, int y, int width, int height) : Canvas(x, y, width, height)
 	{
-		this->setName("Configuration");
-		this->setBackgroundColor(20, 20, 20);
-		//this->setBackgroundAlpha(0);
+		this->setObjectName("Configuration");
 
-		HeaderWindow *headerWindow = new HeaderWindow(this);
-		Edges *e1 = new Edges(this);
+		Header *configHeader = new Header(this);
+		Edges *configEdges = new Edges(this);
+		Button *configClose = new Button(configHeader);
+		configClose->setGeometry(this->width() - 25, 5, 20, 20);
+		configClose->setText("X");
+		configClose->colorFrame_(QColor(0, 0, 0, 0), QColor(90, 90, 90));
+		connect(
+			configClose, SIGNAL(pressed()),
+			this, SLOT(close())
+		);
+		Canvas *test = new Canvas(this, 250, 50, 200, 200);
+		test->setObjectName("Test");
+		Header *testHeader = new Header(test);
+		Edges *testEdges = new Edges(test);
 
-		Canvas *test = new Canvas(this, 100, 100, 200, 200);
-		test->setName("test");
-		HeaderDialog *headerTest = new HeaderDialog(test);
-		Edges *e2 = new Edges(test);
+		pt = new PureText(test);
+		pt->font_("Univers 57 Condensed");
+		pt->geometry_(30, 150, 150, 40);
+		pt->align_(Qt::AlignLeft | Qt::AlignVCenter);
+		//pt->displayFrame_(true);
 
-		Button *testButton = new Button(test, 50, 50, 25, 25);
-		testButton->addState("A");
-		testButton->addState("B");
-		testButton->addState("C");
-		testButton->addState("D");
-		testButton->setStateCounter(1);
+		lt = new LineText(this);
+		lt->font_("Univers Condensed");
+		lt->geometry_(30, 250, 350, 90);
 
-		LayerTest* L3 = new LayerTest();
-		L3->name_("cara");
+		connect(
+			lt, SIGNAL(enterPressed()),
+			this, SLOT(click())
+		);
 
-		LayerPlocha* L2 = new LayerPlocha();
-		L2->name_("plocha");
-		//L2->alpha_(0.5);
+		/*
+			connect(
+			lt, &LineText::enterPressed,
+			this, &Config::click
+		);
+		*/
 
-		testButton->addLayer(L2);
-		testButton->addLayer(L3);
+		//fade.target(this, &Config::result);
+		fade.reciever(this, "result");
+		fade.value_(10.0, 2.0);
 
-		Button2* B1 = new Button2(this);
-		B1->setGeometry(100, 50, 50, 30);
-		B1->setText("B1");
-		B1->show();
-
-		//QPushButton* B2 = new QPushButton(this);
-		Button2* B2 = new Button2(this);
-		B2->setGeometry(175, 50, 50, 30);
-		B2->setText("B2");
-		B2->setCheckable(true);
-		B2->show();
-		B2->setFont(QFont("Consolas", 8));
-		//B2->setIcon(QIcon(":/close16.png"));
-
-		QPixmap pixmap(":/close16.png");
-		QIcon ButtonIcon(pixmap);
-		B2->setIcon(ButtonIcon);
-		B2->setIconSize(pixmap.rect().size());
-
-
-		//QImage(":/close16.png")
-
-		Canvas2* w = new Canvas2(250, 250, 300, 300);
-		Canvas2* w2 = new Canvas2(w);
-		//RedWin* w3 = new RedWin();
-
-		
+		Button *b = new Button(this);
+		b->setGeometry(30, 50, 50, 50);
+		b->setCheckable(true);
+		b->icon_(QImage(":/close16.png"), 0);
+		b->colorBackground_(QColor(40, 40, 40), QColor(120, 30, 30));
+		connect(
+			b, SIGNAL(pressed()),
+			this, SLOT(click())
+		);
 	}
 
-
-	void Config::onPrint()
-	{
-		qDebug("Config onPrint");
+	void Config::click() {
+		fade.value_(lt->text.toDouble(), 3.0);
+		qDebug() << tr("Config::click(%1)").arg(lt->text);
 	}
-
-	Config::~Config()
-	{
-		qDebug("Config closed");
+	void Config::result() {
+		pt->text_(QString::number(fade.value()));
+		//qDebug() << tr("vysledek = %1").arg(QString::number(fade.value()));
 	}
 }
 

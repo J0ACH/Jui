@@ -1,60 +1,24 @@
 #ifndef BUTTON_H
 #define BUTTON_H
 
-#include "Canvas.h"
-#include <QPushButton>
-#include <QPropertyAnimation>
+#include "Core.h"
+#include "Fade.h"
 
 namespace Jui
 {
-	class Button : public Canvas
-	{
-		Q_OBJECT
 
-	public:
-		Button(Canvas *parent);
-		Button(Canvas *parent, int x, int y, int width, int height);
-		~Button();
+	// Button /////////////////////////////////////////////////////
 
-		void addState(QString name);
-
-		int getState();
-		QString getStateName();
-
-		void setStateCounter(int cnt);
-
-	signals:
-		void actPressed(Button*);
-
-		public slots:
-		//virtual void changed();
-
-	protected:
-
-
-	private:
-		void init();
-
-		int intCounter, maxCounter;
-		QList<QString> stateNames;
-
-		private slots:
-		void prOnPressed();
-
-
-	};
-
-	class Button2 : public QPushButton
+	class Button : public QPushButton
 	{
 
 	public:
-		Button2(QWidget *parent = 0);
+		Button(QWidget *parent = 0);
 
 		void colorFrame_(QColor normal, QColor over);
 		void colorBackground_(QColor off, QColor on);
-		QColor colorFrame();
-		QColor colorBackground();
-
+		void icon_(QImage img, int offset);
+		
 	protected:
 		void enterEvent(QEvent *e) override;
 		void leaveEvent(QEvent *e) override;
@@ -62,14 +26,12 @@ namespace Jui
 		void mouseReleaseEvent(QMouseEvent *e) override;
 		void paintEvent(QPaintEvent *e) override;
 
+		FadeColor colorFrame, colorBackground;
 	private:
-		enum fade { out, in };
-		void fadeVariant(QVariantAnimation &var, Button2::fade fade, int duration);
-		QVariantAnimation fade_colorFrame, fade_colorBackground;
+		QColor colorNormal, colorOver, colorOff, colorOn;
+		QImage icon;
+		int iconOffset;
 	};
-
-	
-
 }
 
 #endif // BUTTON_H
