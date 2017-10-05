@@ -112,18 +112,32 @@ namespace Jui
 			fadetime, SIGNAL(enterPressed()),
 			this, SLOT(onSetChanged())
 		);
+		connect(
+			&variable, SIGNAL(finished()),
+			this, SLOT(onFinished())
+		);
 	}
+	double NumberBox::value() { return  variable.value(); }
+	void NumberBox::text_(QString text) { label->text_(text); }
 	void NumberBox::decimalNumbers_(int cnt) { cntDecNums = cnt; }
+
 	void NumberBox::onSetChanged() {
 		double newTarget = target->text.toDouble();
 		double newFTime = fadetime->text.toDouble();
+		startTime = QDateTime::currentMSecsSinceEpoch();
+		emit started();
 		variable.value_(newTarget, newFTime);
 	}
 	void NumberBox::onCurrentChanged() {
 		QString strVal = QString::number(variable.value(), 'f', cntDecNums);
 		current->text_(strVal);
-		emit numberChanged(variable.value());
-		//qDebug() << tr("NumberBox::onCurrentChanged = %1").arg(strVal);
+		emit changed();
+	}
+	void NumberBox::onFinished() {
+		emit finished();
+		qDebug() << tr("NumberBox real fadeTime = %1").arg(
+			QString::number(QDateTime::currentMSecsSinceEpoch() - startTime)
+		);
 	}
 }
 

@@ -42,20 +42,26 @@ namespace Jui
 		Q_OBJECT
 	public:
 		NumberBox(QWidget *parent = 0);
+		void text_(QString text);
 		void decimalNumbers_(int cnt);
+		double value();
 
 	signals:
-		void numberChanged(double);
+		void started();
+		void changed();
+		void finished();
 			
 	private:
 		PureText *label, *current;
 		LineText *target, *fadetime;
 		FadeDouble variable;
 		int cntDecNums;
-
+		qint64 startTime;
+		
 		private slots:
 		void onSetChanged();
 		void onCurrentChanged();
+		void onFinished();
 	};
 }
 

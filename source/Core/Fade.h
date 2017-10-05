@@ -16,6 +16,10 @@ namespace Jui
 		void stop();
 		void reciever(QObject *object, const char* method = "update");
 		void updater(QWidget *widget);
+
+	signals:
+		void started();
+		void finished();
 		
 	protected:
 		QVariantAnimation variable;
@@ -23,6 +27,7 @@ namespace Jui
 		const char *m_method;
 	private:
 		void onValueChanged(QVariant);
+		void onFinish();
 	};
 
 	// FadeDouble /////////////////////////////////////////////////////
