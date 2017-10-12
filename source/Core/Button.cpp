@@ -85,9 +85,9 @@ namespace Jui
 		fadetime(new LineText(this))
 	{
 		cntDecNums = 2;
-
-		variable.reciever(this, "onCurrentChanged");
-		variable.value_(0);
+		//variable.value_(0);
+		//variable.reciever(this, "onCurrentChanged");
+		
 
 		label->geometry_(5, 5, 139, 16);
 		label->text_("value");
@@ -106,42 +106,56 @@ namespace Jui
 
 		connect(
 			target, SIGNAL(enterPressed()),
-			this, SLOT(onSetChanged())
+			this, SLOT(onSet())
 		);
 		connect(
 			fadetime, SIGNAL(enterPressed()),
-			this, SLOT(onSetChanged())
+			this, SLOT(onSet())
+		);
+		connect(
+			&variable, SIGNAL(changed()),
+			this, SLOT(onCurrentChanged())
 		);
 		connect(
 			&variable, SIGNAL(finished()),
 			this, SLOT(onFinished())
 		);
+		
+		onSet();
+		//variable.value_(0);
 	}
-	double NumberBox::value() { return  variable.value(); }
+	double NumberBox::value() { return variable; }
+	//double NumberBox::value() { return variable.value(); }
 	void NumberBox::text_(QString text) { label->text_(text); }
 	void NumberBox::decimalNumbers_(int cnt) { cntDecNums = cnt; }
 
-	void NumberBox::onSetChanged() {
+	void NumberBox::onSet() {
 		double newTarget = target->text.toDouble();
 		double newFTime = fadetime->text.toDouble();
 		startTime = QDateTime::currentMSecsSinceEpoch();
 		emit started();
-		variable.value_(newTarget, newFTime);
+		qDebug() << tr("NumberBox::onSet (target = %1 fTime = %2)").arg(
+			QString::number(newTarget),
+			QString::number(newFTime)
+		);
+		variable.value_(newTarget, newFTime);		
 	}
 	void NumberBox::onCurrentChanged() {
 		QString strVal = QString::number(variable.value(), 'f', cntDecNums);
 		current->text_(strVal);
-		emit changed();
 		double currentVal = variable;
-		qDebug() << tr("NumberBox current double val = %1").arg(
+		qDebug() << tr("NumberBox::onCurrentChanged (value = %1)").arg(
 			QString::number(currentVal)
 		);
+		emit changed();		
 	}
 	void NumberBox::onFinished() {
+		QString strVal = QString::number(variable.value(), 'f', cntDecNums);
+		current->text_(strVal);
 		emit finished();
-		qDebug() << tr("NumberBox real fadeTime = %1").arg(
+		qDebug() << tr("NumberBox::onFinished (real fadeTime = %1)").arg(
 			QString::number(QDateTime::currentMSecsSinceEpoch() - startTime)
-		);
+		);		
 	}
 }
 

@@ -40,6 +40,7 @@ namespace Jui
 	class NumberBox : public Canvas
 	{
 		Q_OBJECT
+
 	public:
 		NumberBox(QWidget *parent = 0);
 		void text_(QString text);
@@ -59,7 +60,7 @@ namespace Jui
 		qint64 startTime;
 		
 		private slots:
-		void onSetChanged();
+		void onSet();
 		void onCurrentChanged();
 		void onFinished();
 	};

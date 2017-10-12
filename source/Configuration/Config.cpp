@@ -27,14 +27,7 @@ namespace Jui
 		pt->align_(Qt::AlignLeft | Qt::AlignVCenter);
 		//pt->displayFrame_(true);
 
-		lt = new LineText(this);
-		lt->font_("Univers Condensed");
-		lt->geometry_(30, 250, 350, 90);
 
-		connect(
-			lt, SIGNAL(enterPressed()),
-			this, SLOT(click())
-		);
 
 		/*
 			connect(
@@ -44,8 +37,8 @@ namespace Jui
 		*/
 
 		//fade.target(this, &Config::result);
-		fade.reciever(this, "result");
-		fade.value_(10.0, 2.0);
+		//fade.reciever(this, "result");
+		//fade.value_(10.0, 2.0);
 
 		Button *b = new Button(this);
 		b->setGeometry(30, 50, 50, 50);
@@ -61,17 +54,46 @@ namespace Jui
 		nb1->geometry_(30, 90, 200, 80);
 		Header *nb1Header = new Header(nb1);
 
+		nb2 = new NumberBox(this);
+		nb2->geometry_(30, 200, 200, 80);
+		Header *nb2eader = new Header(nb2);
+
+		connect(
+			nb1, SIGNAL(changed()),
+			this, SLOT(result())
+		);
+		connect(
+			nb2, SIGNAL(changed()),
+			this, SLOT(result())
+		);
+
+		lt = new LineText(this);
+		lt->font_("Univers Condensed");
+		lt->geometry_(30, 300, 350, 90);
+
+		connect(
+			lt, SIGNAL(enterPressed()),
+			this, SLOT(click())
+		);
+
+
 	}
 
 	void Config::click() {
-		fade.value_(lt->text.toDouble(), 3.0);
-		qDebug() << tr("Config::click(%1)").arg(lt->text);
+		//fade.value_(lt->text.toDouble(), 3.0);
+		//qDebug() << tr("Config::click(%1)").arg(lt->text);
 	}
 	void Config::result() {
 		//double a = fade;
 		//pt->text_(QString::number(a));
 		//qDebug() << tr("vysledek = %1").arg(fade);
-		pt->text_(QString::number(fade.value()));
+
+
+		double resultValue = nb1->value() + nb2->value();
+		pt->text_(QString::number(resultValue));
+		qDebug() << tr("Config::result(%1)").arg(QString::number(resultValue));
+
+		//pt->text_(QString::number(fade.value()));
 		//qDebug() << tr("vysledek = %1").arg(QString::number(fade.value()));
 	}
 }

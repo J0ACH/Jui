@@ -4,7 +4,16 @@ namespace Jui
 {
 	// FadeAbstract /////////////////////////////////////////////////////
 
-	FadeAbstract::FadeAbstract() : QObject(0) {	}
+	FadeAbstract::FadeAbstract() : QObject(0) {
+		connect(
+			&variable, &QVariantAnimation::valueChanged,
+			this, &FadeAbstract::onValueChanged
+		);
+		connect(
+			&variable, &QVariantAnimation::finished,
+			this, &FadeAbstract::onFinish
+		);
+	}
 	void FadeAbstract::stop() {
 		if (variable.state() == QAbstractAnimation::State::Running) { variable.stop(); }
 	}
@@ -27,7 +36,9 @@ namespace Jui
 		);
 	}
 	void FadeAbstract::onValueChanged(QVariant val) {
-		QMetaObject::invokeMethod(m_target, m_method);
+		//QMetaObject::invokeMethod(m_target, m_method);
+		//qDebug() << tr("FadeAbstract::onValueChanged() variable = %1").arg(val.toString());
+		emit changed();
 	}
 	void FadeAbstract::onFinish() { emit finished(); }
 

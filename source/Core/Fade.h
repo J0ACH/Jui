@@ -19,6 +19,7 @@ namespace Jui
 
 	signals:
 		void started();
+		void changed();
 		void finished();
 		
 	protected:
