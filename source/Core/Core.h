@@ -6,6 +6,7 @@
 #include <QtWidgets>
 
 /*
+#include <QMetaObject>
 #include <QObject>
 #include <QWidget>
 #include <QCoreApplication>

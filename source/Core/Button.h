@@ -51,18 +51,41 @@ namespace Jui
 		void started();
 		void changed();
 		void finished();
-			
+
 	private:
 		PureText *label, *current;
 		LineText *target, *fadetime;
 		FadeDouble variable;
 		int cntDecNums;
 		qint64 startTime;
-		
+
 		private slots:
 		void onSet();
 		void onCurrentChanged();
 		void onFinished();
+	};
+
+	// StringBox /////////////////////////////////////////////////////
+
+	class StringBox : public Canvas
+	{
+		Q_OBJECT
+
+	public:
+		StringBox(QWidget *parent = 0);
+		void label_(QString text);
+		void text_(QString text);
+		QString value();
+
+	signals:
+		void changed();
+
+	private:
+		PureText *label;
+		LineText *txt;
+		
+		private slots:
+		void onSet();
 	};
 }
 

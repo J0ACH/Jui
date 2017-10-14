@@ -28,6 +28,7 @@ namespace Jui
 		PureText* m_text;
 		int thickness;
 		QPoint mousePressedGlobalCoor, mousePressedOriginCoor;
+		
 	};
 
 	// EdgeControler /////////////////////////////////////////////////////

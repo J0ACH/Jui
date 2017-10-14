@@ -3,13 +3,14 @@
 
 #include "Core.h"
 #include "Fade.h"
+#include "Canvas.h"
 
 namespace Jui
 {
 
 	// PureText /////////////////////////////////////////////////////
 
-	class PureText : public QWidget
+	class PureText : public Canvas
 	{
 
 	public:

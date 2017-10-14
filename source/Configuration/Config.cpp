@@ -4,7 +4,8 @@ namespace Jui
 {
 	Config::Config(int x, int y, int width, int height) : Canvas(x, y, width, height)
 	{
-		this->setObjectName("Configuration");
+		//this->setObjectName("Configuration");
+		name_("Configuration");
 
 		Header *configHeader = new Header(this);
 		Edges *configEdges = new Edges(this);
@@ -66,22 +67,17 @@ namespace Jui
 			nb2, SIGNAL(changed()),
 			this, SLOT(result())
 		);
-
-		lt = new LineText(this);
-		lt->font_("Univers Condensed");
-		lt->geometry_(30, 300, 350, 90);
-
+		
+		sb = new StringBox(this);
+		sb->geometry_(30, 300, 200, 80);
 		connect(
-			lt, SIGNAL(enterPressed()),
+			sb, SIGNAL(changed()),
 			this, SLOT(click())
 		);
-
-
 	}
 
 	void Config::click() {
-		//fade.value_(lt->text.toDouble(), 3.0);
-		//qDebug() << tr("Config::click(%1)").arg(lt->text);
+		//qDebug() << tr("Config::click(%1)").arg(sb->value());
 	}
 	void Config::result() {
 		//double a = fade;

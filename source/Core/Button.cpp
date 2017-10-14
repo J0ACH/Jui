@@ -10,6 +10,14 @@ namespace Jui
 		colorBackground_(QColor(0, 0, 0, 0), QColor(130, 30, 30));
 		colorFrame.reciever(this);
 		colorBackground.reciever(this);
+		connect(
+			&colorFrame, SIGNAL(changed()),
+			this, SLOT(update())
+		);
+		connect(
+			&colorBackground, SIGNAL(changed()),
+			this, SLOT(update())
+		);
 		show();
 	}
 	void Button::colorFrame_(QColor normal, QColor over) {
@@ -87,7 +95,7 @@ namespace Jui
 		cntDecNums = 2;
 		//variable.value_(0);
 		//variable.reciever(this, "onCurrentChanged");
-		
+
 
 		label->geometry_(5, 5, 139, 16);
 		label->text_("value");
@@ -120,7 +128,7 @@ namespace Jui
 			&variable, SIGNAL(finished()),
 			this, SLOT(onFinished())
 		);
-		
+
 		onSet();
 		//variable.value_(0);
 	}
@@ -134,28 +142,61 @@ namespace Jui
 		double newFTime = fadetime->text.toDouble();
 		startTime = QDateTime::currentMSecsSinceEpoch();
 		emit started();
-		qDebug() << tr("NumberBox::onSet (target = %1 fTime = %2)").arg(
-			QString::number(newTarget),
-			QString::number(newFTime)
-		);
-		variable.value_(newTarget, newFTime);		
+		/*
+			qDebug() << tr("NumberBox::onSet (target = %1 fTime = %2)").arg(
+				QString::number(newTarget),
+				QString::number(newFTime)
+			);
+		*/
+		variable.value_(newTarget, newFTime);
 	}
 	void NumberBox::onCurrentChanged() {
 		QString strVal = QString::number(variable.value(), 'f', cntDecNums);
 		current->text_(strVal);
 		double currentVal = variable;
-		qDebug() << tr("NumberBox::onCurrentChanged (value = %1)").arg(
-			QString::number(currentVal)
-		);
-		emit changed();		
+		//	qDebug() << tr("NumberBox::onCurrentChanged (value = %1)").arg(QString::number(currentVal));
+		emit changed();
 	}
 	void NumberBox::onFinished() {
 		QString strVal = QString::number(variable.value(), 'f', cntDecNums);
 		current->text_(strVal);
 		emit finished();
-		qDebug() << tr("NumberBox::onFinished (real fadeTime = %1)").arg(
-			QString::number(QDateTime::currentMSecsSinceEpoch() - startTime)
-		);		
+		/*
+			qDebug() << tr("NumberBox::onFinished (real fadeTime = %1)").arg(
+				QString::number(QDateTime::currentMSecsSinceEpoch() - startTime)
+			);
+		*/
+	}
+
+	// StringBox /////////////////////////////////////////////////////
+
+	StringBox::StringBox(QWidget *parent) : Canvas(parent),
+		label(new PureText(this)),
+		txt(new LineText(this))
+	{
+		label->geometry_(5, 5, 139, 16);
+		label->text_("value");
+		label->align_(Qt::AlignLeft | Qt::AlignVCenter);
+
+		txt->geometry_(5, 20, 140, 60);
+		txt->align_(Qt::AlignLeft | Qt::AlignVCenter);
+
+		connect(
+			txt, SIGNAL(enterPressed()),
+			this, SLOT(onSet())
+		);
+	}
+
+	void StringBox::label_(QString text) {
+
+	}
+	void StringBox::text_(QString text) {
+
+	}
+	QString StringBox::value() { return txt->text; }
+
+	void StringBox::onSet() {
+		emit changed();
 	}
 }
 

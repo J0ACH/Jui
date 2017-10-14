@@ -4,20 +4,20 @@ namespace Jui
 {
 	// PureText /////////////////////////////////////////////////////
 
-	PureText::PureText(QWidget *parent) : QWidget(parent) {
+	PureText::PureText(QWidget *parent) : Canvas(parent) {
 		text = "Nan";
 		font_("Univers Condensed");
 		flags = Qt::AlignCenter;
 		displayFrame = false;
-		show();
 	}
 	void PureText::geometry_(int x, int y, int w, int h)
 	{
-		QWidget::setGeometry(x, y, w, h);
+		//Canvas::geometry_(x, y, w, h);
+		setGeometry(x, y, w, h);
 		QFont f = this->font();
 		f.setPixelSize(h * 5 / 6);
 		setFont(f);
-	}
+	}	
 	void PureText::text_(QString t) {
 		text = t;
 		update();
@@ -189,14 +189,14 @@ namespace Jui
 		{
 		case Qt::Key_Return:
 		case Qt::Key_Enter:
-			//qDebug() << "PureText::keyPressEvent(ENTER)";
+			//qDebug() << "LineText::keyPressEvent(ENTER)";
 			previousText = text;
 			m_cursorIndex = -1;
 			deselect();
 			emit enterPressed();
 			break;
 		case Qt::Key_Escape:
-			//qDebug() << "PureText::keyPressEvent(ESC)";
+			//qDebug() << "LineText::keyPressEvent(ESC)";
 			text = previousText;
 			m_cursorIndex = -1;
 			deselect();
@@ -206,7 +206,7 @@ namespace Jui
 				m_cursorIndex--;
 				deselect();
 				emit cursorChanged(m_cursorIndex);
-				//qDebug() << "PureText::keyPressEvent(LEFT)";
+				//qDebug() << "LineText::keyPressEvent(LEFT)";
 			}
 			break;
 		case Qt::Key_Right:
@@ -214,13 +214,20 @@ namespace Jui
 				m_cursorIndex++;
 				deselect();
 				emit cursorChanged(m_cursorIndex);
-				//qDebug() << "PureText::keyPressEvent(RIGHT)";
+				//qDebug() << "LineText::keyPressEvent(RIGHT)";
 			}
 			break;
 		case Qt::Key_Backspace:
 			if (m_cursorIndex > 0) {
-				text.remove(m_cursorIndex - 1, 1);
-				m_cursorIndex--;
+				if (hasSelection())
+				{
+					text.remove(m_selectFrom, m_selectTo - m_selectFrom);
+				}
+				else
+				{
+					text.remove(m_cursorIndex - 1, 1);
+					m_cursorIndex--;
+				}
 				deselect();
 				emit textEdited();
 				emit cursorChanged(m_cursorIndex);
