@@ -14,7 +14,7 @@ namespace Jui
 {
 	class Config : public Canvas
 	{
-		Q_OBJECT
+		//Q_OBJECT
 
 	public:
 		Config(int x, int y, int width, int height);

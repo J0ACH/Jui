@@ -8,7 +8,7 @@ namespace Jui
 {
 	class Canvas : public QWidget
 	{
-		//Q_OBJECT
+		Q_OBJECT
 
 	public:
 		Canvas();
