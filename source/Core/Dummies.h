@@ -9,26 +9,28 @@ namespace Jui
 {
 	// Header /////////////////////////////////////////////////////
 
-	class Header : public Button
+	class Header : public QWidget
 	{
+		Q_OBJECT
+
 	public:
-		Header(QWidget *parent);
+		Header(QWidget *parent = 0);
 		void font_(QString family);
 
 	protected:
 		void mousePressEvent(QMouseEvent *e) override;
 		void mouseMoveEvent(QMouseEvent *e) override;
-		bool eventFilter(QObject *object, QEvent *e) override;
+		void mouseReleaseEvent(QMouseEvent *e) override;
 		void paintEvent(QPaintEvent *e) override;
-		
-		virtual void fitSize();
 
 	private:
-		QWidget* m_parent;
 		PureText* m_text;
 		int thickness;
 		QPoint mousePressedGlobalCoor, mousePressedOriginCoor;
-		
+		FadeColor colorBackground;
+
+		private slots:
+		void onParentResize(QSize size);
 	};
 
 	// EdgeControler /////////////////////////////////////////////////////

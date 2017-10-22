@@ -44,6 +44,9 @@ namespace Jui
 	public:
 		Button2(QWidget *parent = 0);
 
+		void label_(QString txt);
+		void pressable_(bool b);
+
 	signals:
 		void pressed();
 
@@ -56,7 +59,8 @@ namespace Jui
 		void paintEvent(QPaintEvent *e) override;
 
 	private:
-		bool isChecked;
+		QString text;
+		bool isPressable, isChecked;
 		FadeColor colorFrame, colorBackground;
 	};
 

@@ -28,9 +28,12 @@ int main(int argc, char** argv) {
 		canvas, SLOT(close())
 	);
 
+	Button2 *b1 = new Button2(canvas);
+	b1->geometry_(30, 100, 50, 30);
+
 	Button2 *b2 = new Button2(canvas);
-	b2->geometry_(30, 100, 50, 30);
+	b2->geometry_(90, 100, 50, 30);
+	b2->pressable_(true);
 	
 	return app.exec();
 }
-

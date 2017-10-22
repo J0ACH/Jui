@@ -26,7 +26,7 @@ namespace Jui
 		QString name();		
 		
 	signals:
-		void resized();		
+		void resized(QSize size);
 
 	protected:
 		//void mousePressEvent(QMouseEvent *e);

@@ -4,37 +4,36 @@ namespace Jui
 {
 	// Header /////////////////////////////////////////////////////
 
-	Header::Header(QWidget *parent) : Button(parent),
-		m_parent(parent),
+	Header::Header(QWidget *parent) : QWidget(parent),
 		m_text(new PureText(this))
 	{
-		colorBackground_(QColor(0, 0, 0, 0), QColor(120, 20, 20));
 		m_text->font_("Univers Condensed");
 		m_text->text_(parent->objectName());
 		m_text->align_(Qt::AlignVCenter | Qt::AlignLeft);
 		thickness = 30;
 		move(1, 1);
-		fitSize();
-		m_parent->installEventFilter(this);
+
+		colorBackground.value_(QColor(0, 0, 0, 0));
+		connect(
+			&colorBackground, SIGNAL(changed()),
+			this, SLOT(update())
+		);
+
+		connect(
+			parent, SIGNAL(resized(QSize)),
+			this, SLOT(onParentResize(QSize))
+		);
+
+		onParentResize(parent->size());
+		show();
 	}
 	void Header::font_(QString family) { m_text->font_(family); }
-	void Header::fitSize() {
-		setFixedSize(m_parent->size().width() - 2, thickness);
-		m_text->geometry_(20, 6, m_parent->size().width() - 2, thickness - 12);
-	}
-	bool Header::eventFilter(QObject *object, QEvent *e) {
-		switch (e->type())
-		{
-		case QEvent::Type::Resize:
-			fitSize();
-			return true;
-		default:
-			return false;
-		};
+	void Header::onParentResize(QSize size) {
+		setFixedSize(size.width() - 2, thickness);
+		m_text->geometry_(20, 6, size.width() - 2, thickness - 12);
 	}
 	void Header::mousePressEvent(QMouseEvent *e)
 	{
-		Button::mousePressEvent(e);
 		mousePressedGlobalCoor = e->globalPos();
 
 		if (this->parentWidget()->isWindow()) {
@@ -43,6 +42,10 @@ namespace Jui
 		else {
 			mousePressedOriginCoor = this->parentWidget()->mapToParent(QPoint(0, 0));
 		}
+		colorBackground.value_(120, 20, 20, 0.05);
+	}
+	void Header::mouseReleaseEvent(QMouseEvent *e) {
+		colorBackground.value_(QColor(0, 0, 0, 0), 0.5);
 	}
 	void Header::mouseMoveEvent(QMouseEvent *e)
 	{
@@ -58,7 +61,7 @@ namespace Jui
 	}
 	void Header::paintEvent(QPaintEvent *event) {
 		QPainter painter(this);
-		painter.fillRect(rect(), colorBackground.value());
+		painter.fillRect(rect(), colorBackground);
 	}
 
 	// EdgeControler /////////////////////////////////////////////////////

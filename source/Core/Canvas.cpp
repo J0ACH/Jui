@@ -48,7 +48,7 @@ namespace Jui
 		//this->fit(size()); 
 		*/ 
 		QWidget::resizeEvent(e);
-		emit resized();
+		emit resized(size());
 	}
 	void Canvas::fit(QSize size) { }
 

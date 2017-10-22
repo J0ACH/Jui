@@ -26,6 +26,7 @@ namespace Jui
 		QVariantAnimation variable;
 		QObject *m_target;
 		const char *m_method;
+
 	private:
 		void onValueChanged(QVariant);
 		void onFinish();

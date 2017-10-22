@@ -87,7 +87,9 @@ namespace Jui
 	// Button2 /////////////////////////////////////////////////////
 
 	Button2::Button2(QWidget *parent) : Canvas(parent) {
+		isPressable = false;
 		isChecked = false;
+		text = "OFF";
 		colorFrame.value_(50, 50, 50);
 		colorBackground.value_(QColor(0, 0, 0, 0));
 		connect(
@@ -99,21 +101,36 @@ namespace Jui
 			this, SLOT(update())
 		);
 	}
+	void Button2::label_(QString txt) { text = txt; }
+	void Button2::pressable_(bool b) { isPressable = b; }
+
 	void Button2::enterEvent(QEvent *e) {
-		colorFrame.value_(200, 200, 200, 0.5);
+		colorFrame.value_(200, 200, 200, 0.2);
 	}
 	void Button2::leaveEvent(QEvent *e) {
-		colorFrame.value_(50, 50, 50, 2);
+		colorFrame.value_(50, 50, 50, 1);
 	}
 	void Button2::mousePressEvent(QMouseEvent *e) {
 		if (!isChecked) {
-			//isChecked = true;
+			isChecked = true;
 			colorBackground.value_(120, 20, 20, 0.05);
+			text = "ON";
+			emit pressed();
+		}
+		else
+		{
+			isChecked = false;
+			colorBackground.value_(QColor(0, 0, 0, 0), 0.05);
+			text = "OFF";
 		}
 	}
 	void Button2::mouseReleaseEvent(QMouseEvent *e) {
-		if (!isChecked) {
-			colorBackground.value_(QColor(0, 0, 0, 0), 0.5);
+		if (isChecked) {
+			if (!isPressable) {
+				isChecked = false;
+				colorBackground.value_(QColor(0, 0, 0, 0), 0.5);
+				text = "OFF";
+			}
 		}
 	}
 
@@ -127,8 +144,8 @@ namespace Jui
 		painter.setPen(colorFrame);
 		painter.drawRect(frameRect);
 
-		//painter.setPen(QColor(200, 200, 200));
-		//painter.drawText(rect(), flags, text);
+		painter.setPen(QColor(200, 200, 200));
+		painter.drawText(rect(), Qt::AlignCenter, text);
 	}
 
 	// NumberBox /////////////////////////////////////////////////////
