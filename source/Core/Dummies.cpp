@@ -67,22 +67,33 @@ namespace Jui
 	// EdgeControler /////////////////////////////////////////////////////
 
 	EdgeControler::EdgeControler(QWidget *parent, Jui::direction dir) :
-		Button(parent),
+		QWidget(parent),
 		m_direction(dir)
 	{
-		colorFrame_(QColor(20, 20, 20, 0), QColor(60, 60, 60));
+		colorFrame.value_(QColor(0, 0, 0, 0));
+		connect(
+			&colorFrame, SIGNAL(changed()),
+			this, SLOT(update())
+		);
+		show();
 	}
 	Jui::direction EdgeControler::direction() { return m_direction; }
+
+	void EdgeControler::enterEvent(QEvent *e) {
+		colorFrame.value_(QColor(60, 60, 60), 0.2);
+	}
+	void EdgeControler::leaveEvent(QEvent *e) {
+		colorFrame.value_(QColor(0, 0, 0, 0), 1);
+	}
 	void EdgeControler::mousePressEvent(QMouseEvent *e)
 	{
-		colorFrame_(QColor(60, 60, 60), QColor(120, 20, 20));
-		Button::mousePressEvent(e);
+		colorFrame.value_(QColor(200, 200, 200), 0.05);
 		mousePressedGlobalCoor = e->globalPos();
+		emit pressed();
 	}
 	void EdgeControler::mouseReleaseEvent(QMouseEvent *e)
 	{
-		colorFrame_(QColor(20, 20, 20, 0), QColor(60, 60, 60));
-		Button::mouseReleaseEvent(e);
+		colorFrame.value_(QColor(60, 60, 60), 1);
 	}
 	void EdgeControler::mouseMoveEvent(QMouseEvent *e)
 	{
@@ -90,12 +101,12 @@ namespace Jui
 			e->globalPos().x() - mousePressedGlobalCoor.x(),
 			e->globalPos().y() - mousePressedGlobalCoor.y()
 		);
-		emit actControlerMoved(m_direction, deltaPt);
+		emit controlerMoved(m_direction, deltaPt);
 	}
 	void EdgeControler::paintEvent(QPaintEvent *event)
 	{
 		QPainter painter(this);
-		painter.setPen(colorFrame.value());
+		painter.setPen(colorFrame);
 		switch (m_direction)
 		{
 		case Jui::direction::right:
@@ -153,7 +164,7 @@ namespace Jui
 				this, SLOT(onControlerPressed())
 			);
 			connect(
-				oneEdge, SIGNAL(actControlerMoved(Jui::direction, QPoint)),
+				oneEdge, SIGNAL(controlerMoved(Jui::direction, QPoint)),
 				this, SLOT(onControlerMoved(Jui::direction, QPoint))
 			);
 		};

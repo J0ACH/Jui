@@ -35,23 +35,30 @@ namespace Jui
 
 	// EdgeControler /////////////////////////////////////////////////////
 
-	class EdgeControler : public Button
+	class EdgeControler : public QWidget
 	{
 		Q_OBJECT
 
 	public:
 		EdgeControler(QWidget *parent, Jui::direction dir);
 		Jui::direction direction();
+
 	signals:
-		void actControlerMoved(Jui::direction, QPoint deltaPt);
+		void pressed();
+		void controlerMoved(Jui::direction, QPoint deltaPt);
+
 	protected:
+		void enterEvent(QEvent *e) override;
+		void leaveEvent(QEvent *e) override;
 		void mousePressEvent(QMouseEvent *e) override;
 		void mouseReleaseEvent(QMouseEvent *e) override;
 		void mouseMoveEvent(QMouseEvent *e) override;
 		void paintEvent(QPaintEvent *e) override;
+
 	private:
 		Jui::direction m_direction;
 		QPoint mousePressedGlobalCoor;
+		FadeColor colorFrame;
 	};
 
 	// Edges ///////////////////////////////////////////////////// 
