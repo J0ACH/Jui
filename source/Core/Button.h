@@ -3,7 +3,6 @@
 
 #include "Core.h"
 #include "Fade.h"
-#include "Canvas.h"
 #include "Text.h"
 
 namespace Jui

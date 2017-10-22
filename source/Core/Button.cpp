@@ -41,7 +41,6 @@ namespace Jui
 			isChecked = true;
 			colorBackground.value_(120, 20, 20, 0.05);
 			text = "ON";
-			emit pressed();
 		}
 		else
 		{
@@ -49,6 +48,7 @@ namespace Jui
 			colorBackground.value_(QColor(0, 0, 0, 0), 0.05);
 			text = "OFF";
 		}
+		emit pressed();
 	}
 	void Button::mouseReleaseEvent(QMouseEvent *e) {
 		if (isChecked) {
@@ -67,10 +67,10 @@ namespace Jui
 		QRect fillRect = QRect(0, 0, width(), height());
 
 		painter.fillRect(fillRect, colorBackground);
-		painter.setPen(colorFrame);
-		painter.drawRect(frameRect);
 
 		if (icon.isNull()) {
+			painter.setPen(colorFrame);
+			painter.drawRect(frameRect);
 			painter.setPen(colorImage);
 			painter.drawText(rect(), Qt::AlignCenter, text);
 		}

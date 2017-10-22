@@ -8,7 +8,6 @@ namespace Jui
 		m_text(new PureText(this))
 	{
 		m_text->font_("Univers Condensed");
-		m_text->text_(parent->objectName());
 		m_text->align_(Qt::AlignVCenter | Qt::AlignLeft);
 		thickness = 30;
 		move(1, 1);
@@ -62,6 +61,8 @@ namespace Jui
 	void Header::paintEvent(QPaintEvent *event) {
 		QPainter painter(this);
 		painter.fillRect(rect(), colorBackground);
+
+		m_text->text_(this->parentWidget()->objectName());
 	}
 
 	// EdgeControler /////////////////////////////////////////////////////
@@ -153,8 +154,15 @@ namespace Jui
 			new EdgeControler(parent, Jui::direction::top)
 		);
 
-		fitSize();
-		m_parent->installEventFilter(this);
+		connect(
+			parent, SIGNAL(resized(QSize)),
+			this, SLOT(onParentResize(QSize))
+		);
+
+		onParentResize(parent->size());
+
+		//fitSize();
+		//m_parent->installEventFilter(this);
 
 		foreach(EdgeControler *oneEdge, mEdges.values())
 		{
@@ -168,6 +176,7 @@ namespace Jui
 			);
 		};
 	}
+	/*
 	bool Edges::eventFilter(QObject *object, QEvent *e)
 	{
 		switch (e->type())
@@ -213,6 +222,47 @@ namespace Jui
 					offset + corner + gap,
 					offset,
 					m_parent->width() - 2 * offset - 2 * corner - 2 * gap,
+					thickness
+				);
+				break;
+			}
+		}
+	}
+	*/
+	void Edges::onParentResize(QSize size) {
+		foreach(EdgeControler* oneEdge, mEdges.values())
+		{
+			switch (oneEdge->direction())
+			{
+			case Jui::direction::right:
+				oneEdge->setGeometry(
+					size.width() - thickness - offset,
+					offset + corner + gap,
+					thickness,
+					size.height() - 2 * offset - 2 * corner - 2 * gap
+				);
+				break;
+			case Jui::direction::bottom:
+				oneEdge->setGeometry(
+					offset + corner + gap,
+					size.height() - offset - thickness,
+					size.width() - 2 * offset - 2 * corner - 2 * gap,
+					thickness
+				);
+				break;
+			case Jui::direction::left:
+				oneEdge->setGeometry(
+					offset,
+					offset + corner + gap,
+					thickness,
+					size.height() - 2 * offset - 2 * corner - 2 * gap
+				);
+				break;
+			case Jui::direction::top:
+				oneEdge->setGeometry(
+					offset + corner + gap,
+					offset,
+					size.width() - 2 * offset - 2 * corner - 2 * gap,
 					thickness
 				);
 				break;

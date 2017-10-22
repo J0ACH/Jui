@@ -70,18 +70,20 @@ namespace Jui
 	public:
 		Edges(QWidget *parent);
 
-		public slots:
-		void onControlerPressed();
-		void onControlerMoved(Jui::direction, QPoint);
-	protected:
-		bool eventFilter(QObject *object, QEvent *e) override;
+		void show();
+		void hide();
+
 	private:
 		QWidget* m_parent;
 		QMap<Jui::direction, EdgeControler*> mEdges;
-		void fitSize();
 		int thickness, offset, corner, gap;
 		QSize mousePressedParentSize;
 		QPoint mousePressedOriginCoor;
+
+		private slots:
+		void onParentResize(QSize size);
+		void onControlerPressed();
+		void onControlerMoved(Jui::direction, QPoint);
 	};
 
 }

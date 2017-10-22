@@ -1,7 +1,9 @@
 #ifndef FADE_H
 #define FADE_H
 
-#include "Core.h"
+#include <QtCore>
+#include <QtGui>
+#include <QtWidgets>
 
 namespace Jui
 {
