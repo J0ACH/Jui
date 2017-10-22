@@ -84,6 +84,41 @@ namespace Jui
 		}
 	}
 
+	// Button2 /////////////////////////////////////////////////////
+
+	Button2::Button2(QWidget *parent) : Canvas(parent) {
+		colorFrame.value_(50, 50, 50);
+		colorBackground.value_(120, 20, 20);
+		connect(
+			&colorFrame, SIGNAL(changed()),
+			this, SLOT(update())
+		);
+		connect(
+			&colorBackground, SIGNAL(changed()),
+			this, SLOT(update())
+		);
+	}
+	void Button2::enterEvent(QEvent *e) {
+		colorFrame.value_(200, 20, 20, 0.5);
+	}
+	void Button2::leaveEvent(QEvent *e) {
+		colorFrame.value_(20, 20, 20, 2);
+	}
+
+	void Button2::paintEvent(QPaintEvent *e) {
+		QPainter painter(this);
+
+		QRect frameRect = QRect(0, 0, width() - 1, height() - 1);
+		QRect fillRect = QRect(0, 0, width(), height());
+
+		painter.fillRect(fillRect, colorBackground);
+		painter.setPen(colorFrame);
+		painter.drawRect(frameRect);
+
+		//painter.setPen(QColor(200, 200, 200));
+		//painter.drawText(rect(), flags, text);
+	}
+
 	// NumberBox /////////////////////////////////////////////////////
 
 	NumberBox::NumberBox(QWidget *parent) : Canvas(parent),

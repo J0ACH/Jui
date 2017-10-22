@@ -63,6 +63,7 @@ namespace Jui
 		void value_(int r, int g, int b, double ftime);
 		void value_(QColor value, double time);
 		QColor value();
+		operator QColor() const;
 	};
 
 	// FadePoint /////////////////////////////////////////////////////

@@ -84,6 +84,7 @@ namespace Jui
 		emit started();
 	}
 	QColor FadeColor::value() { return variable.currentValue().value<QColor>(); }
+	FadeColor::operator QColor() const { return variable.currentValue().value<QColor>(); }
 
 	// FadePoint /////////////////////////////////////////////////////
 

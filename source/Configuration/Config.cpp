@@ -19,6 +19,8 @@ namespace Jui
 			configClose, SIGNAL(pressed()),
 			canvas, SLOT(close())
 		);
+
+		Button2 *b2 = new Button2(canvas);
 		
 		/*
 		Canvas *test = new Canvas(this, 250, 50, 200, 200);

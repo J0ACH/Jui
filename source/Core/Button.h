@@ -35,6 +35,27 @@ namespace Jui
 		int iconOffset;
 	};
 
+	// Button2 /////////////////////////////////////////////////////
+
+	class Button2 : public Canvas
+	{
+		Q_OBJECT
+
+	public:
+		Button2(QWidget *parent = 0);
+
+	signals:
+		void pressed();
+
+	protected:
+		void enterEvent(QEvent *e) override;
+		void leaveEvent(QEvent *e) override;
+		void paintEvent(QPaintEvent *e) override;
+
+	private:
+		FadeColor colorFrame, colorBackground;
+	};
+
 	// NumberBox /////////////////////////////////////////////////////
 
 	class NumberBox : public Canvas
