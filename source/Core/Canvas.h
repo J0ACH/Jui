@@ -11,28 +11,29 @@ namespace Jui
 		Q_OBJECT
 
 	public:
-		Canvas();
 		Canvas(QWidget *parent = 0);
 		Canvas(QWidget *parent, int x, int y, int width, int height);
 		Canvas(int x, int y, int width, int height);
+		~Canvas();
+
+		static bool isCanvasType(const QObject *qObj);
 
 		void origin_(int x, int y);
-		virtual void geometry_(int x, int y, int w, int h);
+		void geometry_(int x, int y, int w, int h);
 		void name_(QString txt);
 		
 		QPoint origin();
-		QString name();
+		QString name();		
 		
-		/*
 	signals:
-		void resized();
-		*/
-	
+		void resized();		
 
 	protected:
 		//void mousePressEvent(QMouseEvent *e);
 		void resizeEvent(QResizeEvent *e) override;
 		void paintEvent(QPaintEvent *e) override;
+		
+		virtual void fit(QSize size);
 				
 	private:
 		//FadePoint m_origin;

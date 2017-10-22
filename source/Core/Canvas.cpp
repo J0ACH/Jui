@@ -2,7 +2,6 @@
 
 namespace Jui
 {
-	Canvas::Canvas() : QWidget(0) { Canvas::init(); }
 	Canvas::Canvas(QWidget *parent) : QWidget(parent) { Canvas::init(); }
 	Canvas::Canvas(QWidget *parent, int x, int y, int w, int h) : QWidget(parent) { Canvas::init(x, y, w, h); }
 	Canvas::Canvas(int x, int y, int w, int h) : QWidget(0) { Canvas::init(x, y, w, h); }
@@ -13,6 +12,11 @@ namespace Jui
 		//setAttribute(Qt::WA_TranslucentBackground);		
 		setGeometry(x, y, w, h);
 		show();
+	}
+
+	bool Canvas::isCanvasType(const QObject *qObj)
+	{
+		return (dynamic_cast<const Canvas*>(qObj) != NULL);
 	}
 
 	void Canvas::origin_(int x, int y) { QWidget::move(x, y); }
@@ -26,7 +30,28 @@ namespace Jui
 	QString Canvas::name() { return this->objectName(); }
 
 	//void Canvas::mousePressEvent(QMouseEvent *e) { setFocus(); }
-	void Canvas::resizeEvent(QResizeEvent *e) { /*emit resized();*/ }
+	void Canvas::resizeEvent(QResizeEvent *e) { 
+		
+		/*
+		foreach(QObject *oneChild, this->children())
+		{
+			if (Canvas::isCanvasType(oneChild))
+			{
+				dynamic_cast<Canvas*>(oneChild)->fit(size());
+			//qDebug() << "Canvas::resizeEvent" << oneChild->metaObject. staticMetaObject.className;
+
+			}
+			//Canvas *oneCanvas = qobject_cast<Canvas*>(oneChild);
+			//oneChild.fit(size());
+		}
+		//qDebug() << "Canvas::resizeEvent";
+		//this->fit(size()); 
+		*/ 
+		QWidget::resizeEvent(e);
+		emit resized();
+	}
+	void Canvas::fit(QSize size) { }
+
 	void Canvas::paintEvent(QPaintEvent *e) {
 		QPainter painter(this);
 		QRect frameRect = QRect(0, 0, width() - 1, height() - 1);
@@ -36,4 +61,8 @@ namespace Jui
 		painter.setPen(QColor(50, 50, 50));
 		painter.drawRect(frameRect);
 	}
+
+	Canvas::~Canvas() {}
 }
+
+

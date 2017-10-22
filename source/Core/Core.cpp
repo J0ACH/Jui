@@ -6,5 +6,5 @@ namespace Jui
 		int f1 = QFontDatabase::addApplicationFont(":/fontText.ttf");
 		int f2 = QFontDatabase::addApplicationFont(":/fontConsole.ttf");
 	};
-
 }
+

@@ -2,21 +2,25 @@
 
 namespace Jui
 {
-	Config::Config(int x, int y, int width, int height) : Canvas(x, y, width, height)
+	Config::Config(QWidget *parent) : QObject(parent) {  }
+	Config::Config(int x, int y, int width, int height) : QObject(0)
 	{
-		//this->setObjectName("Configuration");
-		name_("Configuration");
+		canvas = new Canvas(600, 250, 500, 500);
+		canvas->name_("Configuration");
 
-		Header *configHeader = new Header(this);
-		Edges *configEdges = new Edges(this);
+		Header *configHeader = new Header(canvas);
+		Edges *configEdges = new Edges(canvas);
 		Button *configClose = new Button(configHeader);
-		configClose->setGeometry(this->width() - 25, 5, 20, 20);
+
+		configClose->setGeometry(canvas->width() - 25, 5, 20, 20);
 		configClose->setText("X");
 		configClose->colorFrame_(QColor(0, 0, 0, 0), QColor(90, 90, 90));
 		connect(
 			configClose, SIGNAL(pressed()),
-			this, SLOT(close())
+			canvas, SLOT(close())
 		);
+		
+		/*
 		Canvas *test = new Canvas(this, 250, 50, 200, 200);
 		test->setObjectName("Test");
 		Header *testHeader = new Header(test);
@@ -26,21 +30,7 @@ namespace Jui
 		pt->font_("Univers 57 Condensed");
 		pt->geometry_(30, 150, 150, 40);
 		pt->align_(Qt::AlignLeft | Qt::AlignVCenter);
-		//pt->displayFrame_(true);
-
-
-
-		/*
-			connect(
-			lt, &LineText::enterPressed,
-			this, &Config::click
-		);
-		*/
-
-		//fade.target(this, &Config::result);
-		//fade.reciever(this, "result");
-		//fade.value_(10.0, 2.0);
-
+		
 		Button *b = new Button(this);
 		b->setGeometry(30, 50, 50, 50);
 		b->setCheckable(true);
@@ -67,14 +57,23 @@ namespace Jui
 			nb2, SIGNAL(changed()),
 			this, SLOT(result())
 		);
-		
+
 		sb = new StringBox(this);
 		sb->geometry_(30, 300, 200, 80);
 		connect(
 			sb, SIGNAL(changed()),
 			this, SLOT(click())
 		);
+		*/
 	}
+/*
+	void Config::fit(QSize size) {
+		qDebug() << tr("Config::fit(%1, %2)").arg(
+			QString::number(size.width()),
+			QString::number(size.height())
+		);
+	}
+*/
 
 	void Config::click() {
 		//qDebug() << tr("Config::click(%1)").arg(sb->value());
