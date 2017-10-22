@@ -78,7 +78,6 @@ namespace Jui
 		show();
 	}
 	Jui::direction EdgeControler::direction() { return m_direction; }
-
 	void EdgeControler::enterEvent(QEvent *e) {
 		colorFrame.value_(QColor(60, 60, 60), 0.2);
 	}

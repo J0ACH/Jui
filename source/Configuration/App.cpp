@@ -20,20 +20,23 @@ int main(int argc, char** argv) {
 	Edges *configEdges = new Edges(canvas);
 	Button *configClose = new Button(configHeader);
 
-	configClose->setGeometry(canvas->width() - 25, 5, 20, 20);
-	configClose->setText("X");
-	configClose->colorFrame_(QColor(0, 0, 0, 0), QColor(90, 90, 90));
+	configClose->geometry_(canvas->width() - 25, 5, 20, 20);
+	configClose->label_("X");
+	configClose->icon_(":/smallClose16.png");
+	//configClose->colorFrame_(QColor(0, 0, 0, 0), QColor(90, 90, 90));
 	QObject::connect(
 		configClose, SIGNAL(pressed()),
 		canvas, SLOT(close())
 	);
 
-	Button2 *b1 = new Button2(canvas);
+	Button *b1 = new Button(canvas);
 	b1->geometry_(30, 100, 50, 30);
+	//b1->icon_(QImage(":/close16.png"), 0);
 
-	Button2 *b2 = new Button2(canvas);
+	Button *b2 = new Button(canvas);
 	b2->geometry_(90, 100, 50, 30);
 	b2->pressable_(true);
+	b2->icon_(":/close16.png");
 	
 	return app.exec();
 }

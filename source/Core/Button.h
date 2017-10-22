@@ -8,44 +8,18 @@
 
 namespace Jui
 {
-
 	// Button /////////////////////////////////////////////////////
 
-	class Button : public QPushButton
-	{
-
-	public:
-		Button(QWidget *parent = 0);
-
-		void colorFrame_(QColor normal, QColor over);
-		void colorBackground_(QColor off, QColor on);
-		void icon_(QImage img, int offset);
-
-	protected:
-		void enterEvent(QEvent *e) override;
-		void leaveEvent(QEvent *e) override;
-		void mousePressEvent(QMouseEvent *e) override;
-		void mouseReleaseEvent(QMouseEvent *e) override;
-		void paintEvent(QPaintEvent *e) override;
-
-		FadeColor colorFrame, colorBackground;
-	private:
-		QColor colorNormal, colorOver, colorOff, colorOn;
-		QImage icon;
-		int iconOffset;
-	};
-
-	// Button2 /////////////////////////////////////////////////////
-
-	class Button2 : public Canvas
+	class Button : public Canvas
 	{
 		Q_OBJECT
 
 	public:
-		Button2(QWidget *parent = 0);
+		Button(QWidget *parent = 0);
 
 		void label_(QString txt);
 		void pressable_(bool b);
+		void icon_(const char* img, int offset = 0);
 
 	signals:
 		void pressed();
@@ -61,7 +35,9 @@ namespace Jui
 	private:
 		QString text;
 		bool isPressable, isChecked;
-		FadeColor colorFrame, colorBackground;
+		FadeColor colorFrame, colorImage, colorBackground;
+		QImage icon;
+		int iconOffset;
 	};
 
 	// NumberBox /////////////////////////////////////////////////////

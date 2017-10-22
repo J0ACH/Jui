@@ -8,6 +8,7 @@ namespace Jui
 		canvas = new Canvas(600, 250, 500, 500);
 		canvas->name_("Configuration");
 
+		/*
 		Header *configHeader = new Header(canvas);
 		Edges *configEdges = new Edges(canvas);
 		Button *configClose = new Button(configHeader);
@@ -20,9 +21,7 @@ namespace Jui
 			canvas, SLOT(close())
 		);
 
-		Button2 *b2 = new Button2(canvas);
-		
-		/*
+			
 		Canvas *test = new Canvas(this, 250, 50, 200, 200);
 		test->setObjectName("Test");
 		Header *testHeader = new Header(test);
