@@ -50,9 +50,13 @@ namespace Jui
 	protected:
 		void enterEvent(QEvent *e) override;
 		void leaveEvent(QEvent *e) override;
+		void mousePressEvent(QMouseEvent *e) override;
+		void mouseReleaseEvent(QMouseEvent *e) override;
+
 		void paintEvent(QPaintEvent *e) override;
 
 	private:
+		bool isChecked;
 		FadeColor colorFrame, colorBackground;
 	};
 

@@ -87,8 +87,9 @@ namespace Jui
 	// Button2 /////////////////////////////////////////////////////
 
 	Button2::Button2(QWidget *parent) : Canvas(parent) {
+		isChecked = false;
 		colorFrame.value_(50, 50, 50);
-		colorBackground.value_(120, 20, 20);
+		colorBackground.value_(QColor(0, 0, 0, 0));
 		connect(
 			&colorFrame, SIGNAL(changed()),
 			this, SLOT(update())
@@ -99,10 +100,21 @@ namespace Jui
 		);
 	}
 	void Button2::enterEvent(QEvent *e) {
-		colorFrame.value_(200, 20, 20, 0.5);
+		colorFrame.value_(200, 200, 200, 0.5);
 	}
 	void Button2::leaveEvent(QEvent *e) {
-		colorFrame.value_(20, 20, 20, 2);
+		colorFrame.value_(50, 50, 50, 2);
+	}
+	void Button2::mousePressEvent(QMouseEvent *e) {
+		if (!isChecked) {
+			//isChecked = true;
+			colorBackground.value_(120, 20, 20, 0.05);
+		}
+	}
+	void Button2::mouseReleaseEvent(QMouseEvent *e) {
+		if (!isChecked) {
+			colorBackground.value_(QColor(0, 0, 0, 0), 0.5);
+		}
 	}
 
 	void Button2::paintEvent(QPaintEvent *e) {
