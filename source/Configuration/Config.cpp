@@ -9,7 +9,7 @@ namespace Jui
 
 		win = new Win(x, y, w, h);
 		win->name_("Configuration");
-		
+
 		Canvas *test = new Canvas(win, 250, 50, 200, 200);
 		test->setObjectName("Test");
 		Header *testHeader = new Header(test);
@@ -24,7 +24,7 @@ namespace Jui
 		b->setGeometry(30, 50, 50, 50);
 		b->pressable_(true);
 		b->icon_(":/close16.png", 0);
-		
+
 		connect(
 			b, SIGNAL(pressed()),
 			this, SLOT(click())
@@ -36,7 +36,8 @@ namespace Jui
 
 		nb2 = new NumberBox(win);
 		nb2->geometry_(30, 200, 200, 80);
-		Header *nb2eader = new Header(nb2);
+		Header *nb2header = new Header(nb2);
+		Edges *nb2edges = new Edges(nb2);
 
 		connect(
 			nb1, SIGNAL(changed()),
@@ -53,16 +54,13 @@ namespace Jui
 			sb, SIGNAL(changed()),
 			this, SLOT(click())
 		);
+		Edges *sbedges = new Edges(sb);
+		
+		Point *pt = new Point(test);
+		pt->x_(test->width() / 2);
+		pt->y_(test->height() / 2);
 
 	}
-	/*
-		void Config::fit(QSize size) {
-			qDebug() << tr("Config::fit(%1, %2)").arg(
-				QString::number(size.width()),
-				QString::number(size.height())
-			);
-		}
-	*/
 
 	void Config::click() {
 		//qDebug() << tr("Config::click(%1)").arg(sb->value());

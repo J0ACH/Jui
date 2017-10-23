@@ -56,17 +56,23 @@ namespace Jui
 		void changed();
 		void finished();
 
+	protected:
+		void resizeEvent(QResizeEvent *e) override;
+		void paintEvent(QPaintEvent *e) override;
+
 	private:
 		PureText *label, *current;
 		LineText *target, *fadetime;
 		FadeDouble variable;
 		int cntDecNums;
 		qint64 startTime;
+		QPoint pt1;
 
 		private slots:
 		void onSet();
 		void onCurrentChanged();
 		void onFinished();
+	
 	};
 
 	// StringBox /////////////////////////////////////////////////////
@@ -83,6 +89,9 @@ namespace Jui
 
 	signals:
 		void changed();
+
+	protected:
+		void resizeEvent(QResizeEvent *e) override;
 
 	private:
 		PureText *label;

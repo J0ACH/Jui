@@ -21,8 +21,10 @@ namespace Jui
 		show();
 	}
 
-	void Canvas::origin_(int x, int y) { QWidget::move(x, y); }
 	void Canvas::geometry_(int x, int y, int w, int h) { QWidget::setGeometry(x, y, w, h); }
+	void Canvas::origin_(int x, int y) { QWidget::move(x, y); }
+	void Canvas::originX_(int x) { QWidget::move(x, origin().y()); }
+	void Canvas::originY_(int y) { QWidget::move(origin().x(), y); }
 	void Canvas::name_(QString txt) { this->setObjectName(txt); }
 
 	QPoint Canvas::origin() {

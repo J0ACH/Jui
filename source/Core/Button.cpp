@@ -97,24 +97,17 @@ namespace Jui
 		fadetime(new LineText(this))
 	{
 		cntDecNums = 2;
-		//variable.value_(0);
-		//variable.reciever(this, "onCurrentChanged");
-
-
-		label->geometry_(5, 5, 139, 16);
+		
 		label->text_("value");
 		label->align_(Qt::AlignRight | Qt::AlignVCenter);
 
-		current->geometry_(5, 20, 140, 60);
-		current->align_(Qt::AlignRight | Qt::AlignVCenter);
+		current->align_(Qt::AlignRight | Qt::AlignBottom);
 
-		target->geometry_(150, 27, 40, 20);
 		target->text_("0");
-		target->align_(Qt::AlignRight | Qt::AlignVCenter);
+		target->align_(Qt::AlignRight | Qt::AlignTop);
 
-		fadetime->geometry_(150, 50, 40, 20);
 		fadetime->text_("0");
-		fadetime->align_(Qt::AlignRight | Qt::AlignVCenter);
+		fadetime->align_(Qt::AlignRight | Qt::AlignBottom);
 
 		connect(
 			target, SIGNAL(enterPressed()),
@@ -132,9 +125,8 @@ namespace Jui
 			&variable, SIGNAL(finished()),
 			this, SLOT(onFinished())
 		);
-
 		onSet();
-		//variable.value_(0);
+
 	}
 	double NumberBox::value() { return variable; }
 	void NumberBox::text_(QString text) { label->text_(text); }
@@ -170,6 +162,26 @@ namespace Jui
 			);
 		*/
 	}
+	void NumberBox::resizeEvent(QResizeEvent *e) {
+		int w = e->size().width();
+		int h = e->size().height();
+		label->geometry_(5, 5, w*0.75, 16);
+		current->geometry_(5, 21, w*0.75, h - 31);
+		target->geometry_(w*0.75 + 5, 21, w * 0.2, (h - 31) / 2);
+		fadetime->geometry_(w*0.75 + 5, 50, w * 0.2, (h - 31) / 2);
+		pt1.setX(w*0.5);
+		Canvas::resizeEvent(e);
+	}
+	void NumberBox::paintEvent(QPaintEvent *e) {
+		Canvas::paintEvent(e);
+
+		QPainter painter(this);
+		QRect frameRect = QRect(0, 0, width() - 1, height() - 1);
+		QRect ptRect = QRect(pt1.x() - 5, pt1.y() - 5, 10, 10);
+
+		painter.setPen(QColor(255,0,0));
+		painter.drawEllipse(ptRect);
+	}
 
 	// StringBox /////////////////////////////////////////////////////
 
@@ -177,13 +189,9 @@ namespace Jui
 		label(new PureText(this)),
 		txt(new LineText(this))
 	{
-		label->geometry_(5, 5, 139, 16);
 		label->text_("value");
 		label->align_(Qt::AlignLeft | Qt::AlignVCenter);
-
-		txt->geometry_(5, 20, 140, 60);
 		txt->align_(Qt::AlignLeft | Qt::AlignVCenter);
-
 		connect(
 			txt, SIGNAL(enterPressed()),
 			this, SLOT(onSet())
@@ -197,6 +205,14 @@ namespace Jui
 
 	}
 	QString StringBox::value() { return txt->text; }
+
+	void StringBox::resizeEvent(QResizeEvent *e) {
+		int w = e->size().width();
+		int h = e->size().height();
+		label->geometry_(5, 5, w / 2 - 10, 16);
+		txt->geometry_(5, 21, w - 10, h - 31);
+		Canvas::resizeEvent(e);
+	}
 
 	void StringBox::onSet() {
 		emit changed();

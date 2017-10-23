@@ -12,11 +12,11 @@ namespace Jui
 	}
 	void PureText::geometry_(int x, int y, int w, int h)
 	{
-		//Canvas::geometry_(x, y, w, h);
-		setGeometry(x, y, w, h);
+		//setGeometry(x, y, w, h);
 		QFont f = this->font();
 		f.setPixelSize(h * 5 / 6);
 		setFont(f);
+		Canvas::geometry_(x, y, w, h);
 	}	
 	void PureText::text_(QString t) {
 		text = t;

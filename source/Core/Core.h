@@ -24,8 +24,10 @@ namespace Jui
 		Canvas(QWidget *parent, int x, int y, int width, int height);
 		Canvas(int x, int y, int width, int height);
 
-		void origin_(int x, int y);
 		void geometry_(int x, int y, int w, int h);
+		void origin_(int x, int y);
+		void originX_(int x);
+		void originY_(int x);
 		void name_(QString txt);
 
 		QPoint origin();

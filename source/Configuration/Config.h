@@ -7,9 +7,7 @@
 #include "Text.h"
 #include "Dummies.h"
 #include "Button.h"
-
-//#include <QDebug>
-//#include <QMetaObject>
+#include "Geometry.h"
 
 namespace Jui
 {

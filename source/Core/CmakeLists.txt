@@ -8,6 +8,7 @@ SET(Core_hdr
 	${CMAKE_CURRENT_LIST_DIR}/Dummies.h
 	${CMAKE_CURRENT_LIST_DIR}/Draw.h
 	${CMAKE_CURRENT_LIST_DIR}/Button.h
+	${CMAKE_CURRENT_LIST_DIR}/Geometry.h
 	PARENT_SCOPE
 )
 
@@ -19,6 +20,7 @@ SET(Core_src
 	${CMAKE_CURRENT_LIST_DIR}/Dummies.cpp
 	${CMAKE_CURRENT_LIST_DIR}/Draw.cpp
 	${CMAKE_CURRENT_LIST_DIR}/Button.cpp
+	${CMAKE_CURRENT_LIST_DIR}/Geometry.cpp
 	PARENT_SCOPE
 )
 

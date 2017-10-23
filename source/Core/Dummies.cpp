@@ -35,30 +35,36 @@ namespace Jui
 	}
 	void Header::mousePressEvent(QMouseEvent *e)
 	{
-		mousePressedGlobalCoor = e->globalPos();
+		if (!isLocked) {
+			mousePressedGlobalCoor = e->globalPos();
 
-		if (this->parentWidget()->isWindow()) {
-			mousePressedOriginCoor = this->parentWidget()->mapToGlobal(QPoint(0, 0));
+			if (this->parentWidget()->isWindow()) {
+				mousePressedOriginCoor = this->parentWidget()->mapToGlobal(QPoint(0, 0));
+			}
+			else {
+				mousePressedOriginCoor = this->parentWidget()->mapToParent(QPoint(0, 0));
+			}
+			colorBackground.value_(120, 20, 20, 0.05);
 		}
-		else {
-			mousePressedOriginCoor = this->parentWidget()->mapToParent(QPoint(0, 0));
-		}
-		colorBackground.value_(120, 20, 20, 0.05);
 	}
 	void Header::mouseReleaseEvent(QMouseEvent *e) {
-		colorBackground.value_(QColor(0, 0, 0, 0), 0.5);
+		if (!isLocked) {
+			colorBackground.value_(QColor(0, 0, 0, 0), 0.5);
+		}
 	}
 	void Header::mouseMoveEvent(QMouseEvent *e)
 	{
-		QPoint deltaPt(
-			e->globalPos().x() - mousePressedGlobalCoor.x(),
-			e->globalPos().y() - mousePressedGlobalCoor.y()
-		);
-		QPoint newOrigin(
-			mousePressedOriginCoor.x() + deltaPt.x(),
-			mousePressedOriginCoor.y() + deltaPt.y()
-		);
-		if (!isLocked) { this->parentWidget()->move(newOrigin); }
+		if (!isLocked) {
+			QPoint deltaPt(
+				e->globalPos().x() - mousePressedGlobalCoor.x(),
+				e->globalPos().y() - mousePressedGlobalCoor.y()
+			);
+			QPoint newOrigin(
+				mousePressedOriginCoor.x() + deltaPt.x(),
+				mousePressedOriginCoor.y() + deltaPt.y()
+			);
+			this->parentWidget()->move(newOrigin);
+		}
 	}
 	void Header::paintEvent(QPaintEvent *event) {
 		QPainter painter(this);
@@ -159,12 +165,8 @@ namespace Jui
 			parent, SIGNAL(resized(QSize)),
 			this, SLOT(onParentResize(QSize))
 		);
-
 		onParentResize(parent->size());
-
-		//fitSize();
-		//m_parent->installEventFilter(this);
-
+		
 		foreach(EdgeControler *oneEdge, mEdges.values())
 		{
 			connect(
