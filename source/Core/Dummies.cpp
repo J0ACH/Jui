@@ -11,6 +11,7 @@ namespace Jui
 		m_text->align_(Qt::AlignVCenter | Qt::AlignLeft);
 		thickness = 30;
 		move(1, 1);
+		isLocked = false;
 
 		colorBackground.value_(QColor(0, 0, 0, 0));
 		connect(
@@ -27,6 +28,7 @@ namespace Jui
 		show();
 	}
 	void Header::font_(QString family) { m_text->font_(family); }
+	void Header::lock_(bool b) { isLocked = b; }
 	void Header::onParentResize(QSize size) {
 		setFixedSize(size.width() - 2, thickness);
 		m_text->geometry_(20, 6, size.width() - 2, thickness - 12);
@@ -56,12 +58,11 @@ namespace Jui
 			mousePressedOriginCoor.x() + deltaPt.x(),
 			mousePressedOriginCoor.y() + deltaPt.y()
 		);
-		this->parentWidget()->move(newOrigin);
+		if (!isLocked) { this->parentWidget()->move(newOrigin); }
 	}
 	void Header::paintEvent(QPaintEvent *event) {
 		QPainter painter(this);
-		painter.fillRect(rect(), colorBackground);
-
+		if (!isLocked) { painter.fillRect(rect(), colorBackground); }
 		m_text->text_(this->parentWidget()->objectName());
 	}
 
@@ -176,59 +177,12 @@ namespace Jui
 			);
 		};
 	}
-	/*
-	bool Edges::eventFilter(QObject *object, QEvent *e)
-	{
-		switch (e->type())
-		{
-		case QEvent::Type::Resize:
-			fitSize();
-			break;
-		};
-		return false;
+	void Edges::hide() {
+		foreach(EdgeControler *oneEdge, mEdges.values()) { oneEdge->hide(); }
 	}
-	void Edges::fitSize()
-	{
-		foreach(EdgeControler* oneEdge, mEdges.values())
-		{
-			switch (oneEdge->direction())
-			{
-			case Jui::direction::right:
-				oneEdge->setGeometry(
-					m_parent->width() - thickness - offset,
-					offset + corner + gap,
-					thickness,
-					m_parent->height() - 2 * offset - 2 * corner - 2 * gap
-				);
-				break;
-			case Jui::direction::bottom:
-				oneEdge->setGeometry(
-					offset + corner + gap,
-					m_parent->height() - offset - thickness,
-					m_parent->width() - 2 * offset - 2 * corner - 2 * gap,
-					thickness
-				);
-				break;
-			case Jui::direction::left:
-				oneEdge->setGeometry(
-					offset,
-					offset + corner + gap,
-					thickness,
-					m_parent->height() - 2 * offset - 2 * corner - 2 * gap
-				);
-				break;
-			case Jui::direction::top:
-				oneEdge->setGeometry(
-					offset + corner + gap,
-					offset,
-					m_parent->width() - 2 * offset - 2 * corner - 2 * gap,
-					thickness
-				);
-				break;
-			}
-		}
+	void Edges::show() {
+		foreach(EdgeControler *oneEdge, mEdges.values()) { oneEdge->show(); }
 	}
-	*/
 	void Edges::onParentResize(QSize size) {
 		foreach(EdgeControler* oneEdge, mEdges.values())
 		{

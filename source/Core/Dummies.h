@@ -16,6 +16,7 @@ namespace Jui
 	public:
 		Header(QWidget *parent = 0);
 		void font_(QString family);
+		void lock_(bool b);
 
 	protected:
 		void mousePressEvent(QMouseEvent *e) override;
@@ -28,6 +29,7 @@ namespace Jui
 		int thickness;
 		QPoint mousePressedGlobalCoor, mousePressedOriginCoor;
 		FadeColor colorBackground;
+		bool isLocked;
 
 		private slots:
 		void onParentResize(QSize size);

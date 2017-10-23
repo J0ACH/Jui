@@ -47,9 +47,15 @@ namespace Jui
 	void Win::onMaximize() {
 		if (!isMaximized()) {
 			showMaximized(); 
-			//winEdges->
+			winHeader->lock_(true);
+			winEdges->hide();
+
 		}
-		else { showNormal(); }
+		else { 
+			showNormal(); 
+			winHeader->lock_(false);
+			winEdges->show();
+		}
 	}
 
 	// Dialog /////////////////////////////////////////////////////
