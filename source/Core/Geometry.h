@@ -6,12 +6,28 @@
 namespace Jui
 {
 
+	// Scene /////////////////////////////////////////////////////
+
+	class Scene : public QGraphicsView
+	{
+	public:
+		Scene(QWidget *parent = 0);
+
+		void geometry_(int x, int y, int w, int h);
+		void background_(QColor color);
+		void background_(int r, int g, int b);
+
+	protected:
+		void drawBackground(QPainter * painter, const QRectF & rect);
+
+	};
+
 	// Point /////////////////////////////////////////////////////
 
 	class Point : public Canvas
 	{
-		Q_OBJECT			
-			
+		Q_OBJECT
+
 	public:
 		Point(QWidget *parent = 0);
 
@@ -23,14 +39,14 @@ namespace Jui
 
 		int x();
 		int y();
-								
+
 	protected:
 		void paintEvent(QPaintEvent *e) override;
 
 	private:
 		shape m_shape;
 	};
-	
+
 	QDebug operator<<(QDebug dbg, Point *pt);
 	QDebug operator<<(QDebug dbg, Point &pt);
 
@@ -45,7 +61,7 @@ namespace Jui
 
 		void from_(Point *pt);
 		void to_(Point *pt);
-		
+
 	protected:
 		void paintEvent(QPaintEvent *e) override;
 
