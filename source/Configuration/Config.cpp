@@ -60,15 +60,17 @@ namespace Jui
 		view->geometry_(300, 50, 350, 350);
 		view->background_(50, 20, 20);
 
+		Point *pt1 = new Point();
+		pt1->origin_(0, 0);
+		view->addItem(pt1);
+
+		Point *pt2 = new Point();
+		pt2->origin_(100, 50);
+		pt2->shape_(Point::shape::CIRCLE);
+		pt2->size_(20);
+		view->addItem(pt2);
+
 		/*
-		Point *pt1 = new Point(test);
-		pt1->x_(300);
-		pt1->y_(100);
-
-		Point *pt2 = new Point(test);
-		pt2->x_(200);
-		pt2->y_(300);
-
 		Line *ln1 = new Line(test);
 		ln1->from_(pt1);
 		ln1->to_(pt2);

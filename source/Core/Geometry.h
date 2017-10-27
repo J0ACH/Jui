@@ -17,39 +17,45 @@ namespace Jui
 		void background_(QColor color);
 		void background_(int r, int g, int b);
 
+		QGraphicsScene scene();
+		void addItem(QGraphicsItem *item);
+
 	protected:
 		void drawBackground(QPainter * painter, const QRectF & rect);
 		void drawForeground(QPainter * painter, const QRectF & rect);
 
 	private:
-		QGraphicsScene *scene;
+		QGraphicsScene *m_scene;
 		FadeColor colorFrame, colorBackground;
 
 	};
 
 	// Point /////////////////////////////////////////////////////
 
-	class Point : public Canvas
+	class Point : public QGraphicsItem
 	{
-		Q_OBJECT
+		//Q_OBJECT
 
 	public:
-		Point(QWidget *parent = 0);
-
+		Point(QGraphicsItem *parent = 0);
+		
 		enum shape { CIRCLE, CROSS };
 
-		void x_(int x);
-		void y_(int y);
-		void size_(int s);
+		void origin_(double x, double y);
+		//void x_(int x);
+		//void y_(int y);
+		void size_(double s);
+		void shape_(Point::shape type);
 
 		int x();
 		int y();
 
-	protected:
-		void paintEvent(QPaintEvent *e) override;
+		QRectF boundingRect() const;
+		void paint(QPainter *painter,const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
 	private:
 		shape m_shape;
+		double m_size;
 	};
 
 	QDebug operator<<(QDebug dbg, Point *pt);
@@ -57,25 +63,6 @@ namespace Jui
 
 	// Line /////////////////////////////////////////////////////
 
-	class Line : public Canvas
-	{
-		Q_OBJECT
-
-	public:
-		Line(QWidget *parent = 0);
-
-		void from_(Point *pt);
-		void to_(Point *pt);
-
-	protected:
-		void paintEvent(QPaintEvent *e) override;
-
-	private:
-		Point *m_from, *m_to;
-
-		private slots:
-		void fitCanvas();
-	};
 }
 
 #endif // GEOMETRY_H
