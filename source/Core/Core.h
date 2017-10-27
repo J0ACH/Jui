@@ -5,28 +5,46 @@
 #include <QtGui>
 #include <QtWidgets>
 
-/*
-#include <QObject>
-#include <QWidget>
-#include <QCoreApplication>
-#include <QTranslator>
-#include <QFontDatabase>
-#include <QMouseEvent>
-#include <QKeyEvent>
-#include <QPushButton>
-#include <QPainter>
-#include <QString>
-#include <QDebug>
-#include <QMetaObject>
-#include <QVariantAnimation>
-#include <QColor>
-*/
+#include "Fade.h"
 
 namespace Jui
 {
 	enum fade { out, in };
 	enum direction { right, bottom, left, top };
-	void loadFonts();
+	void loadFonts();	
+
+	// Canvas /////////////////////////////////////////////////////
+
+	class Canvas : public QWidget
+	{
+		Q_OBJECT
+
+	public:
+		Canvas(QWidget *parent = 0);
+		Canvas(QWidget *parent, int x, int y, int width, int height);
+		Canvas(int x, int y, int width, int height);
+
+		void geometry_(int x, int y, int w, int h);
+		void origin_(int x, int y);
+		void originX_(int x);
+		void originY_(int x);
+		void name_(QString txt);
+
+		QPoint origin();
+		QString name();
+
+	signals:
+		void resized(QSize size);
+
+	protected:
+		void resizeEvent(QResizeEvent *e) override;
+		void paintEvent(QPaintEvent *e) override;
+
+	private:
+		//FadePoint m_origin;
+		void init(int x = 10, int y = 10, int width = 50, int height = 50);
+	};
+
 }
 
 #endif // CORE_H

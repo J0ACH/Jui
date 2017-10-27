@@ -9,7 +9,7 @@ namespace Jui
 
 	// PureText /////////////////////////////////////////////////////
 
-	class PureText : public QWidget
+	class PureText : public Canvas
 	{
 
 	public:
@@ -71,8 +71,8 @@ namespace Jui
 		void mouseDoubleClickEvent(QMouseEvent *e) override;
 		void keyPressEvent(QKeyEvent *e) override;
 		void paintEvent(QPaintEvent *e) override;
-	private:
 
+	private:
 		int m_cursorIndex, m_selectFrom, m_selectTo;
 		QString previousText;
 		FadeColor colorFrame;

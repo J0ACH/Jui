@@ -2,29 +2,37 @@
 #define CONFIG_H
 
 #include "Core.h"
+#include "Screens.h"
 #include "Fade.h"
 #include "Text.h"
-#include "Canvas.h"
 #include "Dummies.h"
 #include "Button.h"
-#include <QDebug>
+#include "Geometry.h"
 
 namespace Jui
 {
-	class Config : public Canvas
+	class Config : public QObject
 	{
 		Q_OBJECT
+
 	public:
-		Config(int x, int y, int width, int height);
+		Config(QObject *parent = 0);
+		Config(int x, int y, int w, int h);
+			
 	private:
-		FadeDouble fade;
+		Win *win;
+		NumberBox *nb1, *nb2;
 		PureText *pt;
-		LineText *lt;
+		StringBox *sb;
+
+		void initConfig(int x, int y, int w, int h);
 
 		private slots:
 		void click();
 		void result();
 	};
+
+	
 }
 
 #endif // CONFIG_H

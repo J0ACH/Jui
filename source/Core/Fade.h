@@ -1,7 +1,9 @@
 #ifndef FADE_H
 #define FADE_H
 
-#include "Core.h"
+#include <QtCore>
+#include <QtGui>
+#include <QtWidgets>
 
 namespace Jui
 {
@@ -15,13 +17,21 @@ namespace Jui
 		FadeAbstract();
 		void stop();
 		void reciever(QObject *object, const char* method = "update");
+		void updater(QWidget *widget);
+
+	signals:
+		void started();
+		void changed();
+		void finished();
 		
 	protected:
 		QVariantAnimation variable;
 		QObject *m_target;
 		const char *m_method;
+
 	private:
 		void onValueChanged(QVariant);
+		void onFinish();
 	};
 
 	// FadeDouble /////////////////////////////////////////////////////
@@ -31,7 +41,8 @@ namespace Jui
 	public:
 		void value_(double value);
 		void value_(double value, double ftime);
-		double value();
+		double value();		
+		operator double() const;
 	};
 
 	// FadeInt /////////////////////////////////////////////////////
@@ -55,6 +66,7 @@ namespace Jui
 		void value_(int r, int g, int b, double ftime);
 		void value_(QColor value, double time);
 		QColor value();
+		operator QColor() const;
 	};
 
 	// FadePoint /////////////////////////////////////////////////////
