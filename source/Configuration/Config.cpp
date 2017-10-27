@@ -55,19 +55,6 @@ namespace Jui
 			this, SLOT(click())
 		);
 		Edges *sbedges = new Edges(sb);
-		
-		Point *pt1 = new Point(test);
-		pt1->x_(300);
-		pt1->y_(100);
-
-		Point *pt2 = new Point(test);
-		pt2->x_(200);
-		pt2->y_(300);
-
-		Line *ln1 = new Line(test);
-		ln1->from_(pt1);
-		ln1->to_(pt2);
-
 	}
 
 	void Config::click() {

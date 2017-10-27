@@ -66,8 +66,7 @@ namespace Jui
 		FadeDouble variable;
 		int cntDecNums;
 		qint64 startTime;
-		QPoint pt1;
-
+		
 		private slots:
 		void onSet();
 		void onCurrentChanged();
