@@ -169,20 +169,8 @@ namespace Jui
 		current->geometry_(5, 21, w*0.75, h - 31);
 		target->geometry_(w*0.75 + 5, 21, w * 0.2, (h - 31) / 2);
 		fadetime->geometry_(w*0.75 + 5, 50, w * 0.2, (h - 31) / 2);
-		pt1.setX(w*0.5);
 		Canvas::resizeEvent(e);
 	}
-	void NumberBox::paintEvent(QPaintEvent *e) {
-		Canvas::paintEvent(e);
-
-		QPainter painter(this);
-		QRect frameRect = QRect(0, 0, width() - 1, height() - 1);
-		QRect ptRect = QRect(pt1.x() - 5, pt1.y() - 5, 10, 10);
-
-		painter.setPen(QColor(255,0,0));
-		painter.drawEllipse(ptRect);
-	}
-
 	// StringBox /////////////////////////////////////////////////////
 
 	StringBox::StringBox(QWidget *parent) : Canvas(parent),

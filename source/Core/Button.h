@@ -58,16 +58,14 @@ namespace Jui
 
 	protected:
 		void resizeEvent(QResizeEvent *e) override;
-		void paintEvent(QPaintEvent *e) override;
-
+		
 	private:
 		PureText *label, *current;
 		LineText *target, *fadetime;
 		FadeDouble variable;
 		int cntDecNums;
 		qint64 startTime;
-		QPoint pt1;
-
+		
 		private slots:
 		void onSet();
 		void onCurrentChanged();

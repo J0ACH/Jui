@@ -4,9 +4,14 @@ namespace Jui
 {
 	// Scene /////////////////////////////////////////////////////
 
-	Scene::Scene(QWidget *parent) : QGraphicsView(parent)
+	Scene::Scene(QWidget *parent) : QGraphicsView(parent),
+		scene(new QGraphicsScene(this))
 	{
-		setCacheMode(QGraphicsView::CacheBackground);
+		//setCacheMode(QGraphicsView::CacheBackground);
+		//setSceneRect(0, 0, 1000, 1000);
+		setWindowFlags(Qt::FramelessWindowHint);
+		setFrameShape(QFrame::Shape::NoFrame);
+		setScene(scene);
 		show();
 	}
 	void Scene::geometry_(int x, int y, int w, int h)
@@ -15,18 +20,18 @@ namespace Jui
 	}
 	void Scene::background_(QColor color) {
 		QBrush brush(color, Qt::SolidPattern);
-		setBackgroundBrush(brush);		
+		setBackgroundBrush(brush);
 	}
 	void Scene::background_(int r, int g, int b) { Scene::background_(QColor(r, g, b)); }
 
+	/*
 	void Scene::drawBackground(QPainter *painter, const QRectF & rect) {
-		//QRect frameRect = QRect(0, 0, width() - 1, height() - 1);
-		//QRect fillRect = QRect(0, 0, width(), height());
-
-		painter->fillRect(rect, QColor(120, 20, 20));
-		painter->setPen(QColor(50, 50, 50));
+		painter->fillRect(rect, QColor(50, 20, 20));
+		painter->setPen(QColor(250, 50, 50));
 		painter->drawRect(rect);
 	}
+	*/
+
 
 	// Point /////////////////////////////////////////////////////
 

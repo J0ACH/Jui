@@ -12,13 +12,17 @@ namespace Jui
 	{
 	public:
 		Scene(QWidget *parent = 0);
+		//Scene(QObject * parent = 0);
 
 		void geometry_(int x, int y, int w, int h);
 		void background_(QColor color);
 		void background_(int r, int g, int b);
 
 	protected:
-		void drawBackground(QPainter * painter, const QRectF & rect);
+		//void drawBackground(QPainter * painter, const QRectF & rect);
+
+	private:
+		QGraphicsScene *scene;
 
 	};
 

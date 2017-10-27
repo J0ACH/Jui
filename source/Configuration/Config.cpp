@@ -10,7 +10,7 @@ namespace Jui
 		win = new Win(x, y, w, h);
 		win->name_("Configuration");
 
-		Canvas *test = new Canvas(win, 250, 50, 200, 200);
+		Canvas *test = new Canvas(win, 30, 390, 200, 200);
 		test->setObjectName("Test");
 		Header *testHeader = new Header(test);
 		Edges *testEdges = new Edges(test);
@@ -55,10 +55,11 @@ namespace Jui
 			this, SLOT(click())
 		);
 		Edges *sbedges = new Edges(sb);
-		
-		Scene *view = new Scene(win);
-		view->geometry_(300, 200, 350, 350);
-		//view->background_(50, 20, 20);
+
+		Scene *view = new Scene();
+		view->geometry_(300, 50, 350, 350);
+		view->background_(50, 20, 20);
+
 		/*
 		Point *pt1 = new Point(test);
 		pt1->x_(300);
