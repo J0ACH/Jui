@@ -12,25 +12,26 @@ namespace Jui
 		setWindowFlags(Qt::FramelessWindowHint);
 		setFrameShape(QFrame::Shape::NoFrame);
 		setScene(scene);
+
+		colorFrame.value_(250, 50, 50);
+		colorBackground.value_(50, 50, 50);
+
 		show();
 	}
 	void Scene::geometry_(int x, int y, int w, int h)
 	{
 		this->setGeometry(x, y, w, h);
 	}
-	void Scene::background_(QColor color) {
-		QBrush brush(color, Qt::SolidPattern);
-		setBackgroundBrush(brush);
-	}
-	void Scene::background_(int r, int g, int b) { Scene::background_(QColor(r, g, b)); }
 
-	/*
+	void Scene::background_(QColor color) { colorBackground.value_(color); }
+	void Scene::background_(int r, int g, int b) { Scene::background_(QColor(r, g, b)); }
 	void Scene::drawBackground(QPainter *painter, const QRectF & rect) {
-		painter->fillRect(rect, QColor(50, 20, 20));
-		painter->setPen(QColor(250, 50, 50));
-		painter->drawRect(rect);
+		painter->fillRect(rect, colorBackground);
 	}
-	*/
+	void Scene::drawForeground(QPainter *painter, const QRectF & rect) {
+		painter->setPen(colorFrame);
+		painter->drawRect(rect.adjusted(0, 0, -1, -1));
+	}
 
 
 	// Point /////////////////////////////////////////////////////

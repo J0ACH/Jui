@@ -56,7 +56,7 @@ namespace Jui
 		);
 		Edges *sbedges = new Edges(sb);
 
-		Scene *view = new Scene();
+		Scene *view = new Scene(win);
 		view->geometry_(300, 50, 350, 350);
 		view->background_(50, 20, 20);
 
