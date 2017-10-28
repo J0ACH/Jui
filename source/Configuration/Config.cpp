@@ -67,6 +67,12 @@ namespace Jui
 		pt2->origin_(100, 50);
 		pt2->shape_(Point::shape::CIRCLE);
 		pt2->size_(20);
+
+		Point *pt3 = new Point(view);
+		pt3->origin_(1000, 0);
+
+		Point *pt4 = new Point(view);
+		pt4->origin_(0, 500);
 		
 		/*
 				Line *ln1 = new Line(test);

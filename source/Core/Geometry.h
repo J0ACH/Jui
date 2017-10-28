@@ -6,6 +6,15 @@
 namespace Jui
 {
 
+	// ScrollBar /////////////////////////////////////////////////////
+
+	class ScrollBar : public QScrollBar {
+	public:
+		ScrollBar(QWidget * parent = 0);
+	protected:
+		void paintEvent(QPaintEvent *e) override;
+	};
+
 	// Scene /////////////////////////////////////////////////////
 
 	class Scene : public QGraphicsScene {
@@ -16,6 +25,7 @@ namespace Jui
 
 		void geometry_(int x, int y, int w, int h);
 
+
 	signals:
 		void zoomed(double);
 
@@ -23,12 +33,15 @@ namespace Jui
 		void drawBackground(QPainter * painter, const QRectF & rect);
 		void drawForeground(QPainter * painter, const QRectF & rect);
 
+		virtual void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent) override;
+		virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent) override;
 		virtual void wheelEvent(QGraphicsSceneWheelEvent *wheelEvent) override;
 
 	private:
 		QGraphicsView *m_view;
-		double zoom;
+		double zoomDelta;
 		FadeColor colorFrame, colorBackground;
+		QPointF mouseAnchor, mouseDelta;
 
 	};
 
