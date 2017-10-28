@@ -58,23 +58,21 @@ namespace Jui
 
 		Scene *view = new Scene(win);
 		view->geometry_(300, 50, 350, 350);
-		view->background_(50, 20, 20);
+		//view->background_(50, 20, 20);
 
-		Point *pt1 = new Point();
+		Point *pt1 = new Point(view);
 		pt1->origin_(0, 0);
-		view->addItem(pt1);
 
-		Point *pt2 = new Point();
+		Point *pt2 = new Point(view);
 		pt2->origin_(100, 50);
 		pt2->shape_(Point::shape::CIRCLE);
 		pt2->size_(20);
-		view->addItem(pt2);
-
+		
 		/*
-		Line *ln1 = new Line(test);
-		ln1->from_(pt1);
-		ln1->to_(pt2);
-		*/
+				Line *ln1 = new Line(test);
+				ln1->from_(pt1);
+				ln1->to_(pt2);
+				*/
 
 	}
 
