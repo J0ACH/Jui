@@ -24,7 +24,8 @@ namespace Jui
 		Scene(QWidget *parent = Q_NULLPTR);
 
 		void geometry_(int x, int y, int w, int h);
-
+		QRect itemBox(int margin = 50);
+		QRectF viewBox();
 
 	signals:
 		void zoomed(double);
@@ -42,6 +43,8 @@ namespace Jui
 		double zoomDelta;
 		FadeColor colorFrame, colorBackground;
 		QPointF mouseAnchor, mouseDelta;
+
+		void drawGrid();
 
 	};
 

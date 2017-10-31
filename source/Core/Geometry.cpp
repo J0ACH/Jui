@@ -7,9 +7,9 @@ namespace Jui
 
 	ScrollBar::ScrollBar(QWidget *parent) { }
 	void ScrollBar::paintEvent(QPaintEvent *e) {
-		//QScrollBar::paintEvent(e);
-		QPainter painter;
-		painter.fillRect(rect(), QColor(255, 0, 0));
+		QScrollBar::paintEvent(e);
+		//QPainter painter;
+		//painter.fillRect(rect(), QColor(255, 0, 0));
 	}
 
 	// Scene /////////////////////////////////////////////////////
@@ -21,7 +21,7 @@ namespace Jui
 		m_view->setFrameShape(QFrame::Shape::NoFrame);
 		m_view->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
 		//m_view->setScene(this);
-		m_view->setVerticalScrollBar(new ScrollBar(m_view));
+		//m_view->setVerticalScrollBar(new ScrollBar(m_view));
 
 		zoomDelta = 0.008;
 
@@ -29,7 +29,8 @@ namespace Jui
 		colorBackground.value_(30, 30, 30);
 
 		//setSceneRect(-w / 2, -h / 2, w, h);
-		setSceneRect(-5000, -5000, 10000, 10000);
+		//setSceneRect(-5000, -5000, 10000, 10000);
+		//setSceneRect(-1, -1, 2, 2);
 
 		m_view->show();
 	}
@@ -37,7 +38,25 @@ namespace Jui
 	{
 		m_view->setGeometry(x, y, w, h);
 	}
+	QRect Scene::itemBox(int margin)
+	{
 
+		//items() const
+		return QRect();
+	}
+	QRectF Scene::viewBox()
+	{
+		int w = m_view->viewport()->width();
+		int h = m_view->viewport()->height();
+		QPolygonF sceneRect = m_view->mapToScene(QRect(0, 0, w, h));
+		QRectF bbox = sceneRect.boundingRect();
+		qDebug() << "Scene:viewBox"
+			<< "width()" << w
+			<< "height()" << h
+			<< "sceneRect" << sceneRect.boundingRect()
+			;
+		return bbox.adjusted(-10,-10,-10,-10);
+	}
 	void Scene::drawBackground(QPainter *painter, const QRectF & rect) {
 		painter->fillRect(rect, colorBackground);
 		painter->setPen(colorFrame);
@@ -56,14 +75,24 @@ namespace Jui
 	}
 
 	void Scene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent) {
-		//qDebug() << "Scene:mousePressEvent" << mouseEvent->scenePos();
-		qDebug() << "Scene:mousePressEvent" << mouseEvent->pos();
+		/*
+		qDebug() << "Scene:mouseMoveEvent"
+			<< "pos" << mouseEvent->pos()
+			<< "scene" << mouseEvent->scenePos()
+			<< "screen" << mouseEvent->screenPos()
+			<< "view" << m_view->mapFromScene(mouseEvent->scenePos())
+			;
+		*/
+
+		this->viewBox();
+
 		mouseDelta = mouseEvent->screenPos();
 		mouseAnchor = m_view->mapToScene(width() / 2, height() / 2); mouseEvent->scenePos();
-		qDebug() << "Scene:mapToScene" << m_view->mapToScene(mouseEvent->pos().x(), mouseEvent->pos().y());
+		//qDebug() << "Scene:mapToScene" << m_view->mapToScene(mouseEvent->pos().x(), mouseEvent->pos().y());
 		QGraphicsScene::mousePressEvent(mouseEvent);
 	}
 	void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent) {
+
 		if (mouseEvent->buttons() == Qt::MiddleButton)
 		{
 			//qDebug() << "Scene:mouseMoveEvent" << mouseEvent->scenePos();
@@ -86,14 +115,19 @@ namespace Jui
 	}
 
 	void Scene::wheelEvent(QGraphicsSceneWheelEvent *wheelEvent) {
-		/*
-		*/
+
 		double scaleFactor = 1;
 		if (wheelEvent->delta() > 0) { scaleFactor += zoomDelta; }
 		else { scaleFactor -= zoomDelta; }
+		m_view->setTransformationAnchor(QGraphicsView::ViewportAnchor::AnchorViewCenter);
+		//m_view->setTransformationAnchor(QGraphicsView::ViewportAnchor::AnchorUnderMouse);
 		m_view->scale(scaleFactor, scaleFactor);
 		//m_view->centerOn(wheelEvent->scenePos());
 
+		setSceneRect(viewBox());
+		m_view->centerOn(wheelEvent->scenePos());
+
+		/*
 		qDebug() << "Scene:wheelEvent"
 			<< "delta:" << wheelEvent->delta()
 			<< "pos" << wheelEvent->pos()
@@ -102,6 +136,7 @@ namespace Jui
 			//"screenpos" << wheelEvent->screenPos() <<
 			//"m_view->sceneRect()" << m_view->sceneRect()
 			;
+		*/
 
 		//QGraphicsScene::wheelEvent(wheelEvent);
 	}
