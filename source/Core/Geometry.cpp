@@ -256,8 +256,12 @@ namespace Jui
 	// Line /////////////////////////////////////////////////////
 
 	Line::Line(Canvas* parent) : AbstractGeometry(parent) {};
+
+	void Line::from_(int x, int y) { fromPt = QPoint(x, y); }
+	void Line::to_(int x, int y) { toPt = QPoint(x, y); }
+
 	void Line::draw(QPainter *painter) {
 		painter->setPen(QColor(255, 0, 0));
-		painter->drawLine(0, 0, 200, 200);
+		painter->drawLine(fromPt, toPt);
 	}
 }

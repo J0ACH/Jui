@@ -95,7 +95,13 @@ namespace Jui
 	{
 	public:
 		Line(Canvas* parent);
+
+		void from_(int x, int y);
+		void to_(int x, int y);
+
 		void draw(QPainter *painter);
+	private:
+		QPoint fromPt, toPt;
 	};
 	
 }

@@ -34,8 +34,8 @@ namespace Jui
 
 	QString Canvas::name() { return this->objectName(); }
 
-	void Canvas::addGeometry(AbstractGeometry *obj) { 
-		geometryObjects.append(obj); 
+	void Canvas::addGeometry(AbstractGeometry *obj) {
+		geometryObjects.append(obj);
 	}
 
 	void Canvas::resizeEvent(QResizeEvent *e) {
@@ -52,12 +52,13 @@ namespace Jui
 		painter.setPen(QColor(50, 50, 50));
 		painter.drawRect(frameRect);
 
-		
+
 		foreach(AbstractGeometry *oneGeo, geometryObjects)
 		{
 			oneGeo->draw(&painter);
+			oneGeo->drawBBox(&painter);
 		}
-		
+
 
 		//draw(&painter);
 	}
@@ -65,9 +66,20 @@ namespace Jui
 
 	// AbstractGeometry /////////////////////////////////////////////////////
 
-	AbstractGeometry::AbstractGeometry(Canvas* parent)
+	AbstractGeometry::AbstractGeometry(Canvas* parent) :
+		m_parent(parent)
 	{
-		parent->addGeometry(this);
+		m_parent->addGeometry(this);
+	}
+
+	void AbstractGeometry::bbox_(QRect rect) { bbox = rect; }
+	void AbstractGeometry::displayBBox(bool b) { m_displayBBox = b; }
+	void AbstractGeometry::update() { m_parent->update(bbox); }
+	void AbstractGeometry::drawBBox(QPainter *painter) {
+		if (m_displayBBox) {
+			painter->setPen(QColor(255, 0, 0));
+			painter->drawRect(bbox);
+		}
 	}
 }
 

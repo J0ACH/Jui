@@ -58,7 +58,19 @@ namespace Jui
 	public:
 		AbstractGeometry(Canvas *parent);
 
+		void bbox_(QRect rect);
+		void displayBBox(bool b);
+
 		virtual void draw(QPainter *painter) {};
+		void drawBBox(QPainter *painter);
+	
+	protected:
+		void update();
+	
+	private:
+		Canvas *m_parent;
+		QRect bbox;
+		bool m_displayBBox;
 	};
 }
 

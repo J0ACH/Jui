@@ -18,12 +18,13 @@ namespace Jui
 	public:
 		Config(QObject *parent = 0);
 		Config(int x, int y, int w, int h);
-			
+
 	private:
 		Win *win;
 		NumberBox *nb1, *nb2;
 		PureText *pt;
 		StringBox *sb;
+		Line *ln;
 
 		void initConfig(int x, int y, int w, int h);
 
