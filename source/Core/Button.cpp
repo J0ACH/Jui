@@ -59,7 +59,7 @@ namespace Jui
 			}
 		}
 	}
-
+	
 	void Button::paintEvent(QPaintEvent *e) {
 		QPainter painter(this);
 
@@ -87,7 +87,7 @@ namespace Jui
 			painter.drawImage(target, renderedIcon, source);  // draw image to QWidget
 		}
 	}
-
+	
 	// NumberBox /////////////////////////////////////////////////////
 
 	NumberBox::NumberBox(QWidget *parent) : Canvas(parent),

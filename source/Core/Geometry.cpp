@@ -19,7 +19,7 @@ namespace Jui
 	{
 		m_view->setWindowFlags(Qt::FramelessWindowHint);
 		m_view->setFrameShape(QFrame::Shape::NoFrame);
-		m_view->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
+		//m_view->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
 		//m_view->setScene(this);
 		//m_view->setVerticalScrollBar(new ScrollBar(m_view));
 
@@ -53,9 +53,10 @@ namespace Jui
 		qDebug() << "Scene:viewBox"
 			<< "width()" << w
 			<< "height()" << h
-			<< "sceneRect" << sceneRect.boundingRect()
+			<< "bbox" << bbox
 			;
-		return bbox.adjusted(-10,-10,-10,-10);
+		//return bbox.adjusted(-10,-10,-10,-10);
+		return bbox;
 	}
 	void Scene::drawBackground(QPainter *painter, const QRectF & rect) {
 		painter->fillRect(rect, colorBackground);
@@ -115,16 +116,15 @@ namespace Jui
 	}
 
 	void Scene::wheelEvent(QGraphicsSceneWheelEvent *wheelEvent) {
-
 		double scaleFactor = 1;
 		if (wheelEvent->delta() > 0) { scaleFactor += zoomDelta; }
 		else { scaleFactor -= zoomDelta; }
-		m_view->setTransformationAnchor(QGraphicsView::ViewportAnchor::AnchorViewCenter);
+		//m_view->setTransformationAnchor(QGraphicsView::ViewportAnchor::AnchorViewCenter);
 		//m_view->setTransformationAnchor(QGraphicsView::ViewportAnchor::AnchorUnderMouse);
 		m_view->scale(scaleFactor, scaleFactor);
 		//m_view->centerOn(wheelEvent->scenePos());
 
-		setSceneRect(viewBox());
+		//setSceneRect(viewBox());
 		m_view->centerOn(wheelEvent->scenePos());
 
 		/*
@@ -255,5 +255,9 @@ namespace Jui
 
 	// Line /////////////////////////////////////////////////////
 
-
+	Line::Line(Canvas* parent) : AbstractGeometry(parent) {};
+	void Line::draw(QPainter *painter) {
+		painter->setPen(QColor(255, 0, 0));
+		painter->drawLine(0, 0, 200, 200);
+	}
 }

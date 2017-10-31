@@ -21,7 +21,7 @@ namespace Jui
 		pt->align_(Qt::AlignLeft | Qt::AlignVCenter);
 
 		Button *b = new Button(win);
-		b->setGeometry(30, 50, 50, 50);
+		b->setGeometry(130, 30, 50, 50);
 		b->pressable_(true);
 		b->icon_(":/close16.png", 0);
 
@@ -57,7 +57,7 @@ namespace Jui
 		Edges *sbedges = new Edges(sb);
 
 		Scene *view = new Scene(win);
-		view->geometry_(300, 50, 350, 350);
+		view->geometry_(300, 150, 350, 350);
 		//view->background_(50, 20, 20);
 
 		Point *pt1 = new Point(view);
@@ -74,6 +74,7 @@ namespace Jui
 		Point *pt4 = new Point(view);
 		pt4->origin_(0, 500);
 		
+		Line *ln = new Line(win);
 		/*
 				Line *ln1 = new Line(test);
 				ln1->from_(pt1);

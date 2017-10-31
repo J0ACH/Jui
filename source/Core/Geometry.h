@@ -91,6 +91,13 @@ namespace Jui
 
 	// Line /////////////////////////////////////////////////////
 
+	class Line : public AbstractGeometry
+	{
+	public:
+		Line(Canvas* parent);
+		void draw(QPainter *painter);
+	};
+	
 }
 
 #endif // GEOMETRY_H

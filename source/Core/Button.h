@@ -30,7 +30,7 @@ namespace Jui
 		void mouseReleaseEvent(QMouseEvent *e) override;
 
 		void paintEvent(QPaintEvent *e) override;
-
+		
 	private:
 		QString text;
 		bool isPressable, isChecked;

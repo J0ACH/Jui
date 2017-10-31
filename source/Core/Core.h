@@ -9,9 +9,12 @@
 
 namespace Jui
 {
+	class Canvas;
+	class AbstractGeometry;
+	
 	enum fade { out, in };
 	enum direction { right, bottom, left, top };
-	void loadFonts();	
+	void loadFonts();
 
 	// Canvas /////////////////////////////////////////////////////
 
@@ -33,6 +36,8 @@ namespace Jui
 		QPoint origin();
 		QString name();
 
+		void addGeometry(AbstractGeometry *obj);
+
 	signals:
 		void resized(QSize size);
 
@@ -43,8 +48,18 @@ namespace Jui
 	private:
 		//FadePoint m_origin;
 		void init(int x = 10, int y = 10, int width = 50, int height = 50);
+		QList<AbstractGeometry*> geometryObjects;
 	};
 
+	// AbstractGeometry /////////////////////////////////////////////////////
+
+	class AbstractGeometry
+	{
+	public:
+		AbstractGeometry(Canvas *parent);
+
+		virtual void draw(QPainter *painter) {};
+	};
 }
 
 #endif // CORE_H
