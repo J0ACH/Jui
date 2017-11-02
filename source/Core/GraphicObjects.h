@@ -55,14 +55,22 @@ namespace Jui
 		void size_(double s);
 		void shape_(ScenePoint::shape type);
 
+		QPointF origin();
+		double x();
+		double y();
+
 		QRectF boundingRect() const;
 		void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+
+	signals:
+		void changedOrigin();
 
 	protected:
 		virtual void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
 		virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
 		virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
 		virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+		virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
 
 	private:
 		shape m_shape;
@@ -79,6 +87,25 @@ namespace Jui
 	QDebug operator<<(QDebug dbg, ScenePoint *pt);
 	QDebug operator<<(QDebug dbg, ScenePoint &pt);
 
+	// SceneLine /////////////////////////////////////////////////////
+
+	class SceneLine : public QGraphicsObject
+	{
+		Q_OBJECT
+
+	public:
+		SceneLine(Scene *parent, ScenePoint *from, ScenePoint *to);
+
+		QRectF boundingRect() const;
+		void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+	
+	private:
+		ScenePoint *m_from, *m_to;
+		FadeColor colorPen;
+		
+		private slots:
+		void onChange();
+	};
 }
 
 #endif // GRAPHICOBJECTS_H

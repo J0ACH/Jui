@@ -164,6 +164,11 @@ namespace Jui
 	void ScenePoint::size_(double s) { m_size = s; }
 	void ScenePoint::shape_(ScenePoint::shape type) { m_shape = type; }
 
+	QPointF ScenePoint::origin() { return pos(); }
+	double ScenePoint::x() { return pos().x(); }
+	double ScenePoint::y() { return pos().y(); }
+
+
 	QRectF ScenePoint::boundingRect() const {
 		qreal penWidth = 1;
 		return QRectF(
@@ -200,6 +205,13 @@ namespace Jui
 		colorPen.value_(150, 150, 150, 0.5);
 		QGraphicsObject::mouseReleaseEvent(event);
 	}
+	void ScenePoint::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+	{
+		//qDebug() << "Point::mouseMoveEvent";
+		QGraphicsObject::mouseMoveEvent(event);
+		emit changedOrigin();
+	}
+
 	void ScenePoint::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 	{
 		painter->setRenderHint(QPainter::Antialiasing);
@@ -243,4 +255,61 @@ namespace Jui
 		return dbg.space();
 	}
 
+	// SceneLine /////////////////////////////////////////////////////
+
+	SceneLine::SceneLine(Scene *parent, ScenePoint *from, ScenePoint *to) :
+		QGraphicsObject(0),
+		m_from(from),
+		m_to(to)
+	{
+		parent->addItem(this);
+		colorPen.value_(150, 150, 150);
+
+		connect(
+			from, SIGNAL(changedOrigin()),
+			this, SLOT(onChange())
+		);
+		connect(
+			to, SIGNAL(changedOrigin()),
+			this, SLOT(onChange())
+		);
+	}
+
+	QRectF SceneLine::boundingRect() const {
+		double rectX, rectY, rectW, rectH;
+		if (m_from->x() < m_to->x())
+		{
+			rectX = m_from->x();
+			rectW = m_to->x() - m_from->x();
+		}
+		else
+		{
+			rectX = m_to->x();
+			rectW = m_from->x() - m_to->x();
+		}
+		if (m_from->y() < m_to->y())
+		{
+			rectY = m_from->y();
+			rectH = m_to->y() - m_from->y();
+		}
+		else
+		{
+			rectY = m_to->y();
+			rectH = m_from->y() - m_to->y();
+		}
+		return QRect(rectX, rectY, rectW, rectH);
+	}
+
+	void SceneLine::onChange() { this->update(boundingRect()); }
+
+	void SceneLine::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+	{
+		painter->setRenderHint(QPainter::Antialiasing);
+		
+		QPen pen;
+		pen.setColor(colorPen);
+		painter->setPen(pen);
+
+		painter->drawLine(m_from->origin(), m_to->origin());
+	}
 }
