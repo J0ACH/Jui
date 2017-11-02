@@ -60,30 +60,26 @@ namespace Jui
 		view->geometry_(300, 300, 350, 350);
 		//view->background_(50, 20, 20);
 
-		Point *pt1 = new Point(view);
+		ScenePoint *pt1 = new ScenePoint(view);
 		pt1->origin_(0, 0);
 
-		Point *pt2 = new Point(view);
+		ScenePoint *pt2 = new ScenePoint(view);
 		pt2->origin_(100, 50);
-		pt2->shape_(Point::shape::CIRCLE);
+		pt2->shape_(ScenePoint::shape::CIRCLE);
 		pt2->size_(20);
 
-		Point *pt3 = new Point(view);
+		ScenePoint *pt3 = new ScenePoint(view);
 		pt3->origin_(1000, 0);
 
-		Point *pt4 = new Point(view);
-		pt4->origin_(0, 500);
-		/*
-		*/
+		ScenePoint *pt4 = new ScenePoint(view);
+		pt4->origin_(10, 300);
+	
+		Point *pt5 = new Point(win);
+		pt5->origin_(10, 200);
 
-		ln = new Line(win);
+		Line *ln = new Line(win);
 		ln->from_(100, 200);
 		ln->to_(500, 100);
-		/*
-				Line *ln1 = new Line(test);
-				ln1->from_(pt1);
-				ln1->to_(pt2);
-				*/
 
 	}
 

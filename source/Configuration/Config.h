@@ -8,6 +8,7 @@
 #include "Dummies.h"
 #include "Button.h"
 #include "Geometry.h"
+#include "GraphicObjects.h"
 
 namespace Jui
 {
@@ -24,8 +25,7 @@ namespace Jui
 		NumberBox *nb1, *nb2;
 		PureText *pt;
 		StringBox *sb;
-		Line *ln;
-
+		
 		void initConfig(int x, int y, int w, int h);
 
 		private slots:

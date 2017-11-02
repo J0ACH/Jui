@@ -63,15 +63,17 @@ namespace Jui
 
 		virtual void draw(QPainter *painter) {};
 		void drawBBox(QPainter *painter);
-	
+
 	protected:
 		void update();
-	
+
 	private:
 		Canvas *m_parent;
 		QRect bbox;
 		bool m_displayBBox;
 	};
+
+	
 }
 
 #endif // CORE_H

@@ -52,7 +52,6 @@ namespace Jui
 		painter.setPen(QColor(50, 50, 50));
 		painter.drawRect(frameRect);
 
-
 		foreach(AbstractGeometry *oneGeo, geometryObjects)
 		{
 			oneGeo->draw(&painter);
@@ -70,7 +69,9 @@ namespace Jui
 		m_parent(parent)
 	{
 		m_parent->addGeometry(this);
+		m_displayBBox = false;
 	}
+
 
 	void AbstractGeometry::bbox_(QRect rect) { bbox = rect; }
 	void AbstractGeometry::displayBBox(bool b) { m_displayBBox = b; }
@@ -81,5 +82,9 @@ namespace Jui
 			painter->drawRect(bbox);
 		}
 	}
+
+
+
+
 }
 
