@@ -65,8 +65,8 @@ namespace Jui
 
 		ScenePoint *pt2 = new ScenePoint(view);
 		pt2->origin_(100, 50);
-		pt2->shape_(ScenePoint::shape::CIRCLE);
-		pt2->size_(20);
+		pt2->typeShape_(ScenePoint::typeShape::CIRCLE);
+		//pt2->size_(20);
 
 		SceneLine *ln2 = new SceneLine(view, pt1, pt2);
 		

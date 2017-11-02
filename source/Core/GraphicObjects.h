@@ -49,21 +49,26 @@ namespace Jui
 	public:
 		ScenePoint(Scene *parent);
 
-		enum shape { CIRCLE, CROSS };
+		enum typeShape { CIRCLE, CROSS };
 
 		void origin_(double x, double y);
 		void size_(double s);
-		void shape_(ScenePoint::shape type);
+		void typeShape_(ScenePoint::typeShape type);
 
 		QPointF origin();
 		double x();
 		double y();
 
 		QRectF boundingRect() const;
-		void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+		QPainterPath shape() const;
+		void paint(
+			QPainter *painter, 
+			const QStyleOptionGraphicsItem *option, 
+			QWidget *widget
+		);
 
 	signals:
-		void changedOrigin();
+		void changed();
 
 	protected:
 		virtual void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
@@ -73,12 +78,13 @@ namespace Jui
 		virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
 
 	private:
-		shape m_shape;
+		typeShape m_shape;
 		double m_size;
 
-		bool isOver;
 		FadeDouble thickness;
 		FadeColor colorPen;
+
+		QPainterPath pointShape() const;
 
 		private slots:
 		void onChange();
@@ -97,10 +103,17 @@ namespace Jui
 		SceneLine(Scene *parent, ScenePoint *from, ScenePoint *to);
 
 		QRectF boundingRect() const;
+		QPainterPath shape() const;
 		void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 	
+	protected:
+		virtual void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
+		virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
+
 	private:
 		ScenePoint *m_from, *m_to;
+				
+		FadeDouble thickness; 
 		FadeColor colorPen;
 		
 		private slots:

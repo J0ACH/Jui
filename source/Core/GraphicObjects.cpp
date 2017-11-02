@@ -138,13 +138,12 @@ namespace Jui
 		//qDebug() << "Point::addItem width:" << parent->width();
 		parent->addItem(this);
 
+		setAcceptHoverEvents(true);
 		setFlag(QGraphicsItem::GraphicsItemFlag::ItemIsMovable);
 
-		isOver = false;
-		thickness.value_(1.0);
-		setAcceptHoverEvents(true);
-		m_shape = ScenePoint::shape::CROSS;
-		size_(10);
+		thickness.value_(1);
+		m_shape = ScenePoint::typeShape::CROSS;
+		size_(8);
 		colorPen.value_(150, 150, 150);
 
 		QGraphicsScene *scene = static_cast<QGraphicsScene*>(parent);
@@ -162,7 +161,7 @@ namespace Jui
 
 	void ScenePoint::origin_(double x, double y) { setPos(x, y); }
 	void ScenePoint::size_(double s) { m_size = s; }
-	void ScenePoint::shape_(ScenePoint::shape type) { m_shape = type; }
+	void ScenePoint::typeShape_(ScenePoint::typeShape type) { m_shape = type; }
 
 	QPointF ScenePoint::origin() { return pos(); }
 	double ScenePoint::x() { return pos().x(); }
@@ -170,26 +169,45 @@ namespace Jui
 
 
 	QRectF ScenePoint::boundingRect() const {
-		qreal penWidth = 1;
 		return QRectF(
-			-m_size / 2 - penWidth / 2,
-			-m_size / 2 - penWidth / 2,
-			m_size + penWidth,
-			m_size + penWidth
+			-m_size / 2 - thickness,
+			-m_size / 2 - thickness,
+			m_size + 2 * thickness,
+			m_size + 2 * thickness
 		);
+	}
+	QPainterPath ScenePoint::pointShape() const {
+		QPainterPath path;
+		switch (m_shape)
+		{
+		case Jui::ScenePoint::typeShape::CIRCLE:
+			path.addEllipse(QPointF(0,0), m_size/2, m_size/2);
+			break;
+		case Jui::ScenePoint::typeShape::CROSS:
+		default:
+			path.moveTo(-m_size / 2, -m_size / 2);
+			path.lineTo(m_size / 2, m_size / 2);
+			path.moveTo(-m_size / 2, m_size / 2);
+			path.lineTo(m_size / 2, -m_size / 2);
+			break;
+		}
+		return path;
+	}
+	QPainterPath ScenePoint::shape() const {
+		QPainterPathStroker stroke;
+		stroke.setWidth(5);
+		return stroke.createStroke(pointShape());
 	}
 
 	void ScenePoint::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 	{
 		//qDebug() << "Point::hoverEnterEvent";
 		thickness.value_(3, 0.2);
-		isOver = true;
 		QGraphicsObject::hoverEnterEvent(event);
 	}
 	void ScenePoint::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 	{
 		//qDebug() << "Point::hoverLeaveEvent";
-		isOver = false;
 		thickness.value_(1, 1);
 		QGraphicsObject::hoverLeaveEvent(event);
 	}
@@ -209,7 +227,6 @@ namespace Jui
 	{
 		//qDebug() << "Point::mouseMoveEvent";
 		QGraphicsObject::mouseMoveEvent(event);
-		emit changedOrigin();
 	}
 
 	void ScenePoint::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -220,10 +237,11 @@ namespace Jui
 		pen.setWidthF(thickness);
 		pen.setColor(colorPen);
 		painter->setPen(pen);
-
+		painter->drawPath(pointShape());
+		/*
 		switch (m_shape)
 		{
-		case Jui::ScenePoint::shape::CROSS:
+		case Jui::ScenePoint::typeShape::CROSS:
 			painter->drawLine(
 				boundingRect().left(),
 				boundingRect().top(),
@@ -237,11 +255,13 @@ namespace Jui
 				boundingRect().top()
 			);
 			break;
-		case Jui::ScenePoint::shape::CIRCLE:
+		case Jui::ScenePoint::typeShape::CIRCLE:
 		default:
 			painter->drawEllipse(boundingRect());
 			break;
 		}
+		*/
+		emit changed();
 	}
 
 	QDebug operator<<(QDebug dbg, ScenePoint &pt)
@@ -263,14 +283,26 @@ namespace Jui
 		m_to(to)
 	{
 		parent->addItem(this);
+
+		setAcceptHoverEvents(true);
+
+		thickness.value_(1);
 		colorPen.value_(150, 150, 150);
 
 		connect(
-			from, SIGNAL(changedOrigin()),
+			from, SIGNAL(changed()),
 			this, SLOT(onChange())
 		);
 		connect(
-			to, SIGNAL(changedOrigin()),
+			to, SIGNAL(changed()),
+			this, SLOT(onChange())
+		);
+		connect(
+			&thickness, SIGNAL(changed()),
+			this, SLOT(onChange())
+		);
+		connect(
+			&colorPen, SIGNAL(changed()),
 			this, SLOT(onChange())
 		);
 	}
@@ -299,17 +331,41 @@ namespace Jui
 		}
 		return QRect(rectX, rectY, rectW, rectH);
 	}
+	QPainterPath SceneLine::shape() const {
+		QPainterPath path;
+		path.moveTo(m_from->origin());
+		path.lineTo(m_to->origin());
+		return path;
+		/*
+		QPainterPathStroker stroke;
+		stroke.setWidth(5);
+		return stroke.createStroke(path);
+		*/
+	}
+
+	void SceneLine::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
+	{
+		qDebug() << "SceneLine::hoverEnterEvent";
+		thickness.value_(3, 0.2);
+		QGraphicsObject::hoverEnterEvent(event);
+	}
+	void SceneLine::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
+	{
+		qDebug() << "SceneLine::hoverLeaveEvent";
+		thickness.value_(1, 1);
+		QGraphicsObject::hoverLeaveEvent(event);
+	}
 
 	void SceneLine::onChange() { this->update(boundingRect()); }
 
 	void SceneLine::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 	{
 		painter->setRenderHint(QPainter::Antialiasing);
-		
+
 		QPen pen;
 		pen.setColor(colorPen);
+		pen.setWidthF(thickness);
 		painter->setPen(pen);
-
-		painter->drawLine(m_from->origin(), m_to->origin());
+		painter->drawPath(shape());
 	}
 }
