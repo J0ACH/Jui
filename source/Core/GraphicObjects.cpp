@@ -12,7 +12,7 @@ namespace Jui
 		m_view->setFrameShape(QFrame::Shape::NoFrame);
 		//m_view->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
 		//m_view->setScene(this);
-		//m_view->setVerticalScrollBar(new ScrollBar(m_view));
+		m_view->setVerticalScrollBar(new ScrollBar(m_view));
 
 		zoomDelta = 0.008;
 
@@ -20,7 +20,7 @@ namespace Jui
 		colorBackground.value_(30, 30, 30);
 
 		//setSceneRect(-w / 2, -h / 2, w, h);
-		//setSceneRect(-5000, -5000, 10000, 10000);
+		setSceneRect(-5000, -5000, 10000, 10000);
 		//setSceneRect(-1, -1, 2, 2);
 
 		m_view->show();
@@ -84,11 +84,15 @@ namespace Jui
 		QGraphicsScene::mousePressEvent(mouseEvent);
 	}
 	void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent) {
-
-		if (mouseEvent->buttons() == Qt::MiddleButton)
+		switch (mouseEvent->buttons())
 		{
+		case Qt::RightButton:
+			qDebug() << "Scene:mouseMoveEvent RIGHT" << mouseEvent->scenePos();
+			//m_view->centerOn(mouseEvent->scenePos());
+			break;
+		case Qt::MiddleButton:
 			//qDebug() << "Scene:mouseMoveEvent" << mouseEvent->scenePos();
-			//	target_(mouseEvent->scenePos().x(), mouseEvent->scenePos().y());
+	//	target_(mouseEvent->scenePos().x(), mouseEvent->scenePos().y());
 			QPointF deltaPt;
 			deltaPt.setX(mouseEvent->screenPos().x() - mouseDelta.x());
 			deltaPt.setY(mouseEvent->screenPos().y() - mouseDelta.y());
@@ -102,6 +106,7 @@ namespace Jui
 			//m_view->translate(deltaPt.x(), deltaPt.y());
 			m_view->centerOn(centerPt);
 			//m_view->shear(deltaPt.x(), deltaPt.y());
+			break;
 		}
 		QGraphicsScene::mouseMoveEvent(mouseEvent);
 	}
@@ -132,7 +137,15 @@ namespace Jui
 		//QGraphicsScene::wheelEvent(wheelEvent);
 	}
 
-	// Point /////////////////////////////////////////////////////
+	// ScrollBar /////////////////////////////////////////////////////
+
+	ScrollBar::ScrollBar(QWidget *parent = 0) :QScrollBar(parent) { }
+	void ScrollBar::wheelEvent(QWheelEvent * e) { 
+		qDebug() << "ScrollBar::wheelEvent";
+	}
+
+
+	// ScenePoint /////////////////////////////////////////////////////
 
 	ScenePoint::ScenePoint(Scene *parent) : QGraphicsObject(0) {
 		//qDebug() << "Point::addItem width:" << parent->width();
@@ -167,13 +180,17 @@ namespace Jui
 	double ScenePoint::x() { return pos().x(); }
 	double ScenePoint::y() { return pos().y(); }
 
-
 	QRectF ScenePoint::boundingRect() const {
+		/*
 		return QRectF(
 			-m_size / 2 - thickness,
 			-m_size / 2 - thickness,
 			m_size + 2 * thickness,
 			m_size + 2 * thickness
+		);
+		*/
+		return pointShape().controlPointRect().adjusted(
+			-thickness, -thickness, thickness, thickness
 		);
 	}
 	QPainterPath ScenePoint::pointShape() const {
@@ -181,7 +198,7 @@ namespace Jui
 		switch (m_shape)
 		{
 		case Jui::ScenePoint::typeShape::CIRCLE:
-			path.addEllipse(QPointF(0,0), m_size/2, m_size/2);
+			path.addEllipse(QPointF(0, 0), m_size / 2, m_size / 2);
 			break;
 		case Jui::ScenePoint::typeShape::CROSS:
 		default:
@@ -336,28 +353,22 @@ namespace Jui
 		path.moveTo(m_from->origin());
 		path.lineTo(m_to->origin());
 		return path;
-		/*
-		QPainterPathStroker stroke;
-		stroke.setWidth(5);
-		return stroke.createStroke(path);
-		*/
 	}
 
 	void SceneLine::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 	{
-		qDebug() << "SceneLine::hoverEnterEvent";
+		//qDebug() << "SceneLine::hoverEnterEvent";
 		thickness.value_(3, 0.2);
 		QGraphicsObject::hoverEnterEvent(event);
 	}
 	void SceneLine::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 	{
-		qDebug() << "SceneLine::hoverLeaveEvent";
+		//qDebug() << "SceneLine::hoverLeaveEvent";
 		thickness.value_(1, 1);
 		QGraphicsObject::hoverLeaveEvent(event);
 	}
 
 	void SceneLine::onChange() { this->update(boundingRect()); }
-
 	void SceneLine::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 	{
 		painter->setRenderHint(QPainter::Antialiasing);

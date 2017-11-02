@@ -3,7 +3,6 @@
 
 #include "Core.h"
 
-
 namespace Jui
 {
 
@@ -38,6 +37,15 @@ namespace Jui
 
 		void drawGrid();
 
+	};
+
+	// ScrollBar /////////////////////////////////////////////////////
+
+	class ScrollBar : public QScrollBar {
+	public:
+		ScrollBar(QWidget *parent = 0);
+	protected:
+		virtual void wheelEvent(QWheelEvent * e) override;
 	};
 
 	// Point /////////////////////////////////////////////////////
