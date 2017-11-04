@@ -6,6 +6,29 @@
 namespace Jui
 {
 
+	// Scene2 /////////////////////////////////////////////////////
+
+	class Scene2 : public QGraphicsView {
+
+	public:
+		Scene2(QWidget *parent = Q_NULLPTR);
+
+		void geometry_(int x, int y, int w, int h);
+
+	protected:
+		void drawBackground(QPainter * painter, const QRectF & rect) override;
+		void mousePressEvent(QMouseEvent * event) override;
+		void mouseMoveEvent(QMouseEvent * event) override;
+
+		virtual void drawGrid(QPainter *painter);
+
+	private:
+		FadeColor colorFrame, colorBackground;
+		QPoint mouseAnchor;
+		QPointF sceneAnchor;
+
+	};
+
 	// Scene /////////////////////////////////////////////////////
 
 	class Scene : public QGraphicsScene {
@@ -55,7 +78,7 @@ namespace Jui
 		Q_OBJECT
 
 	public:
-		ScenePoint(Scene *parent);
+		ScenePoint(Scene2 *parent);
 
 		enum typeShape { CIRCLE, CROSS };
 
@@ -70,8 +93,8 @@ namespace Jui
 		QRectF boundingRect() const;
 		QPainterPath shape() const;
 		void paint(
-			QPainter *painter, 
-			const QStyleOptionGraphicsItem *option, 
+			QPainter *painter,
+			const QStyleOptionGraphicsItem *option,
 			QWidget *widget
 		);
 
@@ -113,17 +136,17 @@ namespace Jui
 		QRectF boundingRect() const;
 		QPainterPath shape() const;
 		void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-	
+
 	protected:
 		virtual void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
 		virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
 
 	private:
 		ScenePoint *m_from, *m_to;
-				
-		FadeDouble thickness; 
+
+		FadeDouble thickness;
 		FadeColor colorPen;
-		
+
 		private slots:
 		void onChange();
 	};

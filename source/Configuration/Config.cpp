@@ -56,6 +56,17 @@ namespace Jui
 		);
 		Edges *sbedges = new Edges(sb);
 
+
+		Scene2 *view = new Scene2(win);
+		view->geometry_(250, 50, 450, 450);
+
+		ScenePoint *pt1 = new ScenePoint(view);
+		pt1->origin_(0, 0);
+
+		ScenePoint *pt2 = new ScenePoint(view);
+		pt2->origin_(100, 50);
+
+		/*
 		Scene *view = new Scene(win);
 		view->geometry_(250, 50, 450, 450);
 		//view->background_(50, 20, 20);
@@ -75,6 +86,7 @@ namespace Jui
 
 		ScenePoint *pt4 = new ScenePoint(view);
 		pt4->origin_(10, 300);
+		*/
 	
 		/*
 		Point *pt5 = new Point(win);
