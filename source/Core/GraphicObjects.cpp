@@ -10,6 +10,7 @@ namespace Jui
 		setFrameShape(QFrame::Shape::NoFrame);
 		setVerticalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOff);
 		setHorizontalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOff);
+		setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
 		zoom = 1;
 		zoomStep = 0.08;
 		colorFrame.value_(50, 50, 50);
@@ -25,6 +26,7 @@ namespace Jui
 		switch (event->buttons())
 		{
 		case Qt::RightButton:
+		case Qt::MiddleButton:
 			mouseAnchor = event->globalPos();
 			sceneAnchor = mapToScene(QPoint(width() / 2, width() / 2));
 			/*
@@ -42,6 +44,7 @@ namespace Jui
 		switch (event->buttons())
 		{
 		case Qt::RightButton:
+		case Qt::MiddleButton:
 			QPoint deltaPt(
 				event->globalPos().x() - mouseAnchor.x(),
 				event->globalPos().y() - mouseAnchor.y()
@@ -59,15 +62,18 @@ namespace Jui
 				;
 			*/
 			centerOn(centerPt);
-			resetCachedContent();
 			break;
 		}
+		resetCachedContent();
 	}
 	void Scene::wheelEvent(QWheelEvent * event) {
 		double scaleFactor = 1;
+		QPointF centerPt = mapToScene(event->pos());
+
 		if (event->angleDelta().y() > 0) {
 			scaleFactor += zoomStep;
 			zoom *= scaleFactor;
+			//centerOn(centerPt);
 		}
 		else {
 			scaleFactor -= zoomStep;
@@ -76,11 +82,11 @@ namespace Jui
 
 		qDebug() << "Scene::wheelEvent"
 			<< "angleDelta" << event->angleDelta()
+			<< "pos" << event->pos()
 			<< "zoom" << zoom
-			<< "matrix dx" << transform().dx()
-			<< "matrix dy" << transform().dy()
 			;
 		scale(scaleFactor, scaleFactor);
+		resetCachedContent();
 	}
 
 	void Scene::drawBackground(QPainter *painter, const QRectF & rect) {
