@@ -21,10 +21,12 @@ namespace Jui
 		void drawBackground(QPainter * painter, const QRectF & rect) override;
 		void mousePressEvent(QMouseEvent * event) override;
 		void mouseMoveEvent(QMouseEvent * event) override;
+		void wheelEvent(QWheelEvent * event) override;
 		
 		virtual void drawGrid(QPainter *painter);
 
 	private:
+		double zoom, zoomStep;
 		FadeColor colorFrame, colorBackground;
 		QPoint mouseAnchor;
 		QPointF sceneAnchor;

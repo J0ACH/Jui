@@ -10,6 +10,8 @@ namespace Jui
 		setFrameShape(QFrame::Shape::NoFrame);
 		setVerticalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOff);
 		setHorizontalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOff);
+		zoom = 1;
+		zoomStep = 0.08;
 		colorFrame.value_(50, 50, 50);
 		colorBackground.value_(30, 30, 30);
 		setScene(new QGraphicsScene(this));
@@ -44,6 +46,8 @@ namespace Jui
 				event->globalPos().x() - mouseAnchor.x(),
 				event->globalPos().y() - mouseAnchor.y()
 			);
+			deltaPt.setX(deltaPt.x() / zoom);
+			deltaPt.setY(deltaPt.y() / zoom);
 			QPointF centerPt(
 				sceneAnchor.x() - deltaPt.x(),
 				sceneAnchor.y() - deltaPt.y()
@@ -59,7 +63,26 @@ namespace Jui
 			break;
 		}
 	}
-	
+	void Scene::wheelEvent(QWheelEvent * event) {
+		double scaleFactor = 1;
+		if (event->angleDelta().y() > 0) {
+			scaleFactor += zoomStep;
+			zoom *= scaleFactor;
+		}
+		else {
+			scaleFactor -= zoomStep;
+			zoom *= scaleFactor;
+		}
+
+		qDebug() << "Scene::wheelEvent"
+			<< "angleDelta" << event->angleDelta()
+			<< "zoom" << zoom
+			<< "matrix dx" << transform().dx()
+			<< "matrix dy" << transform().dy()
+			;
+		scale(scaleFactor, scaleFactor);
+	}
+
 	void Scene::drawBackground(QPainter *painter, const QRectF & rect) {
 
 		painter->fillRect(rect, colorBackground);
@@ -84,11 +107,11 @@ namespace Jui
 
 		int w = viewport()->width();
 		int h = viewport()->height();
-		int offset = 0;
+		int offset = 5;
 		QPolygonF sceneRect = mapToScene(QRect(0, 0, w, h));
 		QRectF bbox = sceneRect.boundingRect().adjusted(offset, offset, -offset, -offset);
-		QPen penMainAxis(QColor(50, 50, 50));
-		QPen penMinorAxis(QColor(40, 40, 40));
+		QPen penMainAxis(QColor(50, 50, 50), 1 / zoom);
+		QPen penMinorAxis(QColor(40, 40, 40), 1 / zoom);
 
 		for (int i = qFloor(bbox.left()); i < qCeil(bbox.right()); i++)
 		{
@@ -109,7 +132,7 @@ namespace Jui
 			}
 		}
 	}
-	
+
 
 	// ScenePoint /////////////////////////////////////////////////////
 
