@@ -57,7 +57,7 @@ namespace Jui
 		Edges *sbedges = new Edges(sb);
 
 
-		Scene2 *view = new Scene2(win);
+		Scene *view = new Scene(win);
 		view->geometry_(250, 50, 450, 450);
 
 		ScenePoint *pt1 = new ScenePoint(view);
@@ -66,6 +66,7 @@ namespace Jui
 		ScenePoint *pt2 = new ScenePoint(view);
 		pt2->origin_(100, 50);
 
+		SceneLine *ln2 = new SceneLine(view, pt1, pt2);
 		/*
 		Scene *view = new Scene(win);
 		view->geometry_(250, 50, 450, 450);
@@ -79,7 +80,6 @@ namespace Jui
 		pt2->typeShape_(ScenePoint::typeShape::CIRCLE);
 		//pt2->size_(20);
 
-		SceneLine *ln2 = new SceneLine(view, pt1, pt2);
 		
 		ScenePoint *pt3 = new ScenePoint(view);
 		pt3->origin_(1000, 0);

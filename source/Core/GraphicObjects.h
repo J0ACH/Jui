@@ -6,69 +6,29 @@
 namespace Jui
 {
 
-	// Scene2 /////////////////////////////////////////////////////
+	// Scene /////////////////////////////////////////////////////
 
-	class Scene2 : public QGraphicsView {
+	class Scene : public QGraphicsView {
 
 	public:
-		Scene2(QWidget *parent = Q_NULLPTR);
+		Scene(QWidget *parent = Q_NULLPTR);
 
 		void geometry_(int x, int y, int w, int h);
+
+		QRectF sceneRect();
 
 	protected:
 		void drawBackground(QPainter * painter, const QRectF & rect) override;
 		void mousePressEvent(QMouseEvent * event) override;
 		void mouseMoveEvent(QMouseEvent * event) override;
-
+		
 		virtual void drawGrid(QPainter *painter);
 
 	private:
 		FadeColor colorFrame, colorBackground;
 		QPoint mouseAnchor;
 		QPointF sceneAnchor;
-
-	};
-
-	// Scene /////////////////////////////////////////////////////
-
-	class Scene : public QGraphicsScene {
-		Q_OBJECT
-
-	public:
-		Scene(QWidget *parent = Q_NULLPTR);
-
-		void geometry_(int x, int y, int w, int h);
-		QRect itemBox(int margin = 50);
-		QRectF viewBox();
-
-	signals:
-		void zoomed(double);
-
-	protected:
-		void drawBackground(QPainter * painter, const QRectF & rect);
-		void drawForeground(QPainter * painter, const QRectF & rect);
-
-		virtual void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent) override;
-		virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent) override;
-		virtual void wheelEvent(QGraphicsSceneWheelEvent *wheelEvent) override;
-
-	private:
-		QGraphicsView *m_view;
-		double zoomDelta;
-		FadeColor colorFrame, colorBackground;
-		QPointF mouseAnchor, mouseDelta;
-
-		void drawGrid();
-
-	};
-
-	// ScrollBar /////////////////////////////////////////////////////
-
-	class ScrollBar : public QScrollBar {
-	public:
-		ScrollBar(QWidget *parent = 0);
-	protected:
-		virtual void wheelEvent(QWheelEvent * e) override;
+		
 	};
 
 	// Point /////////////////////////////////////////////////////
@@ -78,7 +38,7 @@ namespace Jui
 		Q_OBJECT
 
 	public:
-		ScenePoint(Scene2 *parent);
+		ScenePoint(Scene *parent);
 
 		enum typeShape { CIRCLE, CROSS };
 
