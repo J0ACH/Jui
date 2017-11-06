@@ -9,12 +9,18 @@ namespace Jui
 	// Scene /////////////////////////////////////////////////////
 
 	class Scene : public QGraphicsView {
+		Q_OBJECT
 
 	public:
 		Scene(QWidget *parent = Q_NULLPTR);
 
 		void geometry_(int x, int y, int w, int h);
 		void background_(int r, int g, int b);
+		
+		double zoomRatio(double x = 1);
+
+	public slots:
+		void zoomAll();
 
 	protected:
 		void drawBackground(QPainter * painter, const QRectF & rect) override;

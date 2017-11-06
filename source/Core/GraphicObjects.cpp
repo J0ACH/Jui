@@ -27,8 +27,8 @@ namespace Jui
 
 		int offset = 10;
 		double brightness = (r + g + b) / 3;
-		if (brightness < 255/2) {
-			colorMajorAxis.setRgb(r + 2*offset, g + 2*offset, b + 2*offset);
+		if (brightness < 255 / 2) {
+			colorMajorAxis.setRgb(r + 2 * offset, g + 2 * offset, b + 2 * offset);
 			colorMinorAxis.setRgb(r + offset, g + offset, b + offset);
 		}
 		else
@@ -38,6 +38,18 @@ namespace Jui
 		}
 
 		update();
+	}
+
+	double Scene::zoomRatio(double x) {
+		double precision = 100000.0;
+		int refDimension = mapFromScene(QPointF(precision, 0)).x();
+		double currentZoom = refDimension / precision;
+		return x / currentZoom;
+	}
+
+	void Scene::zoomAll() {
+		QRectF itemsRect = scene()->itemsBoundingRect();
+		fitInView(itemsRect, Qt::AspectRatioMode::KeepAspectRatio);
 	}
 
 	void Scene::mousePressEvent(QMouseEvent * event) {
@@ -64,12 +76,10 @@ namespace Jui
 		case Qt::RightButton:
 		case Qt::MiddleButton:
 			QPoint deltaPt(
-				event->globalPos().x() - mouseAnchor.x(),
-				event->globalPos().y() - mouseAnchor.y()
+				zoomRatio(event->globalPos().x() - mouseAnchor.x()),
+				zoomRatio(event->globalPos().y() - mouseAnchor.y())
 			);
-			deltaPt.setX(deltaPt.x() / zoom);
-			deltaPt.setY(deltaPt.y() / zoom);
-			QPointF centerPt(
+					QPointF centerPt(
 				sceneAnchor.x() - deltaPt.x(),
 				sceneAnchor.y() - deltaPt.y()
 			);
@@ -82,7 +92,6 @@ namespace Jui
 			centerOn(centerPt);
 			break;
 		}
-		//resetCachedContent();
 	}
 	void Scene::wheelEvent(QWheelEvent * event) {
 		double scaleFactor = 1;
@@ -94,17 +103,16 @@ namespace Jui
 		}
 		else {
 			scaleFactor -= zoomStep;
-			zoom *= scaleFactor;
+			//zoom *= scaleFactor;
 		}
-/*
+		/*
 		qDebug() << "Scene::wheelEvent"
 			<< "angleDelta" << event->angleDelta()
 			<< "pos" << event->pos()
 			<< "zoom" << zoom
 			;
-*/
+		*/
 		scale(scaleFactor, scaleFactor);
-		//resetCachedContent();
 	}
 
 	void Scene::drawBackground(QPainter *painter, const QRectF & rect) {
@@ -137,8 +145,8 @@ namespace Jui
 
 		QRectF bbox = sceneRect();
 
-		QPen penMainAxis(colorMajorAxis, 1 / zoom);
-		QPen penMinorAxis(colorMinorAxis, 1 / zoom);
+		QPen penMainAxis(colorMajorAxis, zoomRatio());
+		QPen penMinorAxis(colorMinorAxis, zoomRatio());
 
 		for (int i = qFloor(bbox.left()); i < qCeil(bbox.right()); i++)
 		{

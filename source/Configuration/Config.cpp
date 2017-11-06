@@ -61,6 +61,15 @@ namespace Jui
 		view->geometry_(250, 50, 450, 450);
 		view->background_(20, 20, 20);
 
+		Button *zoomAll = new Button(view);
+		zoomAll->setGeometry(view->height()-30, 0, 30, 30);
+		zoomAll->icon_(":/maximize16.png", 0);
+
+		connect(
+			zoomAll, SIGNAL(pressed()),
+			view, SLOT(zoomAll())
+		);
+
 		ScenePoint *pt1 = new ScenePoint(view);
 		pt1->origin_(0, 0);
 
