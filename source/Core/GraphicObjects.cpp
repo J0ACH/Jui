@@ -64,7 +64,7 @@ namespace Jui
 			centerOn(centerPt);
 			break;
 		}
-		resetCachedContent();
+		//resetCachedContent();
 	}
 	void Scene::wheelEvent(QWheelEvent * event) {
 		double scaleFactor = 1;
@@ -86,7 +86,7 @@ namespace Jui
 			;
 */
 		scale(scaleFactor, scaleFactor);
-		resetCachedContent();
+		//resetCachedContent();
 	}
 
 	void Scene::drawBackground(QPainter *painter, const QRectF & rect) {
