@@ -14,9 +14,7 @@ namespace Jui
 		Scene(QWidget *parent = Q_NULLPTR);
 
 		void geometry_(int x, int y, int w, int h);
-
-		QRectF sceneRect();
-
+		
 	protected:
 		void drawBackground(QPainter * painter, const QRectF & rect) override;
 		void mousePressEvent(QMouseEvent * event) override;

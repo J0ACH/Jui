@@ -73,18 +73,18 @@ namespace Jui
 		if (event->angleDelta().y() > 0) {
 			scaleFactor += zoomStep;
 			zoom *= scaleFactor;
-			//centerOn(centerPt);
 		}
 		else {
 			scaleFactor -= zoomStep;
 			zoom *= scaleFactor;
 		}
-
+/*
 		qDebug() << "Scene::wheelEvent"
 			<< "angleDelta" << event->angleDelta()
 			<< "pos" << event->pos()
 			<< "zoom" << zoom
 			;
+*/
 		scale(scaleFactor, scaleFactor);
 		resetCachedContent();
 	}
@@ -111,11 +111,14 @@ namespace Jui
 	}
 	void Scene::drawGrid(QPainter *painter) {
 
-		int w = viewport()->width();
-		int h = viewport()->height();
-		int offset = 5;
-		QPolygonF sceneRect = mapToScene(QRect(0, 0, w, h));
-		QRectF bbox = sceneRect.boundingRect().adjusted(offset, offset, -offset, -offset);
+		//int w = viewport()->width();
+		//int h = viewport()->height();
+		//int offset = 5;
+		//QPolygonF sceneRect = mapToScene(QRect(0, 0, w, h));
+		//QRectF bbox = sceneRect.boundingRect().adjusted(offset, offset, -offset, -offset);
+
+		QRectF bbox = sceneRect();
+
 		QPen penMainAxis(QColor(50, 50, 50), 1 / zoom);
 		QPen penMinorAxis(QColor(40, 40, 40), 1 / zoom);
 
@@ -138,7 +141,6 @@ namespace Jui
 			}
 		}
 	}
-
 
 	// ScenePoint /////////////////////////////////////////////////////
 
