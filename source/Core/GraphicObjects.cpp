@@ -99,7 +99,7 @@ namespace Jui
 
 		if (event->angleDelta().y() > 0) {
 			scaleFactor += zoomStep;
-			zoom *= scaleFactor;
+			//zoom *= scaleFactor;
 		}
 		else {
 			scaleFactor -= zoomStep;
@@ -175,7 +175,14 @@ namespace Jui
 		parent->scene()->addItem(this);
 
 		setAcceptHoverEvents(true);
-		setFlag(QGraphicsItem::GraphicsItemFlag::ItemIsMovable);
+		setFlag(QGraphicsItem::GraphicsItemFlag::ItemIsMovable, true);
+		setFlag(QGraphicsItem::GraphicsItemFlag::ItemIsSelectable, true);
+		/*
+			setFlags(
+			QGraphicsItem::GraphicsItemFlag::ItemIsMovable
+			| QGraphicsItem::GraphicsItemFlag::ItemIsSelectable
+		);
+		*/
 
 		thickness.value_(1);
 		m_shape = ScenePoint::typeShape::CROSS;
@@ -254,13 +261,13 @@ namespace Jui
 	void ScenePoint::mousePressEvent(QGraphicsSceneMouseEvent *event)
 	{
 		//qDebug() << "Point::mousePressEvent";
-		colorPen.value_(250, 0, 0, 0.2);
+		//colorPen.value_(250, 0, 0, 0.2);
 		QGraphicsObject::mousePressEvent(event);
 	}
 	void ScenePoint::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 	{
 		//qDebug() << "Point::mousePressEvent";
-		colorPen.value_(150, 150, 150, 0.5);
+		//colorPen.value_(150, 150, 150, 0.5);
 		QGraphicsObject::mouseReleaseEvent(event);
 	}
 	void ScenePoint::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
@@ -276,6 +283,7 @@ namespace Jui
 		QPen pen;
 		pen.setWidthF(thickness);
 		pen.setColor(colorPen);
+		if(isSelected()) { pen.setColor(QColor(250, 0, 0)); }
 		painter->setPen(pen);
 		painter->drawPath(pointShape());
 		/*
