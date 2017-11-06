@@ -21,6 +21,24 @@ namespace Jui
 	}
 
 	void Scene::geometry_(int x, int y, int w, int h) { setGeometry(x, y, w, h); }
+	void Scene::background_(int r, int g, int b)
+	{
+		colorBackground.value_(r, g, b);
+
+		int offset = 10;
+		double brightness = (r + g + b) / 3;
+		if (brightness < 255/2) {
+			colorMajorAxis.setRgb(r + 2*offset, g + 2*offset, b + 2*offset);
+			colorMinorAxis.setRgb(r + offset, g + offset, b + offset);
+		}
+		else
+		{
+			colorMinorAxis.setRgb(r - offset, g - offset, b - offset);
+			colorMajorAxis.setRgb(r - 2 * offset, g - 2 * offset, b - 2 * offset);
+		}
+
+		update();
+	}
 
 	void Scene::mousePressEvent(QMouseEvent * event) {
 		switch (event->buttons())
@@ -119,8 +137,8 @@ namespace Jui
 
 		QRectF bbox = sceneRect();
 
-		QPen penMainAxis(QColor(50, 50, 50), 1 / zoom);
-		QPen penMinorAxis(QColor(40, 40, 40), 1 / zoom);
+		QPen penMainAxis(colorMajorAxis, 1 / zoom);
+		QPen penMinorAxis(colorMinorAxis, 1 / zoom);
 
 		for (int i = qFloor(bbox.left()); i < qCeil(bbox.right()); i++)
 		{

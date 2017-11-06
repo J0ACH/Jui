@@ -59,6 +59,7 @@ namespace Jui
 
 		Scene *view = new Scene(win);
 		view->geometry_(250, 50, 450, 450);
+		view->background_(20, 20, 20);
 
 		ScenePoint *pt1 = new ScenePoint(view);
 		pt1->origin_(0, 0);

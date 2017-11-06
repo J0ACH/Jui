@@ -14,21 +14,23 @@ namespace Jui
 		Scene(QWidget *parent = Q_NULLPTR);
 
 		void geometry_(int x, int y, int w, int h);
-		
+		void background_(int r, int g, int b);
+
 	protected:
 		void drawBackground(QPainter * painter, const QRectF & rect) override;
 		void mousePressEvent(QMouseEvent * event) override;
 		void mouseMoveEvent(QMouseEvent * event) override;
 		void wheelEvent(QWheelEvent * event) override;
-		
+
 		virtual void drawGrid(QPainter *painter);
 
 	private:
 		double zoom, zoomStep;
 		FadeColor colorFrame, colorBackground;
+		QColor colorMajorAxis, colorMinorAxis;
 		QPoint mouseAnchor;
 		QPointF sceneAnchor;
-		
+
 	};
 
 	// Point /////////////////////////////////////////////////////
