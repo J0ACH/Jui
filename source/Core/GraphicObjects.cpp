@@ -79,7 +79,7 @@ namespace Jui
 				zoomRatio(event->globalPos().x() - mouseAnchor.x()),
 				zoomRatio(event->globalPos().y() - mouseAnchor.y())
 			);
-					QPointF centerPt(
+			QPointF centerPt(
 				sceneAnchor.x() - deltaPt.x(),
 				sceneAnchor.y() - deltaPt.y()
 			);
@@ -283,7 +283,7 @@ namespace Jui
 		QPen pen;
 		pen.setWidthF(thickness);
 		pen.setColor(colorPen);
-		if(isSelected()) { pen.setColor(QColor(250, 0, 0)); }
+		if (isSelected()) { pen.setColor(QColor(250, 0, 0)); }
 		painter->setPen(pen);
 		painter->drawPath(pointShape());
 		/*
@@ -410,4 +410,31 @@ namespace Jui
 		painter->setPen(pen);
 		painter->drawPath(shape());
 	}
+
+	// SceneWidget /////////////////////////////////////////////////////
+
+	SceneWidget::SceneWidget(Scene *parent) : QGraphicsWidget(0)
+	{
+		parent->scene()->addItem(this);
+
+		setFlag(QGraphicsItem::GraphicsItemFlag::ItemIsMovable, true);
+		setFlag(QGraphicsItem::GraphicsItemFlag::ItemIsSelectable, true);
+	};
+
+	void SceneWidget::geometry_(double x, double y, double w, double h)
+	{
+		setGeometry(x, y, w, h);
+	}
+
+	void SceneWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+	{
+		//painter->setRenderHint(QPainter::Antialiasing);
+		QColor backC = QColor(50, 50, 50);
+		if (isSelected()) { backC = QColor(250, 0, 0); }
+
+		//painter->fillRect(rect(), backC);
+		painter->setPen(backC);
+		painter->drawRect(rect());
+	}
+
 }

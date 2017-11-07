@@ -77,6 +77,10 @@ namespace Jui
 		pt2->origin_(100, 50);
 
 		SceneLine *ln2 = new SceneLine(view, pt1, pt2);
+
+		SceneWidget *w1 = new SceneWidget(view);
+		w1->geometry_(-100, 100, 50, 50);
+		//view->scene()->addItem(w1);
 		/*
 		Scene *view = new Scene(win);
 		view->geometry_(250, 50, 450, 450);

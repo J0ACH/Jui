@@ -16,10 +16,10 @@ namespace Jui
 
 		void geometry_(int x, int y, int w, int h);
 		void background_(int r, int g, int b);
-		
+
 		double zoomRatio(double x = 1);
 
-	public slots:
+		public slots:
 		void zoomAll();
 
 	protected:
@@ -117,6 +117,18 @@ namespace Jui
 
 		private slots:
 		void onChange();
+	};
+
+	// SceneWidget /////////////////////////////////////////////////////
+
+	class SceneWidget : public QGraphicsWidget
+	{
+	public:
+		SceneWidget(Scene *parent);
+
+		void geometry_(double x, double y, double w, double h);
+		
+		void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 	};
 }
 
