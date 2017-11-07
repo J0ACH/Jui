@@ -8,7 +8,8 @@ namespace Jui
 
 	// Scene /////////////////////////////////////////////////////
 
-	class Scene : public QGraphicsView {
+	class Scene : public QGraphicsView 
+	{
 		Q_OBJECT
 
 	public:
@@ -26,6 +27,7 @@ namespace Jui
 		void drawBackground(QPainter * painter, const QRectF & rect) override;
 		void mousePressEvent(QMouseEvent * event) override;
 		void mouseMoveEvent(QMouseEvent * event) override;
+		void mouseReleaseEvent(QMouseEvent * event) override;
 		void wheelEvent(QWheelEvent * event) override;
 
 		virtual void drawGrid(QPainter *painter);
@@ -34,8 +36,9 @@ namespace Jui
 		double zoom, zoomStep;
 		FadeColor colorFrame, colorBackground;
 		QColor colorMajorAxis, colorMinorAxis;
-		QPoint mouseAnchor;
+		QPoint mouseAnchor, selectionAnchor;
 		QPointF sceneAnchor;
+		QRect selectionRect;
 
 	};
 
@@ -72,9 +75,12 @@ namespace Jui
 	protected:
 		virtual void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
 		virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
+		/*
 		virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
 		virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 		virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+		*/
+		QVariant itemChange(GraphicsItemChange change, const QVariant & value);
 
 	private:
 		typeShape m_shape;
@@ -123,12 +129,23 @@ namespace Jui
 
 	class SceneWidget : public QGraphicsWidget
 	{
+		Q_OBJECT
+
 	public:
 		SceneWidget(Scene *parent);
 
 		void geometry_(double x, double y, double w, double h);
 		
 		void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+
+	protected:
+		QVariant itemChange(GraphicsItemChange change, const QVariant & value);
+	
+	private:
+		FadeColor colorPen;
+
+		private slots:
+		void onChange();
 	};
 }
 

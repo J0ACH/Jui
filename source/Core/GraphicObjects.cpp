@@ -55,24 +55,49 @@ namespace Jui
 	void Scene::mousePressEvent(QMouseEvent * event) {
 		switch (event->buttons())
 		{
+		case Qt::LeftButton:
+			qDebug() << "Scene::mousePressEvent"
+				<< "size: " << scene()->selectedItems().size()
+				<< "isEmpty: " << scene()->selectedItems().isEmpty()
+				;
+			if (scene()->selectedItems().isEmpty())
+			{
+				selectionAnchor = event->pos();
+			}
+			QGraphicsView::mousePressEvent(event);
+			break;
 		case Qt::RightButton:
 		case Qt::MiddleButton:
 			mouseAnchor = event->globalPos();
 			sceneAnchor = mapToScene(QPoint(width() / 2, width() / 2));
-			/*
-			qDebug() << "Scene2::mousePressEvent RIGHT"
-				<< "mouseAnchor" << mouseAnchor
-				<< "sceneAnchor" << sceneAnchor
-				;
-			*/
 			break;
 		}
-		QGraphicsView::mousePressEvent(event);
+		/*
+		qDebug() << "Scene::mousePressEvent"
+			<< "mouseAnchor" << mouseAnchor
+			<< "sceneAnchor" << sceneAnchor
+			;
+		*/
 	}
 	void Scene::mouseMoveEvent(QMouseEvent * event) {
-		QGraphicsView::mouseMoveEvent(event);
+		//qDebug() << "Scene::mouseReleaseEvent" << event->button();
+
+		QPoint selectionPt;
+		int originX, originY, w, h;
+
 		switch (event->buttons())
 		{
+		case Qt::LeftButton:
+			if (scene()->selectedItems().isEmpty())
+			{
+				originX = qMin(selectionAnchor.x(), event->pos().x());
+				originY = qMin(selectionAnchor.y(), event->pos().y());
+				w = qAbs(event->pos().x() - selectionAnchor.x());
+				h = qAbs(event->pos().y() - selectionAnchor.y());
+				selectionRect = QRect(originX, originY, w, h);
+				scene()->update();
+			}
+			break;
 		case Qt::RightButton:
 		case Qt::MiddleButton:
 			QPoint deltaPt(
@@ -92,6 +117,27 @@ namespace Jui
 			centerOn(centerPt);
 			break;
 		}
+
+		QGraphicsView::mouseMoveEvent(event);
+	}
+	void Scene::mouseReleaseEvent(QMouseEvent * event) {
+		qDebug() << "Scene::mouseReleaseEvent" << event->button();
+		switch (event->button())
+		{
+		case Qt::LeftButton:
+			qDebug() << "Scene::mouseReleaseEvent LEFT";
+			//scene()->setSelectionArea()
+			QList<QGraphicsItem*> list;
+			list = items(selectionRect, Qt::ItemSelectionMode::IntersectsItemShape);
+			foreach(QGraphicsItem *oneItem, list)
+			{
+				oneItem->setSelected(true);
+			}
+			selectionRect = QRect();
+			scene()->update();
+			break;
+		}
+		QGraphicsView::mouseReleaseEvent(event);
 	}
 	void Scene::wheelEvent(QWheelEvent * event) {
 		double scaleFactor = 1;
@@ -132,6 +178,10 @@ namespace Jui
 		pen.setColor(QColor(255, 0, 0));
 		painter->setPen(pen);
 		painter->drawLine(0, 0, 10, 0);
+
+		QPainterPath path;
+		path.addPolygon(mapToScene(selectionRect));
+		painter->fillPath(path, QColor(30, 30, 180, 50));
 
 		QGraphicsView::drawBackground(painter, rect);
 	}
@@ -175,8 +225,12 @@ namespace Jui
 		parent->scene()->addItem(this);
 
 		setAcceptHoverEvents(true);
+		//setAcceptTouchEvents(true);
+
 		setFlag(QGraphicsItem::GraphicsItemFlag::ItemIsMovable, true);
 		setFlag(QGraphicsItem::GraphicsItemFlag::ItemIsSelectable, true);
+		setFlag(GraphicsItemFlag::ItemSendsScenePositionChanges, true);
+
 		/*
 			setFlags(
 			QGraphicsItem::GraphicsItemFlag::ItemIsMovable
@@ -258,6 +312,7 @@ namespace Jui
 		thickness.value_(1, 1);
 		QGraphicsObject::hoverLeaveEvent(event);
 	}
+	/*
 	void ScenePoint::mousePressEvent(QGraphicsSceneMouseEvent *event)
 	{
 		//qDebug() << "Point::mousePressEvent";
@@ -267,7 +322,7 @@ namespace Jui
 	void ScenePoint::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 	{
 		//qDebug() << "Point::mousePressEvent";
-		//colorPen.value_(150, 150, 150, 0.5);
+	//	colorPen.value_(150, 150, 150, 0.5);
 		QGraphicsObject::mouseReleaseEvent(event);
 	}
 	void ScenePoint::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
@@ -275,6 +330,24 @@ namespace Jui
 		//qDebug() << "Point::mouseMoveEvent";
 		QGraphicsObject::mouseMoveEvent(event);
 	}
+	*/
+	QVariant ScenePoint::itemChange(GraphicsItemChange change, const QVariant &value) {
+		//qDebug() << "ScenePoint::itemChange" << change;
+
+		switch (change)
+		{
+		case QGraphicsItem::ItemSelectedChange:
+			if (isSelected()) { colorPen.value_(150, 150, 150, 0.5); }
+			else { colorPen.value_(250, 0, 0, 0.2); }
+			break;
+		case QGraphicsItem::ItemPositionChange:
+			//qDebug() << "ScenePoint::itemChange MOVE";
+			emit changed();
+			break;
+		}
+		return QGraphicsObject::itemChange(change, value);
+	}
+
 
 	void ScenePoint::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 	{
@@ -283,7 +356,7 @@ namespace Jui
 		QPen pen;
 		pen.setWidthF(thickness);
 		pen.setColor(colorPen);
-		if (isSelected()) { pen.setColor(QColor(250, 0, 0)); }
+
 		painter->setPen(pen);
 		painter->drawPath(pointShape());
 		/*
@@ -309,7 +382,7 @@ namespace Jui
 			break;
 		}
 		*/
-		emit changed();
+
 	}
 
 	QDebug operator<<(QDebug dbg, ScenePoint &pt)
@@ -419,6 +492,13 @@ namespace Jui
 
 		setFlag(QGraphicsItem::GraphicsItemFlag::ItemIsMovable, true);
 		setFlag(QGraphicsItem::GraphicsItemFlag::ItemIsSelectable, true);
+
+		colorPen.value_(150, 150, 150);
+
+		connect(
+			&colorPen, SIGNAL(changed()),
+			this, SLOT(onChange())
+		);
 	};
 
 	void SceneWidget::geometry_(double x, double y, double w, double h)
@@ -426,15 +506,26 @@ namespace Jui
 		setGeometry(x, y, w, h);
 	}
 
+	QVariant SceneWidget::itemChange(GraphicsItemChange change, const QVariant &value) {
+		//qDebug() << "ScenePoint::itemChange" << change;
+
+		switch (change)
+		{
+		case QGraphicsItem::ItemSelectedChange:
+			if (isSelected()) { colorPen.value_(150, 150, 150, 0.5); }
+			else { colorPen.value_(250, 0, 0, 0.2); }
+			break;
+		}
+		return QGraphicsObject::itemChange(change, value);
+	}
+
 	void SceneWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 	{
 		//painter->setRenderHint(QPainter::Antialiasing);
-		QColor backC = QColor(50, 50, 50);
-		if (isSelected()) { backC = QColor(250, 0, 0); }
-
-		//painter->fillRect(rect(), backC);
-		painter->setPen(backC);
+		painter->setPen(colorPen);
 		painter->drawRect(rect());
 	}
+
+	void SceneWidget::onChange() { this->update(rect()); }
 
 }
