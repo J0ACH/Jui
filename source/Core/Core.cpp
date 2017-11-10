@@ -34,19 +34,57 @@ namespace Jui
 
 	QString Canvas::name() { return this->objectName(); }
 
+	void Canvas::addGeometry(AbstractGeometry *obj) {
+		geometryObjects.append(obj);
+	}
+
 	void Canvas::resizeEvent(QResizeEvent *e) {
 		QWidget::resizeEvent(e);
 		emit resized(size());
 	}
 	void Canvas::paintEvent(QPaintEvent *e) {
 		QPainter painter(this);
+
 		QRect frameRect = QRect(0, 0, width() - 1, height() - 1);
 		QRect fillRect = QRect(0, 0, width(), height());
 
 		painter.fillRect(fillRect, QColor(20, 20, 20));
 		painter.setPen(QColor(50, 50, 50));
 		painter.drawRect(frameRect);
+
+		foreach(AbstractGeometry *oneGeo, geometryObjects)
+		{
+			oneGeo->draw(&painter);
+			oneGeo->drawBBox(&painter);
+		}
+
+
+		//draw(&painter);
 	}
+
+
+	// AbstractGeometry /////////////////////////////////////////////////////
+
+	AbstractGeometry::AbstractGeometry(Canvas* parent) :
+		m_parent(parent)
+	{
+		m_parent->addGeometry(this);
+		m_displayBBox = false;
+	}
+
+
+	void AbstractGeometry::bbox_(QRect rect) { bbox = rect; }
+	void AbstractGeometry::displayBBox(bool b) { m_displayBBox = b; }
+	void AbstractGeometry::update() { m_parent->update(bbox); }
+	void AbstractGeometry::drawBBox(QPainter *painter) {
+		if (m_displayBBox) {
+			painter->setPen(QColor(255, 0, 0));
+			painter->drawRect(bbox);
+		}
+	}
+
+
+
 
 }
 

@@ -10,7 +10,7 @@ namespace Jui
 		win = new Win(x, y, w, h);
 		win->name_("Configuration");
 
-		Canvas *test = new Canvas(win, 250, 50, 200, 200);
+		Canvas *test = new Canvas(win, 30, 390, 200, 200);
 		test->setObjectName("Test");
 		Header *testHeader = new Header(test);
 		Edges *testEdges = new Edges(test);
@@ -21,7 +21,7 @@ namespace Jui
 		pt->align_(Qt::AlignLeft | Qt::AlignVCenter);
 
 		Button *b = new Button(win);
-		b->setGeometry(30, 50, 50, 50);
+		b->setGeometry(130, 30, 50, 50);
 		b->pressable_(true);
 		b->icon_(":/close16.png", 0);
 
@@ -55,6 +55,64 @@ namespace Jui
 			this, SLOT(click())
 		);
 		Edges *sbedges = new Edges(sb);
+
+
+		Scene *view = new Scene(win);
+		view->geometry_(250, 50, 450, 450);
+		view->background_(20, 20, 20);
+
+		Button *zoomAll = new Button(view);
+		zoomAll->setGeometry(view->height()-30, 0, 30, 30);
+		zoomAll->icon_(":/maximize16.png", 0);
+
+		connect(
+			zoomAll, SIGNAL(pressed()),
+			view, SLOT(zoomAll())
+		);
+
+		ScenePoint *pt1 = new ScenePoint(view);
+		pt1->origin_(0, 0);
+
+		ScenePoint *pt2 = new ScenePoint(view);
+		pt2->origin_(100, 50);
+
+		SceneLine *ln2 = new SceneLine(view, pt1, pt2);
+
+		SceneWidget *w1 = new SceneWidget(view);
+		w1->geometry_(-100, 100, 50, 50);
+		
+		view->zoomAll();
+		//view->scene()->addItem(w1);
+		/*
+		Scene *view = new Scene(win);
+		view->geometry_(250, 50, 450, 450);
+		//view->background_(50, 20, 20);
+
+		ScenePoint *pt1 = new ScenePoint(view);
+		pt1->origin_(0, 0);
+
+		ScenePoint *pt2 = new ScenePoint(view);
+		pt2->origin_(100, 50);
+		pt2->typeShape_(ScenePoint::typeShape::CIRCLE);
+		//pt2->size_(20);
+
+		
+		ScenePoint *pt3 = new ScenePoint(view);
+		pt3->origin_(1000, 0);
+
+		ScenePoint *pt4 = new ScenePoint(view);
+		pt4->origin_(10, 300);
+		*/
+	
+		/*
+		Point *pt5 = new Point(win);
+		pt5->origin_(10, 200);
+
+		Line *ln = new Line(win);
+		ln->from_(100, 200);
+		ln->to_(500, 100);
+		*/
+
 	}
 
 	void Config::click() {

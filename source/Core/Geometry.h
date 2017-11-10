@@ -1,60 +1,49 @@
 #ifndef GEOMETRY_H
 #define GEOMETRY_H
 
+#include <QtCore>
+#include <QtGui>
+#include <QtWidgets>
+
 #include "Core.h"
 
 namespace Jui
 {
 
+	
 	// Point /////////////////////////////////////////////////////
 
-	class Point : public Canvas
+	class Point : public AbstractGeometry
 	{
-		Q_OBJECT			
-			
 	public:
-		Point(QWidget *parent = 0);
+		Point(Canvas *parent);
+		
+		void origin_(int x, int y);
 
-		enum shape { CIRCLE, CROSS };
-
-		void x_(int x);
-		void y_(int y);
-		void size_(int s);
-
-		int x();
-		int y();
-								
-	protected:
-		void paintEvent(QPaintEvent *e) override;
+		void draw(QPainter *painter);
 
 	private:
-		shape m_shape;
+		double originX, originY;
+		int size;
+
 	};
-	
-	QDebug operator<<(QDebug dbg, Point *pt);
-	QDebug operator<<(QDebug dbg, Point &pt);
 
 	// Line /////////////////////////////////////////////////////
 
-	class Line : public Canvas
+	class Line : public AbstractGeometry
 	{
-		Q_OBJECT
-
 	public:
-		Line(QWidget *parent = 0);
+		Line(Canvas* parent);
 
-		void from_(Point *pt);
-		void to_(Point *pt);
-		
-	protected:
-		void paintEvent(QPaintEvent *e) override;
+		void from_(int x, int y);
+		void to_(int x, int y);
+
+		void draw(QPainter *painter);
 
 	private:
-		Point *m_from, *m_to;
-
-		private slots:
-		void fitCanvas();
+		QPoint fromPt, toPt;
 	};
+	
 }
 
 #endif // GEOMETRY_H

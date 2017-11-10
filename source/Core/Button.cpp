@@ -59,7 +59,7 @@ namespace Jui
 			}
 		}
 	}
-
+	
 	void Button::paintEvent(QPaintEvent *e) {
 		QPainter painter(this);
 
@@ -87,7 +87,7 @@ namespace Jui
 			painter.drawImage(target, renderedIcon, source);  // draw image to QWidget
 		}
 	}
-
+	
 	// NumberBox /////////////////////////////////////////////////////
 
 	NumberBox::NumberBox(QWidget *parent) : Canvas(parent),
@@ -171,13 +171,6 @@ namespace Jui
 		fadetime->geometry_(w*0.75 + 5, 50, w * 0.2, (h - 31) / 2);
 		Canvas::resizeEvent(e);
 	}
-	void NumberBox::paintEvent(QPaintEvent *e) {
-		Canvas::paintEvent(e);
-
-		QPainter painter(this);
-		QRect frameRect = QRect(0, 0, width() - 1, height() - 1);
-	}
-
 	// StringBox /////////////////////////////////////////////////////
 
 	StringBox::StringBox(QWidget *parent) : Canvas(parent),
