@@ -13,10 +13,12 @@ namespace Jui
 		//Folder f;
 		Folder f("c:/test");
 		//f.current();
-		f.makeFolder("test");
+		f.make("test");
 		f.enter("test");
 		//f.current();
 		f.show();
+
+		File txt(f, "pokus.txt");
 	}
 
 	void Config::click() {
