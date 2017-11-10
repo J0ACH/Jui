@@ -56,10 +56,12 @@ namespace Jui
 		switch (event->buttons())
 		{
 		case Qt::LeftButton:
+			/*
 			qDebug() << "Scene::mousePressEvent"
 				<< "size: " << scene()->selectedItems().size()
 				<< "isEmpty: " << scene()->selectedItems().isEmpty()
 				;
+			*/
 			if (scene()->selectedItems().isEmpty())
 			{
 				selectionAnchor = event->pos();
@@ -121,11 +123,11 @@ namespace Jui
 		QGraphicsView::mouseMoveEvent(event);
 	}
 	void Scene::mouseReleaseEvent(QMouseEvent * event) {
-		qDebug() << "Scene::mouseReleaseEvent" << event->button();
+		//qDebug() << "Scene::mouseReleaseEvent" << event->button();
 		switch (event->button())
 		{
 		case Qt::LeftButton:
-			qDebug() << "Scene::mouseReleaseEvent LEFT";
+			//qDebug() << "Scene::mouseReleaseEvent LEFT";
 			//scene()->setSelectionArea()
 			QList<QGraphicsItem*> list;
 			list = items(selectionRect, Qt::ItemSelectionMode::IntersectsItemShape);
@@ -223,7 +225,7 @@ namespace Jui
 	ScenePoint::ScenePoint(Scene *parent) : QGraphicsObject(0) {
 		//qDebug() << "Point::addItem width:" << parent->width();
 		parent->scene()->addItem(this);
-
+		
 		setAcceptHoverEvents(true);
 		//setAcceptTouchEvents(true);
 
@@ -404,7 +406,7 @@ namespace Jui
 		m_to(to)
 	{
 		parent->scene()->addItem(this);
-
+		
 		setAcceptHoverEvents(true);
 
 		thickness.value_(1);
@@ -489,7 +491,7 @@ namespace Jui
 	SceneWidget::SceneWidget(Scene *parent) : QGraphicsWidget(0)
 	{
 		parent->scene()->addItem(this);
-
+		
 		setFlag(QGraphicsItem::GraphicsItemFlag::ItemIsMovable, true);
 		setFlag(QGraphicsItem::GraphicsItemFlag::ItemIsSelectable, true);
 

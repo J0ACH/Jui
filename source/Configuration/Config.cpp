@@ -80,6 +80,8 @@ namespace Jui
 
 		SceneWidget *w1 = new SceneWidget(view);
 		w1->geometry_(-100, 100, 50, 50);
+		
+		view->zoomAll();
 		//view->scene()->addItem(w1);
 		/*
 		Scene *view = new Scene(win);
