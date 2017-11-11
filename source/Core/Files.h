@@ -9,6 +9,27 @@
 
 namespace Jui
 {
+	// Data /////////////////////////////////////////////////////
+
+	class Data {
+	public:
+		Data();
+		
+		void add(QString key, QString value);
+		
+		QByteArray get(QString key);
+
+		void print();
+
+		operator QByteArray() ;
+
+	private:
+		QMap<QString, QVariant> library;
+		int currentLevel;
+	
+		static QString level(int n);
+	};
+
 	// Folder /////////////////////////////////////////////////////
 
 	class Folder {
@@ -34,6 +55,10 @@ namespace Jui
 	public:
 		File(QString name);
 		File(Folder path, QString name);
+
+		void write(QString data);
+		void write(Data data);
+
 	private:
 		QFile file;
 	};

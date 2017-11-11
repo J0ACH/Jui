@@ -10,15 +10,24 @@ namespace Jui
 		win = new Win(x, y, w, h);
 		win->name_("Configuration");
 		
+		/*
+		*/
 		//Folder f;
 		Folder f("c:/test");
-		//f.current();
-		f.make("test");
-		f.enter("test");
-		//f.current();
 		f.show();
+		//f.current();
+		//f.make("test");
+		//f.enter("test");
+		//f.current();
 
 		File txt(f, "pokus.txt");
+		txt.write("ahoj2");
+
+		Data d;
+		d.add("name", "Jachym");
+		d.add("surname", "Pesek");
+		//d.print();
+		txt.write(d);
 	}
 
 	void Config::click() {
