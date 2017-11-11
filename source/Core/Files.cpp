@@ -5,12 +5,20 @@ namespace Jui
 {
 	// Node /////////////////////////////////////////////////////
 
-	Node::Node() { }
-	Node::Node(QString key, QVariant value) : m_key(key), m_value(value) { }
+	Node::Node() { m_tabs = ""; }
+	Node::Node(QString key, QVariant value) : m_key(key), m_value(value) { m_tabs = ""; }
 
 	void Node::key(QString name) { m_key = name; }
 	void Node::value(QVariant val) { m_value = val; }
+	void Node::tabs(int n) {
+		m_tabs = "";
+		for (int i = 0; i < n; i++) { m_tabs += "\t"; }
+	}
 
+	Node::operator QByteArray() {
+		QString txt = m_tabs + "- " + m_key + ": " + m_value.toString() + "\n";
+		return txt.toUtf8();
+	}
 	Node::operator QString() {
 		switch (m_value.type())
 		{
@@ -22,29 +30,21 @@ namespace Jui
 	Node::operator int() { return m_value.toInt(); }
 	Node::operator double() { return m_value.toDouble(); }
 
+
 	// Data /////////////////////////////////////////////////////
 
 	Data::Data() {
-		currentLevel = 0;
+		currentLevel = 1;
 	}
 
 	void Data::add(QString key, QVariant value)
 	{
 		Node node(key, value);
+		node.tabs(currentLevel);
 		library.insert(key, node);
 	}
 
 	Node Data::at(QString key) { return library.value(key); }
-
-	QByteArray Data::get(QString key)
-	{
-		QString txt;
-		QString tabs = level(currentLevel);
-		//txt += level(currentLevel) + "[\n";
-		txt += tabs + "- " + key + ": " + at(key) + "\n";
-		//txt += level(currentLevel) + "]\n";
-		return txt.toUtf8();
-	}
 
 	Data::operator QByteArray() {
 		QByteArray ba;
@@ -52,24 +52,22 @@ namespace Jui
 
 		foreach(QString oneKey, library.keys())
 		{
-			currentLevel++;
-			ba.append(get(oneKey));
-
-			currentLevel--;
+			//currentLevel++;
+			QByteArray oneNode = at(oneKey);
+			ba.append(oneNode);
+			//currentLevel--;
 		}
 		ba.append("]");
 		return ba;
 	}
 
 	void Data::print() {
-		QString txt;
 		foreach(QString oneKey, library.keys())
 		{
-			//qDebug() << "key:" << oneKey << "value:" << at(oneKey);
+			Node node = at(oneKey);
+			QByteArray baNode = node;
+			qDebug() << baNode;
 		}
-
-
-		//qDebug() << txt;
 	}
 
 	QString Data::level(int n) {
@@ -99,7 +97,7 @@ namespace Jui
 
 	QString Folder::current() {
 		QString currentPath = dir.path();
-		qDebug() << "Folder::current:" << currentPath;
+		//qDebug() << "Folder::current:" << currentPath;
 		//QDir::setCurrent(currentPath);
 		return currentPath;
 	}

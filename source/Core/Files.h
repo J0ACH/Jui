@@ -18,13 +18,15 @@ namespace Jui
 
 		void key(QString name);
 		void value(QVariant val);
-		
+		void tabs(int n);
+
+		operator QByteArray();
 		operator QString();
 		operator int();
 		operator double();
 
 	private:
-		QString m_key;
+		QString m_key, m_tabs;
 		QVariant m_value;
 	};
 
@@ -35,11 +37,8 @@ namespace Jui
 		Data();
 
 		void add(QString key, QVariant value);
-		
-		Node at(QString key);
 
-		QByteArray get(QString key);
-		
+		Node at(QString key);
 
 		void print();
 
