@@ -26,8 +26,12 @@ namespace Jui
 		Data d;
 		d.add("name", "Jachym");
 		d.add("surname", "Pesek");
+		d.add("age", 32);
 		//d.print();
 		txt.write(d);
+
+		int age = d.at("age");
+		qDebug() << "age:" << age + 1;
 	}
 
 	void Config::click() {

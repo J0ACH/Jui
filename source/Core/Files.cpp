@@ -3,29 +3,49 @@
 
 namespace Jui
 {
+	// Node /////////////////////////////////////////////////////
+
+	Node::Node() { }
+	Node::Node(QString key, QVariant value) : m_key(key), m_value(value) { }
+
+	void Node::key(QString name) { m_key = name; }
+	void Node::value(QVariant val) { m_value = val; }
+
+	Node::operator QString() {
+		switch (m_value.type())
+		{
+		case QVariant::Int:	return QString::number(m_value.toInt());
+		case QVariant::Double: return QString::number(m_value.toDouble());
+		default: return m_value.toString();
+		}
+	}
+	Node::operator int() { return m_value.toInt(); }
+	Node::operator double() { return m_value.toDouble(); }
+
 	// Data /////////////////////////////////////////////////////
 
 	Data::Data() {
 		currentLevel = 0;
 	}
 
-	void Data::add(QString key, QString value)
+	void Data::add(QString key, QVariant value)
 	{
-		library.insert(key, value);
+		Node node(key, value);
+		library.insert(key, node);
 	}
+
+	Node Data::at(QString key) { return library.value(key); }
 
 	QByteArray Data::get(QString key)
 	{
 		QString txt;
-		QString tabs = level(currentLevel + 1);
-		txt += level(currentLevel) + "[\n";
-		txt += tabs + "- key: " + key + "\n";
-		txt += tabs + "- value: " + library.value(key).toString() + "\n";
-		txt += tabs + "- type: " + library.value(key).typeName() + "\n";
-		txt += level(currentLevel) + "]\n";
+		QString tabs = level(currentLevel);
+		//txt += level(currentLevel) + "[\n";
+		txt += tabs + "- " + key + ": " + at(key) + "\n";
+		//txt += level(currentLevel) + "]\n";
 		return txt.toUtf8();
 	}
-	
+
 	Data::operator QByteArray() {
 		QByteArray ba;
 		ba.append("[\n");
@@ -34,6 +54,7 @@ namespace Jui
 		{
 			currentLevel++;
 			ba.append(get(oneKey));
+
 			currentLevel--;
 		}
 		ba.append("]");
@@ -44,7 +65,7 @@ namespace Jui
 		QString txt;
 		foreach(QString oneKey, library.keys())
 		{
-			qDebug() << "key:" << oneKey << "value:" << library.value(oneKey);
+			//qDebug() << "key:" << oneKey << "value:" << at(oneKey);
 		}
 
 

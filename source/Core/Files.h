@@ -9,24 +9,46 @@
 
 namespace Jui
 {
+	// Node /////////////////////////////////////////////////////
+
+	class Node {
+	public:
+		Node();
+		Node(QString key, QVariant value);
+
+		void key(QString name);
+		void value(QVariant val);
+		
+		operator QString();
+		operator int();
+		operator double();
+
+	private:
+		QString m_key;
+		QVariant m_value;
+	};
+
 	// Data /////////////////////////////////////////////////////
 
 	class Data {
 	public:
 		Data();
+
+		void add(QString key, QVariant value);
 		
-		void add(QString key, QString value);
-		
+		Node at(QString key);
+
 		QByteArray get(QString key);
+		
 
 		void print();
 
-		operator QByteArray() ;
+		operator QByteArray();
 
 	private:
-		QMap<QString, QVariant> library;
+		QMap<QString, Node> library;
 		int currentLevel;
-	
+
 		static QString level(int n);
 	};
 
