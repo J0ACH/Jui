@@ -75,10 +75,12 @@ namespace Jui
 	class File {
 	public:
 		File(QString name);
-		File(Folder path, QString name);
+		File(QString path, QString name);
 
 		void write(QString data);
 		void write(Data data);
+
+		void show();
 
 	private:
 		QFile file;

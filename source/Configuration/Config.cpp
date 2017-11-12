@@ -13,25 +13,32 @@ namespace Jui
 		/*
 		*/
 		//Folder f;
-		//Folder f("c:/test");
+		
 		//f.show();
 		//f.current();
 		//f.make("test");
 		//f.enter("test");
 		//f.current();
 
-		//File txt(f, "pokus.txt");
+		Folder f("c:/test");
+		//File txt("c:/test/mozna","pokus.txt");
 		File txt("test.txt");
 		
-		Data d;
-		d.add("name", "Jachym");
-		d.add("surname", "Pesek");
-		d.add("age", 32);
-		d.add("color", QColor(30, 40, 60));
-		d.print();
+		Data dataWrite;
+		dataWrite.add("name", "Jachym");
+		dataWrite.add("surname", "Pesek");
+		dataWrite.add("age", 32);
+		dataWrite.add("thickness", 1.2);
+		dataWrite.add("color", QColor(30, 40, 60));
+		dataWrite.add("font", QFont("TeutonHell",14));
+
+		//Data color
+	//	d.print();
 		txt.write(d);
 
-		
+		//Data d2;
+
+		txt.show();
 	}
 
 	void Config::click() {

@@ -85,22 +85,22 @@ namespace Jui
 	Folder::Folder(QString path) {
 		dir = QDir(path);
 		if (!dir.exists()) { bool done = dir.mkpath(dir.path()); }
+		QDir::setCurrent(path);
 	}
 
 	void Folder::make(QString name) { dir.mkdir(name); }
 
 	void Folder::enter(QString name) {
 		bool done = dir.cd(name);
-		if (!done) { qDebug() << "Folder::enter err (" << name << ") at" << current(); }
+		if (done) { QDir::setCurrent(dir.path()); }
+		//else { qDebug() << "Folder::enter err (" << name << ") at" << current(); }
 	}
-	void Folder::escape() { dir.cdUp(); }
+	void Folder::escape() {
+		bool done = dir.cdUp();
+		if (done) { QDir::setCurrent(dir.path()); }
+	}
 
-	QString Folder::current() {
-		QString currentPath = dir.path();
-		//qDebug() << "Folder::current:" << currentPath;
-		//QDir::setCurrent(currentPath);
-		return currentPath;
-	}
+	QString Folder::current() { return QDir::currentPath(); }
 
 	void Folder::show() {
 		bool done = QDesktopServices::openUrl(QUrl(current()));
@@ -110,10 +110,9 @@ namespace Jui
 
 	File::File(QString name) {
 		file.setFileName(name);
-
 	}
-	File::File(Folder path, QString name) {
-		QDir::setCurrent(path.current());
+	File::File(QString path, QString name) {
+		Folder::Folder(path);
 		file.setFileName(name);
 	}
 
@@ -126,5 +125,9 @@ namespace Jui
 		file.open(QIODevice::WriteOnly);
 		file.write(data);
 		file.close();
+	}
+
+	void File::show() {
+		bool done = QDesktopServices::openUrl(QUrl(QDir::currentPath()));
 	}
 }
