@@ -9,6 +9,16 @@ namespace Jui
 		currentLevel = 1;
 	}
 
+	Data::Data(QByteArray ba) {
+		qDebug() << "Data(QByteArray ba) /////////////////////";
+		
+		QList<QByteArray> lines = ba.split('\n');
+		foreach(const QByteArray oneLine, lines)
+		{
+			qDebug() << oneLine;
+		}
+	}
+
 	void Data::add(QString key, QVariant value) {
 		Data data;
 		QColor color;
@@ -82,7 +92,7 @@ namespace Jui
 		foreach(QString oneLine, map2string(library)) { txt += oneLine + "\n"; }
 		return txt;
 	}
-	
+
 	// Folder /////////////////////////////////////////////////////
 
 	Folder::Folder() {
@@ -131,6 +141,17 @@ namespace Jui
 		file.open(QIODevice::WriteOnly);
 		file.write(data);
 		file.close();
+	}
+	QByteArray File::read() {
+		//if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) return;
+		QByteArray ba;
+		file.open(QIODevice::ReadOnly);
+		while (!file.atEnd()) {
+			ba.append(file.readLine());
+			//process_line(line);
+		}
+		file.close();
+		return ba;
 	}
 
 	void File::show() {

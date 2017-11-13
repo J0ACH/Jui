@@ -17,6 +17,7 @@ namespace Jui
 	class Data {
 	public:
 		Data();
+		Data(QByteArray ba);
 
 		void add(QString key, QVariant value);
 		void add(QString key, Data value);
@@ -66,6 +67,8 @@ namespace Jui
 
 		void write(QString data);
 		void write(Data data);
+
+		QByteArray read();
 
 		void show();
 

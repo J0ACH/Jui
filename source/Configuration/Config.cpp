@@ -39,6 +39,9 @@ namespace Jui
 		txt.write(dataWrite);
 		txt.show();
 
+		Data newData(txt.read());
+		newData.print();
+
 		/*
 		File file("test.txt");
 		QString txt = dataWrite;
