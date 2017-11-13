@@ -6,53 +6,21 @@
 #include <QDesktopServices>
 #include <QFile>
 #include <QColor>
+#include <QFont>
 #include <QDebug>
 
 namespace Jui
 {
-	// Data /////////////////////////////////////////////////////
-
-	// Node /////////////////////////////////////////////////////
-
-	class Node {
-	public:
-		Node();
-		Node(QString key, QVariant value, Node *parent = 0);
-
-		void key(QString name);
-		void value(QVariant val);
-		void value(QMap<QString, QVariant> val);
-		void tabs(int n);
-
-		operator QByteArray();
-		operator QString();
-		operator int();
-		operator double();
-		operator QMap<QString, QVariant>();
-
-	private:
-		Node *parent;
-		QString m_key, m_tabs;
-		QVariant m_value;
-
-		static QString asString(Node value);
-		static Node asNode(QString txt);
-	};
-
+	
 	// Data /////////////////////////////////////////////////////
 
 	class Data {
 	public:
 		Data();
 
-		void add(QString key, QString value);
-		void add(QString key, int value);
-		void add(QString key, double value);
+		void add(QString key, QVariant value);
 		void add(QString key, Data value);
-		void add(QString key, int red, int green, int blue, int alpha = 255);
-
-		//void add(QString key, QVariant value);		
-
+		
 		QVariant at(QString key);
 		QList<QVariant> nodes();
 		QList<QString> keys();

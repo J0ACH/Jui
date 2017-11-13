@@ -11,11 +11,7 @@ namespace Jui
 		win->name_("Configuration");
 
 		/*
-		QMap<QString, QVariant> map;
-		map.insert("red", 120);
-		map.insert("green", 30);
-		map.insert("blue", 30);
-		map.insert("alpha", 255);
+
 
 		Node n("test", map);
 		QByteArray ba = n;
@@ -27,26 +23,35 @@ namespace Jui
 		dataWrite.add("surname", "Pesek");
 		dataWrite.add("age", 32);
 		dataWrite.add("thickness", 1.2);
-		//dataWrite.add("color", 30, 40, 60);
-		//	dataWrite.add("font", QFont("TeutonHell", 14));
+		dataWrite.add("color", QColor(30, 40, 60));
+		dataWrite.add("font", QFont("TeutonHell", 14));
+		dataWrite.add("bool", true);
 
 		Data color;
 		color.add("c1", 120);
 		color.add("c2", 30);
-		color.add("c3", 30, 40, 50);
+		//color.add("c3", 30, 40, 50);
 		dataWrite.add("colorNew", color);
-		/*
 
-		dataWrite.print();
-		
+		QMap<QString, QVariant> map;
+		map.insert("red", 120);
+		map.insert("green", 30);
+		map.insert("blue", 30);
+		map.insert("alpha2", 255);
+
+		dataWrite.add("mapColor", map);
+
+		//dataWrite.print();
+
 		File txt("test.txt");
 		txt.write(dataWrite);
 		txt.show();
-		*/
 
+		/*
 		File file("test.txt");
 		QString txt = dataWrite;
 		file.write(txt);
+		*/
 		//qDebug() << txt;
 
 		/*

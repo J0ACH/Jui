@@ -3,89 +3,42 @@
 
 namespace Jui
 {
-	// Node /////////////////////////////////////////////////////
-
-	Node::Node() { m_tabs = ""; }
-	Node::Node(QString key, QVariant value, Node *parent) : m_key(key), m_value(value) { m_tabs = ""; }
-
-	void Node::key(QString name) { m_key = name; }
-	void Node::value(QVariant val) { m_value = val; }
-	void Node::value(QMap<QString, QVariant> val) {
-
-	};
-	void Node::tabs(int n) {
-		m_tabs = "";
-		for (int i = 0; i < n; i++) { m_tabs += "\t"; }
-	}
-
-	Node::operator QByteArray() {
-		qDebug() << "m_value.typeName():" << m_value.type();
-		QString txt;
-
-		switch (m_value.type())
-		{
-		case QVariant::Type::Map:
-			QMap<QString, QVariant> map = m_value.toMap();
-			foreach(QString oneKey, map.keys())
-			{
-				qDebug() << " QVariant::Type::Map::" << oneKey;
-			}
-			break;
-		}
-		txt = m_tabs + "- " + m_key + ": " + m_value.toString() + "\n";
-		return txt.toUtf8();
-	}
-	Node::operator QString() {
-		switch (m_value.type())
-		{
-		case QVariant::Int:	return QString::number(m_value.toInt());
-		case QVariant::Double: return QString::number(m_value.toDouble());
-		default: return m_value.toString();
-		}
-	}
-	Node::operator int() { return m_value.toInt(); }
-	Node::operator double() { return m_value.toDouble(); }
-	Node::operator QMap<QString, QVariant>() { return m_value.toMap(); }
-
-	QString Node::asString(Node node) {
-		QString txt;
-		/*
-		switch (m_value.type())
-		{
-		case QVariant::Int:	txt + QString::number(value.toInt());
-		case QVariant::Double: return QString::number(value.toDouble());
-		default: return value.toString();
-		}
-		*/
-
-		//txt = m_tabs + "- " + m_key + ": " + m_value.toString() + "\n";
-		return txt;
-	}
-
-	Node Node::asNode(QString txt) {
-		Node node;
-		return node;
-	}
-
-
 	// Data /////////////////////////////////////////////////////
 
 	Data::Data() {
 		currentLevel = 1;
 	}
 
-	void Data::add(QString key, QString value) { library.insert(key, value); }
-	void Data::add(QString key, int value) { library.insert(key, value); }
-	void Data::add(QString key, double value) { library.insert(key, value); }
-	void Data::add(QString key, Data value) { library.insert(key, value.map()); }
-	void Data::add(QString key, int red, int green, int blue, int alpha) {
-		Data color;
-		color.add("red", red);
-		color.add("green", green);
-		color.add("blue", blue);
-		color.add("alpha", alpha);
-		add(key, color);
+	void Data::add(QString key, QVariant value) {
+		Data data;
+		QColor color;
+		QFont font;
+
+		switch (value.type())
+		{
+		case QVariant::Type::Color:
+			color = value.value<QColor>();
+			data.add("red", color.red());
+			data.add("green", color.green());
+			data.add("blue", color.blue());
+			data.add("alpha", color.alpha());
+			add(key, data);
+			break;
+		case QVariant::Type::Font:
+			font = value.value<QFont>();
+			data.add("family", font.family());
+			data.add("pointSize", font.pointSize());
+			add(key, data);
+			break;
+		case QVariant::Type::Map:
+			library.insert(key, value.toMap());
+			break;
+		default:
+			library.insert(key, value);
+			break;
+		};
 	}
+	void Data::add(QString key, Data value) { library.insert(key, value.map()); }
 
 	QVariant Data::at(QString key) { return library.value(key); }
 	QList<QString> Data::keys() { return library.keys(); }
@@ -128,8 +81,7 @@ namespace Jui
 		foreach(QString oneLine, map2string(library)) { txt += oneLine + "\n"; }
 		return txt;
 	}
-
-
+	
 	// Folder /////////////////////////////////////////////////////
 
 	Folder::Folder() {
