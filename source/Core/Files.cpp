@@ -10,8 +10,8 @@ namespace Jui
 
 	void Node::key(QString name) { m_key = name; }
 	void Node::value(QVariant val) { m_value = val; }
-	void Node::value(QMap<QString, Node> val) {
-	
+	void Node::value(QMap<QString, QVariant> val) {
+
 	};
 	void Node::tabs(int n) {
 		m_tabs = "";
@@ -19,7 +19,20 @@ namespace Jui
 	}
 
 	Node::operator QByteArray() {
-		QString txt = m_tabs + "- " + m_key + ": " + m_value.toString() + "\n";
+		qDebug() << "m_value.typeName():" << m_value.type();
+		QString txt;
+
+		switch (m_value.type())
+		{
+		case QVariant::Type::Map:
+			QMap<QString, QVariant> map = m_value.toMap();
+			foreach(QString oneKey, map.keys())
+			{
+				qDebug() << " QVariant::Type::Map::" << oneKey;
+			}
+			break;
+		}
+		txt = m_tabs + "- " + m_key + ": " + m_value.toString() + "\n";
 		return txt.toUtf8();
 	}
 	Node::operator QString() {
@@ -32,9 +45,30 @@ namespace Jui
 	}
 	Node::operator int() { return m_value.toInt(); }
 	Node::operator double() { return m_value.toDouble(); }
+	Node::operator QMap<QString, QVariant>() { return m_value.toMap(); }
+
+	QString Node::asString(Node node) {
+		QString txt;
+		/*
+		switch (m_value.type())
+		{
+		case QVariant::Int:	txt + QString::number(value.toInt());
+		case QVariant::Double: return QString::number(value.toDouble());
+		default: return value.toString();
+		}
+		*/
+
+		//txt = m_tabs + "- " + m_key + ": " + m_value.toString() + "\n";
+		return txt;
+	}
+
+	Node Node::asNode(QString txt) {
+		Node node;
+		return node;
+	}
 
 
-	// Data /////////////////////////////////////////////////////
+	 // Data /////////////////////////////////////////////////////
 
 	Data::Data() {
 		currentLevel = 1;
@@ -44,7 +78,7 @@ namespace Jui
 	{
 		Node node(key, value);
 		node.tabs(currentLevel);
-		library.insert(key, node);
+		//library.insert(key, node);
 	}
 	void Data::add(QString key, Data value)
 	{
@@ -55,10 +89,10 @@ namespace Jui
 		}
 		//Node node(key, value);
 		//node.tabs(currentLevel);
-		library.insert(key, value.map());
+		//library.insert(key, value.map());
 	}
 
-	Node Data::at(QString key) { return library.value(key).value<Node>(); }
+	QVariant Data::at(QString key) { return library.value(key); }
 	QList<QString> Data::keys() { return library.keys(); }
 	QList<QVariant> Data::nodes() { return library.values(); }
 	QMap<QString, QVariant> Data::map() { return library; }
@@ -70,8 +104,8 @@ namespace Jui
 		foreach(QString oneKey, library.keys())
 		{
 			//currentLevel++;
-			QByteArray oneNode = at(oneKey);
-			ba.append(oneNode);
+			//QByteArray oneNode = at(oneKey);
+			//ba.append(oneNode);
 			//currentLevel--;
 		}
 		ba.append("]");
@@ -81,9 +115,9 @@ namespace Jui
 	void Data::print() {
 		foreach(QString oneKey, library.keys())
 		{
-			Node node = at(oneKey);
-			QByteArray baNode = node;
-			qDebug() << baNode;
+			//Node node = at(oneKey);
+			//QByteArray baNode = node;
+			//qDebug() << baNode;
 		}
 	}
 

@@ -9,11 +9,19 @@ namespace Jui
 
 		win = new Win(x, y, w, h);
 		win->name_("Configuration");
-		
+
+		QMap<QString, QVariant> map;
+		map.insert("red", 120);
+		map.insert("green", 30);
+		map.insert("blue", 30);
+		map.insert("alpha", 255);
+
+		Node n("test", map);
+		QByteArray ba = n;
+		qDebug() << "ba:" << ba;
 		/*
-		*/
 		//Folder f;
-		
+
 		//f.show();
 		//f.current();
 		//f.make("test");
@@ -23,7 +31,7 @@ namespace Jui
 		Folder f("c:/test");
 		//File txt("c:/test/mozna","pokus.txt");
 		File txt("test.txt");
-		
+
 		Data dataWrite;
 		dataWrite.add("name", "Jachym");
 		dataWrite.add("surname", "Pesek");
@@ -45,13 +53,14 @@ namespace Jui
 		//Data d2;
 
 		txt.show();
+		*/
 	}
 
 	void Config::click() {
 		//qDebug() << tr("Config::click(%1)").arg(sb->value());
 	}
 	void Config::result() {
-	
+
 	}
 }
 

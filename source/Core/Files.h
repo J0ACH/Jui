@@ -18,17 +18,21 @@ namespace Jui
 
 		void key(QString name);
 		void value(QVariant val);
-		void value(QMap<QString, Node> val);
+		void value(QMap<QString, QVariant> val);
 		void tabs(int n);
 
 		operator QByteArray();
 		operator QString();
 		operator int();
 		operator double();
+		operator QMap<QString, QVariant>();
 
 	private:
 		QString m_key, m_tabs;
 		QVariant m_value;
+
+		static QString asString(Node value);
+		static Node asNode(QString txt);
 	};
 
 	// Data /////////////////////////////////////////////////////
@@ -40,7 +44,7 @@ namespace Jui
 		void add(QString key, QVariant value);
 		void add(QString key, Data value);
 
-		Node at(QString key);
+		QVariant at(QString key);
 		QList<QVariant> nodes();
 		QList<QString> keys();
 		QMap<QString, QVariant> map();
