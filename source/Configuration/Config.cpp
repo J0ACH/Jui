@@ -10,14 +10,6 @@ namespace Jui
 		win = new Win(x, y, w, h);
 		win->name_("Configuration");
 
-		/*
-
-
-		Node n("test", map);
-		QByteArray ba = n;
-		qDebug() << "ba:" << ba;
-		*/
-
 		Data dataWrite;
 		dataWrite.add("name", "Jachym");
 		dataWrite.add("surname", "Pesek");
@@ -30,7 +22,7 @@ namespace Jui
 		Data color;
 		color.add("c1", 120);
 		color.add("c2", 30);
-		//color.add("c3", 30, 40, 50);
+		color.add("c3", QColor(30, 40, 50));
 		dataWrite.add("colorNew", color);
 
 		QMap<QString, QVariant> map;
@@ -41,7 +33,7 @@ namespace Jui
 
 		dataWrite.add("mapColor", map);
 
-		//dataWrite.print();
+		dataWrite.print();
 
 		File txt("test.txt");
 		txt.write(dataWrite);

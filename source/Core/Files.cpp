@@ -50,7 +50,8 @@ namespace Jui
 	QStringList Data::map2string(QMap<QString, QVariant> data, int level) {
 		QStringList txt;
 		QString tabs = "";
-		for (int i = 0; i < level; i++) { tabs += "\t"; }
+		for (int i = 0; i < level; i++) { tabs += "    "; }
+		//for (int i = 0; i < level; i++) { tabs += "\t"; }
 
 		foreach(QString key, data.keys())
 		{
