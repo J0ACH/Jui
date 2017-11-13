@@ -10,6 +10,9 @@ namespace Jui
 
 	void Node::key(QString name) { m_key = name; }
 	void Node::value(QVariant val) { m_value = val; }
+	void Node::value(QMap<QString, Node> val) {
+	
+	};
 	void Node::tabs(int n) {
 		m_tabs = "";
 		for (int i = 0; i < n; i++) { m_tabs += "\t"; }
@@ -43,8 +46,22 @@ namespace Jui
 		node.tabs(currentLevel);
 		library.insert(key, node);
 	}
+	void Data::add(QString key, Data value)
+	{
+		//QMap<QString, Node> library;
+		foreach(QString oneKey, value.keys())
+		{
+			qDebug() << "Data::add data value: " << oneKey;
+		}
+		//Node node(key, value);
+		//node.tabs(currentLevel);
+		library.insert(key, value.map());
+	}
 
-	Node Data::at(QString key) { return library.value(key); }
+	Node Data::at(QString key) { return library.value(key).value<Node>(); }
+	QList<QString> Data::keys() { return library.keys(); }
+	QList<QVariant> Data::nodes() { return library.values(); }
+	QMap<QString, QVariant> Data::map() { return library; }
 
 	Data::operator QByteArray() {
 		QByteArray ba;

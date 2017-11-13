@@ -32,9 +32,15 @@ namespace Jui
 		dataWrite.add("color", QColor(30, 40, 60));
 		dataWrite.add("font", QFont("TeutonHell",14));
 
-		//Data color
+		Data color;
+		color.add("red", 120);
+		color.add("green", 30);
+		color.add("blue", 30);
+		color.add("alpha", 255);
+		dataWrite.add("colorNew", color);
+
 	//	d.print();
-		txt.write(d);
+		txt.write(dataWrite);
 
 		//Data d2;
 
