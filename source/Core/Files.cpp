@@ -6,7 +6,7 @@ namespace Jui
 	// Node /////////////////////////////////////////////////////
 
 	Node::Node() { m_tabs = ""; }
-	Node::Node(QString key, QVariant value) : m_key(key), m_value(value) { m_tabs = ""; }
+	Node::Node(QString key, QVariant value, Node *parent) : m_key(key), m_value(value) { m_tabs = ""; }
 
 	void Node::key(QString name) { m_key = name; }
 	void Node::value(QVariant val) { m_value = val; }
@@ -68,28 +68,23 @@ namespace Jui
 	}
 
 
-	 // Data /////////////////////////////////////////////////////
+	// Data /////////////////////////////////////////////////////
 
 	Data::Data() {
 		currentLevel = 1;
 	}
 
-	void Data::add(QString key, QVariant value)
-	{
-		Node node(key, value);
-		node.tabs(currentLevel);
-		//library.insert(key, node);
-	}
-	void Data::add(QString key, Data value)
-	{
-		//QMap<QString, Node> library;
-		foreach(QString oneKey, value.keys())
-		{
-			qDebug() << "Data::add data value: " << oneKey;
-		}
-		//Node node(key, value);
-		//node.tabs(currentLevel);
-		//library.insert(key, value.map());
+	void Data::add(QString key, QString value) { library.insert(key, value); }
+	void Data::add(QString key, int value) { library.insert(key, value); }
+	void Data::add(QString key, double value) { library.insert(key, value); }
+	void Data::add(QString key, Data value) { library.insert(key, value.map()); }
+	void Data::add(QString key, int red, int green, int blue, int alpha) {
+		Data color;
+		color.add("red", red);
+		color.add("green", green);
+		color.add("blue", blue);
+		color.add("alpha", alpha);
+		add(key, color);
 	}
 
 	QVariant Data::at(QString key) { return library.value(key); }
@@ -97,36 +92,43 @@ namespace Jui
 	QList<QVariant> Data::nodes() { return library.values(); }
 	QMap<QString, QVariant> Data::map() { return library; }
 
+	void Data::print() { foreach(QString oneLine, map2string(library)) { qDebug() << oneLine; } }
+
+	QStringList Data::map2string(QMap<QString, QVariant> data, int level) {
+		QStringList txt;
+		QString tabs = "";
+		for (int i = 0; i < level; i++) { tabs += "\t"; }
+
+		foreach(QString key, data.keys())
+		{
+			QVariant value = data.value(key);
+			switch (data.value(key).type())
+			{
+			case QVariant::Type::Map:
+				txt.append(tabs + "- " + key + ": ");
+				foreach(QString oneLine, map2string(value.toMap(), level + 1)) { txt.append(oneLine); }
+				//txt.append(tabs + "-");
+				break;
+			default:
+				txt.append(tabs + "- " + key + ": " + value.toString());
+				break;
+			}
+		}
+		return txt;
+	}
+
 	Data::operator QByteArray() {
 		QByteArray ba;
-		ba.append("[\n");
-
-		foreach(QString oneKey, library.keys())
-		{
-			//currentLevel++;
-			//QByteArray oneNode = at(oneKey);
-			//ba.append(oneNode);
-			//currentLevel--;
-		}
-		ba.append("]");
+		foreach(QString oneLine, map2string(library)) { ba.append(oneLine + "\n"); }
 		return ba;
 	}
 
-	void Data::print() {
-		foreach(QString oneKey, library.keys())
-		{
-			//Node node = at(oneKey);
-			//QByteArray baNode = node;
-			//qDebug() << baNode;
-		}
+	Data::operator QString() {
+		QString txt;
+		foreach(QString oneLine, map2string(library)) { txt += oneLine + "\n"; }
+		return txt;
 	}
 
-	QString Data::level(int n) {
-		QString tabs = "";
-		for (int i = 0; i < n; i++) { tabs += "\t"; }
-		//qDebug() << "Data::level tabs:" << tabs;
-		return tabs;
-	}
 
 	// Folder /////////////////////////////////////////////////////
 

@@ -10,6 +10,7 @@ namespace Jui
 		win = new Win(x, y, w, h);
 		win->name_("Configuration");
 
+		/*
 		QMap<QString, QVariant> map;
 		map.insert("red", 120);
 		map.insert("green", 30);
@@ -19,6 +20,35 @@ namespace Jui
 		Node n("test", map);
 		QByteArray ba = n;
 		qDebug() << "ba:" << ba;
+		*/
+
+		Data dataWrite;
+		dataWrite.add("name", "Jachym");
+		dataWrite.add("surname", "Pesek");
+		dataWrite.add("age", 32);
+		dataWrite.add("thickness", 1.2);
+		//dataWrite.add("color", 30, 40, 60);
+		//	dataWrite.add("font", QFont("TeutonHell", 14));
+
+		Data color;
+		color.add("c1", 120);
+		color.add("c2", 30);
+		color.add("c3", 30, 40, 50);
+		dataWrite.add("colorNew", color);
+		/*
+
+		dataWrite.print();
+		
+		File txt("test.txt");
+		txt.write(dataWrite);
+		txt.show();
+		*/
+
+		File file("test.txt");
+		QString txt = dataWrite;
+		file.write(txt);
+		//qDebug() << txt;
+
 		/*
 		//Folder f;
 
@@ -30,25 +60,12 @@ namespace Jui
 
 		Folder f("c:/test");
 		//File txt("c:/test/mozna","pokus.txt");
-		File txt("test.txt");
 
-		Data dataWrite;
-		dataWrite.add("name", "Jachym");
-		dataWrite.add("surname", "Pesek");
-		dataWrite.add("age", 32);
-		dataWrite.add("thickness", 1.2);
-		dataWrite.add("color", QColor(30, 40, 60));
-		dataWrite.add("font", QFont("TeutonHell",14));
 
-		Data color;
-		color.add("red", 120);
-		color.add("green", 30);
-		color.add("blue", 30);
-		color.add("alpha", 255);
-		dataWrite.add("colorNew", color);
+
+
 
 	//	d.print();
-		txt.write(dataWrite);
 
 		//Data d2;
 
