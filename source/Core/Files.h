@@ -16,7 +16,7 @@ namespace Jui
 	class Leaf {
 	public:
 		Leaf(QString key, QVariant value);
-		Leaf(QString folder, QString key, QVariant value);
+		//Leaf(QString folder, QString key, QVariant value);
 
 		QString key();
 		QVariant value();

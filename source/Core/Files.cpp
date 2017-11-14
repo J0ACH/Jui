@@ -6,30 +6,50 @@ namespace Jui
 	// Leaf /////////////////////////////////////////////////////
 
 	Leaf::Leaf(QString key, QVariant value) {
-		map.insert("path", "");
+		QColor color;
+		//map.insert("path", "root");
 		map.insert("key", key);
-		map.insert("value", value);
 		map.insert("type", QVariant::nameToType(value.typeName()));
+		switch (value.type())
+		{
+		case QVariant::Type::Color:
+			color = value.value<QColor>();
+			map.insert("red", color.red());
+			map.insert("green", color.green());
+			map.insert("blue", color.blue());
+			map.insert("alpha", color.alpha());
+			break;
+		default:
+			map.insert("value", value);
+			break;
+		}
 	}
+	/*
 	Leaf::Leaf(QString folder, QString key, QVariant value) {
 		map.insert("path", folder);
 		map.insert("key", key);
 		map.insert("value", value);
 		map.insert("type", value.typeName());
 	}
+	*/
 
 	QString Leaf::key() { return map.value("key").toString(); }
 	QVariant Leaf::value() { return map.value("value"); }
 	QVariant::Type Leaf::type() { return QVariant::nameToType(map.value("type").typeName()); }
 
 	Leaf::operator QString() {
+		QMap<QString, QVariant> data(map);
 		QString txt;
-		txt += map.value("key").toString() + " [\n";
-		foreach(QString key, map.keys())
+		QString key = data.take("key").toString();
+		QString type = data.take("type").typeName();
+		//QString value = data.take("value").toString();
+		txt += key + " [\n";
+		txt += "\t - type: " + type + "\n";
+		//txt += "\t - value: " + value + "\n";
+
+		foreach(QString key, data.keys())
 		{
-			if (key != "key") {
-				txt += map.value(key).toString() + ",\n";
-			}
+			txt += "\t - " + key + ": " + data.value(key).toString() + ",\n";
 		}
 		txt += "]\n";
 		return txt;
