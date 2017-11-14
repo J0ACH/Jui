@@ -10,6 +10,11 @@ namespace Jui
 		win = new Win(x, y, w, h);
 		win->name_("Configuration");
 
+		Leaf l1("cislo", 1.6);
+
+		qDebug() << l1.value();
+
+		/*
 		Data dataWrite;
 		dataWrite.add("name", "Jachym");
 		dataWrite.add("surname", "Pesek");
@@ -38,9 +43,12 @@ namespace Jui
 		File txt("test.txt");
 		txt.write(dataWrite);
 		txt.show();
+		*/
 
+		/*
 		Data newData(txt.read());
 		newData.print();
+		*/
 
 		/*
 		File file("test.txt");

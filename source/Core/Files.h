@@ -11,7 +11,23 @@
 
 namespace Jui
 {
-	
+	// Leaf /////////////////////////////////////////////////////
+
+	class Leaf {
+	public:
+		Leaf(QString key, QVariant value);
+		Leaf(QString folder, QString key, QVariant value);
+
+		QString key();
+		QVariant value();
+		QVariant::Type type();
+
+		operator QString();
+
+	private:
+		QMap<QString, QVariant> map;
+	};
+
 	// Data /////////////////////////////////////////////////////
 
 	class Data {
@@ -21,7 +37,7 @@ namespace Jui
 
 		void add(QString key, QVariant value);
 		void add(QString key, Data value);
-		
+
 		QVariant at(QString key);
 		QList<QVariant> nodes();
 		QList<QString> keys();

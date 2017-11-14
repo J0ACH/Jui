@@ -3,6 +3,38 @@
 
 namespace Jui
 {
+	// Leaf /////////////////////////////////////////////////////
+
+	Leaf::Leaf(QString key, QVariant value) {
+		map.insert("path", "");
+		map.insert("key", key);
+		map.insert("value", value);
+		map.insert("type", QVariant::nameToType(value.typeName()));
+	}
+	Leaf::Leaf(QString folder, QString key, QVariant value) {
+		map.insert("path", folder);
+		map.insert("key", key);
+		map.insert("value", value);
+		map.insert("type", value.typeName());
+	}
+
+	QString Leaf::key() { return map.value("key").toString(); }
+	QVariant Leaf::value() { return map.value("value"); }
+	QVariant::Type Leaf::type() { return QVariant::nameToType(map.value("type").typeName()); }
+
+	Leaf::operator QString() {
+		QString txt;
+		txt += map.value("key").toString() + " [\n";
+		foreach(QString key, map.keys())
+		{
+			if (key != "key") {
+				txt += map.value(key).toString() + ",\n";
+			}
+		}
+		txt += "]\n";
+		return txt;
+	}
+
 	// Data /////////////////////////////////////////////////////
 
 	Data::Data() {
@@ -10,12 +42,12 @@ namespace Jui
 	}
 
 	Data::Data(QByteArray ba) {
-		qDebug() << "Data(QByteArray ba) /////////////////////";
-		
+		//qDebug() << "Data(QByteArray ba) /////////////////////";
+
 		QList<QByteArray> lines = ba.split('\n');
 		foreach(const QByteArray oneLine, lines)
 		{
-			qDebug() << oneLine;
+			//qDebug() << oneLine;
 		}
 	}
 
@@ -45,6 +77,14 @@ namespace Jui
 			break;
 		default:
 			library.insert(key, value);
+			/*
+			//qDebug() << library.value(key).typeName();
+			data.add("type", value.typeName());
+			data.add("value", value.toString());
+			//add(key, data);
+			qDebug() << value.typeName();
+			library.insert(key, data.map());
+			*/
 			break;
 		};
 	}
@@ -58,6 +98,7 @@ namespace Jui
 	void Data::print() { foreach(QString oneLine, map2string(library)) { qDebug() << oneLine; } }
 
 	QStringList Data::map2string(QMap<QString, QVariant> data, int level) {
+		QMap<QString, QVariant> temp;
 		QStringList txt;
 		QString tabs = "";
 		for (int i = 0; i < level; i++) { tabs += "    "; }
@@ -69,12 +110,16 @@ namespace Jui
 			switch (data.value(key).type())
 			{
 			case QVariant::Type::Map:
-				txt.append(tabs + "- " + key + ": ");
-				foreach(QString oneLine, map2string(value.toMap(), level + 1)) { txt.append(oneLine); }
+				txt.append(tabs + "- " + key + "[" + value.typeName() + "]: ");
+				foreach(QString oneLine, map2string(value.toMap(), level + 1)) {
+					txt.append(oneLine);
+				}
 				//txt.append(tabs + "-");
 				break;
 			default:
-				txt.append(tabs + "- " + key + ": " + value.toString());
+
+				txt.append(tabs + "- " + key + "[" + value.typeName() + "]: " + value.toString());
+				//txt.append(tabs + "- " + key + ": " + value.toString());
 				break;
 			}
 		}
