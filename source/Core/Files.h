@@ -21,21 +21,25 @@ namespace Jui
 		Path(QString folder);
 		Path(QStringList folder);
 		Path(QString f1, QString f2, QString f3 = "", QString f4 = "", QString f5 = "", QString f6 = "");
-
+		
 		static Path root();
 		static Path current();
 		static Path home();
 		static Path temp();
 
+		Path &add(QString folder);
+		Path &del();
+
 		QString toString();
 		QStringList toList();
-				
-		Path operator +(Path otherPath);
+
+		Path operator + (Path otherPath);
+
+		void show();
 
 	private:
 		QStringList dir;
-			
-		//QString separator;
+
 		QString disk(QString latter = "C");
 	};
 
@@ -65,8 +69,6 @@ namespace Jui
 		QMap<QString, QVariant> map;
 		QString tabs(int level);
 	};
-
-
 
 	// Data /////////////////////////////////////////////////////
 

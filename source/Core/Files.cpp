@@ -23,10 +23,18 @@ namespace Jui
 	Path Path::home() { return Path(QDir::homePath()); }
 	Path Path::temp() { return Path(QDir::tempPath()); }
 
+	Path &Path::add(QString folder) {
+		dir.append(folder);
+		return *this;
+	}
+	Path &Path::del() {
+		if (dir.size() > 0) { dir.removeLast(); }
+		return *this;
+	}
+
 	QString Path::toString() { return QStringList(dir).join("/"); }
 	QStringList Path::toList() { return dir; }
 
-	//Path::operator QString() { return toString(); }
 	Path Path::operator +(Path otherPath) {
 		QStringList newPath(toList());
 		newPath.append(otherPath.toList());
@@ -41,6 +49,12 @@ namespace Jui
 
 	//QString Path::separator() { return "/"; }
 
+	void Path::show() {
+		if (QDir(toString()).exists()) {
+			bool done = QDesktopServices::openUrl(QUrl(toString()));
+		}
+		else { qDebug() << "Directory at" << toString() << "not found"; }
+	}
 
 	QDebug operator<<(QDebug dbg, Path &path)
 	{
@@ -52,7 +66,6 @@ namespace Jui
 		dbg.nospace() << *path;
 		return dbg.space();
 	}
-
 
 	// Leaf /////////////////////////////////////////////////////
 

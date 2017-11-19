@@ -13,24 +13,22 @@ namespace Jui
 		QStringList pathList = { "ahoj", "mozna", "nevim", "zase" };
 		int test[] = { 1,2,3,5 };
 
-		//Path path("home");
-		Path path("home", "ahoj", "ahoj", "mozna", "nevim", "zase");
-		Path curr(Path::current());
+		Path path("root", "barva");
+		//Path path("home", "ahoj", "ahoj", "mozna", "nevim", "zase");
 		//Path path({ "ahoj", "mozna", "nevim", "zase" });
-		//Path result = curr + path;
 		Path result = Path::current() + path;
 
 		//qDebug() << curr;
 		qDebug() << path;
-		qDebug() << result;
+		qDebug() << path.del().del().del();
+		qDebug() << path.add("enter").add("jesteeee");
+		//qDebug() << result;
 
-		/*
-		qDebug() << Path::root();
-		qDebug() << Path::current();
-		qDebug() << Path::home();
-		qDebug() << Path::temp();
-		*/
+		//Path::current().show();
+		//result.show();
+		//Path::root().show();
 
+	
 		//Data dat();
 		//dat.add("barva", QColor(30, 40, 60));
 
