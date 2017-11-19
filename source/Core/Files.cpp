@@ -33,7 +33,7 @@ namespace Jui
 	}
 
 	QString Path::toString() { return QStringList(dir).join("/"); }
-	QStringList Path::toList() { return dir; }
+	QStringList Path::toList() { return QStringList(dir); }
 
 	Path Path::operator +(Path otherPath) {
 		QStringList newPath(toList());

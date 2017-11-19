@@ -32,6 +32,7 @@ namespace Jui
 
 		QString toString();
 		QStringList toList();
+		//Folder toFolder();
 
 		Path operator + (Path otherPath);
 

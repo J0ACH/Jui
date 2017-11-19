@@ -10,15 +10,19 @@ namespace Jui
 		win = new Win(x, y, w, h);
 		win->name_("Configuration");
 
-		QStringList pathList = { "ahoj", "mozna", "nevim", "zase" };
-		int test[] = { 1,2,3,5 };
+		//QStringList pathList = { "ahoj", "mozna", "nevim", "zase" };
+		//int test[] = { 1,2,3,5 };
 
 		Path path("root", "barva");
 		//Path path("home", "ahoj", "ahoj", "mozna", "nevim", "zase");
 		//Path path({ "ahoj", "mozna", "nevim", "zase" });
 		Path result = Path::current() + path;
 
-		//qDebug() << curr;
+		QStringList pathList = path.toList();
+		//QStringList pathList = path.toList().append("aaaa");
+		qDebug() << pathList;
+
+
 		qDebug() << path;
 		qDebug() << path.del().del().del();
 		qDebug() << path.add("enter").add("jesteeee");
