@@ -15,17 +15,24 @@ namespace Jui
 
 	class Leaf {
 	public:
-		Leaf(QString key, QVariant value);
-		//Leaf(QString folder, QString key, QVariant value);
+		Leaf();
+		Leaf(QString name, QVariant val);
+		Leaf(QByteArray ba);
+		
+		void key_(QString name);
+		void value_(QVariant val);
+		void level_(int n);
 
 		QString key();
 		QVariant value();
 		QVariant::Type type();
+		int level();
 
 		operator QString();
 
 	private:
 		QMap<QString, QVariant> map;
+		QString tabs(int level);
 	};
 
 	// Data /////////////////////////////////////////////////////

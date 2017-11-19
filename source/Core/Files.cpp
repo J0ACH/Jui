@@ -5,23 +5,21 @@ namespace Jui
 {
 	// Leaf /////////////////////////////////////////////////////
 
-	Leaf::Leaf(QString key, QVariant value) {
-		QColor color;
-		//map.insert("path", "root");
-		map.insert("key", key);
-		map.insert("type", QVariant::nameToType(value.typeName()));
-		switch (value.type())
+	Leaf::Leaf() {
+		map = QMap<QString, QVariant>();
+		tabs(1);
+	}
+	Leaf::Leaf(QString name, QVariant val) {
+		map = QMap<QString, QVariant>();
+		tabs(1);
+		key_(name);
+		value_(val);
+	}
+	Leaf::Leaf(QByteArray ba) {
+		QList<QByteArray> lines = ba.split('\n');
+		foreach(const QByteArray oneLine, lines)
 		{
-		case QVariant::Type::Color:
-			color = value.value<QColor>();
-			map.insert("red", color.red());
-			map.insert("green", color.green());
-			map.insert("blue", color.blue());
-			map.insert("alpha", color.alpha());
-			break;
-		default:
-			map.insert("value", value);
-			break;
+			qDebug() << oneLine;
 		}
 	}
 	/*
@@ -33,6 +31,27 @@ namespace Jui
 	}
 	*/
 
+	void Leaf::key_(QString name) { map.insert("key", name); }
+	void Leaf::value_(QVariant val) {
+		map.insert("type", QVariant::nameToType(val.typeName()));
+		switch (val.type())
+		{
+		case QVariant::Type::Color:
+			map.insert("red", val.value<QColor>().red());
+			map.insert("green", val.value<QColor>().green());
+			map.insert("blue", val.value<QColor>().blue());
+			map.insert("alpha", val.value<QColor>().alpha());
+			break;
+		default:
+			map.insert("value", val);
+			break;
+		}
+	}
+	void Leaf::level_(int n) {
+		if (n < 1) { n = 1; }
+		map.insert("level", n);
+	}
+
 	QString Leaf::key() { return map.value("key").toString(); }
 	QVariant Leaf::value() { return map.value("value"); }
 	QVariant::Type Leaf::type() { return QVariant::nameToType(map.value("type").typeName()); }
@@ -42,17 +61,28 @@ namespace Jui
 		QString txt;
 		QString key = data.take("key").toString();
 		QString type = data.take("type").typeName();
-		//QString value = data.take("value").toString();
-		txt += key + " [\n";
-		txt += "\t - type: " + type + "\n";
-		//txt += "\t - value: " + value + "\n";
+		int level = data.take("level").toInt();
+
+		txt += tabs(level - 1) + "[\n";
+		txt += tabs(level) + "key: " + key + ",\n";
+		txt += tabs(level) + "type: " + type + ",\n";
 
 		foreach(QString key, data.keys())
 		{
-			txt += "\t - " + key + ": " + data.value(key).toString() + ",\n";
+			txt += tabs(level);
+			txt += key + ": ";
+			txt += data.value(key).toString();
+			if (key != data.keys().last()) { txt += ","; };
+			txt += "\n";
 		}
-		txt += "]\n";
+		txt += tabs(level - 1) + "]\n";
 		return txt;
+	}
+
+	QString Leaf::tabs(int level) {
+		QString tabs = "";
+		for (int i = 0; i <= level; i++) { tabs += "\t"; };
+		return tabs;
 	}
 
 	// Data /////////////////////////////////////////////////////

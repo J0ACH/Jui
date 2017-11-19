@@ -11,13 +11,16 @@ namespace Jui
 		win->name_("Configuration");
 
 		//Leaf l1("cislo", 1.6);
-		Leaf l1("barva", QColor(30,40,60));
-		
-		qDebug() << l1;
+		Leaf l1("barva", QColor(30, 40, 60));
+		l1.level_(2);
 
 		File txt("test.txt");
 		txt.write(l1);
 		txt.show();
+
+		qDebug() << l1;
+		QByteArray ba = txt.read();
+		Leaf l2(ba);
 
 		/*
 		Data dataWrite;
