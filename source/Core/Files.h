@@ -1,6 +1,7 @@
 #ifndef FILES_H
 #define FILES_H
 
+#include <QQueue>
 #include <QDir>
 #include <QUrl>
 #include <QDesktopServices>
@@ -11,6 +12,36 @@
 
 namespace Jui
 {
+
+	// Path /////////////////////////////////////////////////////
+
+	class Path {
+	public:
+		Path();
+		Path(QString folder);
+		Path(QStringList folder);
+		Path(QString f1, QString f2, QString f3 = "", QString f4 = "", QString f5 = "", QString f6 = "");
+
+		static Path root();
+		static Path current();
+		static Path home();
+		static Path temp();
+
+		QString toString();
+		QStringList toList();
+				
+		Path operator +(Path otherPath);
+
+	private:
+		QStringList dir;
+			
+		//QString separator;
+		QString disk(QString latter = "C");
+	};
+
+	QDebug operator<<(QDebug dbg, Path *path);
+	QDebug operator<<(QDebug dbg, Path &path);
+
 	// Leaf /////////////////////////////////////////////////////
 
 	class Leaf {
@@ -18,7 +49,7 @@ namespace Jui
 		Leaf();
 		Leaf(QString name, QVariant val);
 		Leaf(QByteArray ba);
-		
+
 		void key_(QString name);
 		void value_(QVariant val);
 		void level_(int n);
@@ -34,6 +65,8 @@ namespace Jui
 		QMap<QString, QVariant> map;
 		QString tabs(int level);
 	};
+
+
 
 	// Data /////////////////////////////////////////////////////
 

@@ -3,6 +3,57 @@
 
 namespace Jui
 {
+
+	// Path /////////////////////////////////////////////////////
+
+	Path::Path() {}
+	Path::Path(QString folder) { dir = folder.split("/"); }
+	Path::Path(QStringList folder) { dir = folder; }
+	Path::Path(QString f1, QString f2, QString f3, QString f4, QString f5, QString f6) {
+		dir.append(f1);
+		dir.append(f2);
+		if (!f3.isEmpty()) { dir.append(f3); }
+		if (!f4.isEmpty()) { dir.append(f4); }
+		if (!f5.isEmpty()) { dir.append(f5); }
+		if (!f6.isEmpty()) { dir.append(f6); }
+	}
+
+	Path Path::root() { return Path(QDir::rootPath()); }
+	Path Path::current() { return Path(QDir::currentPath()); }
+	Path Path::home() { return Path(QDir::homePath()); }
+	Path Path::temp() { return Path(QDir::tempPath()); }
+
+	QString Path::toString() { return QStringList(dir).join("/"); }
+	QStringList Path::toList() { return dir; }
+
+	//Path::operator QString() { return toString(); }
+	Path Path::operator +(Path otherPath) {
+		QStringList newPath(toList());
+		newPath.append(otherPath.toList());
+		return Path(newPath);
+	}
+
+	QString Path::disk(QString latter) {
+		QString txt;
+		txt += latter.toUpper() + ":/";
+		return txt;
+	}
+
+	//QString Path::separator() { return "/"; }
+
+
+	QDebug operator<<(QDebug dbg, Path &path)
+	{
+		dbg.nospace() << "Path(" << path.toString() << ")";
+		return dbg.space();
+	}
+	QDebug operator<<(QDebug dbg, Path *path)
+	{
+		dbg.nospace() << *path;
+		return dbg.space();
+	}
+
+
 	// Leaf /////////////////////////////////////////////////////
 
 	Leaf::Leaf() {
@@ -85,6 +136,7 @@ namespace Jui
 		return tabs;
 	}
 
+
 	// Data /////////////////////////////////////////////////////
 
 	Data::Data() {
@@ -102,6 +154,11 @@ namespace Jui
 	}
 
 	void Data::add(QString key, QVariant value) {
+		Leaf leaf;
+		leaf.key_(key);
+		leaf.value_(value);
+
+		/*
 		Data data;
 		QColor color;
 		QFont font;
@@ -127,16 +184,9 @@ namespace Jui
 			break;
 		default:
 			library.insert(key, value);
-			/*
-			//qDebug() << library.value(key).typeName();
-			data.add("type", value.typeName());
-			data.add("value", value.toString());
-			//add(key, data);
-			qDebug() << value.typeName();
-			library.insert(key, data.map());
-			*/
 			break;
 		};
+		*/
 	}
 	void Data::add(QString key, Data value) { library.insert(key, value.map()); }
 

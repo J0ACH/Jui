@@ -10,83 +10,115 @@ namespace Jui
 		win = new Win(x, y, w, h);
 		win->name_("Configuration");
 
-		//Leaf l1("cislo", 1.6);
-		Leaf l1("barva", QColor(30, 40, 60));
-		l1.level_(2);
+		QStringList pathList = { "ahoj", "mozna", "nevim", "zase" };
+		int test[] = { 1,2,3,5 };
 
+		//Path path("home");
+		Path path("home", "ahoj", "ahoj", "mozna", "nevim", "zase");
+		Path curr(Path::current());
+		//Path path({ "ahoj", "mozna", "nevim", "zase" });
+		//Path result = curr + path;
+		Path result = Path::current() + path;
+
+		//qDebug() << curr;
+		qDebug() << path;
+		qDebug() << result;
+
+		/*
+		qDebug() << Path::root();
+		qDebug() << Path::current();
+		qDebug() << Path::home();
+		qDebug() << Path::temp();
+		*/
+
+		//Data dat();
+		//dat.add("barva", QColor(30, 40, 60));
+
+		/*
 		File txt("test.txt");
-		txt.write(l1);
+		txt.write(dat);
 		txt.show();
+				*/
 
-		qDebug() << l1;
-		QByteArray ba = txt.read();
-		Leaf l2(ba);
+				/*
+				//Leaf l1("cislo", 1.6);
+				Leaf l1("barva", QColor(30, 40, 60));
+				l1.level_(2);
 
-		/*
-		Data dataWrite;
-		dataWrite.add("name", "Jachym");
-		dataWrite.add("surname", "Pesek");
-		dataWrite.add("age", 32);
-		dataWrite.add("thickness", 1.2);
-		dataWrite.add("color", QColor(30, 40, 60));
-		dataWrite.add("font", QFont("TeutonHell", 14));
-		dataWrite.add("bool", true);
+				File txt("test.txt");
+				txt.write(l1);
+				txt.show();
 
-		Data color;
-		color.add("c1", 120);
-		color.add("c2", 30);
-		color.add("c3", QColor(30, 40, 50));
-		dataWrite.add("colorNew", color);
+				qDebug() << l1;
+				QByteArray ba = txt.read();
+				Leaf l2(ba);
+				*/
 
-		QMap<QString, QVariant> map;
-		map.insert("red", 120);
-		map.insert("green", 30);
-		map.insert("blue", 30);
-		map.insert("alpha2", 255);
+				/*
+				Data dataWrite;
+				dataWrite.add("name", "Jachym");
+				dataWrite.add("surname", "Pesek");
+				dataWrite.add("age", 32);
+				dataWrite.add("thickness", 1.2);
+				dataWrite.add("color", QColor(30, 40, 60));
+				dataWrite.add("font", QFont("TeutonHell", 14));
+				dataWrite.add("bool", true);
 
-		dataWrite.add("mapColor", map);
+				Data color;
+				color.add("c1", 120);
+				color.add("c2", 30);
+				color.add("c3", QColor(30, 40, 50));
+				dataWrite.add("colorNew", color);
 
-		dataWrite.print();
+				QMap<QString, QVariant> map;
+				map.insert("red", 120);
+				map.insert("green", 30);
+				map.insert("blue", 30);
+				map.insert("alpha2", 255);
 
-		File txt("test.txt");
-		txt.write(dataWrite);
-		txt.show();
-		*/
+				dataWrite.add("mapColor", map);
 
-		/*
-		Data newData(txt.read());
-		newData.print();
-		*/
+				dataWrite.print();
 
-		/*
-		File file("test.txt");
-		QString txt = dataWrite;
-		file.write(txt);
-		*/
-		//qDebug() << txt;
+				File txt("test.txt");
+				txt.write(dataWrite);
+				txt.show();
+				*/
 
-		/*
-		//Folder f;
+				/*
+				Data newData(txt.read());
+				newData.print();
+				*/
 
-		//f.show();
-		//f.current();
-		//f.make("test");
-		//f.enter("test");
-		//f.current();
+				/*
+				File file("test.txt");
+				QString txt = dataWrite;
+				file.write(txt);
+				*/
+				//qDebug() << txt;
 
-		Folder f("c:/test");
-		//File txt("c:/test/mozna","pokus.txt");
+				/*
+				//Folder f;
+
+				//f.show();
+				//f.current();
+				//f.make("test");
+				//f.enter("test");
+				//f.current();
+
+				Folder f("c:/test");
+				//File txt("c:/test/mozna","pokus.txt");
 
 
 
 
 
-	//	d.print();
+			//	d.print();
 
-		//Data d2;
+				//Data d2;
 
-		txt.show();
-		*/
+				txt.show();
+				*/
 	}
 
 	void Config::click() {
