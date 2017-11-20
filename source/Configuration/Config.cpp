@@ -12,7 +12,7 @@ namespace Jui
 
 		//QStringList pathList = { "ahoj", "mozna", "nevim", "zase" };
 		//int test[] = { 1,2,3,5 };
-		
+
 		//Path path;
 		//Path path("temp");
 		//Path path("home", "ahoj", "ahoj", "mozna", "nevim", "zase");
@@ -34,8 +34,11 @@ namespace Jui
 		//qDebug() << f.exist();
 
 		//f.write("ahoj");
+		qDebug() << "f.size:" << f.size();
 		f.show();
-		
+
+		qDebug() << f.read();
+
 		//qDebug() << path.del().del().del();
 		//qDebug() << path.add("enter").add("jesteeee");
 		//qDebug() << result;
@@ -44,7 +47,7 @@ namespace Jui
 		//result.show();
 		//Path::root().show();
 
-	
+
 		//Data dat();
 		//dat.add("barva", QColor(30, 40, 60));
 

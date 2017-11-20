@@ -54,11 +54,14 @@ namespace Jui
 		static bool exist(Path folder);
 		static bool make(Path folder);
 		
+		File &show();
+
 		bool exist();
-		void show();
+		int size();
 		
 		void write(QString data);
-		
+		QStringList read();
+
 		/*
 		void write(Data data);
 		QByteArray read();

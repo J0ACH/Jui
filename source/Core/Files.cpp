@@ -86,16 +86,27 @@ namespace Jui
 	}
 
 	bool File::exist() { return file.exists(); }
-	void File::show() {
+	int File::size() { return file.size(); }
+
+	File &File::show() {
 		QString path = file.fileName();
 		if (exist()) { QDesktopServices::openUrl(QUrl(path)); }
 		else { qDebug() << "File" << path << "doesn't exist"; }
+		return *this;
 	}
 
 	void File::write(QString data) {
 		file.open(QIODevice::WriteOnly);
 		file.write(data.toUtf8());
 		file.close();
+	}
+	
+	QStringList File::read() {
+		QStringList list;
+		file.open(QIODevice::ReadOnly);
+		while (!file.atEnd()) { list.append(QString(file.readLine())); }
+		file.close();
+		return list;
 	}
 
 	/*
