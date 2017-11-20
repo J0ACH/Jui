@@ -57,6 +57,7 @@ namespace Jui
 		File &show();
 
 		bool exist();
+		int lenght();
 		int size();
 		
 		void write(QString data);

@@ -34,6 +34,7 @@ namespace Jui
 		//qDebug() << f.exist();
 
 		//f.write("ahoj");
+		qDebug() << "f.lenght:" << f.lenght();
 		qDebug() << "f.size:" << f.size();
 		f.show();
 

@@ -86,7 +86,8 @@ namespace Jui
 	}
 
 	bool File::exist() { return file.exists(); }
-	int File::size() { return file.size(); }
+	int File::lenght() { return file.size(); }
+	int File::size() { return QFileInfo(file).size(); }
 
 	File &File::show() {
 		QString path = file.fileName();
