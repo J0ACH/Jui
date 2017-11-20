@@ -13,20 +13,23 @@ namespace Jui
 		//QStringList pathList = { "ahoj", "mozna", "nevim", "zase" };
 		//int test[] = { 1,2,3,5 };
 		
-		Path path;
+		//Path path;
 		//Path path("temp");
 		//Path path("home", "ahoj", "ahoj", "mozna", "nevim", "zase");
 		//Path path({"root", "mozna", "nevim", "zase" });
-		Path result = Path::disk().add({ "Games", "OpenTTD" });
+		Path path = Path::disk().add("testFolder");
 
-		path.add("root", "barva");
+		//path.add("root", "barva");
 
 		//QStringList pathList = path.toList();
 		//QStringList pathList = path.toList().filter("a");
-		qDebug() << result;
-		result.show();
-
 		qDebug() << path;
+		//path.show();
+
+		File::show(path);
+		File::make(path);
+		File::show(path);
+		
 		//qDebug() << path.del().del().del();
 		//qDebug() << path.add("enter").add("jesteeee");
 		//qDebug() << result;

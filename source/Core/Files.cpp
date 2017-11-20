@@ -41,20 +41,10 @@ namespace Jui
 	QString Path::toString() { return QStringList(dir).join("/"); }
 	QStringList Path::toList() { return QStringList(dir); }
 
-	Path Path::operator +(Path otherPath) {
+	Path Path::operator + (Path otherPath) {
 		QStringList newPath(toList());
 		newPath.append(otherPath.toList());
 		return Path(newPath);
-	}
-
-
-	//QString Path::separator() { return "/"; }
-
-	void Path::show() {
-		if (QDir(toString()).exists()) {
-			bool done = QDesktopServices::openUrl(QUrl(toString()));
-		}
-		else { qDebug() << "Directory at" << toString() << "not found"; }
 	}
 
 	QDebug operator<<(QDebug dbg, Path &path)
@@ -67,6 +57,61 @@ namespace Jui
 		dbg.nospace() << *path;
 		return dbg.space();
 	}
+
+	// File /////////////////////////////////////////////////////
+
+	File::File(Path path, QString name, QString extension) {
+
+		QString fileName = QString("%1.%2").arg(name, extension);
+		qDebug() << "path:" << fileName;
+		qDebug() << "fileName:" << fileName;
+		file.setFileName(fileName);
+	}
+
+	bool File::show(Path folder) {
+		bool done = false;
+		QString path = folder.toString();
+		if (QDir(path).exists()) { done = QDesktopServices::openUrl(QUrl(path)); }
+		else { qDebug() << "Directory at" << path << "not found"; }
+		return done;
+	}
+	bool File::exist(Path folder) { return QDir(folder.toString()).exists(); }
+	bool File::make(Path folder) {
+		bool done = false;
+		QString path = folder.toString();
+		if (!File::exist(folder))
+		{
+			QDir::setCurrent(path);
+			QDir dir = QDir::current();
+			done = dir.mkpath(path);
+		}
+		return done;
+	}
+
+	/*
+	void File::write(QString data) {
+		file.open(QIODevice::WriteOnly);
+		file.write(data.toUtf8());
+		file.close();
+	}
+	void File::write(Data data) {
+		file.open(QIODevice::WriteOnly);
+		file.write(data);
+		file.close();
+	}
+	QByteArray File::read() {
+		//if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) return;
+		QByteArray ba;
+		file.open(QIODevice::ReadOnly);
+		while (!file.atEnd()) {
+			ba.append(file.readLine());
+			//process_line(line);
+		}
+		file.close();
+		return ba;
+	}
+	*/
+
 
 	// Leaf /////////////////////////////////////////////////////
 
@@ -253,7 +298,7 @@ namespace Jui
 	}
 
 	// Folder /////////////////////////////////////////////////////
-
+	/*
 	Folder::Folder() {
 		dir = QDir::current();
 	}
@@ -280,40 +325,7 @@ namespace Jui
 	void Folder::show() {
 		bool done = QDesktopServices::openUrl(QUrl(current()));
 	}
+	*/
 
-	// File /////////////////////////////////////////////////////
 
-	File::File(QString name) {
-		file.setFileName(name);
-	}
-	File::File(QString path, QString name) {
-		Folder::Folder(path);
-		file.setFileName(name);
-	}
-
-	void File::write(QString data) {
-		file.open(QIODevice::WriteOnly);
-		file.write(data.toUtf8());
-		file.close();
-	}
-	void File::write(Data data) {
-		file.open(QIODevice::WriteOnly);
-		file.write(data);
-		file.close();
-	}
-	QByteArray File::read() {
-		//if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) return;
-		QByteArray ba;
-		file.open(QIODevice::ReadOnly);
-		while (!file.atEnd()) {
-			ba.append(file.readLine());
-			//process_line(line);
-		}
-		file.close();
-		return ba;
-	}
-
-	void File::show() {
-		bool done = QDesktopServices::openUrl(QUrl(QDir::currentPath()));
-	}
 }

@@ -35,15 +35,35 @@ namespace Jui
 
 		QString toString();
 		QStringList toList();
-
+	
 		Path operator + (Path otherPath);
-		void show();
 
 	private:
 		QStringList dir;
 	};
 	QDebug operator<<(QDebug dbg, Path *path);
 	QDebug operator<<(QDebug dbg, Path &path);
+
+	// File /////////////////////////////////////////////////////
+
+	class File {
+	public:
+		File(Path path, QString name = "", QString extension = "txt");
+
+		static bool show(Path folder);
+		static bool exist(Path folder);
+		static bool make(Path folder);
+		
+		/*
+		void write(QString data);
+		void write(Data data);
+		QByteArray read();
+		*/		
+
+	private:
+		QFile file;
+	};
+
 
 	// Leaf /////////////////////////////////////////////////////
 
@@ -97,7 +117,7 @@ namespace Jui
 	};
 
 	// Folder /////////////////////////////////////////////////////
-
+/*
 	class Folder {
 	public:
 		Folder();
@@ -114,24 +134,8 @@ namespace Jui
 	private:
 		QDir dir;
 	};
-
-	// File /////////////////////////////////////////////////////
-
-	class File {
-	public:
-		File(QString name);
-		File(QString path, QString name);
-
-		void write(QString data);
-		void write(Data data);
-
-		QByteArray read();
-
-		void show();
-
-	private:
-		QFile file;
-	};
+*/
 }
+
 
 #endif // FILES_H
