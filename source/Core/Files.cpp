@@ -7,24 +7,30 @@ namespace Jui
 	// Path /////////////////////////////////////////////////////
 
 	Path::Path() {}
-	Path::Path(QString folder) { dir = folder.split("/"); }
 	Path::Path(QStringList folder) { dir = folder; }
+	Path::Path(QString folder) { dir = folder.split("/"); }
 	Path::Path(QString f1, QString f2, QString f3, QString f4, QString f5, QString f6) {
-		dir.append(f1);
-		dir.append(f2);
-		if (!f3.isEmpty()) { dir.append(f3); }
-		if (!f4.isEmpty()) { dir.append(f4); }
-		if (!f5.isEmpty()) { dir.append(f5); }
-		if (!f6.isEmpty()) { dir.append(f6); }
+		add(f1, f2, f3, f4, f5, f6);
 	}
 
 	Path Path::root() { return Path(QDir::rootPath()); }
 	Path Path::current() { return Path(QDir::currentPath()); }
 	Path Path::home() { return Path(QDir::homePath()); }
 	Path Path::temp() { return Path(QDir::tempPath()); }
+	Path Path::disk(QString latter) { return Path(latter.toUpper() + ":"); }
 
-	Path &Path::add(QString folder) {
+	Path &Path::add(QStringList folder) {
 		dir.append(folder);
+		return *this;
+	}
+	Path &Path::add(QString folder) { return add(folder.split("/")); }
+	Path &Path::add(QString f1, QString f2, QString f3, QString f4, QString f5, QString f6) {
+		dir.append(f1);
+		dir.append(f2);
+		if (!f3.isEmpty()) { dir.append(f3); }
+		if (!f4.isEmpty()) { dir.append(f4); }
+		if (!f5.isEmpty()) { dir.append(f5); }
+		if (!f6.isEmpty()) { dir.append(f6); }
 		return *this;
 	}
 	Path &Path::del() {
@@ -41,11 +47,6 @@ namespace Jui
 		return Path(newPath);
 	}
 
-	QString Path::disk(QString latter) {
-		QString txt;
-		txt += latter.toUpper() + ":/";
-		return txt;
-	}
 
 	//QString Path::separator() { return "/"; }
 

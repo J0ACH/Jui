@@ -18,32 +18,30 @@ namespace Jui
 	class Path {
 	public:
 		Path();
-		Path(QString folder);
 		Path(QStringList folder);
+		Path(QString folder);
 		Path(QString f1, QString f2, QString f3 = "", QString f4 = "", QString f5 = "", QString f6 = "");
-		
+
 		static Path root();
 		static Path current();
 		static Path home();
 		static Path temp();
+		static Path disk(QString latter = "C");
 
+		Path &add(QStringList folder);
 		Path &add(QString folder);
+		Path &add(QString f1, QString f2, QString f3 = "", QString f4 = "", QString f5 = "", QString f6 = "");
 		Path &del();
 
 		QString toString();
 		QStringList toList();
-		//Folder toFolder();
 
 		Path operator + (Path otherPath);
-
 		void show();
 
 	private:
 		QStringList dir;
-
-		QString disk(QString latter = "C");
 	};
-
 	QDebug operator<<(QDebug dbg, Path *path);
 	QDebug operator<<(QDebug dbg, Path &path);
 
