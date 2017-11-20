@@ -61,19 +61,16 @@ namespace Jui
 	// File /////////////////////////////////////////////////////
 
 	File::File(Path path, QString name, QString extension) {
-
-		QString fileName = QString("%1.%2").arg(name, extension);
-		qDebug() << "path:" << fileName;
-		qDebug() << "fileName:" << fileName;
+		QString fileName;
+		if (!name.isEmpty()) { fileName = QString("%1/%2.%3").arg(path.toString(), name, extension); }
+		else { fileName = QString("%2.%3").arg(name, extension); }
 		file.setFileName(fileName);
 	}
 
-	bool File::show(Path folder) {
-		bool done = false;
+	void File::show(Path folder) {
 		QString path = folder.toString();
-		if (QDir(path).exists()) { done = QDesktopServices::openUrl(QUrl(path)); }
+		if (QDir(path).exists() || QFile(path).exists()) { QDesktopServices::openUrl(QUrl(path)); }
 		else { qDebug() << "Directory at" << path << "not found"; }
-		return done;
 	}
 	bool File::exist(Path folder) { return QDir(folder.toString()).exists(); }
 	bool File::make(Path folder) {
@@ -88,12 +85,20 @@ namespace Jui
 		return done;
 	}
 
-	/*
+	bool File::exist() { return file.exists(); }
+	void File::show() {
+		QString path = file.fileName();
+		if (exist()) { QDesktopServices::openUrl(QUrl(path)); }
+		else { qDebug() << "File" << path << "doesn't exist"; }
+	}
+
 	void File::write(QString data) {
 		file.open(QIODevice::WriteOnly);
 		file.write(data.toUtf8());
 		file.close();
 	}
+
+	/*
 	void File::write(Data data) {
 		file.open(QIODevice::WriteOnly);
 		file.write(data);

@@ -50,12 +50,16 @@ namespace Jui
 	public:
 		File(Path path, QString name = "", QString extension = "txt");
 
-		static bool show(Path folder);
+		static void show(Path folder);
 		static bool exist(Path folder);
 		static bool make(Path folder);
 		
-		/*
+		bool exist();
+		void show();
+		
 		void write(QString data);
+		
+		/*
 		void write(Data data);
 		QByteArray read();
 		*/		

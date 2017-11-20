@@ -26,9 +26,15 @@ namespace Jui
 		qDebug() << path;
 		//path.show();
 
-		File::show(path);
+		//File::show(path);
 		File::make(path);
-		File::show(path);
+		//File::show(path);
+
+		File f(path, "data");
+		//qDebug() << f.exist();
+
+		//f.write("ahoj");
+		f.show();
 		
 		//qDebug() << path.del().del().del();
 		//qDebug() << path.add("enter").add("jesteeee");
