@@ -87,7 +87,11 @@ namespace Jui
 
 	bool File::exist() { return file.exists(); }
 	int File::lenght() { return file.size(); }
-	int File::size() { return QFileInfo(file).size(); }
+	int File::size() { 
+		return QStorageInfo(name()).bytesTotal();
+		//return QFileInfo(file).size(); 
+	}
+	QString File::name() { return file.fileName(); }
 
 	File &File::show() {
 		QString path = file.fileName();
@@ -109,6 +113,18 @@ namespace Jui
 		file.close();
 		return list;
 	}
+
+	QDebug operator<<(QDebug dbg, File &file)
+	{
+		dbg.nospace() << "File(" << file.name() << ")";
+		return dbg.space();
+	}
+	QDebug operator<<(QDebug dbg, File *file)
+	{
+		dbg.nospace() << *file;
+		return dbg.space();
+	}
+
 
 	/*
 	void File::write(Data data) {

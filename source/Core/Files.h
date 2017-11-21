@@ -6,6 +6,7 @@
 #include <QUrl>
 #include <QDesktopServices>
 #include <QFile>
+#include <QStorageInfo>
 #include <QColor>
 #include <QFont>
 #include <QDebug>
@@ -59,7 +60,8 @@ namespace Jui
 		bool exist();
 		int lenght();
 		int size();
-		
+		QString name();
+
 		void write(QString data);
 		QStringList read();
 
@@ -71,6 +73,8 @@ namespace Jui
 	private:
 		QFile file;
 	};
+	QDebug operator<<(QDebug dbg, File *file);
+	QDebug operator<<(QDebug dbg, File &file);
 
 
 	// Leaf /////////////////////////////////////////////////////

@@ -31,12 +31,13 @@ namespace Jui
 		//File::show(path);
 
 		File f(path, "data");
+		//f.write("ahoj");
+		//f.show();
 		//qDebug() << f.exist();
 
-		//f.write("ahoj");
+		qDebug() << f;
 		qDebug() << "f.lenght:" << f.lenght();
 		qDebug() << "f.size:" << f.size();
-		f.show();
 
 		qDebug() << f.read();
 
