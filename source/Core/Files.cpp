@@ -89,14 +89,6 @@ namespace Jui
 	int File::size() { return file.size(); }
 	QString File::name() { return file.fileName(); }
 
-	QStringList File::read(QString separator) {
-		QString txt;
-		if (file.open(QIODevice::ReadOnly)) {
-			while (!file.atEnd()) { txt += QString(file.readLine()); }
-			file.close();
-		}
-		return txt.split(separator);
-	}
 	QStringList File::readLines() {
 		QStringList list;
 		if (file.open(QIODevice::ReadOnly)) {
@@ -104,6 +96,14 @@ namespace Jui
 			file.close();
 		}
 		return list;
+	}
+	QStringList File::read(QString separator) {
+		QString txt;
+		if (file.open(QIODevice::ReadOnly)) {
+			while (!file.atEnd()) { txt += QString(file.readLine()); }
+			file.close();
+		}
+		return txt.split(separator);
 	}
 
 	File &File::show() {
@@ -188,8 +188,11 @@ namespace Jui
 	}
 	*/
 
-	void Leaf::key_(QString name) { map.insert("key", name); }
-	void Leaf::value_(QVariant val) {
+	Leaf &Leaf::key_(QString name) {
+		map.insert("key", name);
+		return *this;
+	}
+	Leaf &Leaf::value_(QVariant val) {
 		map.insert("type", QVariant::nameToType(val.typeName()));
 		switch (val.type())
 		{
@@ -203,19 +206,26 @@ namespace Jui
 			map.insert("value", val);
 			break;
 		}
+		return *this;
 	}
-	void Leaf::level_(int n) {
+	Leaf &Leaf::level_(int n) {
 		if (n < 1) { n = 1; }
 		map.insert("level", n);
+		return *this;
+	}
+	Leaf &Leaf::path_(Path folder) {
+		map.insert("path", folder.toString());
+		return *this;
 	}
 
 	QString Leaf::key() { return map.value("key").toString(); }
 	QVariant Leaf::value() { return map.value("value"); }
 	QVariant::Type Leaf::type() { return QVariant::nameToType(map.value("type").typeName()); }
+	Path Leaf::path() { return Path(map.value("path").toString().split("/")); }
 
-	Leaf::operator QString() {
-		QMap<QString, QVariant> data(map);
+	QString Leaf::toString() {
 		QString txt;
+		QMap<QString, QVariant> data(map);
 		QString key = data.take("key").toString();
 		QString type = data.take("type").typeName();
 		int level = data.take("level").toInt();

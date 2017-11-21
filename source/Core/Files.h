@@ -85,17 +85,19 @@ namespace Jui
 		Leaf(QString name, QVariant val);
 		Leaf(QByteArray ba);
 
-		void key_(QString name);
-		void value_(QVariant val);
-		void level_(int n);
+		Leaf &key_(QString name);
+		Leaf &value_(QVariant val);
+		Leaf &level_(int n);
+		Leaf &path_(Path folder);
 
 		QString key();
 		QVariant value();
 		QVariant::Type type();
 		int level();
+		Path path();
 
-		operator QString();
-
+		QString toString();
+		
 	private:
 		QMap<QString, QVariant> map;
 		QString tabs(int level);

@@ -22,8 +22,13 @@ namespace Jui
 		File::make(path);
 		//File::show(path);
 		
+		Path dir("root", "folder1");
 		Leaf leaf;
+		leaf.key_("jmeno").value_("jsemToAAAA").path_(dir);
 
+		qDebug() << leaf.path();
+		//qDebug() << leaf.toString();
+		/*
 		File f(path, "data");
 		f.write("ahoj");
 		f.append("ahoj2", false);
@@ -33,6 +38,7 @@ namespace Jui
 		qDebug() << f;
 		qDebug() << "f.size:" << f.size();
 		qDebug() << f.read();
+		*/
 
 
 	}
