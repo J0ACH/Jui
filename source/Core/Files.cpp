@@ -165,12 +165,14 @@ namespace Jui
 	Leaf::Leaf() {
 		map = QMap<QString, QVariant>();
 		tabs(1);
+		path_(Path("root"));
 	}
 	Leaf::Leaf(QString name, QVariant val) {
 		map = QMap<QString, QVariant>();
 		tabs(1);
 		key_(name);
 		value_(val);
+		path_(Path("root"));
 	}
 	Leaf::Leaf(QByteArray ba) {
 		QList<QByteArray> lines = ba.split('\n');

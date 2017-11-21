@@ -21,10 +21,10 @@ namespace Jui
 		//qDebug() << path;
 		File::make(path);
 		//File::show(path);
-		
+
 		Path dir("root", "folder1");
 		Leaf leaf;
-		leaf.key_("jmeno").value_("jsemToAAAA").path_(dir);
+		leaf.key_("jmeno").value_("jsemToAAAA").path_(Path::root().add("aaa"));
 
 		qDebug() << leaf.path();
 		//qDebug() << leaf.toString();
@@ -44,7 +44,7 @@ namespace Jui
 	}
 
 	void Config::click() {
-		
+
 	}
 	void Config::result() {
 

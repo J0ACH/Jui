@@ -28,7 +28,7 @@ namespace Jui
 		static Path home();
 		static Path temp();
 		static Path disk(QString latter = "C");
-
+		
 		Path &add(QStringList folder);
 		Path &add(QString folder);
 		Path &add(QString f1, QString f2, QString f3 = "", QString f4 = "", QString f5 = "", QString f6 = "");
