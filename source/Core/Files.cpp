@@ -86,12 +86,25 @@ namespace Jui
 	}
 
 	bool File::exist() { return file.exists(); }
-	int File::lenght() { return file.size(); }
-	int File::size() { 
-		return QStorageInfo(name()).bytesTotal();
-		//return QFileInfo(file).size(); 
-	}
+	int File::size() { return file.size(); }
 	QString File::name() { return file.fileName(); }
+
+	QStringList File::read(QString separator) {
+		QString txt;
+		if (file.open(QIODevice::ReadOnly)) {
+			while (!file.atEnd()) { txt += QString(file.readLine()); }
+			file.close();
+		}
+		return txt.split(separator);
+	}
+	QStringList File::readLines() {
+		QStringList list;
+		if (file.open(QIODevice::ReadOnly)) {
+			while (!file.atEnd()) { list.append(QString(file.readLine())); }
+			file.close();
+		}
+		return list;
+	}
 
 	File &File::show() {
 		QString path = file.fileName();
@@ -99,19 +112,22 @@ namespace Jui
 		else { qDebug() << "File" << path << "doesn't exist"; }
 		return *this;
 	}
-
-	void File::write(QString data) {
-		file.open(QIODevice::WriteOnly);
-		file.write(data.toUtf8());
-		file.close();
+	File &File::write(QString txt, bool newLine) {
+		if (file.open(QIODevice::WriteOnly)) {
+			file.write(txt.toUtf8());
+			if (newLine) { file.write("\n"); }
+			file.close();
+		}
+		return *this;
 	}
-	
-	QStringList File::read() {
-		QStringList list;
-		file.open(QIODevice::ReadOnly);
-		while (!file.atEnd()) { list.append(QString(file.readLine())); }
-		file.close();
-		return list;
+	File &File::append(QString txt, bool newLine) {
+		if (file.open(QIODevice::WriteOnly | QIODevice::Append))
+		{
+			file.write(txt.toUtf8());
+			if (newLine) { file.write("\n"); }
+			file.close();
+		}
+		return *this;
 	}
 
 	QDebug operator<<(QDebug dbg, File &file)
@@ -124,7 +140,6 @@ namespace Jui
 		dbg.nospace() << *file;
 		return dbg.space();
 	}
-
 
 	/*
 	void File::write(Data data) {
@@ -144,7 +159,6 @@ namespace Jui
 		return ba;
 	}
 	*/
-
 
 	// Leaf /////////////////////////////////////////////////////
 

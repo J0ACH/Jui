@@ -53,17 +53,17 @@ namespace Jui
 
 		static void show(Path folder);
 		static bool exist(Path folder);
-		static bool make(Path folder);
-		
-		File &show();
+		static bool make(Path folder);		
 
 		bool exist();
-		int lenght();
 		int size();
 		QString name();
+		QStringList readLines();
+		QStringList read(QString separator = "\n");
 
-		void write(QString data);
-		QStringList read();
+		File &show();
+		File &write(QString txt, bool newLine = true);
+		File &append(QString txt, bool newLine = true);
 
 		/*
 		void write(Data data);
