@@ -24,11 +24,11 @@ namespace Jui
 		Path(QString f1, QString f2, QString f3 = "", QString f4 = "", QString f5 = "", QString f6 = "");
 
 		static Path root();
+		static Path disk(QString latter = "C");
 		static Path current();
 		static Path home();
 		static Path temp();
-		static Path disk(QString latter = "C");
-		
+
 		Path &add(QStringList folder);
 		Path &add(QString folder);
 		Path &add(QString f1, QString f2, QString f3 = "", QString f4 = "", QString f5 = "", QString f6 = "");
@@ -36,7 +36,8 @@ namespace Jui
 
 		QString toString();
 		QStringList toList();
-	
+		int level();
+
 		Path operator + (Path otherPath);
 
 	private:
@@ -53,7 +54,7 @@ namespace Jui
 
 		static void show(Path folder);
 		static bool exist(Path folder);
-		static bool make(Path folder);		
+		static bool make(Path folder);
 
 		bool exist();
 		int size();
@@ -68,7 +69,7 @@ namespace Jui
 		/*
 		void write(Data data);
 		QByteArray read();
-		*/		
+		*/
 
 	private:
 		QFile file;
@@ -76,19 +77,18 @@ namespace Jui
 	QDebug operator<<(QDebug dbg, File *file);
 	QDebug operator<<(QDebug dbg, File &file);
 
-
 	// Leaf /////////////////////////////////////////////////////
 
 	class Leaf {
 	public:
 		Leaf();
 		Leaf(QString name, QVariant val);
+		Leaf(Path path, QString name, QVariant val);
 		Leaf(QByteArray ba);
 
+		Leaf &path_(Path folder);
 		Leaf &key_(QString name);
 		Leaf &value_(QVariant val);
-		Leaf &level_(int n);
-		Leaf &path_(Path folder);
 
 		QString key();
 		QVariant value();
@@ -97,7 +97,7 @@ namespace Jui
 		Path path();
 
 		QString toString();
-		
+
 	private:
 		QMap<QString, QVariant> map;
 		QString tabs(int level);
@@ -130,25 +130,6 @@ namespace Jui
 
 	};
 
-	// Folder /////////////////////////////////////////////////////
-/*
-	class Folder {
-	public:
-		Folder();
-		Folder(QString path);
-
-		void make(QString name);
-
-		void enter(QString name);
-		void escape();
-
-		QString current();
-		void show();
-
-	private:
-		QDir dir;
-	};
-*/
 }
 
 

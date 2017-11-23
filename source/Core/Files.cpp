@@ -13,11 +13,11 @@ namespace Jui
 		add(f1, f2, f3, f4, f5, f6);
 	}
 
-	Path Path::root() { return Path(QDir::rootPath()); }
+	Path Path::root() { return Path().add("root"); }
+	Path Path::disk(QString latter) { return Path(latter.toUpper() + ":"); }
 	Path Path::current() { return Path(QDir::currentPath()); }
 	Path Path::home() { return Path(QDir::homePath()); }
 	Path Path::temp() { return Path(QDir::tempPath()); }
-	Path Path::disk(QString latter) { return Path(latter.toUpper() + ":"); }
 
 	Path &Path::add(QStringList folder) {
 		dir.append(folder);
@@ -40,6 +40,7 @@ namespace Jui
 
 	QString Path::toString() { return QStringList(dir).join("/"); }
 	QStringList Path::toList() { return QStringList(dir); }
+	int Path::level() { return dir.size() - 1; }
 
 	Path Path::operator + (Path otherPath) {
 		QStringList newPath(toList());
@@ -162,17 +163,12 @@ namespace Jui
 
 	// Leaf /////////////////////////////////////////////////////
 
-	Leaf::Leaf() {
-		map = QMap<QString, QVariant>();
-		tabs(1);
-		path_(Path("root"));
-	}
-	Leaf::Leaf(QString name, QVariant val) {
-		map = QMap<QString, QVariant>();
-		tabs(1);
+	Leaf::Leaf() { Leaf::Leaf(Path::root(), "Untitled", "Nan"); }
+	Leaf::Leaf(QString name, QVariant val) { Leaf::Leaf(Path::root(), name, val); }
+	Leaf::Leaf(Path path, QString name, QVariant val) {
 		key_(name);
 		value_(val);
-		path_(Path("root"));
+		path_(path);
 	}
 	Leaf::Leaf(QByteArray ba) {
 		QList<QByteArray> lines = ba.split('\n');
@@ -181,15 +177,11 @@ namespace Jui
 			qDebug() << oneLine;
 		}
 	}
-	/*
-	Leaf::Leaf(QString folder, QString key, QVariant value) {
-		map.insert("path", folder);
-		map.insert("key", key);
-		map.insert("value", value);
-		map.insert("type", value.typeName());
-	}
-	*/
 
+	Leaf &Leaf::path_(Path folder) {
+		map.insert("path", folder.toString());
+		return *this;
+	}
 	Leaf &Leaf::key_(QString name) {
 		map.insert("key", name);
 		return *this;
@@ -210,47 +202,40 @@ namespace Jui
 		}
 		return *this;
 	}
-	Leaf &Leaf::level_(int n) {
-		if (n < 1) { n = 1; }
-		map.insert("level", n);
-		return *this;
-	}
-	Leaf &Leaf::path_(Path folder) {
-		map.insert("path", folder.toString());
-		return *this;
-	}
 
 	QString Leaf::key() { return map.value("key").toString(); }
 	QVariant Leaf::value() { return map.value("value"); }
 	QVariant::Type Leaf::type() { return QVariant::nameToType(map.value("type").typeName()); }
 	Path Leaf::path() { return Path(map.value("path").toString().split("/")); }
+	int Leaf::level() { return path().level(); }
 
 	QString Leaf::toString() {
 		QString txt;
 		QMap<QString, QVariant> data(map);
-		QString key = data.take("key").toString();
-		QString type = data.take("type").typeName();
-		int level = data.take("level").toInt();
+		QString strPath = data.take("path").toString();
+		QString strKey = data.take("key").toString();
+		QString strType = data.take("type").typeName();
 
-		txt += tabs(level - 1) + "[\n";
-		txt += tabs(level) + "key: " + key + ",\n";
-		txt += tabs(level) + "type: " + type + ",\n";
+		txt += tabs(level()) + "[\n";
+		txt += tabs(level() + 1) + "path: " + strPath + ",\n";
+		txt += tabs(level() + 1) + "key: " + strKey + ",\n";
+		txt += tabs(level() + 1) + "type: " + strType + ",\n";
 
-		foreach(QString key, data.keys())
+		foreach(QString oneKey, data.keys())
 		{
-			txt += tabs(level);
-			txt += key + ": ";
-			txt += data.value(key).toString();
-			if (key != data.keys().last()) { txt += ","; };
+			txt += tabs(level() + 1);
+			txt += oneKey + ": ";
+			txt += data.value(oneKey).toString();
+			if (oneKey != data.keys().last()) { txt += ","; };
 			txt += "\n";
 		}
-		txt += tabs(level - 1) + "]\n";
+		txt += tabs(level()) + "]\n";
 		return txt;
 	}
 
 	QString Leaf::tabs(int level) {
 		QString tabs = "";
-		for (int i = 0; i <= level; i++) { tabs += "\t"; };
+		for (int i = 0; i < level; i++) { tabs += "\t"; };
 		return tabs;
 	}
 
@@ -356,35 +341,6 @@ namespace Jui
 		return txt;
 	}
 
-	// Folder /////////////////////////////////////////////////////
-	/*
-	Folder::Folder() {
-		dir = QDir::current();
-	}
-	Folder::Folder(QString path) {
-		dir = QDir(path);
-		if (!dir.exists()) { bool done = dir.mkpath(dir.path()); }
-		QDir::setCurrent(path);
-	}
-
-	void Folder::make(QString name) { dir.mkdir(name); }
-
-	void Folder::enter(QString name) {
-		bool done = dir.cd(name);
-		if (done) { QDir::setCurrent(dir.path()); }
-		//else { qDebug() << "Folder::enter err (" << name << ") at" << current(); }
-	}
-	void Folder::escape() {
-		bool done = dir.cdUp();
-		if (done) { QDir::setCurrent(dir.path()); }
-	}
-
-	QString Folder::current() { return QDir::currentPath(); }
-
-	void Folder::show() {
-		bool done = QDesktopServices::openUrl(QUrl(current()));
-	}
-	*/
 
 
 }

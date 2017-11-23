@@ -22,11 +22,16 @@ namespace Jui
 		File::make(path);
 		//File::show(path);
 
-		Path dir("root", "folder1");
-		Leaf leaf;
-		leaf.key_("jmeno").value_("jsemToAAAA").path_(Path::root().add("aaa"));
+		//Path dir("root", "folder1");
 
-		qDebug() << leaf.path();
+		Leaf leaf;
+		leaf.key_("jmeno").value_("jsemToAAAA").path_(Path::root().add("lide"));
+		
+		File f(path, "test");
+		f.write(leaf.toString());
+		f.show();
+
+		//qDebug() << leaf.level();
 		//qDebug() << leaf.toString();
 		/*
 		File f(path, "data");
