@@ -239,6 +239,17 @@ namespace Jui
 		return tabs;
 	}
 
+	QDebug operator<<(QDebug dbg, Leaf &leaf)
+	{
+		dbg.nospace() << "Leaf(" << leaf.key() << ")";
+		return dbg.space();
+	}
+	QDebug operator<<(QDebug dbg, Leaf *leaf)
+	{
+		dbg.nospace() << *leaf;
+		return dbg.space();
+	}
+
 
 	// Data /////////////////////////////////////////////////////
 

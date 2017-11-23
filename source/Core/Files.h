@@ -90,11 +90,11 @@ namespace Jui
 		Leaf &key_(QString name);
 		Leaf &value_(QVariant val);
 
+		Path path();
 		QString key();
 		QVariant value();
 		QVariant::Type type();
 		int level();
-		Path path();
 
 		QString toString();
 
@@ -102,6 +102,8 @@ namespace Jui
 		QMap<QString, QVariant> map;
 		QString tabs(int level);
 	};
+	QDebug operator<<(QDebug dbg, Leaf *file);
+	QDebug operator<<(QDebug dbg, Leaf &file);
 
 	// Data /////////////////////////////////////////////////////
 
