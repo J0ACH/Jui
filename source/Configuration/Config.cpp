@@ -24,13 +24,24 @@ namespace Jui
 
 		Path dir = Path::root() + Path("lide");
 
-		Leaf l1(dir, "jmeno", "Emil");
-		qDebug() << l1;
+		Leaf l1(dir, "jmeno1", "Emil");
+		Leaf l2(dir, "jmeno2", "Jarda");
+		//qDebug() << l1;
+
+		Data d;
+		d.add(Path::root(), "jmeno", "Alva");
+		d.add(dir, "jmeno2", "Jarda");
+		d.add(Leaf(dir, "jmeno1", "Emil"));
 		//leaf.key_("jmeno").value_("jsemToAAAA").path_(Path::root().add("lide"));
-		
-		//File f(path, "test");
-		//f.write(leaf.toString());
-		//f.show();
+	
+		d.filter(Path("root", "lide"));
+		//qDebug() << d.keys();
+
+		/*
+		File f(path, "test");
+		f.write(d.at(dir, "jmeno1").toString());
+		f.show();
+		*/
 
 	}
 

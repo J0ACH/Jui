@@ -253,9 +253,7 @@ namespace Jui
 
 	// Data /////////////////////////////////////////////////////
 
-	Data::Data() {
-		currentLevel = 1;
-	}
+	Data::Data() { }
 
 	Data::Data(QByteArray ba) {
 		//qDebug() << "Data(QByteArray ba) /////////////////////";
@@ -267,90 +265,136 @@ namespace Jui
 		}
 	}
 
-	void Data::add(QString key, QVariant value) {
-		Leaf leaf;
-		leaf.key_(key);
-		leaf.value_(value);
-
-		/*
-		Data data;
-		QColor color;
-		QFont font;
-
-		switch (value.type())
-		{
-		case QVariant::Type::Color:
-			color = value.value<QColor>();
-			data.add("red", color.red());
-			data.add("green", color.green());
-			data.add("blue", color.blue());
-			data.add("alpha", color.alpha());
-			add(key, data);
-			break;
-		case QVariant::Type::Font:
-			font = value.value<QFont>();
-			data.add("family", font.family());
-			data.add("pointSize", font.pointSize());
-			add(key, data);
-			break;
-		case QVariant::Type::Map:
-			library.insert(key, value.toMap());
-			break;
-		default:
-			library.insert(key, value);
-			break;
-		};
-		*/
+	Data &Data::add(Leaf leaf)
+	{
+		library.insert(mapPath(leaf), leaf);
+		qDebug() << "add:" << mapPath(leaf);
+		return *this;
 	}
-	void Data::add(QString key, Data value) { library.insert(key, value.map()); }
+	Data &Data::add(Path path, QString key, QVariant value)
+	{
+		add(Leaf(path, key, value));
+		return *this;
+	}
 
-	QVariant Data::at(QString key) { return library.value(key); }
-	QList<QString> Data::keys() { return library.keys(); }
-	QList<QVariant> Data::nodes() { return library.values(); }
-	QMap<QString, QVariant> Data::map() { return library; }
+	Leaf Data::at(Path path, QString key) { return library.value(mapPath(path, key)); }
+	QStringList Data::keys() { return library.keys(); }
+	QList<Leaf> Data::filter(Path path) {
+		QList<Leaf> list;
+		QStringList paths = keys().filter(path.toString());
+	//	qDebug() << path.toString();
+		foreach(QString onePath, paths) {
+			//list.append(at(onePath));
+			qDebug() << onePath;
+		}
+		return list;
+	}
 
-	void Data::print() { foreach(QString oneLine, map2string(library)) { qDebug() << oneLine; } }
+	QString Data::toString() {
+		QString txt;
+		foreach(Leaf oneLeaf, library) {
+			txt += oneLeaf.toString();// +"\n";
+			//if (oneLeaf != library2.values().last()) { txt += ","; };
 
-	QStringList Data::map2string(QMap<QString, QVariant> data, int level) {
-		QMap<QString, QVariant> temp;
-		QStringList txt;
-		QString tabs = "";
-		for (int i = 0; i < level; i++) { tabs += "    "; }
-		//for (int i = 0; i < level; i++) { tabs += "\t"; }
-
-		foreach(QString key, data.keys())
-		{
-			QVariant value = data.value(key);
-			switch (data.value(key).type())
-			{
-			case QVariant::Type::Map:
-				txt.append(tabs + "- " + key + "[" + value.typeName() + "]: ");
-				foreach(QString oneLine, map2string(value.toMap(), level + 1)) {
-					txt.append(oneLine);
-				}
-				//txt.append(tabs + "-");
-				break;
-			default:
-
-				txt.append(tabs + "- " + key + "[" + value.typeName() + "]: " + value.toString());
-				//txt.append(tabs + "- " + key + ": " + value.toString());
-				break;
-			}
 		}
 		return txt;
 	}
 
-	Data::operator QByteArray() {
-		QByteArray ba;
-		foreach(QString oneLine, map2string(library)) { ba.append(oneLine + "\n"); }
-		return ba;
+	QString Data::mapPath(Path path, QString key) {
+		return path.toString() + "/" + key;
+	}
+	QString Data::mapPath(Leaf leaf) {
+		return leaf.path().toString() + "/" + leaf.key();
 	}
 
-	Data::operator QString() {
-		QString txt;
-		foreach(QString oneLine, map2string(library)) { txt += oneLine + "\n"; }
-		return txt;
-	}
+	/*
+	void Data::add(QString key, QVariant value) {
+		Leaf leaf;
+		leaf.key_(key);
+		leaf.value_(value);
+	*/
+
+	/*
+	Data data;
+	QColor color;
+	QFont font;
+
+	switch (value.type())
+	{
+	case QVariant::Type::Color:
+		color = value.value<QColor>();
+		data.add("red", color.red());
+		data.add("green", color.green());
+		data.add("blue", color.blue());
+		data.add("alpha", color.alpha());
+		add(key, data);
+		break;
+	case QVariant::Type::Font:
+		font = value.value<QFont>();
+		data.add("family", font.family());
+		data.add("pointSize", font.pointSize());
+		add(key, data);
+		break;
+	case QVariant::Type::Map:
+		library.insert(key, value.toMap());
+		break;
+	default:
+		library.insert(key, value);
+		break;
+	};
+	*/
+	//	}
+
+		//void Data::add(QString key, Data value) { library.insert(key, value.map()); }
+	/*
+		QVariant Data::at(QString key) { return library.value(key); }
+		QList<QString> Data::keys() { return library.keys(); }
+		QList<QVariant> Data::nodes() { return library.values(); }
+		QMap<QString, QVariant> Data::map() { return library; }
+
+		void Data::print() { foreach(QString oneLine, map2string(library)) { qDebug() << oneLine; } }
+
+		QStringList Data::map2string(QMap<QString, QVariant> data, int level) {
+			QMap<QString, QVariant> temp;
+			QStringList txt;
+			QString tabs = "";
+			for (int i = 0; i < level; i++) { tabs += "    "; }
+			//for (int i = 0; i < level; i++) { tabs += "\t"; }
+
+			foreach(QString key, data.keys())
+			{
+				QVariant value = data.value(key);
+				switch (data.value(key).type())
+				{
+				case QVariant::Type::Map:
+					txt.append(tabs + "- " + key + "[" + value.typeName() + "]: ");
+					foreach(QString oneLine, map2string(value.toMap(), level + 1)) {
+						txt.append(oneLine);
+					}
+					//txt.append(tabs + "-");
+					break;
+				default:
+
+					txt.append(tabs + "- " + key + "[" + value.typeName() + "]: " + value.toString());
+					//txt.append(tabs + "- " + key + ": " + value.toString());
+					break;
+				}
+			}
+			return txt;
+		}
+
+		Data::operator QByteArray() {
+			QByteArray ba;
+			foreach(QString oneLine, map2string(library)) { ba.append(oneLine + "\n"); }
+			return ba;
+		}
+
+		Data::operator QString() {
+			QString txt;
+			foreach(QString oneLine, map2string(library)) { txt += oneLine + "\n"; }
+			return txt;
+		}
+	*/
 
 
 

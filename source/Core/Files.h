@@ -112,25 +112,27 @@ namespace Jui
 		Data();
 		Data(QByteArray ba);
 
-		void add(QString key, QVariant value);
-		void add(QString key, Data value);
+		Data &add(Leaf leaf);
+		Data &add(Path path, QString key, QVariant value);
 
-		QVariant at(QString key);
+		Leaf at(Path path, QString key);
+		QStringList keys();
+		QList<Leaf> filter(Path path);
+
+		/*
 		QList<QVariant> nodes();
-		QList<QString> keys();
 		QMap<QString, QVariant> map();
+		*/
 
-		void print();
-		operator QByteArray();
-		operator QString();
+		QString toString();
+		//operator QByteArray();
+		//operator QString();
 
 	private:
-		QMap<QString, QVariant> library;
-
-		QStringList map2string(QMap<QString, QVariant> data, int level = 0);
-		int currentLevel;
-
-	};
+		QMap<QString, Leaf> library;
+		QString mapPath(Path path, QString key);
+		QString mapPath(Leaf laef);
+			};
 
 }
 
