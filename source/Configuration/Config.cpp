@@ -24,20 +24,24 @@ namespace Jui
 		File file(path, "dataTest");
 
 		Path dir = Path::root() + Path("lide");
-		Leaf leaf1(dir, "jmeno1", "Emil");
-		Leaf leaf2(dir, "jmeno2", "Jarda");
+		Leaf leaf1(dir, "jmenoA", "Bara");
+		Leaf leaf2(dir, "jmeno1", "Emil");
+		Leaf leaf3(dir, "jmeno2", "Jarda");
 		//qDebug() << l1;
 
 		Data d;
-		d.add(Path::root(), "jmeno", "Alva");
+		d.add(Path::root(), "jmenoA", "Alva");
 		d.add(leaf1);
 		d.add(leaf2);
+		d.add(leaf3);
 
 		file.write(d.toString());
 		file.show();
 
-		//d.leafs(Path::root());
-		d.leafs(dir);
+		//d.atPath(Path::root());
+		//d.atPath(dir);
+
+		d.filter("jmenoA");
 	}
 
 	void Config::click() {

@@ -124,10 +124,9 @@ namespace Jui
 		QList<Leaf> values();
 
 		Leaf at(Path path, QString key);
-		QList<Leaf> filter(Path path);
+		QList<Leaf> atPath(Path path);
 
-		QStringList folders(Path path);
-		QList<Leaf> leafs(Path path);
+		QList<Leaf> filter(QString path);
 		
 		QString toString();
 		
