@@ -18,31 +18,26 @@ namespace Jui
 		//Path path("home", "ahoj", "ahoj", "mozna", "nevim", "zase");
 		//Path path({"root", "mozna", "nevim", "zase" });
 		Path path = Path::disk().add("testFolder");
-		//qDebug() << path;
 		File::make(path);
-		//File::show(path);
+		File::show(path);
+
+		File file(path, "dataTest");
 
 		Path dir = Path::root() + Path("lide");
-
-		Leaf l1(dir, "jmeno1", "Emil");
-		Leaf l2(dir, "jmeno2", "Jarda");
+		Leaf leaf1(dir, "jmeno1", "Emil");
+		Leaf leaf2(dir, "jmeno2", "Jarda");
 		//qDebug() << l1;
 
 		Data d;
 		d.add(Path::root(), "jmeno", "Alva");
-		d.add(dir, "jmeno2", "Jarda");
-		d.add(Leaf(dir, "jmeno1", "Emil"));
-		//leaf.key_("jmeno").value_("jsemToAAAA").path_(Path::root().add("lide"));
-	
-		d.filter(Path("root", "lide"));
-		//qDebug() << d.keys();
+		d.add(leaf1);
+		d.add(leaf2);
 
-		/*
-		File f(path, "test");
-		f.write(d.at(dir, "jmeno1").toString());
-		f.show();
-		*/
+		file.write(d.toString());
+		file.show();
 
+		//d.leafs(Path::root());
+		d.leafs(dir);
 	}
 
 	void Config::click() {

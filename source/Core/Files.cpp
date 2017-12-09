@@ -42,6 +42,10 @@ namespace Jui
 	QStringList Path::toList() { return QStringList(dir); }
 	int Path::level() { return dir.size() - 1; }
 
+	bool Path::operator == (Path otherPath) {
+		if (dir == otherPath.toList()) { return true; }
+		return false;
+	}
 	Path Path::operator + (Path otherPath) {
 		QStringList newPath(toList());
 		newPath.append(otherPath.toList());
@@ -267,8 +271,15 @@ namespace Jui
 
 	Data &Data::add(Leaf leaf)
 	{
-		library.insert(mapPath(leaf), leaf);
-		qDebug() << "add:" << mapPath(leaf);
+		library.insert(getKey(leaf), leaf);
+		//qDebug() << "add:" << mapPath(leaf);
+		return *this;
+	}
+	Data &Data::add(Path path, QVariant value)
+	{
+		QStringList list = path.toList();
+		QString key = list.takeLast();
+		add(Leaf(list, key, value));
 		return *this;
 	}
 	Data &Data::add(Path path, QString key, QVariant value)
@@ -277,15 +288,39 @@ namespace Jui
 		return *this;
 	}
 
-	Leaf Data::at(Path path, QString key) { return library.value(mapPath(path, key)); }
+	Leaf Data::at(Path path, QString key) { return library.value(getKey(path, key)); }
+
 	QStringList Data::keys() { return library.keys(); }
+	QList<Leaf> Data::values() { return library.values(); }
+
 	QList<Leaf> Data::filter(Path path) {
 		QList<Leaf> list;
 		QStringList paths = keys().filter(path.toString());
-	//	qDebug() << path.toString();
 		foreach(QString onePath, paths) {
-			//list.append(at(onePath));
+			list.append(library.value(onePath));
+			qDebug() << "Data::filter at path added:" << onePath;
+		}
+		return list;
+	}
+
+	QStringList Data::folders(Path path) {
+		QStringList foldersList;
+		QStringList paths = keys().filter(path.toString());
+		foreach(QString onePath, paths) {
 			qDebug() << onePath;
+		}
+		return foldersList;
+	}
+	QList<Leaf> Data::leafs(Path path) {
+		//qDebug() << "Data::leafs path.toString:" << path.toString();
+
+		QList<Leaf> list;
+		foreach(Leaf oneLeaf, values()) {
+			//qDebug() << "Data::leafs leaf.key:" << oneLeaf.key();
+			if (oneLeaf.path() == path) {
+				list.append(oneLeaf);
+				qDebug() << "Data::leafs IF leaf.key:" << oneLeaf.key();
+			}
 		}
 		return list;
 	}
@@ -300,12 +335,9 @@ namespace Jui
 		return txt;
 	}
 
-	QString Data::mapPath(Path path, QString key) {
-		return path.toString() + "/" + key;
-	}
-	QString Data::mapPath(Leaf leaf) {
-		return leaf.path().toString() + "/" + leaf.key();
-	}
+	QString Data::getKey(Leaf leaf) { return leaf.path().toString() + "/" + leaf.key(); }
+	QString Data::getKey(Path path, QString key) { return path.toString() + "/" + key; }
+
 
 	/*
 	void Data::add(QString key, QVariant value) {

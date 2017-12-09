@@ -11,6 +11,9 @@
 #include <QFont>
 #include <QDebug>
 
+//#include <stdarg.h>
+//using System.Diagnostics;
+
 namespace Jui
 {
 
@@ -38,6 +41,7 @@ namespace Jui
 		QStringList toList();
 		int level();
 
+		bool operator == (Path otherPath);
 		Path operator + (Path otherPath);
 
 	private:
@@ -113,26 +117,27 @@ namespace Jui
 		Data(QByteArray ba);
 
 		Data &add(Leaf leaf);
+		Data &add(Path path, QVariant value);
 		Data &add(Path path, QString key, QVariant value);
 
-		Leaf at(Path path, QString key);
 		QStringList keys();
+		QList<Leaf> values();
+
+		Leaf at(Path path, QString key);
 		QList<Leaf> filter(Path path);
 
-		/*
-		QList<QVariant> nodes();
-		QMap<QString, QVariant> map();
-		*/
-
+		QStringList folders(Path path);
+		QList<Leaf> leafs(Path path);
+		
 		QString toString();
-		//operator QByteArray();
-		//operator QString();
-
+		
 	private:
 		QMap<QString, Leaf> library;
-		QString mapPath(Path path, QString key);
-		QString mapPath(Leaf laef);
-			};
+		
+		QString getKey(Leaf laef);
+		QString getKey(Path path, QString key);
+
+	};
 
 }
 
