@@ -23,25 +23,30 @@ namespace Jui
 
 		File file(path, "dataTest");
 
-		Path dir = Path::root() + Path("lide");
-		Leaf leaf1(dir, "jmenoA", "Bara");
-		Leaf leaf2(dir, "jmeno1", "Emil");
-		Leaf leaf3(dir, "jmeno2", "Jarda");
+		//Path dir = Path::root() + Path("lide");
+		Path dirMuzi = Path("lide", "muzi");
+		Path dirZeny = Path("lide", "zeny");
+		Leaf leaf1(dirZeny, "jmeno1", "Bara");
+		Leaf leaf2(dirMuzi, "jmeno1", "Emil");
+		Leaf leaf3(dirMuzi, "jmeno2", "Jarda");
 		//qDebug() << l1;
 
 		Data d;
-		d.add(Path::root(), "jmenoA", "Alva");
+		d.add(Path("lide", "zeny", "divky"), "Alva");
 		d.add(leaf1);
 		d.add(leaf2);
 		d.add(leaf3);
 
-		file.write(d.toString());
-		file.show();
 
 		//d.atPath(Path::root());
 		//d.atPath(dir);
 
-		d.filter("jmenoA");
+		Data d2 = d.filter("jmenoA");
+		qDebug() << "D2.size:" <<d2.size();
+		qDebug() << "D2.isEmpty:" << d2.isEmpty();
+
+		file.write(d2.toString());
+		file.show();
 	}
 
 	void Config::click() {

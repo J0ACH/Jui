@@ -279,6 +279,7 @@ namespace Jui
 	{
 		QStringList list = path.toList();
 		QString key = list.takeLast();
+		//if (list.isEmpty()) { list.append(Path::root().toString()); }
 		add(Leaf(list, key, value));
 		return *this;
 	}
@@ -287,9 +288,27 @@ namespace Jui
 		add(Leaf(path, key, value));
 		return *this;
 	}
-	
+
+	Data Data::filter(QString path) {
+		Data newCopy;
+		QStringList paths = keys().filter(path);
+		qDebug() << "Data::filter PATHS:" << paths;
+
+		foreach(QString onePath, paths) {
+			newCopy.add(library.value(onePath));
+			qDebug() << "Data::filter at path added:" << onePath;
+		}
+		return newCopy;
+	}
+
 	QStringList Data::keys() { return library.keys(); }
 	QList<Leaf> Data::values() { return library.values(); }
+
+	int Data::size() { return keys().size(); }
+	bool Data::isEmpty() { 
+		if (size() > 0) { return false; }
+		return true; 
+	}
 
 	Leaf Data::at(Path path, QString key) { return library.value(getKey(path, key)); }
 	QList<Leaf> Data::atPath(Path path) {
@@ -300,9 +319,10 @@ namespace Jui
 		return list;
 	}
 
+	/*
 	QList<Leaf> Data::filter(QString path) {
 		QList<Leaf> list;
-			qDebug() << "Data::filter KEYS:" << keys();
+		qDebug() << "Data::filter KEYS:" << keys();
 
 		QStringList paths = keys().filter(path);
 		qDebug() << "Data::filter PATHS:" << paths;
@@ -313,6 +333,7 @@ namespace Jui
 		}
 		return list;
 	}
+	*/
 
 	QString Data::toString() {
 		QString txt;

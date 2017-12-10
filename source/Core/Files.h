@@ -119,15 +119,18 @@ namespace Jui
 		Data &add(Leaf leaf);
 		Data &add(Path path, QVariant value);
 		Data &add(Path path, QString key, QVariant value);
+		
+		Data filter(QString path);
 
 		QStringList keys();
 		QList<Leaf> values();
+		
+		int size();
+		bool isEmpty();
 
 		Leaf at(Path path, QString key);
 		QList<Leaf> atPath(Path path);
-
-		QList<Leaf> filter(QString path);
-		
+				
 		QString toString();
 		
 	private:
