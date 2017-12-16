@@ -123,8 +123,7 @@ namespace Jui
 		Data filter(QString path);
 
 		QStringList keys();
-		QList<Leaf> values();
-		
+		QList<Leaf> values();		
 		int size();
 		bool isEmpty();
 

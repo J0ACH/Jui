@@ -272,14 +272,12 @@ namespace Jui
 	Data &Data::add(Leaf leaf)
 	{
 		library.insert(getKey(leaf), leaf);
-		//qDebug() << "add:" << mapPath(leaf);
 		return *this;
 	}
 	Data &Data::add(Path path, QVariant value)
 	{
 		QStringList list = path.toList();
 		QString key = list.takeLast();
-		//if (list.isEmpty()) { list.append(Path::root().toString()); }
 		add(Leaf(list, key, value));
 		return *this;
 	}
@@ -292,22 +290,16 @@ namespace Jui
 	Data Data::filter(QString path) {
 		Data newCopy;
 		QStringList paths = keys().filter(path);
-		qDebug() << "Data::filter PATHS:" << paths;
-
-		foreach(QString onePath, paths) {
-			newCopy.add(library.value(onePath));
-			qDebug() << "Data::filter at path added:" << onePath;
-		}
+		foreach(QString onePath, paths) { newCopy.add(library.value(onePath)); }
 		return newCopy;
 	}
 
 	QStringList Data::keys() { return library.keys(); }
 	QList<Leaf> Data::values() { return library.values(); }
-
 	int Data::size() { return keys().size(); }
-	bool Data::isEmpty() { 
+	bool Data::isEmpty() {
 		if (size() > 0) { return false; }
-		return true; 
+		return true;
 	}
 
 	Leaf Data::at(Path path, QString key) { return library.value(getKey(path, key)); }
@@ -318,22 +310,6 @@ namespace Jui
 		}
 		return list;
 	}
-
-	/*
-	QList<Leaf> Data::filter(QString path) {
-		QList<Leaf> list;
-		qDebug() << "Data::filter KEYS:" << keys();
-
-		QStringList paths = keys().filter(path);
-		qDebug() << "Data::filter PATHS:" << paths;
-
-		foreach(QString onePath, paths) {
-			list.append(library.value(onePath));
-			qDebug() << "Data::filter at path added:" << onePath;
-		}
-		return list;
-	}
-	*/
 
 	QString Data::toString() {
 		QString txt;
@@ -347,96 +323,6 @@ namespace Jui
 
 	QString Data::getKey(Leaf leaf) { return leaf.path().toString() + "/" + leaf.key(); }
 	QString Data::getKey(Path path, QString key) { return path.toString() + "/" + key; }
-
-
-	/*
-	void Data::add(QString key, QVariant value) {
-		Leaf leaf;
-		leaf.key_(key);
-		leaf.value_(value);
-	*/
-
-	/*
-	Data data;
-	QColor color;
-	QFont font;
-
-	switch (value.type())
-	{
-	case QVariant::Type::Color:
-		color = value.value<QColor>();
-		data.add("red", color.red());
-		data.add("green", color.green());
-		data.add("blue", color.blue());
-		data.add("alpha", color.alpha());
-		add(key, data);
-		break;
-	case QVariant::Type::Font:
-		font = value.value<QFont>();
-		data.add("family", font.family());
-		data.add("pointSize", font.pointSize());
-		add(key, data);
-		break;
-	case QVariant::Type::Map:
-		library.insert(key, value.toMap());
-		break;
-	default:
-		library.insert(key, value);
-		break;
-	};
-	*/
-	//	}
-
-		//void Data::add(QString key, Data value) { library.insert(key, value.map()); }
-	/*
-		QVariant Data::at(QString key) { return library.value(key); }
-		QList<QString> Data::keys() { return library.keys(); }
-		QList<QVariant> Data::nodes() { return library.values(); }
-		QMap<QString, QVariant> Data::map() { return library; }
-
-		void Data::print() { foreach(QString oneLine, map2string(library)) { qDebug() << oneLine; } }
-
-		QStringList Data::map2string(QMap<QString, QVariant> data, int level) {
-			QMap<QString, QVariant> temp;
-			QStringList txt;
-			QString tabs = "";
-			for (int i = 0; i < level; i++) { tabs += "    "; }
-			//for (int i = 0; i < level; i++) { tabs += "\t"; }
-
-			foreach(QString key, data.keys())
-			{
-				QVariant value = data.value(key);
-				switch (data.value(key).type())
-				{
-				case QVariant::Type::Map:
-					txt.append(tabs + "- " + key + "[" + value.typeName() + "]: ");
-					foreach(QString oneLine, map2string(value.toMap(), level + 1)) {
-						txt.append(oneLine);
-					}
-					//txt.append(tabs + "-");
-					break;
-				default:
-
-					txt.append(tabs + "- " + key + "[" + value.typeName() + "]: " + value.toString());
-					//txt.append(tabs + "- " + key + ": " + value.toString());
-					break;
-				}
-			}
-			return txt;
-		}
-
-		Data::operator QByteArray() {
-			QByteArray ba;
-			foreach(QString oneLine, map2string(library)) { ba.append(oneLine + "\n"); }
-			return ba;
-		}
-
-		Data::operator QString() {
-			QString txt;
-			foreach(QString oneLine, map2string(library)) { txt += oneLine + "\n"; }
-			return txt;
-		}
-	*/
 
 
 
