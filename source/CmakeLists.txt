@@ -15,8 +15,6 @@ add_library(Jui SHARED
 target_include_directories(Jui
 	PRIVATE
 		${Core_hdr}	
-	PUBLIC
-		${_qtIncludeDirs}
 	INTERFACE 
 		$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>
 		$<INSTALL_INTERFACE:${PROJECT_NAME}_${PROJECT_VERSION}/include>
@@ -35,55 +33,6 @@ add_custom_command(TARGET Jui
 		COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/include
 		COMMAND ${CMAKE_COMMAND} -E copy_if_different ${Core_hdr} ${CMAKE_BINARY_DIR}/include
 )
-
-#[[
-string(TOUPPER ${CMAKE_CONFIGURATION_TYPES} configType)
-set_target_properties( Jui
-    PROPERTIES
-		ARCHIVE_OUTPUT_DIRECTORY_${configType} ${buildDir}/lib
-		LIBRARY_OUTPUT_DIRECTORY_${configType} ${buildDir}/lib
-		RUNTIME_OUTPUT_DIRECTORY_${configType} ${buildDir}/bin
-		DEBUG_POSTFIX _d
-)
-
-add_custom_command(TARGET Jui
-	POST_BUILD
-		COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/include
-		COMMAND ${CMAKE_COMMAND} -E copy_if_different ${Core_hdr} ${CMAKE_BINARY_DIR}/include
-)
-
-get_target_property(_qtCoreInclude Qt5::Core INTERFACE_INCLUDE_DIRECTORIES) 
-get_target_property(_qtGuiInclude Qt5::Gui INTERFACE_INCLUDE_DIRECTORIES) 
-get_target_property(_qtWidgetsInclude Qt5::Widgets INTERFACE_INCLUDE_DIRECTORIES) 
-list(APPEND _qtIncludeDirs ${_qtCoreInclude})
-list(APPEND _qtIncludeDirs ${_qtGuiInclude})
-list(APPEND _qtIncludeDirs ${_qtWidgetsInclude})
-list(REMOVE_DUPLICATES _qtIncludeDirs)
-
-target_include_directories(Jui
-	PRIVATE
-		${Core_hdr}	
-	PUBLIC
-		${_qtIncludeDirs}
-	INTERFACE 
-		$<BUILD_INTERFACE:${buildDir}/include>
-		$<INSTALL_INTERFACE:include>
-)
-
-get_target_property(_qtCoreLib Qt5::Core IMPORTED_IMPLIB_RELEASE) 
-get_target_property(_qtGuiLib Qt5::Gui IMPORTED_IMPLIB_RELEASE) 
-get_target_property(_qtWidgetsLib Qt5::Widgets IMPORTED_IMPLIB_RELEASE) 
-get_target_property(_qtWinMainLib Qt5::WinMain IMPORTED_LOCATION_RELEASE) 
-list(APPEND _qtLinkLibs ${_qtCoreLib})
-list(APPEND _qtLinkLibs ${_qtGuiLib})
-list(APPEND _qtLinkLibs ${_qtWidgetsLib})
-list(APPEND _qtLinkLibs ${_qtWinMainLib})
-
-target_link_libraries(${CMAKE_PROJECT_NAME} 
-	PUBLIC
-		${_qtLinkLibs}
-)
-#]]
 
 # CONFIG SETUP ###################################################
 
@@ -114,38 +63,6 @@ set_target_properties( Jui Config
 		DEBUG_POSTFIX d
 		WIN32_EXECUTABLE TRUE
 )
-
-#[[
-string(TOUPPER ${CMAKE_CONFIGURATION_TYPES} configType)
-set_target_properties( Config
-    PROPERTIES
-		ARCHIVE_OUTPUT_DIRECTORY_${configType} ${buildDir}/lib
-		LIBRARY_OUTPUT_DIRECTORY_${configType} ${buildDir}/lib
-		RUNTIME_OUTPUT_DIRECTORY_${configType} ${buildDir}/bin
-		DEBUG_POSTFIX _d
-)
-
-add_custom_command(TARGET Config
-	POST_BUILD
-		COMMAND ${CMAKE_COMMAND} -E make_directory ${buildDir}/include
-		COMMAND ${CMAKE_COMMAND} -E copy_if_different ${Config_hdr} ${buildDir}/include
-)
-
-target_include_directories(Config 
-	PRIVATE 
-		${Config_hdr}	
-)
-target_link_libraries(Config 
-	PRIVATE 
-		Jui
-)
-
-if(WIN32)
-	if( ${CMAKE_CONFIGURATION_TYPES} STREQUAL "Release" )
-		set_target_properties(Config PROPERTIES WIN32_EXECUTABLE TRUE)
-	endif()
-endif(WIN32)
-#]]
 
 # PACKAGE BUILD SETUP ###################################################
 

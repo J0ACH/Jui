@@ -11,16 +11,6 @@ set(CMAKE_VS_INCLUDE_PACKAGE_TO_DEFAULT_BUILD TRUE)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-#[[
-set(cacheDir ${CMAKE_SOURCE_DIR}/cache)
-set(buildDir ${CMAKE_SOURCE_DIR}/build)
-set(installDir ${CMAKE_SOURCE_DIR}/install)
-
-message(STATUS "\t cacheDir: ${cacheDir}")
-message(STATUS "\t buildDir: ${buildDir}")
-message(STATUS "\t installDir: ${installDir}")
-#]]
-
 message(STATUS "\t CMAKE_BINARY_DIR: " ${CMAKE_BINARY_DIR})
 message(STATUS "\t CMAKE_INSTALL_PREFIX: " ${CMAKE_INSTALL_PREFIX})
 message(STATUS "\t CMAKE_GENERATOR : " ${CMAKE_GENERATOR})
