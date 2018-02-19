@@ -17,9 +17,10 @@ namespace Jui
 		//Path path("temp");
 		//Path path("home", "ahoj", "ahoj", "mozna", "nevim", "zase");
 		//Path path({"root", "mozna", "nevim", "zase" });
+		
 		Path path = Path::disk().add("testFolder");
-		File::make(path);
-		File::show(path);
+		//File::make(path);
+		//File::show(path);
 
 		File file(path, "dataTest");
 
@@ -45,8 +46,8 @@ namespace Jui
 		qDebug() << "D2.size:" <<d2.size();
 		qDebug() << "D2.isEmpty:" << d2.isEmpty();
 
-		file.write(d2.toString());
-		file.show();
+		//file.write(d2.toString());
+		//file.show();
 	}
 
 	void Config::click() {
