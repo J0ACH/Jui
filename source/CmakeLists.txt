@@ -2,7 +2,7 @@
 find_package(Qt5 COMPONENTS Core Widgets Gui REQUIRED)
 add_subdirectory(Core)
 add_subdirectory(Configuration)
-set(CMAKE_AUTORCC ON)
+
 
 # JUI SETUP ###################################################
 
@@ -12,6 +12,31 @@ add_library(Jui SHARED
 	${Core_res}
 )
 
+target_include_directories(Jui
+	PRIVATE
+		${Core_hdr}	
+	PUBLIC
+		${_qtIncludeDirs}
+	INTERFACE 
+		$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>
+		$<INSTALL_INTERFACE:${PROJECT_NAME}_${PROJECT_VERSION}/include>
+)
+
+target_link_libraries(Jui
+	PUBLIC
+		Qt5::Core
+		Qt5::Gui
+		Qt5::Widgets
+		Qt5::WinMain
+)
+
+add_custom_command(TARGET Jui
+	POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/include
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different ${Core_hdr} ${CMAKE_BINARY_DIR}/include
+)
+
+#[[
 string(TOUPPER ${CMAKE_CONFIGURATION_TYPES} configType)
 set_target_properties( Jui
     PROPERTIES
@@ -23,8 +48,8 @@ set_target_properties( Jui
 
 add_custom_command(TARGET Jui
 	POST_BUILD
-		COMMAND ${CMAKE_COMMAND} -E make_directory ${buildDir}/include
-		COMMAND ${CMAKE_COMMAND} -E copy_if_different ${Core_hdr} ${buildDir}/include
+		COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/include
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different ${Core_hdr} ${CMAKE_BINARY_DIR}/include
 )
 
 get_target_property(_qtCoreInclude Qt5::Core INTERFACE_INCLUDE_DIRECTORIES) 
@@ -58,6 +83,7 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
 	PUBLIC
 		${_qtLinkLibs}
 )
+#]]
 
 # CONFIG SETUP ###################################################
 
@@ -66,6 +92,30 @@ add_executable(Config
 	${Config_src}
 )
 
+target_include_directories(Config 
+	PRIVATE 
+		${Config_hdr}	
+)
+target_link_libraries(Config 
+	PRIVATE 
+		Jui
+)
+add_custom_command(TARGET Config
+	POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/include
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different ${Config_hdr} ${CMAKE_BINARY_DIR}/include
+)
+
+set_target_properties( Jui Config
+    PROPERTIES
+		ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
+		LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
+		RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+		DEBUG_POSTFIX d
+		WIN32_EXECUTABLE TRUE
+)
+
+#[[
 string(TOUPPER ${CMAKE_CONFIGURATION_TYPES} configType)
 set_target_properties( Config
     PROPERTIES
@@ -95,25 +145,26 @@ if(WIN32)
 		set_target_properties(Config PROPERTIES WIN32_EXECUTABLE TRUE)
 	endif()
 endif(WIN32)
+#]]
 
 # PACKAGE BUILD SETUP ###################################################
 
 include(CMakePackageConfigHelpers)
 configure_package_config_file (
 	${CMAKE_CURRENT_SOURCE_DIR}/JuiConfig.cmake.in
-	${buildDir}/cmake/JuiConfig.cmake
-	INSTALL_DESTINATION lib/cmake
+	${CMAKE_BINARY_DIR}/cmake/JuiConfig.cmake
+	INSTALL_DESTINATION ${PROJECT_NAME}_${PROJECT_VERSION}/cmake
 )
 write_basic_package_version_file(
-	${buildDir}/cmake/JuiConfigVersion.cmake
+	${CMAKE_BINARY_DIR}/cmake/JuiConfigVersion.cmake
 	VERSION ${PROJECT_VERSION}
 	COMPATIBILITY AnyNewerVersion 
 )
-#cmake_policy(SET CMP0022 NEW)
+cmake_policy(SET CMP0022 NEW)
 export ( 
 	TARGETS Jui Config
-	FILE ${buildDir}/cmake/JuiTargets.cmake 
-	#EXPORT_LINK_INTERFACE_LIBRARIES
+	FILE ${CMAKE_BINARY_DIR}/cmake/JuiTargets-${CMAKE_CONFIGURATION_TYPES}.cmake 
+	EXPORT_LINK_INTERFACE_LIBRARIES
 )
 
 # PACKAGE INSTALL SETUP ###################################################
@@ -123,17 +174,15 @@ install(
 		Jui 
 		Config
 	EXPORT JuiTargets
-	ARCHIVE DESTINATION lib
-    LIBRARY DESTINATION lib
-	RUNTIME DESTINATION bin
-	CONFIGURATIONS Release
+	ARCHIVE DESTINATION ${PROJECT_NAME}_${PROJECT_VERSION}/lib
+	LIBRARY DESTINATION ${PROJECT_NAME}_${PROJECT_VERSION}/lib
+	RUNTIME DESTINATION ${PROJECT_NAME}_${PROJECT_VERSION}/bin
 )
 install(
 	FILES 
 		${Core_hdr}
 		${Config_hdr}
-	DESTINATION include
-	CONFIGURATIONS Release
+	DESTINATION ${PROJECT_NAME}_${PROJECT_VERSION}/include
 )
 
 #[[
@@ -150,16 +199,15 @@ install(
 
 install(
 	EXPORT JuiTargets
-	DESTINATION lib/cmake/Jui-${PROJECT_VERSION}
+		DESTINATION ${PROJECT_NAME}_${PROJECT_VERSION}/cmake
 	FILE JuiTargets.cmake
-	CONFIGURATIONS Release
 )
+
 install(
 	FILES 
 		${buildDir}/cmake/JuiConfig.cmake
 		${buildDir}/cmake/JuiConfigVersion.cmake
-	DESTINATION	lib/cmake/Jui-${PROJECT_VERSION}
-	CONFIGURATIONS Release
+	DESTINATION	${PROJECT_NAME}_${PROJECT_VERSION}/cmake
 )
 
 
