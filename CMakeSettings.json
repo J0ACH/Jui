@@ -5,15 +5,14 @@
       "name": "x64-Debug",
       "generator": "Visual Studio 15 2017 Win64",
       "configurationType": "Debug",
-      "buildRoot": "${projectDir}\\cache\\${name}",
+      "buildRoot": "${projectDir}\\build",
       "cmakeCommandArgs": "",
       "buildCommandArgs": "-m -v:minimal",
       "ctestCommandArgs": "",
       "variables": [
         {
           "name": "CMAKE_INSTALL_PREFIX",
-          //"value": "${env.ProgramFiles}\\Jui",
-          "value": "${projectDir}\\install"
+          "value": "C:\\Hangar"
         }
       ]
 
@@ -22,15 +21,14 @@
       "name": "x64-Release",
       "generator": "Visual Studio 15 2017 Win64",
       "configurationType": "Release",
-      "buildRoot": "${projectDir}\\cache\\${name}",
+      "buildRoot": "${projectDir}\\build",
       "cmakeCommandArgs": "",
       "buildCommandArgs": "-m -v:minimal",
       "ctestCommandArgs": "",
       "variables": [
         {
           "name": "CMAKE_INSTALL_PREFIX",
-          //"value": "${env.ProgramFiles}\\Jui",
-          "value": "${projectDir}\\install"
+          "value": "C:\\Hangar"
         }
       ]
     }
