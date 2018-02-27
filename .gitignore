@@ -1,6 +1,4 @@
 .vs/
-cache/
+.vscode/
 build/
 install/
-
-CMakeSettings.json

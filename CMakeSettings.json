@@ -12,7 +12,7 @@
       "variables": [
         {
           "name": "CMAKE_INSTALL_PREFIX",
-          "value": "C:\\Hangar"
+          "value": "${projectDir}\\install"
         }
       ]
 
@@ -28,9 +28,11 @@
       "variables": [
         {
           "name": "CMAKE_INSTALL_PREFIX",
-          "value": "C:\\Hangar"
+          "value": "${projectDir}\\install"
         }
       ]
+
+
     }
   ]
 }
