@@ -1,19 +1,29 @@
 
 find_package(Qt5 COMPONENTS Core Widgets Gui REQUIRED)
 add_subdirectory(Core)
+add_subdirectory(Variables)
 add_subdirectory(Configuration)
+
+# JUI RESOURCES
+
+SET(Jui_res
+	${CMAKE_CURRENT_LIST_DIR}/JuiResources.qrc
+)
 
 # JUI SETUP ###################################################
 
 add_library(Jui SHARED
+	${Jui_res}
 	${Core_hdr}
 	${Core_src}
-	${Core_res}
+	${Variables_hdr}
+	${Variables_src}
 )
 
 target_include_directories(Jui
 	PRIVATE 
 		${CMAKE_CURRENT_LIST_DIR}/Core
+		${CMAKE_CURRENT_LIST_DIR}/Variables
 	INTERFACE 
 		$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>
 		$<INSTALL_INTERFACE:${PROJECT_NAME}_${PROJECT_VERSION}/include>
@@ -31,11 +41,13 @@ add_custom_command(TARGET Jui
 	POST_BUILD
 		COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/include
 		COMMAND ${CMAKE_COMMAND} -E copy_if_different ${Core_hdr} ${CMAKE_BINARY_DIR}/include
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different ${Variables_hdr} ${CMAKE_BINARY_DIR}/include
 )
 
 # CONFIG SETUP ###################################################
 
 add_executable(Config
+	#${Jui_res}
 	${Config_hdr}
 	${Config_src}
 )
@@ -64,7 +76,7 @@ set_target_properties( Jui Config
 		LIBRARY_OUTPUT_DIRECTORY_${configType} ${CMAKE_BINARY_DIR}/lib
 		RUNTIME_OUTPUT_DIRECTORY_${configType} ${CMAKE_BINARY_DIR}/bin
 		DEBUG_POSTFIX d
-		WIN32_EXECUTABLE TRUE
+		#WIN32_EXECUTABLE TRUE
 )
 
 # PACKAGE BUILD SETUP ###################################################

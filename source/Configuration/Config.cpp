@@ -10,6 +10,14 @@ namespace Jui
 		win = new Win(x, y, w, h);
 		win->name_("Configuration");
 
+		bool ref = true;
+		Variable *a = new Variable(win);
+		a->geometry_(100, 100, 150, 35);
+
+		Button *butt = new Button(win);
+		butt->geometry_(20, 100, 30, 35);
+
+
 		//QStringList pathList = { "ahoj", "mozna", "nevim", "zase" };
 		//int test[] = { 1,2,3,5 };
 
@@ -43,15 +51,15 @@ namespace Jui
 		//d.atPath(dir);
 
 		Data d2 = d.filter("jmenoA");
-		qDebug() << "D2.size:" <<d2.size();
-		qDebug() << "D2.isEmpty:" << d2.isEmpty();
+		//qDebug() << "D2.size:" <<d2.size();
+		//qDebug() << "D2.isEmpty:" << d2.isEmpty();
 
 		//file.write(d2.toString());
 		//file.show();
 	}
 
 	void Config::click() {
-
+		qDebug() << "Config::click()";
 	}
 	void Config::result() {
 

@@ -11,6 +11,8 @@
 #include "GraphicObjects.h"
 #include "Files.h"
 
+#include "Variables.h"
+
 namespace Jui
 {
 	class Config : public QObject
@@ -20,10 +22,11 @@ namespace Jui
 	public:
 		Config(QObject *parent = 0);
 		Config(int x, int y, int w, int h);
-
+				
 	private:
 		Win *win;
-				
+		Button *butt;
+
 		void initConfig(int x, int y, int w, int h);
 
 		private slots:
