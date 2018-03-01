@@ -6,14 +6,30 @@
 namespace Jui {
 
 	class Variable : public Canvas {
+		Q_OBJECT
+
 	public:
-		Variable(QWidget *parent = 0);
-		
+		Variable(QWidget *parent);
+		void label_(QString txt);
+		void text_(QString val);		
+	
+	signals:
+		void changed();
+
 	private:
-		//QString label;
-		PureText *label, *value;
+		PureText * label, *valText;
 	};
 
+	class Vbool : public Variable {
+	public:
+		Vbool(QWidget *parent);
+
+		void value_(bool ref);
+		bool value();
+
+	private:
+		bool reference;
+	};
 }
 
 #endif

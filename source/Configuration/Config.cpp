@@ -10,12 +10,15 @@ namespace Jui
 		win = new Win(x, y, w, h);
 		win->name_("Configuration");
 
-		bool ref = true;
-		Variable *a = new Variable(win);
-		a->geometry_(100, 100, 150, 35);
-
 		Button *butt = new Button(win);
 		butt->geometry_(20, 100, 30, 35);
+
+		var = new Vbool(win);
+		var->geometry_(100, 100, 150, 35);
+		var->value_(false);
+
+
+		connect(butt, SIGNAL(pressed()), this, SLOT(click()));
 
 
 		//QStringList pathList = { "ahoj", "mozna", "nevim", "zase" };
@@ -25,7 +28,7 @@ namespace Jui
 		//Path path("temp");
 		//Path path("home", "ahoj", "ahoj", "mozna", "nevim", "zase");
 		//Path path({"root", "mozna", "nevim", "zase" });
-		
+
 		Path path = Path::disk().add("testFolder");
 		//File::make(path);
 		//File::show(path);
@@ -59,7 +62,11 @@ namespace Jui
 	}
 
 	void Config::click() {
-		qDebug() << "Config::click()";
+		
+		if (var->value()) { var->value_(false); }
+		else { var->value_(true); }
+		qDebug() << "Config::click() testBool:" << var->value();
+	
 	}
 	void Config::result() {
 
