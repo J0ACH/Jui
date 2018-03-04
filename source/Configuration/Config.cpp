@@ -19,53 +19,20 @@ namespace Jui
 
 
 		connect(butt, SIGNAL(pressed()), this, SLOT(click()));
-
-
-		//QStringList pathList = { "ahoj", "mozna", "nevim", "zase" };
-		//int test[] = { 1,2,3,5 };
-
-		//Path path;
-		//Path path("temp");
-		//Path path("home", "ahoj", "ahoj", "mozna", "nevim", "zase");
-		//Path path({"root", "mozna", "nevim", "zase" });
-
-		Path path = Path::disk().add("testFolder");
-		//File::make(path);
-		//File::show(path);
-
-		File file(path, "dataTest");
-
-		//Path dir = Path::root() + Path("lide");
-		Path dirMuzi = Path("lide", "muzi");
-		Path dirZeny = Path("lide", "zeny");
-		Leaf leaf1(dirZeny, "jmeno1", "Bara");
-		Leaf leaf2(dirMuzi, "jmeno1", "Emil");
-		Leaf leaf3(dirMuzi, "jmeno2", "Jarda");
-		//qDebug() << l1;
-
-		Data d;
-		d.add(Path("lide", "zeny", "divky"), "Alva");
-		d.add(leaf1);
-		d.add(leaf2);
-		d.add(leaf3);
-
-
-		//d.atPath(Path::root());
-		//d.atPath(dir);
-
-		Data d2 = d.filter("jmenoA");
-		//qDebug() << "D2.size:" <<d2.size();
-		//qDebug() << "D2.isEmpty:" << d2.isEmpty();
-
-		//file.write(d2.toString());
-		//file.show();
 	}
 
 	void Config::click() {
-		
-		if (var->value()) { var->value_(false); }
-		else { var->value_(true); }
-		qDebug() << "Config::click() testBool:" << var->value();
+		/*
+		//if (var->value())
+		if (var) { var->value_(false); }
+		else { 
+			var->value_(true); 
+			//var = true;
+		}
+		*/
+
+		bool a = var;
+		qDebug() << "Config::click() testBool:" << a;// var->value();
 	
 	}
 	void Config::result() {

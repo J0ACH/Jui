@@ -25,8 +25,11 @@ namespace Jui {
 		Vbool(QWidget *parent);
 
 		void value_(bool ref);
-		bool value();
+		//bool value();
+		bool getValue();
 
+		operator bool() const;
+		//void operator =(bool b);
 	private:
 		bool reference;
 	};

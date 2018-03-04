@@ -27,7 +27,7 @@ namespace Jui
 		Win *win;
 		Button *butt;
 		Vbool *var;
-		QString testBool;
+		//QString testBool;
 
 		void initConfig(int x, int y, int w, int h);
 
