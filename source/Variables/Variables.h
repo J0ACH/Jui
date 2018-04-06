@@ -23,25 +23,18 @@ namespace Jui {
 
 	class Vbool : public Variable {
 	public:
-		Vbool(QWidget *parent);
-
-		void value_(bool ref);
-		//bool value();
-		bool getValue();
-
-		operator bool() const;
-		//void operator =(bool b);
+		Vbool();
+		void operator =(bool b);
+		operator bool();
 	private:
 		bool reference;
 	};
 
 	class Vint : public Variable {
-
 	public:
 		Vint();
 		void operator =(int i);
 		operator int();
-
 	private:
 		int reference;
 	};

@@ -24,38 +24,23 @@ namespace Jui {
 		//}
 	}
 
-	Vbool::Vbool(QWidget *parent) : Variable(parent) {
-		//reference = false;
-	}
 
-	void Vbool::value_(bool ref) {
-		qDebug() << "jsem tu vatlue_:" << reference;
-		reference = ref;
-		text_(QString::number(reference));
+	Vbool::Vbool() : Variable(0) {
+		reference = false;
+		text_("false");
 	}
-	bool Vbool::getValue() { return reference; }
-
-	Vbool::operator bool() const {
-		qDebug() << "operator bool() jsem tu";
-		if (reference) {
-			return true;
-		}
-		else {
-			return false;
-		}
-		//return reference;
-	}
-	/*
-	void Vbool::operator =(const bool b) {
+	void Vbool::operator =(bool b) {
 		reference = b;
-		emit changed();
+		if (reference) { text_("true"); }
+		else { text_("false"); }
 	}
-	*/
+	Vbool::operator bool() { return reference; }
+
 
 	Vint::Vint() : Variable(0) {
 		reference = 0;
+		text_(QString::number(0));
 	}
-
 	void Vint::operator =(int i) {
 		reference = i;
 		text_(QString::number(reference));

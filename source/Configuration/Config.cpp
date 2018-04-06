@@ -12,9 +12,10 @@ namespace Jui
 
 		buttBool = new Button(win);
 		buttBool->geometry_(20, 100, 30, 35);
-		varBool = new Vbool(win);
-		varBool->geometry_(100, 100, 150, 35);
-		varBool->value_(false);
+		//varBool = new Vbool(win);
+		varBool.parent_(win);
+		varBool.geometry_(100, 100, 150, 35);
+		//varBool->value_(false);
 		connect(buttBool, SIGNAL(pressed()), this, SLOT(clickBool()));
 
 		buttInt = new Button(win);
@@ -26,18 +27,11 @@ namespace Jui
 	}
 
 	void Config::clickBool() {
-		/*
-		//if (var->value())
-		if (var) { var->value_(false); }
-		else {
-			var->value_(true);
-			//var = true;
-		}
-		*/
+		bool b = varBool;
+		if (varBool) { varBool = false; }
+		else { varBool = true; }
 
-		bool a = varBool;
-		qDebug() << "Config::click() testBool:" << a;// var->value();
-
+		qDebug() << "Config::clickBool() =" << b << " -> " << varBool;
 	}
 
 	void Config::clickInt() {

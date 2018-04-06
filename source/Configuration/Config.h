@@ -26,7 +26,7 @@ namespace Jui
 	private:
 		Win *win;
 		Button *buttBool, *buttInt;
-		Vbool *varBool;
+		Vbool varBool;
 		Vint varInt;
 		
 		void initConfig(int x, int y, int w, int h);
