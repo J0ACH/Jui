@@ -25,15 +25,16 @@ namespace Jui
 				
 	private:
 		Win *win;
-		Button *butt;
-		Vbool *var;
-		//QString testBool;
-
+		Button *buttBool, *buttInt;
+		Vbool *varBool;
+		Vint varInt;
+		
 		void initConfig(int x, int y, int w, int h);
 
 		private slots:
-		void click();
-		void result();
+		void clickBool();
+		void clickInt();
+		
 	};
 
 	

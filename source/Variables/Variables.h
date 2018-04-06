@@ -10,9 +10,10 @@ namespace Jui {
 
 	public:
 		Variable(QWidget *parent);
+		void parent_(QWidget *parent);
 		void label_(QString txt);
-		void text_(QString val);		
-	
+		void text_(QString val);
+
 	signals:
 		void changed();
 
@@ -32,6 +33,17 @@ namespace Jui {
 		//void operator =(bool b);
 	private:
 		bool reference;
+	};
+
+	class Vint : public Variable {
+
+	public:
+		Vint();
+		void operator =(int i);
+		operator int();
+
+	private:
+		int reference;
 	};
 }
 

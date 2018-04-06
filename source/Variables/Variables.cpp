@@ -12,6 +12,10 @@ namespace Jui {
 		valText->geometry_(50, 10, 50, 16);
 	}
 
+	void Variable::parent_(QWidget *parent) {
+		this->setParent(parent);
+		this->show();
+	}
 	void Variable::label_(QString name) { label->text_(name); }
 	void Variable::text_(QString val) {
 		//if (val != valText->text) {
@@ -19,7 +23,6 @@ namespace Jui {
 		emit changed();
 		//}
 	}
-
 
 	Vbool::Vbool(QWidget *parent) : Variable(parent) {
 		//reference = false;
@@ -48,4 +51,14 @@ namespace Jui {
 		emit changed();
 	}
 	*/
+
+	Vint::Vint() : Variable(0) {
+		reference = 0;
+	}
+
+	void Vint::operator =(int i) {
+		reference = i;
+		text_(QString::number(reference));
+	}
+	Vint::operator int() { return reference; }
 }

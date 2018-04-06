@@ -10,33 +10,40 @@ namespace Jui
 		win = new Win(x, y, w, h);
 		win->name_("Configuration");
 
-		Button *butt = new Button(win);
-		butt->geometry_(20, 100, 30, 35);
+		buttBool = new Button(win);
+		buttBool->geometry_(20, 100, 30, 35);
+		varBool = new Vbool(win);
+		varBool->geometry_(100, 100, 150, 35);
+		varBool->value_(false);
+		connect(buttBool, SIGNAL(pressed()), this, SLOT(clickBool()));
 
-		var = new Vbool(win);
-		var->geometry_(100, 100, 150, 35);
-		var->value_(false);
-
-
-		connect(butt, SIGNAL(pressed()), this, SLOT(click()));
+		buttInt = new Button(win);
+		buttInt->geometry_(20, 150, 30, 35);
+		varInt.parent_(win);
+		varInt.geometry_(100, 150, 150, 35);
+		//varInt = new Vint(win);
+		connect(buttInt, SIGNAL(pressed()), this, SLOT(clickInt()));
 	}
 
-	void Config::click() {
+	void Config::clickBool() {
 		/*
 		//if (var->value())
 		if (var) { var->value_(false); }
-		else { 
-			var->value_(true); 
+		else {
+			var->value_(true);
 			//var = true;
 		}
 		*/
 
-		bool a = var;
+		bool a = varBool;
 		qDebug() << "Config::click() testBool:" << a;// var->value();
-	
-	}
-	void Config::result() {
 
+	}
+
+	void Config::clickInt() {
+		int num = varInt;
+		varInt = num + 1;
+		qDebug() << "Config::clickInt() =" << num << " -> " << varInt;
 	}
 }
 
