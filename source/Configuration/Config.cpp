@@ -12,17 +12,15 @@ namespace Jui
 
 		buttBool = new Button(win);
 		buttBool->geometry_(20, 100, 30, 35);
-		//varBool = new Vbool(win);
 		varBool.parent_(win);
 		varBool.geometry_(100, 100, 150, 35);
-		//varBool->value_(false);
 		connect(buttBool, SIGNAL(pressed()), this, SLOT(clickBool()));
 
 		buttInt = new Button(win);
 		buttInt->geometry_(20, 150, 30, 35);
 		varInt.parent_(win);
 		varInt.geometry_(100, 150, 150, 35);
-		//varInt = new Vint(win);
+		varInt.label_("int");
 		connect(buttInt, SIGNAL(pressed()), this, SLOT(clickInt()));
 	}
 
@@ -30,7 +28,6 @@ namespace Jui
 		bool b = varBool;
 		if (varBool) { varBool = false; }
 		else { varBool = true; }
-
 		qDebug() << "Config::clickBool() =" << b << " -> " << varBool;
 	}
 

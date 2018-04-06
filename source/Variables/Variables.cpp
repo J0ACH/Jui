@@ -24,6 +24,7 @@ namespace Jui {
 		//}
 	}
 
+	// Vbool ///////////////////////////////////////////////
 
 	Vbool::Vbool() : Variable(0) {
 		reference = false;
@@ -36,6 +37,7 @@ namespace Jui {
 	}
 	Vbool::operator bool() { return reference; }
 
+	// Vint ///////////////////////////////////////////////
 
 	Vint::Vint() : Variable(0) {
 		reference = 0;

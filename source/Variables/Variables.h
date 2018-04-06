@@ -18,8 +18,10 @@ namespace Jui {
 		void changed();
 
 	private:
-		PureText * label, *valText;
+		PureText *label, *valText;
 	};
+
+	// Vbool ///////////////////////////////////////////////
 
 	class Vbool : public Variable {
 	public:
@@ -29,6 +31,8 @@ namespace Jui {
 	private:
 		bool reference;
 	};
+
+	// Vint ///////////////////////////////////////////////
 
 	class Vint : public Variable {
 	public:
