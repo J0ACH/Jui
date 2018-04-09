@@ -14,6 +14,8 @@ namespace Jui {
 		void label_(QString txt);
 		void text_(QString val);
 
+		void connectOnChange(const QObject *receiver, const char *method);
+
 	signals:
 		void changed();
 

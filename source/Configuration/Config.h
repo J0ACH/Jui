@@ -34,6 +34,7 @@ namespace Jui
 		private slots:
 		void clickBool();
 		void clickInt();
+		void onBoolChange();
 		
 	};
 

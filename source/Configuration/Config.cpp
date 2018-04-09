@@ -14,6 +14,7 @@ namespace Jui
 		buttBool->geometry_(20, 100, 30, 35);
 		varBool.parent_(win);
 		varBool.geometry_(100, 100, 150, 35);
+		varBool.connectOnChange(this, SLOT(onBoolChange()));
 		connect(buttBool, SIGNAL(pressed()), this, SLOT(clickBool()));
 
 		buttInt = new Button(win);
@@ -29,6 +30,10 @@ namespace Jui
 		if (varBool) { varBool = false; }
 		else { varBool = true; }
 		qDebug() << "Config::clickBool() =" << b << " -> " << varBool;
+	}
+
+	void Config::onBoolChange() {
+		qDebug() << "Config::onBoolChange";
 	}
 
 	void Config::clickInt() {

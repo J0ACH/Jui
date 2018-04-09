@@ -4,6 +4,9 @@
 namespace Jui {
 
 	Variable::Variable(QWidget *parent) : Canvas(parent) {
+		
+		this->setVisible(false);
+		
 		label = new PureText(this);
 		label->geometry_(10, 10, 50, 16);
 		label->text_("variable");
@@ -22,6 +25,10 @@ namespace Jui {
 		valText->text_(val);
 		emit changed();
 		//}
+	}
+
+	void Variable::connectOnChange(const QObject *receiver, const char *method) {
+		QObject::connect(this, SIGNAL(changed()), receiver, method);
 	}
 
 	// Vbool ///////////////////////////////////////////////
