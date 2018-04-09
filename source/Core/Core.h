@@ -28,6 +28,8 @@ namespace Jui
 		Canvas(int x, int y, int width, int height);
 
 		void geometry_(int x, int y, int w, int h);
+		void width_(int w);
+		void height_(int h);
 		void origin_(int x, int y);
 		void originX_(int x);
 		void originY_(int x);

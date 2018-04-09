@@ -12,6 +12,7 @@ namespace Jui {
 		Variable(QWidget *parent);
 		void parent_(QWidget *parent);
 		void label_(QString txt);
+		void labelSize_(int x);
 		void text_(QString val);
 
 		void connectOnChange(const QObject *receiver, const char *method);
@@ -24,6 +25,9 @@ namespace Jui {
 
 	private:
 		PureText *label, *valText;
+		int labelWidth, textOffset;
+
+		void fitText();
 	};
 
 	// Vbool ///////////////////////////////////////////////

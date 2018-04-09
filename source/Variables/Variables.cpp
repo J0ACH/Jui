@@ -4,15 +4,23 @@
 namespace Jui {
 
 	Variable::Variable(QWidget *parent) : Canvas(parent) {
-		
+
 		this->setVisible(false);
-		
+
+		this->width_(150);
+		this->height_(20);
+
+		labelWidth = 50;
+		textOffset = 2;
+
 		label = new PureText(this);
-		label->geometry_(10, 10, 50, 16);
 		label->text_("variable");
+		label->align_(Qt::AlignLeft);
+		//label->displayFrame_(true);
 
 		valText = new PureText(this);
-		valText->geometry_(50, 10, 250, 16);
+		valText->align_(Qt::AlignLeft);
+		//valText->displayFrame_(true);
 	}
 
 	void Variable::parent_(QWidget *parent) {
@@ -20,6 +28,10 @@ namespace Jui {
 		this->show();
 	}
 	void Variable::label_(QString name) { label->text_(name); }
+	void Variable::labelSize_(int x) {
+		labelWidth = x;
+		fitText();
+	}
 	void Variable::text_(QString val) {
 		//if (val != valText->text) {
 		valText->text_(val);
@@ -32,12 +44,21 @@ namespace Jui {
 	}
 
 	void Variable::resizeEvent(QResizeEvent *e) {
-		QSize size = e->size();
-		label->geometry_(10, 10, 50, 16);
-		valText->geometry_(50, 10, size.width()-50, 16);
-
 		Canvas::resizeEvent(e);
-		
+		fitText();
+	}
+
+	void Variable::fitText() {
+		int w = this->width();
+		int h = this->height();
+
+		label->geometry_(textOffset, textOffset, labelWidth, h - 2 * textOffset);
+		valText->geometry_(
+			labelWidth + 2 * textOffset,
+			textOffset,
+			this->width() - labelWidth - 3 * textOffset,
+			h - 2 * textOffset
+		);
 	}
 
 	// Vbool ///////////////////////////////////////////////

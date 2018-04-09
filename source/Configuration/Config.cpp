@@ -13,20 +13,24 @@ namespace Jui
 		buttBool = new Button(win);
 		buttBool->geometry_(20, 100, 30, 35);
 		varBool.parent_(win);
-		varBool.geometry_(100, 100, 150, 35);
+		varBool.origin_(100, 100);
+		
 		varBool.connectOnChange(this, SLOT(onBoolChange()));
 		connect(buttBool, SIGNAL(pressed()), this, SLOT(clickBool()));
 
 		buttInt = new Button(win);
 		buttInt->geometry_(20, 150, 30, 35);
 		varInt.parent_(win);
-		varInt.geometry_(100, 150, 150, 35);
+		varInt.origin_(100, 150);
+		//varInt.geometry_(100, 150, 350, 35);
 		varInt.label_("int");
 		connect(buttInt, SIGNAL(pressed()), this, SLOT(clickInt()));
 
 		varString.parent_(win);
-		varString.geometry_(100, 200, 250, 35);
+		varString.origin_(100, 200);
+		//varString.geometry_(100, 200, 250, 35);
 		varString.label_("str");
+		varString.width_(350);
 		//varString.text_("test");
 	}
 
