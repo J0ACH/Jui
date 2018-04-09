@@ -23,6 +23,11 @@ namespace Jui
 		varInt.geometry_(100, 150, 150, 35);
 		varInt.label_("int");
 		connect(buttInt, SIGNAL(pressed()), this, SLOT(clickInt()));
+
+		varString.parent_(win);
+		varString.geometry_(100, 200, 250, 35);
+		varString.label_("str");
+		//varString.text_("test");
 	}
 
 	void Config::clickBool() {
@@ -34,12 +39,15 @@ namespace Jui
 
 	void Config::onBoolChange() {
 		qDebug() << "Config::onBoolChange";
+		varString = QString("Config::onBoolChange() = %1 ").arg(varBool);
 	}
 
 	void Config::clickInt() {
 		int num = varInt;
 		varInt = num + 1;
 		qDebug() << "Config::clickInt() =" << num << " -> " << varInt;
+
+		
 	}
 }
 

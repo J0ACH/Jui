@@ -19,6 +19,9 @@ namespace Jui {
 	signals:
 		void changed();
 
+	protected:
+		void resizeEvent(QResizeEvent *e) override;
+
 	private:
 		PureText *label, *valText;
 	};
@@ -43,6 +46,17 @@ namespace Jui {
 		operator int();
 	private:
 		int reference;
+	};
+
+	// Vstring ///////////////////////////////////////////////
+
+	class Vstring : public Variable {
+	public:
+		Vstring();
+		void operator =(QString txt);
+		operator QString();
+	private:
+		QString reference;
 	};
 }
 

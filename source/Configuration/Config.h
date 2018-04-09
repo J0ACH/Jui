@@ -28,6 +28,7 @@ namespace Jui
 		Button *buttBool, *buttInt;
 		Vbool varBool;
 		Vint varInt;
+		Vstring varString;
 		
 		void initConfig(int x, int y, int w, int h);
 
