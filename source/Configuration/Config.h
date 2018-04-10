@@ -27,7 +27,7 @@ namespace Jui
 		Win *win;
 		Button *buttBool, *buttInt;
 		Vbool varBool;
-		Vint varInt;
+		Vint varInt, varIntPlus;
 		Vstring varString;
 		
 		void initConfig(int x, int y, int w, int h);
@@ -36,7 +36,7 @@ namespace Jui
 		void clickBool();
 		void clickInt();
 		void onBoolChange();
-		
+		void onIntChange();
 	};
 
 	

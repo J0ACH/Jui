@@ -9,7 +9,7 @@ namespace Jui {
 		Q_OBJECT
 
 	public:
-		Variable(QWidget *parent);
+		Variable();
 		void parent_(QWidget *parent);
 		void label_(QString txt);
 		void labelSize_(int x);
@@ -47,6 +47,8 @@ namespace Jui {
 	public:
 		Vint();
 		void operator =(int i);
+		//void operator +(int i);
+		//void operator =(Vint i);
 		operator int();
 	private:
 		int reference;

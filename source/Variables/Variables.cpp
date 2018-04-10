@@ -3,7 +3,7 @@
 
 namespace Jui {
 
-	Variable::Variable(QWidget *parent) : Canvas(parent) {
+	Variable::Variable() : Canvas(0) {
 
 		this->setVisible(false);
 
@@ -63,7 +63,7 @@ namespace Jui {
 
 	// Vbool ///////////////////////////////////////////////
 
-	Vbool::Vbool() : Variable(0) {
+	Vbool::Vbool() : Variable() {
 		reference = false;
 		label_("boolean");
 		text_("false");
@@ -77,7 +77,7 @@ namespace Jui {
 
 	// Vint ///////////////////////////////////////////////
 
-	Vint::Vint() : Variable(0) {
+	Vint::Vint() : Variable() {
 		reference = 0;
 		label_("int");
 		text_(QString::number(0));
@@ -86,11 +86,22 @@ namespace Jui {
 		reference = i;
 		text_(QString::number(reference));
 	}
+	/*
+	void Vint::operator +(int i) {
+		reference += i;
+		text_(QString::number(reference));
+	}
+	void Vint::operator =(Vint i) {
+		reference = i;
+		text_(QString::number(reference));
+	}
+	*/
+
 	Vint::operator int() { return reference; }
 
 	// Vstring ///////////////////////////////////////////////
 
-	Vstring::Vstring() : Variable(0) {
+	Vstring::Vstring() : Variable() {
 		reference = "";
 		label_("string");
 		text_("");
