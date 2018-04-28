@@ -47,8 +47,6 @@ namespace Jui {
 	public:
 		Vint();
 		void operator =(int i);
-		//void operator +(int i);
-		//void operator =(Vint i);
 		operator int();
 	private:
 		int reference;

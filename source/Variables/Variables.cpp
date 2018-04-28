@@ -86,17 +86,6 @@ namespace Jui {
 		reference = i;
 		text_(QString::number(reference));
 	}
-	/*
-	void Vint::operator +(int i) {
-		reference += i;
-		text_(QString::number(reference));
-	}
-	void Vint::operator =(Vint i) {
-		reference = i;
-		text_(QString::number(reference));
-	}
-	*/
-
 	Vint::operator int() { return reference; }
 
 	// Vstring ///////////////////////////////////////////////

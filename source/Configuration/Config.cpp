@@ -55,7 +55,7 @@ namespace Jui
 	}
 	void Config::onIntChange() {
 		qDebug() << "Config::onIntChange";
-		//varIntPlus = varIntPlus + 5;
+		varIntPlus = varInt + 5;
 	}
 }
 
