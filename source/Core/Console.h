@@ -20,9 +20,15 @@ namespace Jui
 		void println(QString msg);
 
 	private:
-		QLabel *txt;
+
+		QScrollArea *scroll;
+
+		int size;
+		int lineHeight;
+		QList<QLabel*> lines;
 
 		void init(int x, int y, int w, int h);
+
 
 	};
 
