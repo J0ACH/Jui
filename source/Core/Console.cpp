@@ -7,10 +7,34 @@ namespace Jui
 	void Console::init(int x, int y, int w, int h) {
 
 		scroll = new QScrollArea(this);
-		scroll->setGeometry(10, 10, 300, 300);
+		//scroll->setGeometry(10, 10, 300, 300);
 		scroll->setWidget(new QWidget());
 		scroll->setWidgetResizable(true);
-		size = 20;
+		scroll->setVerticalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOff);
+
+		scroll->verticalScrollBar()->setStyleSheet(
+			//"QScrollBar {width:5px;}"
+			/*
+			"QScrollBar::add - line:vertical{"
+			"border: none;"
+			"background: none;"
+			"}"
+
+			"QScrollBar::sub - line : vertical{"
+			"border: none;"
+			"background: none;"
+			"}"
+			*/
+			"QScrollBar::up - arrow:vertical, QScrollBar::bottom - arrow : vertical"
+			"{"
+				  "border: none;"
+				  "background: none;"
+				  "color: none;"
+			"}"
+		);
+
+
+		size = 100;
 		QList<QLabel*> lines;
 
 		lineHeight = 30;
@@ -39,12 +63,22 @@ namespace Jui
 		int posY = 0;
 		foreach(QLabel *oneLabel, lines)
 		{
-					oneLabel->move(oneLabel->x(), posY);
+			oneLabel->move(oneLabel->x(), posY);
 			posY += lineHeight;
 		}
 
 		scroll->widget()->setFixedHeight(posY);
 		scroll->ensureWidgetVisible(label);
 
+	}
+
+	void Console::resizeEvent(QResizeEvent *e) {
+		QWidget::resizeEvent(e);
+		scroll->setGeometry(10, 10, width()-20, height()-20);
+		println(QString("resized: %1x%2").arg(
+			QString::number(scroll->width()),
+			QString::number(scroll->height())
+		));
+		//emit resized(size());
 	}
 }

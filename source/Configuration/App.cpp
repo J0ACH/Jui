@@ -18,7 +18,9 @@ int main(int argc, char** argv) {
 	QPalette palette;
 	palette.setColor(QPalette::Window, QColor(30, 30, 30));
 	palette.setColor(QPalette::WindowText, QColor(200, 200, 200));
-
+	//palette.setColor(QPalette::Base, QColor(200, 50, 50));
+	//palette.setColor(QPalette::Button, QColor(200, 50, 50));
+	   
 	app.setPalette(palette);
 
 	Console a;

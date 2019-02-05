@@ -19,8 +19,11 @@ namespace Jui
 	public slots:
 		void println(QString msg);
 
-	private:
 
+	protected:
+		void resizeEvent(QResizeEvent *e) override;
+
+	private:
 		QScrollArea *scroll;
 
 		int size;
