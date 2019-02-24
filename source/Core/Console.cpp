@@ -6,6 +6,8 @@ namespace Jui
 
 	void Console::init(int x, int y, int w, int h) {
 
+		setObjectName("Console");
+
 		scroll = new QScrollArea(this);
 		//scroll->setGeometry(10, 10, 300, 300);
 		scroll->setWidget(new QWidget());

@@ -10,7 +10,7 @@ namespace Jui
 		isChecked = false;
 		text = "OFF";
 		colorFrame.value_(QColor(0, 0, 0, 0));
-		colorImage.value_(50, 50, 50);
+		colorImage.value_(100, 100, 100);
 		colorBackground.value_(QColor(0, 0, 0, 0));
 		connect(
 			&colorFrame, SIGNAL(changed()),
@@ -34,7 +34,7 @@ namespace Jui
 	}
 	void Button::leaveEvent(QEvent *e) {
 		colorFrame.value_(QColor(0, 0, 0, 0), 1);
-		colorImage.value_(50, 50, 50, 1);
+		colorImage.value_(100, 100, 100, 1);
 	}
 	void Button::mousePressEvent(QMouseEvent *e) {
 		if (!isChecked) {

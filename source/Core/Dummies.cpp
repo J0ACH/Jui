@@ -5,17 +5,28 @@ namespace Jui
 	// Header /////////////////////////////////////////////////////
 
 	Header::Header(QWidget *parent) : QWidget(parent),
-		m_text(new PureText(this))
+		//m_text(new PureText(this)),
+		label(new QLabel(this))
 	{
-		m_text->font_("Univers Condensed");
-		m_text->align_(Qt::AlignVCenter | Qt::AlignLeft);
+		//m_text->font_("Univers Condensed");
+		//m_text->font_("Segoe UI Light");
+		//m_text->displayFrame_(true);
+		//m_text->align_(Qt::AlignVCenter | Qt::AlignLeft);
+
+
+		label->setFont(QFont("Segoe UI Light", 9));
+		label->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
+
+
 		thickness = 30;
 		move(1, 1);
 		isLocked = false;
 
-		colorBackground.value_(QColor(0, 0, 0, 0));
+		background_(40, 40, 40);
+
+		currentColorBackground.value_(colorBackground);
 		connect(
-			&colorBackground, SIGNAL(changed()),
+			&currentColorBackground, SIGNAL(changed()),
 			this, SLOT(update())
 		);
 
@@ -27,14 +38,27 @@ namespace Jui
 		onParentResize(parent->size());
 		show();
 	}
+	void Header::name_(QString name) { setWindowTitle(name); }
 	void Header::font_(QString family) { m_text->font_(family); }
 	void Header::lock_(bool b) { isLocked = b; }
+	void Header::height_(int y) {
+		thickness = y;
+		onParentResize(size());
+	}
+	void Header::background_(int r, int g, int b) {
+		colorBackground = QColor(r, g, b);
+		currentColorBackground.value_(colorBackground);
+	}
+
 	void Header::onParentResize(QSize size) {
-		setFixedSize(size.width() - 2, thickness);
-		m_text->geometry_(20, 6, size.width() - 2, thickness - 12);
+		setFixedSize(size.width() - 2, thickness-1);
+		//m_text->geometry_(20, 8, size.width() - 2, thickness - 18);
+		label->setGeometry(20, 0, size.width() - 2, thickness - 1);
 	}
 	void Header::mousePressEvent(QMouseEvent *e)
 	{
+		parentWidget()->setFocus();
+
 		if (!isLocked) {
 			mousePressedGlobalCoor = e->globalPos();
 
@@ -44,12 +68,12 @@ namespace Jui
 			else {
 				mousePressedOriginCoor = this->parentWidget()->mapToParent(QPoint(0, 0));
 			}
-			colorBackground.value_(120, 20, 20, 0.05);
+			currentColorBackground.value_(60, 60, 60, 0.05);
 		}
 	}
 	void Header::mouseReleaseEvent(QMouseEvent *e) {
 		if (!isLocked) {
-			colorBackground.value_(QColor(0, 0, 0, 0), 0.5);
+			currentColorBackground.value_(colorBackground, 0.5);
 		}
 	}
 	void Header::mouseMoveEvent(QMouseEvent *e)
@@ -68,8 +92,9 @@ namespace Jui
 	}
 	void Header::paintEvent(QPaintEvent *event) {
 		QPainter painter(this);
-		if (!isLocked) { painter.fillRect(rect(), colorBackground); }
-		m_text->text_(this->parentWidget()->objectName());
+		if (!isLocked) { painter.fillRect(rect(), currentColorBackground); }
+		//m_text->text_(windowTitle());
+		label->setText(windowTitle());
 	}
 
 	// EdgeControler /////////////////////////////////////////////////////
@@ -87,20 +112,21 @@ namespace Jui
 	}
 	Jui::direction EdgeControler::direction() { return m_direction; }
 	void EdgeControler::enterEvent(QEvent *e) {
-		colorFrame.value_(QColor(60, 60, 60), 0.2);
+		colorFrame.value_(QColor(100, 100, 100), 0.2);
 	}
 	void EdgeControler::leaveEvent(QEvent *e) {
 		colorFrame.value_(QColor(0, 0, 0, 0), 1);
 	}
 	void EdgeControler::mousePressEvent(QMouseEvent *e)
 	{
+		parentWidget()->setFocus();
 		colorFrame.value_(QColor(200, 200, 200), 0.05);
 		mousePressedGlobalCoor = e->globalPos();
 		emit pressed();
 	}
 	void EdgeControler::mouseReleaseEvent(QMouseEvent *e)
 	{
-		colorFrame.value_(QColor(60, 60, 60), 1);
+		colorFrame.value_(QColor(100, 100, 100), 1);
 	}
 	void EdgeControler::mouseMoveEvent(QMouseEvent *e)
 	{
@@ -139,8 +165,8 @@ namespace Jui
 	Edges::Edges(QWidget *parent) : QObject(parent),
 		m_parent(parent)
 	{
-		thickness = 10;
-		offset = 1;
+		thickness = 12;
+		offset = 2;
 		corner = 20;
 		gap = 5;
 
@@ -166,7 +192,7 @@ namespace Jui
 			this, SLOT(onParentResize(QSize))
 		);
 		onParentResize(parent->size());
-		
+
 		foreach(EdgeControler *oneEdge, mEdges.values())
 		{
 			connect(

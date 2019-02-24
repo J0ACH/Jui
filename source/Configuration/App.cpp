@@ -23,9 +23,31 @@ int main(int argc, char** argv) {
 	   
 	app.setPalette(palette);
 
+
+	
+
 	Console a;
 	a.setGeometry(100, 100, 600, 600);
-	a.show();
+	
+	//Qt::WindowFlags flags = a.windowFlags();
+	//flags.setFlag(Qt::WindowMinMaxButtonsHint, false);
+	//flags.setFlag(Qt::WindowCloseButtonHint, false);
+	//flags.setFlag(Qt::CustomizeWindowHint, true);
+	//flags |= Qt::CustomizeWindowHint;
+	//flags &= ~Qt::WindowContextHelpButtonHint;
+	//flags &= ~Qt::WindowSystemMenuHint;
+	//flags &= ~Qt::WindowMinMaxButtonsHint;
+	//flags &= ~Qt::WindowCloseButtonHint;
+	//a.setWindowFlags(Qt::CustomizeWindowHint);
+	//a.setWindowFlags(flags);
+	
+	QPixmap pixmap(32, 32);
+	pixmap.fill(Qt::transparent);
+	a.setWindowIcon(QIcon(pixmap));
+
+	a.setWindowTitle("Console");
+		a.show();
+
 
 	for (int i = 0; i < 50; i++) {
 		a.println(QString("test_%1").arg(i));
@@ -33,6 +55,13 @@ int main(int argc, char** argv) {
 	a.println("ahoj");
 
 	//Config c(200, 200, 800, 600);
+
+	//MainCanvas mCanvas(500,500,1000,1000);
+	//mCanvas.show();
+
+	Win w(500, 500, 1000, 1000);
+	w.setObjectName("Console");
+	//w.show();
 
 	return app.exec();
 }

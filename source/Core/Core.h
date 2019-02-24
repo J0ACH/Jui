@@ -44,7 +44,7 @@ namespace Jui
 	protected:
 		void resizeEvent(QResizeEvent *e) override;
 		void paintEvent(QPaintEvent *e) override;
-
+		
 	private:
 		//FadePoint m_origin;
 		void init(int x = 10, int y = 10, int width = 50, int height = 50);
@@ -73,6 +73,22 @@ namespace Jui
 		bool m_displayBBox;
 	};
 
+	// MainCanvas
+
+	class MainCanvas : public Canvas
+	{
+		Q_OBJECT
+
+	public:
+		MainCanvas(QWidget *parent = 0);
+		MainCanvas(int x, int y, int width, int height);
+		
+	private: 
+		//Header titleBar;
+
+		void init();
+
+	};
 	
 }
 

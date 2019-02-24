@@ -2,7 +2,7 @@
 
 namespace Jui
 {
-	
+
 	// Win /////////////////////////////////////////////////////
 
 	Win::Win(int x, int y, int w, int h) : Canvas(nullptr),
@@ -15,7 +15,7 @@ namespace Jui
 		buttonClose->icon_(":/close16.png");
 		buttonMaximize->icon_(":/maximize16.png");
 		buttonMinimize->icon_(":/minimize16.png");
-		
+
 		buttonMaximize->pressable_(true);
 
 		connect(
@@ -34,25 +34,31 @@ namespace Jui
 			buttonMinimize, SIGNAL(pressed()),
 			this, SLOT(showMinimized())
 		);
-		
+
 		geometry_(x, y, w, h);
+
+		winHeader->height_(40);
+		winHeader->background_(30, 30, 30);
+		winHeader->name_("Console testing window");
+
+		show();
 	}
 
 	void Win::onParentResize(QSize size) {
-		buttonClose->geometry_(size.width() - 25, 5, 20, 20);
-		buttonMaximize->geometry_(size.width() - 50, 5, 20, 20);
-		buttonMinimize->geometry_(size.width() - 75, 5, 20, 20);
+		buttonClose->geometry_(size.width() - 40, 0, 40, 40);
+		buttonMaximize->geometry_(size.width() - 80, 0, 40, 40);
+		buttonMinimize->geometry_(size.width() - 120, 0, 40, 40);
 	}
 
 	void Win::onMaximize() {
 		if (!isMaximized()) {
-			showMaximized(); 
+			showMaximized();
 			winHeader->lock_(true);
 			winEdges->hide();
 
 		}
-		else { 
-			showNormal(); 
+		else {
+			showNormal();
 			winHeader->lock_(false);
 			winEdges->show();
 		}

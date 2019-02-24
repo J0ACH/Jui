@@ -15,8 +15,11 @@ namespace Jui
 
 	public:
 		Header(QWidget *parent = 0);
+		void name_(QString name);
 		void font_(QString family);
 		void lock_(bool b);
+		void height_(int y);
+		void background_(int r, int g, int b);
 
 	protected:
 		void mousePressEvent(QMouseEvent *e) override;
@@ -26,12 +29,14 @@ namespace Jui
 
 	private:
 		PureText* m_text;
+		QLabel *label;
 		int thickness;
 		QPoint mousePressedGlobalCoor, mousePressedOriginCoor;
-		FadeColor colorBackground;
+		QColor colorBackground;
+		FadeColor currentColorBackground;
 		bool isLocked;
 
-		private slots:
+	private slots:
 		void onParentResize(QSize size);
 	};
 
@@ -82,7 +87,7 @@ namespace Jui
 		QSize mousePressedParentSize;
 		QPoint mousePressedOriginCoor;
 
-		private slots:
+	private slots:
 		void onParentResize(QSize size);
 		void onControlerPressed();
 		void onControlerMoved(Jui::direction, QPoint);

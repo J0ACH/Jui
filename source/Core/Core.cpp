@@ -18,6 +18,7 @@ namespace Jui
 		setWindowFlags(Qt::FramelessWindowHint);
 		//setAttribute(Qt::WA_TranslucentBackground);		
 		setGeometry(x, y, w, h);
+		setFocusPolicy(Qt::ClickFocus);
 		show();
 	}
 
@@ -49,7 +50,10 @@ namespace Jui
 		QRect fillRect = QRect(0, 0, width(), height());
 
 		painter.fillRect(fillRect, QColor(20, 20, 20));
-		painter.setPen(QColor(50, 50, 50));
+
+		if (hasFocus()) { painter.setPen(QColor(100, 100, 100)); }
+		else { painter.setPen(QColor(50, 50, 50)); }
+
 		painter.drawRect(frameRect);
 
 		foreach(AbstractGeometry *oneGeo, geometryObjects)
@@ -83,6 +87,16 @@ namespace Jui
 		}
 	}
 
+	// MainCanvas /////////////////////////////////////////////////////
+
+	MainCanvas::MainCanvas(QWidget *parent) : Canvas(parent) { MainCanvas::init(); }
+	MainCanvas::MainCanvas(int x, int y, int w, int h) : Canvas(x, y, w, h) { MainCanvas::init(); }
+
+	void MainCanvas::init() {
+		setWindowFlags(Qt::CustomizeWindowHint);
+		//setGeometry(x, y, w, h);
+		//show();
+	}
 
 
 
