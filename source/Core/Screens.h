@@ -18,6 +18,9 @@ namespace Jui
 	public:
 		Win(int x, int y, int w, int h);
 
+		void name_(QString txt);
+		void colorActive_(QColor color);
+
 	private:
 		Header *winHeader;
 		Edges *winEdges;
@@ -26,6 +29,8 @@ namespace Jui
 		private slots:
 		void onParentResize(QSize size);
 		void onMaximize();
+
+
 	};
 
 	// Dialog /////////////////////////////////////////////////////

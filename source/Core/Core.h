@@ -15,6 +15,7 @@ namespace Jui
 	enum fade { out, in };
 	enum direction { right, bottom, left, top };
 	void loadFonts();
+	QColor getWindowsAccentColor();
 
 	// Canvas /////////////////////////////////////////////////////
 
@@ -32,6 +33,7 @@ namespace Jui
 		void originX_(int x);
 		void originY_(int x);
 		void name_(QString txt);
+		void colorActive_(QColor color);
 
 		QPoint origin();
 		QString name();
@@ -49,6 +51,7 @@ namespace Jui
 		//FadePoint m_origin;
 		void init(int x = 10, int y = 10, int width = 50, int height = 50);
 		QList<AbstractGeometry*> geometryObjects;
+		QColor activeColor;
 	};
 
 	// AbstractGeometry /////////////////////////////////////////////////////

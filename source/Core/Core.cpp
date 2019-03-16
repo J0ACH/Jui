@@ -7,6 +7,32 @@ namespace Jui
 		int f2 = QFontDatabase::addApplicationFont(":/fontConsole.ttf");
 	}
 
+	QColor Jui::getWindowsAccentColor() {
+
+		/*
+		QSettings reg("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\DWM", QSettings::Registry32Format);
+		foreach(QString oneReg, reg.childKeys())
+		{
+			QVariant var = reg.value(oneReg);
+			var.convert(QVariant::UInt);
+			QString str = var.toString();
+			//QColor color = QColor(str);
+			qDebug() << "key: " << oneReg << " value: " << var << " str: " << str;
+		}
+		*/
+
+		QSettings settings("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\DWM", QSettings::NativeFormat);
+		QVariant variant = settings.value("AccentColor");
+		variant.convert(QVariant::UInt);
+		uint intColor = variant.toInt();
+		byte r = (byte)(intColor >> 0);
+		byte g = (byte)(intColor >> 8);
+		byte b = (byte)(intColor >> 16);
+		byte a = (byte)(intColor >> 24);
+		QColor color = QColor(r,g,b,a);
+		return color;
+	}
+
 	// Canvas /////////////////////////////////////////////////////
 
 	Canvas::Canvas(QWidget *parent) : QWidget(parent) { Canvas::init(); }
@@ -19,6 +45,7 @@ namespace Jui
 		//setAttribute(Qt::WA_TranslucentBackground);		
 		setGeometry(x, y, w, h);
 		setFocusPolicy(Qt::ClickFocus);
+		activeColor = QColor(90, 90, 90);
 		show();
 	}
 
@@ -27,6 +54,7 @@ namespace Jui
 	void Canvas::originX_(int x) { QWidget::move(x, origin().y()); }
 	void Canvas::originY_(int y) { QWidget::move(origin().x(), y); }
 	void Canvas::name_(QString txt) { this->setObjectName(txt); }
+	void Canvas::colorActive_(QColor color) { activeColor = color; }
 
 	QPoint Canvas::origin() {
 		if (this->isWindow()) { return this->mapToGlobal(QPoint(0, 0)); }
@@ -51,7 +79,7 @@ namespace Jui
 
 		painter.fillRect(fillRect, QColor(20, 20, 20));
 
-		if (hasFocus()) { painter.setPen(QColor(100, 100, 100)); }
+		if (hasFocus()) { painter.setPen(activeColor); }
 		else { painter.setPen(QColor(50, 50, 50)); }
 
 		painter.drawRect(frameRect);

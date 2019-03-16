@@ -6,17 +6,10 @@ namespace Jui
 
 	Header::Header(QWidget *parent) : QWidget(parent),
 		//m_text(new PureText(this)),
-		label(new QLabel(this))
+		title(new QLabel(this))
 	{
-		//m_text->font_("Univers Condensed");
-		//m_text->font_("Segoe UI Light");
-		//m_text->displayFrame_(true);
-		//m_text->align_(Qt::AlignVCenter | Qt::AlignLeft);
-
-
-		label->setFont(QFont("Segoe UI Light", 9));
-		label->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
-
+		title->setFont(QFont("Segoe UI Light", 9));
+		title->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
 
 		thickness = 30;
 		move(1, 1);
@@ -39,7 +32,7 @@ namespace Jui
 		show();
 	}
 	void Header::name_(QString name) { setWindowTitle(name); }
-	void Header::font_(QString family) { m_text->font_(family); }
+	void Header::font_(QString family) { title->setFont(family); }
 	void Header::lock_(bool b) { isLocked = b; }
 	void Header::height_(int y) {
 		thickness = y;
@@ -51,9 +44,8 @@ namespace Jui
 	}
 
 	void Header::onParentResize(QSize size) {
-		setFixedSize(size.width() - 2, thickness-1);
-		//m_text->geometry_(20, 8, size.width() - 2, thickness - 18);
-		label->setGeometry(20, 0, size.width() - 2, thickness - 1);
+		setFixedSize(size.width() - 2, thickness - 1);
+		title->setGeometry(20, 0, size.width() - 2, thickness - 1);
 	}
 	void Header::mousePressEvent(QMouseEvent *e)
 	{
@@ -68,7 +60,7 @@ namespace Jui
 			else {
 				mousePressedOriginCoor = this->parentWidget()->mapToParent(QPoint(0, 0));
 			}
-			currentColorBackground.value_(60, 60, 60, 0.05);
+			currentColorBackground.value_(90, 90, 90, 0.05);
 		}
 	}
 	void Header::mouseReleaseEvent(QMouseEvent *e) {
@@ -94,7 +86,7 @@ namespace Jui
 		QPainter painter(this);
 		if (!isLocked) { painter.fillRect(rect(), currentColorBackground); }
 		//m_text->text_(windowTitle());
-		label->setText(windowTitle());
+		title->setText(windowTitle());
 	}
 
 	// EdgeControler /////////////////////////////////////////////////////
@@ -113,9 +105,22 @@ namespace Jui
 	Jui::direction EdgeControler::direction() { return m_direction; }
 	void EdgeControler::enterEvent(QEvent *e) {
 		colorFrame.value_(QColor(100, 100, 100), 0.2);
+		switch (m_direction)
+		{
+		case Jui::direction::right:
+		case Jui::direction::left:
+			setCursor(QCursor(Qt::SizeHorCursor));
+			break;
+
+		case Jui::direction::top:
+		case Jui::direction::bottom:
+			setCursor(QCursor(Qt::SizeVerCursor));
+			break;
+		}
 	}
 	void EdgeControler::leaveEvent(QEvent *e) {
 		colorFrame.value_(QColor(0, 0, 0, 0), 1);
+		setCursor(QCursor(Qt::ArrowCursor));
 	}
 	void EdgeControler::mousePressEvent(QMouseEvent *e)
 	{

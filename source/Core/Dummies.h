@@ -28,8 +28,7 @@ namespace Jui
 		void paintEvent(QPaintEvent *e) override;
 
 	private:
-		PureText* m_text;
-		QLabel *label;
+		QLabel *title;
 		int thickness;
 		QPoint mousePressedGlobalCoor, mousePressedOriginCoor;
 		QColor colorBackground;

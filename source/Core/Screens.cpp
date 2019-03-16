@@ -39,9 +39,14 @@ namespace Jui
 
 		winHeader->height_(40);
 		winHeader->background_(30, 30, 30);
-		winHeader->name_("Console testing window");
 
 		show();
+	}
+
+	void Win::name_(QString name) { winHeader->name_(name); }
+	void Win::colorActive_(QColor color) {
+		//colorActive_(color); 
+		winHeader->background_(color.red(), color.green(), color.blue());
 	}
 
 	void Win::onParentResize(QSize size) {
