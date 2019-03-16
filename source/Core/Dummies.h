@@ -19,20 +19,16 @@ namespace Jui
 		void font_(QString family);
 		void lock_(bool b);
 		void height_(int y);
-		void background_(int r, int g, int b);
 
 	protected:
 		void mousePressEvent(QMouseEvent *e) override;
 		void mouseMoveEvent(QMouseEvent *e) override;
-		void mouseReleaseEvent(QMouseEvent *e) override;
 		void paintEvent(QPaintEvent *e) override;
 
 	private:
 		QLabel *title;
 		int thickness;
 		QPoint mousePressedGlobalCoor, mousePressedOriginCoor;
-		QColor colorBackground;
-		FadeColor currentColorBackground;
 		bool isLocked;
 
 	private slots:

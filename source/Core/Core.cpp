@@ -29,7 +29,7 @@ namespace Jui
 		byte g = (byte)(intColor >> 8);
 		byte b = (byte)(intColor >> 16);
 		byte a = (byte)(intColor >> 24);
-		QColor color = QColor(r,g,b,a);
+		QColor color = QColor(r, g, b, a);
 		return color;
 	}
 
@@ -77,10 +77,12 @@ namespace Jui
 		QRect frameRect = QRect(0, 0, width() - 1, height() - 1);
 		QRect fillRect = QRect(0, 0, width(), height());
 
-		painter.fillRect(fillRect, QColor(20, 20, 20));
+		painter.fillRect(fillRect, palette().color(QPalette::ColorRole::Window));
 
-		if (hasFocus()) { painter.setPen(activeColor); }
-		else { painter.setPen(QColor(50, 50, 50)); }
+		QColor frameColor;
+		if (hasFocus()) { frameColor = palette().color(QPalette::ColorGroup::Active, QPalette::ColorRole::Highlight); }
+		else { frameColor = palette().color(QPalette::ColorGroup::Inactive, QPalette::ColorRole::Highlight); }
+		painter.setPen(frameColor);
 
 		painter.drawRect(frameRect);
 

@@ -1,6 +1,7 @@
 #include <QApplication>
 #include "Core.h"
 #include "Console.h"
+#include "Palette.h"
 #include "Screens.h"
 #include "Fade.h"
 #include "Text.h"
@@ -15,18 +16,13 @@ int main(int argc, char** argv) {
 	QApplication app(argc, argv);
 	//Jui::loadFonts();
 
-	QPalette palette;
-	palette.setColor(QPalette::Window, QColor(30, 30, 30));
-	palette.setColor(QPalette::WindowText, QColor(200, 200, 200));
-	//palette.setColor(QPalette::Base, QColor(200, 50, 50));
-	//palette.setColor(QPalette::Button, QColor(200, 50, 50));
-
-	app.setPalette(palette);
+	Palette style;
+	app.setPalette(style.palette());
 
 
 	//qDebug() << settings.value;
 
-	
+
 	//Jui::get
 
 	/*
@@ -68,7 +64,8 @@ int main(int argc, char** argv) {
 
 	Win w(500, 500, 1000, 1000);
 	w.name_("Testing window");
-	w.colorActive_(activeWinColor);
+	//w.setPalette(style.palette());
+	//w.colorActive_(activeWinColor);
 	//w.show();
 
 	return app.exec();

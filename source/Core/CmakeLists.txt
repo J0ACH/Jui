@@ -3,6 +3,7 @@
 SET(Core_hdr
 	${CMAKE_CURRENT_LIST_DIR}/Core.h
 	${CMAKE_CURRENT_LIST_DIR}/Console.h
+	${CMAKE_CURRENT_LIST_DIR}/Palette.h
 	${CMAKE_CURRENT_LIST_DIR}/Fade.h
 	${CMAKE_CURRENT_LIST_DIR}/Text.h
 	${CMAKE_CURRENT_LIST_DIR}/Screens.h
@@ -18,6 +19,7 @@ SET(Core_hdr
 SET(Core_src
 	${CMAKE_CURRENT_LIST_DIR}/Core.cpp
 	${CMAKE_CURRENT_LIST_DIR}/Console.cpp
+	${CMAKE_CURRENT_LIST_DIR}/Palette.cpp
 	${CMAKE_CURRENT_LIST_DIR}/Fade.cpp
 	${CMAKE_CURRENT_LIST_DIR}/Text.cpp
 	${CMAKE_CURRENT_LIST_DIR}/Screens.cpp

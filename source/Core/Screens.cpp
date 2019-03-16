@@ -38,17 +38,12 @@ namespace Jui
 		geometry_(x, y, w, h);
 
 		winHeader->height_(40);
-		winHeader->background_(30, 30, 30);
-
+		
 		show();
 	}
 
 	void Win::name_(QString name) { winHeader->name_(name); }
-	void Win::colorActive_(QColor color) {
-		//colorActive_(color); 
-		winHeader->background_(color.red(), color.green(), color.blue());
-	}
-
+	
 	void Win::onParentResize(QSize size) {
 		buttonClose->geometry_(size.width() - 40, 0, 40, 40);
 		buttonMaximize->geometry_(size.width() - 80, 0, 40, 40);

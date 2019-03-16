@@ -19,8 +19,7 @@ namespace Jui
 		Win(int x, int y, int w, int h);
 
 		void name_(QString txt);
-		void colorActive_(QColor color);
-
+		
 	private:
 		Header *winHeader;
 		Edges *winEdges;

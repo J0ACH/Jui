@@ -10,18 +10,11 @@ namespace Jui
 	{
 		title->setFont(QFont("Segoe UI Light", 9));
 		title->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
+		title->setForegroundRole(QPalette::ColorRole::WindowText);
 
 		thickness = 30;
 		move(1, 1);
 		isLocked = false;
-
-		background_(40, 40, 40);
-
-		currentColorBackground.value_(colorBackground);
-		connect(
-			&currentColorBackground, SIGNAL(changed()),
-			this, SLOT(update())
-		);
 
 		connect(
 			parent, SIGNAL(resized(QSize)),
@@ -38,14 +31,10 @@ namespace Jui
 		thickness = y;
 		onParentResize(size());
 	}
-	void Header::background_(int r, int g, int b) {
-		colorBackground = QColor(r, g, b);
-		currentColorBackground.value_(colorBackground);
-	}
 
 	void Header::onParentResize(QSize size) {
-		setFixedSize(size.width() - 2, thickness - 1);
-		title->setGeometry(20, 0, size.width() - 2, thickness - 1);
+		setFixedSize(size.width() - 1, thickness - 1);
+		title->setGeometry(20, 0, size.width() - 1, thickness - 1);
 	}
 	void Header::mousePressEvent(QMouseEvent *e)
 	{
@@ -60,14 +49,9 @@ namespace Jui
 			else {
 				mousePressedOriginCoor = this->parentWidget()->mapToParent(QPoint(0, 0));
 			}
-			currentColorBackground.value_(90, 90, 90, 0.05);
 		}
 	}
-	void Header::mouseReleaseEvent(QMouseEvent *e) {
-		if (!isLocked) {
-			currentColorBackground.value_(colorBackground, 0.5);
-		}
-	}
+
 	void Header::mouseMoveEvent(QMouseEvent *e)
 	{
 		if (!isLocked) {
@@ -84,9 +68,9 @@ namespace Jui
 	}
 	void Header::paintEvent(QPaintEvent *event) {
 		QPainter painter(this);
-		if (!isLocked) { painter.fillRect(rect(), currentColorBackground); }
-		//m_text->text_(windowTitle());
+		if (!isLocked) { painter.fillRect(rect(), palette().color(QPalette::ColorRole::Highlight)); }
 		title->setText(windowTitle());
+
 	}
 
 	// EdgeControler /////////////////////////////////////////////////////
