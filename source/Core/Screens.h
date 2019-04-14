@@ -8,7 +8,17 @@
 
 namespace Jui
 {
-	
+
+	// Win /////////////////////////////////////////////////////
+
+	class Application : public QMainWindow
+	{
+		Q_OBJECT
+
+	public:
+		Application(int w, int h);
+	};
+
 	// Win /////////////////////////////////////////////////////
 
 	class Win : public Canvas
@@ -19,13 +29,16 @@ namespace Jui
 		Win(int x, int y, int w, int h);
 
 		void name_(QString txt);
-		
+		QWidget* widget();
+		operator QWidget*() const;
+
 	private:
 		Header *winHeader;
 		Edges *winEdges;
 		Button *buttonClose, *buttonMaximize, *buttonMinimize;
+		QWidget *screenWidget;
 
-		private slots:
+	private slots:
 		void onParentResize(QSize size);
 		void onMaximize();
 
@@ -46,7 +59,7 @@ namespace Jui
 		Edges *winEdges;
 		Button *buttonClose;
 
-		private slots:
+	private slots:
 		void onParentResize(QSize size);
 	};
 }

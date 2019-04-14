@@ -13,60 +13,49 @@ using namespace Jui;
 
 int main(int argc, char** argv) {
 
-	QApplication app(argc, argv);
-	//Jui::loadFonts();
 
+
+
+	//QApplication::setDesktopSettingsAware(false);
+	QApplication app(argc, argv);
+	
+	//Jui::loadFonts();
+	
 	Palette style;
 	app.setPalette(style.palette());
 
+	/*
+	QWidget *widget = new QWidget();
+	widget->setGeometry(500, 300, 1000, 1000);
+	//widget->setStyleSheet("QWidget { border-top: 1px solid white }");
+	widget->show();
 
-	//qDebug() << settings.value;
+	*/
 
-
-	//Jui::get
+	MainCanvas* mCanvas = new MainCanvas(20,20,500,500);
+	//MainWindow* mWin = new MainWindow(20, 20, 500, 500);
 
 	/*
-	Console a;
-	a.setGeometry(100, 100, 600, 600);
+	Win *w = new Win(1600, 300, 1000, 1000);
+	w->name_("Testing window");
+	w->show();
+	*/
 
-	//Qt::WindowFlags flags = a.windowFlags();
-	//flags.setFlag(Qt::WindowMinMaxButtonsHint, false);
-	//flags.setFlag(Qt::WindowCloseButtonHint, false);
-	//flags.setFlag(Qt::CustomizeWindowHint, true);
-	//flags |= Qt::CustomizeWindowHint;
-	//flags &= ~Qt::WindowContextHelpButtonHint;
-	//flags &= ~Qt::WindowSystemMenuHint;
-	//flags &= ~Qt::WindowMinMaxButtonsHint;
-	//flags &= ~Qt::WindowCloseButtonHint;
-	//a.setWindowFlags(Qt::CustomizeWindowHint);
-	//a.setWindowFlags(flags);
+	/*
+	Win *win = new Win(500, 500, 1000, 1000);
+	win->name_("Console");
 
-	QPixmap pixmap(32, 32);
-	pixmap.fill(Qt::transparent);
-	a.setWindowIcon(QIcon(pixmap));
-
-	a.setWindowTitle("Console");
-	a.show();
-
+	Console console(win->widget(), 5, 10, win->width() - 10, win->height() - 50);
+	console.show();
 
 	for (int i = 0; i < 50; i++) {
-		a.println(QString("test_%1").arg(i));
+		console.println(QString("Console_%1").arg(i));
 	}
-	a.println("ahoj");
+	console.println("ahoj");
 	*/
 
 	//Config c(200, 200, 800, 600);
 
-	//MainCanvas mCanvas(500,500,1000,1000);
-	//mCanvas.show();
-	QColor activeWinColor = Jui::getWindowsAccentColor();
-	qDebug() << "WinColor: " << activeWinColor.red() << ", " << activeWinColor.green() << ", " << activeWinColor.blue();
-
-	Win w(500, 500, 1000, 1000);
-	w.name_("Testing window");
-	//w.setPalette(style.palette());
-	//w.colorActive_(activeWinColor);
-	//w.show();
 
 	return app.exec();
 }

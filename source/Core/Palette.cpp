@@ -14,6 +14,7 @@ namespace Jui
 	void Palette::initPalette(Palette::colorTheme theme) {
 
 		m_palette.setColor(QPalette::ColorGroup::Active, QPalette::ColorRole::Highlight, getWindowsAccentColor());
+			m_palette.setColor(QPalette::ColorRole::Button, QColor(150, 0, 0));
 
 		switch (m_theme)
 		{
@@ -31,6 +32,7 @@ namespace Jui
 
 
 			m_palette.setColor(QPalette::ColorGroup::Inactive, QPalette::ColorRole::Highlight, QColor(60, 60, 60));
+		//	m_palette.setColor(QPalette::ColorGroup::Inactive, QPalette::ColorRole::Window, QColor(160, 60, 60));
 			break;
 		}
 	}

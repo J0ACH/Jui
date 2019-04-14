@@ -4,6 +4,7 @@
 #include <QtCore>
 #include <QtGui>
 #include <QtWidgets>
+//#include <QGraphicsScene>
 
 #include "Fade.h"
 
@@ -11,11 +12,10 @@ namespace Jui
 {
 	class Canvas;
 	class AbstractGeometry;
-	
+
 	enum fade { out, in };
 	enum direction { right, bottom, left, top };
 	void loadFonts();
-	QColor getWindowsAccentColor();
 
 	// Canvas /////////////////////////////////////////////////////
 
@@ -33,7 +33,6 @@ namespace Jui
 		void originX_(int x);
 		void originY_(int x);
 		void name_(QString txt);
-		void colorActive_(QColor color);
 
 		QPoint origin();
 		QString name();
@@ -46,13 +45,94 @@ namespace Jui
 	protected:
 		void resizeEvent(QResizeEvent *e) override;
 		void paintEvent(QPaintEvent *e) override;
-		
+
 	private:
 		//FadePoint m_origin;
 		void init(int x = 10, int y = 10, int width = 50, int height = 50);
 		QList<AbstractGeometry*> geometryObjects;
-		QColor activeColor;
 	};
+
+	// MainCanvas
+
+	class MainCanvas : public Canvas
+	{
+		Q_OBJECT
+
+	public:
+		MainCanvas(QWidget *parent = 0);
+		MainCanvas(int x, int y, int width, int height);
+
+		void setHeaderWidth(int width);
+		void setHeaderOffset(int offset);
+
+	signals:
+		void resized(QSize size);
+
+	protected:
+
+		void mousePressEvent(QMouseEvent *e) override;
+		void mouseMoveEvent(QMouseEvent *e) override;
+		void mouseReleaseEvent(QMouseEvent *e) override;
+
+		void resizeEvent(QResizeEvent *e) override;
+		void paintEvent(QPaintEvent *e) override;
+
+	private:
+		QPoint mousePressedGlobalCoor, mousePressedOriginCoor;
+		int headerWidth, headerOffset;
+		bool isMoving;
+
+		QRect headerRect;
+
+		QLabel *title;
+		QWidget *shadowPlane;
+		void init();
+
+	};
+
+	// MainWindow
+
+	class MainWindow : public QMainWindow
+	{
+		Q_OBJECT
+
+	public:
+		MainWindow(QWidget *parent = 0);
+		MainWindow(int x, int y, int width, int height);
+
+
+		//If you want to have Max/Min/Close buttons, look at how QWinWidget uses these 
+		QPushButton* maximizeButton = nullptr;
+		QPushButton* minimizeButton = nullptr;
+		QPushButton* closeButton = nullptr;
+
+		//If you want to enable dragging the window when the mouse is over top of, say, a QToolBar, 
+		//then look at how QWinWidget uses this
+		QToolBar* toolBar = nullptr;
+		QStatusBar* sBar = nullptr;
+
+	signals:
+
+	public slots:
+
+	private:
+		void init();
+
+	};
+
+
+	// GraphicsCanvas
+
+	class GraphicsCanvas : public QGraphicsScene
+	{
+	public:
+		GraphicsCanvas(QObject* parent = 0);
+		//GraphicsCanvas(QGraphicsItem* parent = 0, Qt::WindowFlags wFlags = 0);
+
+		//paintWindowFrame(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0)
+		//void QGraphicsWidget::paintWindowFrame(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0)
+	};
+
 
 	// AbstractGeometry /////////////////////////////////////////////////////
 
@@ -76,23 +156,8 @@ namespace Jui
 		bool m_displayBBox;
 	};
 
-	// MainCanvas
 
-	class MainCanvas : public Canvas
-	{
-		Q_OBJECT
 
-	public:
-		MainCanvas(QWidget *parent = 0);
-		MainCanvas(int x, int y, int width, int height);
-		
-	private: 
-		//Header titleBar;
-
-		void init();
-
-	};
-	
 }
 
 #endif // CORE_H

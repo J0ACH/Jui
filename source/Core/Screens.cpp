@@ -2,6 +2,15 @@
 
 namespace Jui
 {
+	// Application /////////////////////////////////////////////////////
+
+	Application::Application(int x, int y) : QMainWindow(nullptr, Qt::FramelessWindowHint)
+	{
+		setGeometry(100, 100, x, y);
+
+		qDebug() << "Application start";
+		this->show();
+	}
 
 	// Win /////////////////////////////////////////////////////
 
@@ -10,7 +19,8 @@ namespace Jui
 		winEdges(new Edges(this)),
 		buttonClose(new Button(this)),
 		buttonMaximize(new Button(this)),
-		buttonMinimize(new Button(this))
+		buttonMinimize(new Button(this)),
+		screenWidget(new QWidget(this))
 	{
 		buttonClose->icon_(":/close16.png");
 		buttonMaximize->icon_(":/maximize16.png");
@@ -38,16 +48,24 @@ namespace Jui
 		geometry_(x, y, w, h);
 
 		winHeader->height_(40);
-		
+
 		show();
+		screenWidget->show();
 	}
 
 	void Win::name_(QString name) { winHeader->name_(name); }
-	
+	QWidget* Win::widget() { return screenWidget; }
+	Win::operator QWidget*() const
+	{
+		qDebug() << "Win as QWidget";
+		return screenWidget;
+	}
+
 	void Win::onParentResize(QSize size) {
 		buttonClose->geometry_(size.width() - 40, 0, 40, 40);
 		buttonMaximize->geometry_(size.width() - 80, 0, 40, 40);
 		buttonMinimize->geometry_(size.width() - 120, 0, 40, 40);
+		screenWidget->setGeometry(0, winHeader->height(), size.width(), size.height() - winHeader->height());
 	}
 
 	void Win::onMaximize() {

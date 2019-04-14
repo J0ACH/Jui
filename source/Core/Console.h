@@ -6,6 +6,8 @@
 #include <QtGui>
 #include <QtWidgets>
 
+//#include "Core.h"
+
 
 namespace Jui
 {
@@ -15,10 +17,11 @@ namespace Jui
 
 	public:
 		Console(QWidget *parent = 0);
+		Console(QWidget *parent, int x, int y, int width, int height);
+		Console(int x, int y, int width, int height);
 
 	public slots:
 		void println(QString msg);
-
 
 	protected:
 		void resizeEvent(QResizeEvent *e) override;

@@ -8,9 +8,9 @@ namespace Jui
 		//m_text(new PureText(this)),
 		title(new QLabel(this))
 	{
-		title->setFont(QFont("Segoe UI Light", 9));
+		title->setFont(QFont("Segoe UI", 9));
 		title->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
-		title->setForegroundRole(QPalette::ColorRole::WindowText);
+		//title->setForegroundRole(QPalette::ColorRole::WindowText);
 
 		thickness = 30;
 		move(1, 1);
