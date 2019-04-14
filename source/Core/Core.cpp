@@ -101,7 +101,7 @@ namespace Jui
 
 	void MainCanvas::mousePressEvent(QMouseEvent *e)
 	{
-		if (headerRect.contains(mousePressedGlobal)) { isMoving = true; }
+		if (headerRect.contains(e->localPos().toPoint())) { isMoving = true; }
 
 		mousePressedGlobalCoor = e->globalPos();
 		mousePressedOriginCoor = mapToGlobal(QPoint(0, 0));
