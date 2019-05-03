@@ -54,7 +54,7 @@ namespace Jui
 
 	// MainCanvas
 
-	class MainCanvas : public Canvas
+	class MainCanvas : public QWidget
 	{
 		Q_OBJECT
 
@@ -76,7 +76,7 @@ namespace Jui
 
 		void resizeEvent(QResizeEvent *e) override;
 		void paintEvent(QPaintEvent *e) override;
-
+		
 	private:
 		QPoint mousePressedGlobalCoor, mousePressedOriginCoor;
 		int headerWidth, headerOffset;
@@ -115,22 +115,42 @@ namespace Jui
 
 	public slots:
 
+	protected:
+		bool nativeEvent(const QByteArray &eventType, void *message, long *result) override;
+		void paintEvent(QPaintEvent *e) override;
+
 	private:
 		void init();
+
+		HWND hWnd;
 
 	};
 
 
 	// GraphicsCanvas
 
-	class GraphicsCanvas : public QGraphicsScene
+	class GraphicsCanvas
 	{
 	public:
-		GraphicsCanvas(QObject* parent = 0);
+		GraphicsCanvas(int width, int height);
+		//GraphicsCanvas(QGraphicsItem* parent = nullptr);
+		//GraphicsCanvas(int x, int y, int width, int height);
 		//GraphicsCanvas(QGraphicsItem* parent = 0, Qt::WindowFlags wFlags = 0);
 
 		//paintWindowFrame(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0)
 		//void QGraphicsWidget::paintWindowFrame(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0)
+
+
+	protected:
+		//void paintEvent(QPaintEvent *) override;
+
+	private:
+		QGraphicsScene* scene;
+		QGraphicsView* view;
+		QGraphicsWidget* widget;
+
+		void init();
+
 	};
 
 

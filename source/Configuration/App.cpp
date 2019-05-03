@@ -11,19 +11,23 @@
 
 using namespace Jui;
 
+#include <windows.h>
+#include <stdio.h>
+#pragma comment(lib, "user32.lib")
+
 int main(int argc, char** argv) {
 
+	
 
-
-
-	//QApplication::setDesktopSettingsAware(false);
 	QApplication app(argc, argv);
-	
+
 	//Jui::loadFonts();
-	
+
 	Palette style;
 	app.setPalette(style.palette());
 
+	//QApplication::setDesktopSettingsAware(false);
+	
 	/*
 	QWidget *widget = new QWidget();
 	widget->setGeometry(500, 300, 1000, 1000);
@@ -33,7 +37,12 @@ int main(int argc, char** argv) {
 	*/
 
 	MainCanvas* mCanvas = new MainCanvas(20,20,500,500);
-	//MainWindow* mWin = new MainWindow(20, 20, 500, 500);
+	//MainWindow* mWin = new MainWindow(200, 200, 500, 500);
+	//GraphicsCanvas gCanvas(600, 300);
+	//QGraphicsWidget* wid = new QGraphicsWidget();
+	//wid->resize(600, 400);
+	//wid->show();
+	
 
 	/*
 	Win *w = new Win(1600, 300, 1000, 1000);
@@ -59,3 +68,4 @@ int main(int argc, char** argv) {
 
 	return app.exec();
 }
+

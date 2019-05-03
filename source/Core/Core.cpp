@@ -15,7 +15,7 @@ namespace Jui
 
 	void Canvas::init(int x, int y, int w, int h) {
 		name_("Nan");
-		setWindowFlags(Qt::FramelessWindowHint);
+		//setWindowFlags(Qt::FramelessWindowHint);
 		//setAttribute(Qt::WA_TranslucentBackground);		
 		setGeometry(x, y, w, h);
 		setFocusPolicy(Qt::ClickFocus);
@@ -70,14 +70,26 @@ namespace Jui
 
 	// MainCanvas /////////////////////////////////////////////////////
 
-	MainCanvas::MainCanvas(QWidget *parent) : Canvas(parent) { MainCanvas::init(); }
-	MainCanvas::MainCanvas(int x, int y, int w, int h) : Canvas(x, y, w, h) { MainCanvas::init(); }
+	MainCanvas::MainCanvas(QWidget *parent) : QWidget(nullptr) { MainCanvas::init(); }
+	MainCanvas::MainCanvas(int x, int y, int w, int h) : QWidget(nullptr) {
+		setGeometry(x, y, w, h);
+		MainCanvas::init();
+	}
 
 	void MainCanvas::init() {
 		//setWindowFlag(Qt::Window);
 		//setWindowFlag(Qt::CustomizeWindowHint);
 		//setWindowFlag(Qt::WindowStaysOnTopHint);
-		setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+		//QRect screenRect = QPlatformScreen() ::::availableGeometry();
+		shadowPlane = new QWidget(nullptr);
+		shadowPlane->setGeometry(QApplication::desktop()->availableGeometry(0));
+		shadowPlane->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+		shadowPlane->setAttribute(Qt::WA_TranslucentBackground);
+		setParent(shadowPlane);
+		
+		//setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+		setFocusPolicy(Qt::ClickFocus);
+		setFocus();
 
 		isMoving = false;
 
@@ -87,10 +99,23 @@ namespace Jui
 
 		headerRect = QRect(0, 0, width(), 10);
 
-		setHeaderWidth(40);
+		setHeaderWidth(46);
 		setHeaderOffset(5);
 
+		setContentsMargins(QMargins(20, 20, 20, 20));
+		QGraphicsDropShadowEffect *windowShadow = new QGraphicsDropShadowEffect;
+		windowShadow->setBlurRadius(20);
+		windowShadow->setColor(QColor(0, 0, 0));
+		windowShadow->setOffset(0);
+		this->setGraphicsEffect(windowShadow);
+
+
+		shadowPlane->show();
 		show();
+
+		//SetClassWord(hWnd, COLOR_ACTIVECAPTION, RGB(0x00, 0x80, 0x80));
+		//Sleep(10000);
+		//DestroyWindow(hWnd);
 	}
 
 	void MainCanvas::setHeaderWidth(int w) {
@@ -106,7 +131,6 @@ namespace Jui
 		mousePressedGlobalCoor = e->globalPos();
 		mousePressedOriginCoor = mapToGlobal(QPoint(0, 0));
 	}
-
 	void MainCanvas::mouseMoveEvent(QMouseEvent *e)
 	{
 		QPoint deltaPt(
@@ -120,7 +144,6 @@ namespace Jui
 
 		if (isMoving) { move(newOrigin); }
 	}
-
 	void MainCanvas::mouseReleaseEvent(QMouseEvent *e) {
 		isMoving = false;
 	}
@@ -133,8 +156,9 @@ namespace Jui
 
 		emit resized(size());
 	}
-
 	void MainCanvas::paintEvent(QPaintEvent *e) {
+
+
 		QPainter painter(this);
 
 		QRect frameRect = QRect(0, 0, width() - 1, height() - 1);
@@ -156,6 +180,8 @@ namespace Jui
 		//font.setPixelSize(headerWidth - 2 * headerOffset);
 		//title->setFont(font);
 		title->setGeometry(headerOffset * 2, headerOffset, 100, headerWidth - 2 * headerOffset);
+
+		//QWidget::paintEvent(e);
 	}
 
 
@@ -168,10 +194,14 @@ namespace Jui
 	}
 
 	void MainWindow::init() {
-		setWindowFlags(Qt::CustomizeWindowHint | Qt::WindowStaysOnTopHint);
+		//setWindowFlags(Qt::CustomizeWindowHint | Qt::WindowStaysOnTopHint);
+		//setWindowFlags(Qt::Window | Qt::WindowStaysOnTopHint);
 		//setWindowFlags(Qt::Sheet | Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::CustomizeWindowHint);
 
-		//HWND hWnd = (HWND)winId();
+		//setAttribute(Qt::WA_NoBackground);
+
+		//setContentsMargins(0, 0, right, bottom);
+		hWnd = (HWND)this->winId();
 		//DWORD aero_borderless = WS_THICKFRAME | WS_CLIPCHILDREN;
 		//DWORD aero_borderless = WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_THICKFRAME | WS_CLIPCHILDREN;
 		//SetWindowLong(hWnd, GWL_STYLE, aero_borderless);
@@ -184,27 +214,130 @@ namespace Jui
 		//SetWindowLong((HWND)winId(), GWL_STYLE, WS_CHILD);
 		//SetWindowLong((HWND)winId(), GWL_STYLE, WS_EX_WINDOWEDGE);
 
+
+
 				//leftSpacer->setAttribute(Qt::WA_TransparentForMouseEvents);
 
 		//toolBar = new QToolBar(this);
 		//sBar = new QStatusBar(this);
 
-		statusBar()->showMessage(tr("Ready"));
+		//statusBar()->showMessage(tr("Ready"));
+		qDebug() << "this->winId() " << this->winId();
+		qDebug() << "hWnd " << hWnd;
 
+		SetWindowPos(hWnd, HWND_TOPMOST, 100, 100, 600, 600, SWP_SHOWWINDOW);
+		SetWindowTextA(hWnd, "ahoj");
 
-
-		show();
+		//show();
 
 		qDebug() << "this->geometry() " << this->geometry().y();
 		qDebug() << "this->frameGeometry() " << this->frameGeometry();
 		qDebug() << "this->window()->frameSize() " << this->window()->mask();
 	}
 
+	bool MainWindow::nativeEvent(const QByteArray &eventType, void *message, long *result) {
+		MSG *msg = static_cast<MSG*>(message);
+
+		switch (msg->message)
+		{
+		case WM_NCPAINT:
+			HDC hdc;
+			RECT rect, wr;
+			LONG right, bottom;
+			HBRUSH hBrush = CreateSolidBrush(RGB(100, 180, 180));
+
+			// Undocumented flag works for me
+			//hdc = GetDCEx(hWnd, (HRGN)msg->wParam, DCX_WINDOW | DCX_INTERSECTRGN | 0x10000);
+			//hdc = GetDCEx(hWnd, (HRGN)msg->wParam, DCX_WINDOW | DCX_INTERSECTRGN);
+			hdc = GetDCEx(hWnd, (HRGN)msg->wParam, DCX_WINDOW | DCX_CACHE | DCX_INTERSECTRGN | DCX_LOCKWINDOWUPDATE);
+
+			GetWindowRect(hWnd, &wr);
+			right = wr.right - wr.left;
+			bottom = wr.bottom - wr.top;
+
+			// various rectangles to try
+			// - parameters - SetRect(&rect, left, top, right, bottom);
+			SetRect(&rect, 0, 0, right, bottom); // whole window area
+			//SetRect(&rect, 0, 30, right, bottom);
+			//SetRect(&rect, 0, 0, 150, 150);
+
+			FillRect(hdc, &rect, hBrush);
+
+			ReleaseDC(hWnd, hdc);
+			//RedrawWindow(hWnd, &rect, (HRGN)msg->wParam, RDW_UPDATENOW);
+			qDebug() << "event WM_NCPAINT: " << msg->hwnd;
+			return true;
+			break;
+
+		}
+
+		return false;
+	}
+	void MainWindow::paintEvent(QPaintEvent *e) {
+		QPainter painter(this);
+
+		QRect frameRect = QRect(0, 0, width() - 1, height() - 1);
+		QRect fillRect = QRect(0, 0, width(), height());
+
+		QRect fillHeader = QRect(0, 0, width(), 46);
+
+		painter.fillRect(fillRect, palette().color(QPalette::ColorRole::Window));
+
+		QColor frameColor;
+		if (hasFocus()) { frameColor = palette().color(QPalette::ColorGroup::Active, QPalette::ColorRole::Highlight); }
+		else { frameColor = palette().color(QPalette::ColorGroup::Inactive, QPalette::ColorRole::Highlight); }
+
+		painter.fillRect(fillRect, frameColor);
+		painter.setPen(frameColor);
+		painter.drawRect(frameRect);
+
+		//QFont font = title->font();
+		//font.setPixelSize(headerWidth - 2 * headerOffset);
+		//title->setFont(font);
+		//title->setGeometry(headerOffset * 2, headerOffset, 100, headerWidth - 2 * headerOffset);
+	}
+
 	// GraphicsCanvas /////////////////////////////////////////////////////
 
-	GraphicsCanvas::GraphicsCanvas(QObject* parent) : QGraphicsScene(parent) {
+	GraphicsCanvas::GraphicsCanvas(int w, int h) {
 		//setWindowFrameMargins(0, 0, 0, 0);
+
+		scene = new QGraphicsScene();
+
+
+		//Window *window = new Window;
+		//scene.addItem(window);
+
+		view = new QGraphicsView(scene);
+		view->resize(w, h);
+		view->setWindowFlags(Qt::CustomizeWindowHint | Qt::WindowStaysOnTopHint);
+		//view->setLayout(layout);
+		view->show();
+		view->layout()->margin();
+		qDebug() << "thisGraphicsCanvas init";
+		//setWindowTitle(tr("Basic Graphics Layouts Example"));
+
+		//QLayout *layout = new QLayout(view);
+
 	}
+	/*
+	static void paintLayout(QPainter *painter, QLayoutItem *item)
+	{
+		QLayout *layout = item->layout();
+		if (layout) {
+			for (int i = 0; i < layout->count(); ++i)
+				paintLayout(painter, layout->itemAt(i));
+		}
+		painter->drawRect(item->geometry());
+	}
+
+	void GraphicsCanvas::paintEvent(QPaintEvent *)
+	{
+		QPainter painter(this);
+		if (layout())
+			paintLayout(&painter, layout());
+	}
+	*/
 
 
 	// AbstractGeometry /////////////////////////////////////////////////////
