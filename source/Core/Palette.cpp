@@ -27,11 +27,13 @@ namespace Jui
 			break;
 
 		default:
+			m_palette.setCurrentColorGroup(QPalette::ColorGroup::Active);
 			m_palette.setColor(QPalette::ColorRole::Window, QColor(30, 30, 30));
 			m_palette.setColor(QPalette::ColorRole::WindowText, QColor(255, 255, 255));
-
+			m_palette.setColor(QPalette::ColorRole::ButtonText, QColor(255, 255, 255));
 
 			m_palette.setColor(QPalette::ColorGroup::Inactive, QPalette::ColorRole::Highlight, QColor(60, 60, 60));
+			m_palette.setColor(QPalette::ColorGroup::Inactive, QPalette::ColorRole::ButtonText, QColor(160, 160, 160));
 			//	m_palette.setColor(QPalette::ColorGroup::Inactive, QPalette::ColorRole::Window, QColor(160, 60, 60));
 			break;
 		}

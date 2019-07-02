@@ -80,9 +80,10 @@ namespace Jui
 		//setWindowFlag(Qt::Window);
 		//setWindowFlag(Qt::CustomizeWindowHint);
 		//setWindowFlag(Qt::WindowStaysOnTopHint);
-		//QRect screenRect = QPlatformScreen() ::::availableGeometry();
+		QRect screenRect = QDesktopWidget().availableGeometry(0);
+		
 		shadowPlane = new QWidget(nullptr);
-		shadowPlane->setGeometry(QApplication::desktop()->availableGeometry(0));
+		shadowPlane->setGeometry(screenRect);
 		shadowPlane->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
 		shadowPlane->setAttribute(Qt::WA_TranslucentBackground);
 		setParent(shadowPlane);
@@ -109,6 +110,14 @@ namespace Jui
 		windowShadow->setOffset(0);
 		this->setGraphicsEffect(windowShadow);
 
+
+		QLabel *text = new QLabel(this);
+		text->setGeometry(30, 30, 200, 100);
+		text->setFont(QFont("Segoe MDL2 Assets",20));
+		//text->setText(QString::fromUtf8(u8"\uE001"));
+		//text->setText(QString("\uE001"));
+		text->setText(u8"\uE106");
+		text->show();
 
 		shadowPlane->show();
 		show();
@@ -181,7 +190,6 @@ namespace Jui
 		//title->setFont(font);
 		title->setGeometry(headerOffset * 2, headerOffset, 100, headerWidth - 2 * headerOffset);
 
-		//QWidget::paintEvent(e);
 	}
 
 

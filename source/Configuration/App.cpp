@@ -1,5 +1,6 @@
 #include <QApplication>
 #include "Core.h"
+#include "Window.h"
 #include "Console.h"
 #include "Palette.h"
 #include "Screens.h"
@@ -26,6 +27,8 @@ int main(int argc, char** argv) {
 	Palette style;
 	app.setPalette(style.palette());
 
+	Window *win = new Window(600, 600);
+	win->setTitle("Main application window");
 	//QApplication::setDesktopSettingsAware(false);
 	
 	/*
@@ -36,7 +39,7 @@ int main(int argc, char** argv) {
 
 	*/
 
-	MainCanvas* mCanvas = new MainCanvas(20,20,500,500);
+	//MainCanvas* mCanvas = new MainCanvas(20,20,500,500);
 	//MainWindow* mWin = new MainWindow(200, 200, 500, 500);
 	//GraphicsCanvas gCanvas(600, 300);
 	//QGraphicsWidget* wid = new QGraphicsWidget();
