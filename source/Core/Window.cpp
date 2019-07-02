@@ -30,8 +30,6 @@ namespace Jui
 		setFont(QFont("Segoe MDL2 Assets", 8));
 		setFlat(true);
 		setFocusPolicy(Qt::FocusPolicy::NoFocus);
-		//setForegroundRole(parent->palette().WindowText);
-		//setPalette(parent->palette());
 	}
 
 	void WindowButton::paintEvent(QPaintEvent *e) {
@@ -68,18 +66,11 @@ namespace Jui
 		setFocusPolicy(Qt::ClickFocus);
 		setFocus();
 
-		/*
-		QLabel *text = new QLabel(this);
-		text->setGeometry(30, 30, 200, 100);
-		text->setFont(QFont("Segoe MDL2 Assets", 20));
-		text->setText(u8"\uE106");
-		text->show();
-		*/
-
 		closeButton = new WindowButton(this);
 		closeButton->setText(u8"\uE106");
-		//connect(closeButton, SIGNAL(pressed()), this, SLOT(close()));
+		
 		connect(closeButton, SIGNAL(pressed()), scr, SLOT(close()));
+
 		show();
 	}
 
@@ -114,8 +105,6 @@ namespace Jui
 	}
 
 	void Window::paintEvent(QPaintEvent *e) {
-		int headerWidth = 42;
-
 		QPainter painter(this);
 
 		QRect frameRect = QRect(0, 0, width() - 1, height() - 1);
@@ -126,10 +115,7 @@ namespace Jui
 		QColor frameColor;
 		if (hasFocus()) { frameColor = palette().color(QPalette::ColorGroup::Active, QPalette::ColorRole::Highlight); }
 		else { frameColor = palette().color(QPalette::ColorGroup::Inactive, QPalette::ColorRole::Highlight); }
-
 		painter.fillRect(headerRect, frameColor);
-		painter.setPen(frameColor);
-		painter.drawRect(frameRect);
 
 	}
 

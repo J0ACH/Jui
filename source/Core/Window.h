@@ -25,8 +25,11 @@ namespace Jui
 	{
 	public:
 		WindowButton(QWidget *parent = nullptr);
+
 	protected:
 		void paintEvent(QPaintEvent *e) override;
+
+
 	};
 
 	// Window /////////////////////////////////////////////////////

@@ -16,7 +16,7 @@ namespace Jui
 	public:
 		Palette();
 
-		enum colorTheme { dark, light };
+		enum colorTheme { Dark, Light };
 
 		void palette_(QPalette palette);
 		QPalette palette();

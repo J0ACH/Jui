@@ -6,7 +6,7 @@ namespace Jui
 
 	Palette::Palette()
 	{
-		m_theme = Palette::colorTheme::dark;
+		m_theme = Palette::colorTheme::Dark;
 		initPalette(m_theme);
 	}
 
@@ -14,27 +14,30 @@ namespace Jui
 	void Palette::initPalette(Palette::colorTheme theme) {
 
 		m_palette.setColor(QPalette::ColorGroup::Active, QPalette::ColorRole::Highlight, getWindowsAccentColor());
-		m_palette.setColor(QPalette::ColorRole::Button, QColor(150, 0, 0));
+		//m_palette.setColor(QPalette::ColorRole::Button, QColor(150, 0, 0));
 
 		switch (m_theme)
 		{
-		case Palette::colorTheme::light:
-			m_palette.setColor(QPalette::ColorRole::Window, QColor(255, 255, 255));
-			m_palette.setColor(QPalette::ColorRole::WindowText, QColor(30, 30, 30));
+		case Palette::colorTheme::Light:
+			m_palette.setColor(QPalette::ColorGroup::All, QPalette::ColorRole::Window, QColor(255, 255, 255));
 
+			m_palette.setColor(QPalette::ColorGroup::Active, QPalette::ColorRole::WindowText, QColor(255, 255, 255));
+			m_palette.setColor(QPalette::ColorGroup::Active, QPalette::ColorRole::ButtonText, QColor(255, 255, 255));
 
-			m_palette.setColor(QPalette::ColorGroup::Inactive, QPalette::ColorRole::Highlight, QColor(200, 200, 200));
+			m_palette.setColor(QPalette::ColorGroup::Inactive, QPalette::ColorRole::Highlight, QColor(240, 240, 240));
+			m_palette.setColor(QPalette::ColorGroup::Inactive, QPalette::ColorRole::WindowText, QColor(60, 60, 60));
+			m_palette.setColor(QPalette::ColorGroup::Inactive, QPalette::ColorRole::ButtonText, QColor(60, 60, 60));
 			break;
 
 		default:
-			m_palette.setCurrentColorGroup(QPalette::ColorGroup::Active);
-			m_palette.setColor(QPalette::ColorRole::Window, QColor(30, 30, 30));
-			m_palette.setColor(QPalette::ColorRole::WindowText, QColor(255, 255, 255));
-			m_palette.setColor(QPalette::ColorRole::ButtonText, QColor(255, 255, 255));
+			m_palette.setColor(QPalette::ColorGroup::All, QPalette::ColorRole::Window, QColor(30, 30, 30));
+			
+			m_palette.setColor(QPalette::ColorGroup::Active, QPalette::ColorRole::WindowText, QColor(30, 30, 30));
+			m_palette.setColor(QPalette::ColorGroup::Active, QPalette::ColorRole::ButtonText, QColor(30, 30, 30));
 
 			m_palette.setColor(QPalette::ColorGroup::Inactive, QPalette::ColorRole::Highlight, QColor(60, 60, 60));
+			m_palette.setColor(QPalette::ColorGroup::Inactive, QPalette::ColorRole::WindowText, QColor(160, 160, 160));
 			m_palette.setColor(QPalette::ColorGroup::Inactive, QPalette::ColorRole::ButtonText, QColor(160, 160, 160));
-			//	m_palette.setColor(QPalette::ColorGroup::Inactive, QPalette::ColorRole::Window, QColor(160, 60, 60));
 			break;
 		}
 	}
