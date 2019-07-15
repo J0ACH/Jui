@@ -5,6 +5,8 @@
 #include <QtGui>
 #include <QtWidgets>
 
+#include "Controls.h"
+
 namespace Jui
 {
 
@@ -17,19 +19,6 @@ namespace Jui
 
 	protected:
 		void paintEvent(QPaintEvent *e) override;
-	};
-
-	// Button
-
-	class WindowButton : public QPushButton
-	{
-	public:
-		WindowButton(QWidget *parent = nullptr);
-
-	protected:
-		void paintEvent(QPaintEvent *e) override;
-
-
 	};
 
 	// Window /////////////////////////////////////////////////////
@@ -56,7 +45,8 @@ namespace Jui
 		Screen *scr;
 		QRect headerRect;
 		QLabel *title;
-		WindowButton *closeButton;
+		//WindowButton *closeButton;
+		Button *closeButton;
 		QPoint mousePressedGlobalCoor, mousePressedOriginCoor;
 		bool isMoving;
 

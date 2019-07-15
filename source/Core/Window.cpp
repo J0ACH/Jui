@@ -23,25 +23,6 @@ namespace Jui
 		*/
 	}
 
-
-	// WindowButton /////////////////////////////////////////////////////
-
-	WindowButton::WindowButton(QWidget *parent) : QPushButton(parent) {
-		setFont(QFont("Segoe MDL2 Assets", 8));
-		setFlat(true);
-		setFocusPolicy(Qt::FocusPolicy::NoFocus);
-	}
-
-	void WindowButton::paintEvent(QPaintEvent *e) {
-
-		QPainter painter(this);
-		QRect frameRect = QRect(0, 0, width() - 1, height() - 1);
-		painter.setPen(QColor(255, 0, 0));
-		//painter.drawRect(frameRect);
-
-		QPushButton::paintEvent(e);
-	}
-
 	// Window /////////////////////////////////////////////////////
 
 	Window::Window(QWidget *parent) : QMainWindow(nullptr) { Window::init(500, 500); }
@@ -55,6 +36,7 @@ namespace Jui
 
 		title = new QLabel(this);
 		title->setGeometry(15, 5, 200, 35);
+		title->setForegroundRole(QPalette::ColorRole::Text);
 
 		setContentsMargins(QMargins(20, 20, 20, 20));
 		QGraphicsDropShadowEffect *windowShadow = new QGraphicsDropShadowEffect;
@@ -66,9 +48,8 @@ namespace Jui
 		setFocusPolicy(Qt::ClickFocus);
 		setFocus();
 
-		closeButton = new WindowButton(this);
-		closeButton->setText(u8"\uE106");
-		
+		closeButton = new Button(this);
+		closeButton->symbol_(u8"\uE106");
 		connect(closeButton, SIGNAL(pressed()), scr, SLOT(close()));
 
 		show();

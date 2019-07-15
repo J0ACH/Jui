@@ -62,9 +62,9 @@ namespace Jui
 	}
 
 	void Win::onParentResize(QSize size) {
-		buttonClose->geometry_(size.width() - 40, 0, 40, 40);
-		buttonMaximize->geometry_(size.width() - 80, 0, 40, 40);
-		buttonMinimize->geometry_(size.width() - 120, 0, 40, 40);
+		buttonClose->setGeometry(size.width() - 40, 0, 40, 40);
+		buttonMaximize->setGeometry(size.width() - 80, 0, 40, 40);
+		buttonMinimize->setGeometry(size.width() - 120, 0, 40, 40);
 		screenWidget->setGeometry(0, winHeader->height(), size.width(), size.height() - winHeader->height());
 	}
 
@@ -104,7 +104,7 @@ namespace Jui
 	}
 
 	void Dialog::onParentResize(QSize size) {
-		buttonClose->geometry_(size.width() - 25, 5, 20, 20);
+		buttonClose->setGeometry(size.width() - 25, 5, 20, 20);
 	}
 
 }

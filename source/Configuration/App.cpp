@@ -9,6 +9,7 @@
 #include "Dummies.h"
 #include "Button.h"
 #include "Config.h"
+#include "Controls.h"
 
 using namespace Jui;
 
@@ -30,7 +31,7 @@ int main(int argc, char** argv) {
 	Window *win = new Window(600, 600);
 	win->setTitle("Main application window");
 	//QApplication::setDesktopSettingsAware(false);
-	
+
 	/*
 	QWidget *widget = new QWidget();
 	widget->setGeometry(500, 300, 1000, 1000);

@@ -5,6 +5,7 @@
 #include "Fade.h"
 #include "Dummies.h"
 #include "Button.h"
+#include "Controls.h"
 
 namespace Jui
 {
