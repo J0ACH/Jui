@@ -18,6 +18,7 @@ namespace Jui
 		Screen(QWidget *parent = 0);
 
 	protected:
+		void mouseMoveEvent(QMouseEvent *e) override;
 		void paintEvent(QPaintEvent *e) override;
 	};
 
@@ -34,6 +35,9 @@ namespace Jui
 		void setHeaderWidth(int width);
 		void setTitle(QString txt);
 
+	public slots:
+		void close();
+
 	protected:
 		void mousePressEvent(QMouseEvent *e) override;
 		void mouseMoveEvent(QMouseEvent *e) override;
@@ -45,7 +49,6 @@ namespace Jui
 		Screen *scr;
 		QRect headerRect;
 		QLabel *title;
-		//WindowButton *closeButton;
 		Button *closeButton;
 		QPoint mousePressedGlobalCoor, mousePressedOriginCoor;
 		bool isMoving;

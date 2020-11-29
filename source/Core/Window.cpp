@@ -11,9 +11,14 @@ namespace Jui
 		setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
 		setAttribute(Qt::WA_TranslucentBackground);
 		setAttribute(Qt::WA_TransparentForMouseEvents);
+		//setAttribute(Qt::WA_OpaquePaintEvent, true);
+		//setMouseTracking(true);
 		show();
 	}
-
+	void Screen::mouseMoveEvent(QMouseEvent *e)
+	{
+		qDebug() << "pos: " << e->globalPos();
+	}
 	void Screen::paintEvent(QPaintEvent *e) {
 		/*
 		QPainter painter(this);
@@ -47,12 +52,19 @@ namespace Jui
 
 		setFocusPolicy(Qt::ClickFocus);
 		setFocus();
+		
+		isMoving = false;
 
 		closeButton = new Button(this);
 		closeButton->symbol_(u8"\uE106");
-		connect(closeButton, SIGNAL(pressed()), scr, SLOT(close()));
-
+		connect(closeButton, SIGNAL(pressed()), this, SLOT(close()));
+		
 		show();
+	}
+
+	void Window::close() {
+		scr->close();
+		QMainWindow::close();
 	}
 
 	void Window::setHeaderWidth(int w) { headerRect.setHeight(w); }
@@ -67,6 +79,7 @@ namespace Jui
 	}
 	void Window::mouseMoveEvent(QMouseEvent *e)
 	{
+
 		QPoint deltaPt(
 			e->globalPos().x() - mousePressedGlobalCoor.x(),
 			e->globalPos().y() - mousePressedGlobalCoor.y()
